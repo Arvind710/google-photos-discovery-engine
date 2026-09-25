@@ -148,6 +148,7 @@ Every question in [SOL-JOURNEY] (IDs 0.1 through 10.3) is an analytical question
 
 **Functional constraints on collection**
 - Public data only. Respect each platform's terms. No login-walled or private content.
+  > **Amended 26 Sep 2026 (PM decision):** Reddit, X and Quora are collected through Apify although their robots.txt disallows all agents, because Reddit's API is closed to new developers and Reddit carries most of the long-form stories. The method is disclosed on every record and in Methodology. See `Docs/decisions.md` D-1.
 - Store the minimum needed; strip personal identifiers (usernames, emails, phone numbers, faces in linked images) before analysis. Quotes shown in outputs must be anonymised.
 - Time window: prioritise the most recent 24–36 months (post–Ask Photos era), keeping older data tagged by date so "before vs after Ask Photos" can be compared.
 - Language: English, Hinglish/code-mixed and Hindi (translated for analysis, original retained). Other languages are tagged and counted, not necessarily analysed.

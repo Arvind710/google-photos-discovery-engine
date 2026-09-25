@@ -45,8 +45,8 @@ These pull against each other, and §3.3 is where they are reconciled. [CTX] §1
 │  ┌───────┐    ┌────────┐    ┌──────────┐   ┌──────────────────────┐     │
 │  │Reddit │    │dedupe  │    │post →    │   │A spine   (all 1,000) │     │
 │  │GP Help│───▶│lang    │───▶│stories + │──▶│B memory  (core 450)  │     │
-│  │Play   │    │PII     │    │bucket    │   │C system  (reach 5–6) │     │
-│  │AppStr │    └────────┘    └──────────┘   │D outcome (reach 7–10)│     │
+│  │Stores │    │PII     │    │bucket    │   │C system  (reach 5–6) │     │
+│  │+5 more│    └────────┘    └──────────┘   │D outcome (reach 7–10)│     │
 │  └───────┘                   gpt-5-mini    └──────────────────────┘     │
 │                                                  gpt-5    │               │
 │                    ┌──────────────────────┐              │               │
@@ -295,7 +295,8 @@ SQLite (`data/corpus.db`) — one file, zero config, queryable, git-committable,
 ```sql
 CREATE TABLE records (               -- raw collected material, immutable
   record_id TEXT PRIMARY KEY,        -- sha1(source || native_id)
-  source TEXT NOT NULL,              -- reddit|gp_help|play|appstore
+  source TEXT NOT NULL,              -- reddit|gp_help|play|appstore|youtube|stackexchange|hackernews|x|quora (A.9)
+  collect_method TEXT NOT NULL,      -- official_api|public_feed|public_scraper_lib|headless_render|apify (A.10, D-1)
   source_url TEXT NOT NULL,          -- permalink — no record without one
   native_id TEXT,
   author_key TEXT,                   -- salted hash; salt is env-only, never committed (§11)
@@ -406,14 +407,21 @@ One helper makes "never a percentage without its denominator" structurally true 
 
 ### 5.1 Sources
 
-| Source | Method | Raw target | Why |
-|---|---|---|---|
-| **Reddit** (P0) | `praw` | ~5,500 | Longest narratives, real cue vocabulary, actual tactics. Carries blocks C and D |
-| **GP Help** (P0) | `httpx` + `selectolax` | ~2,500 | Explicit "can't find my photo" threads; replies carry workarounds |
-| **Play Store** (P0) | `google-play-scraper` | ~2,500 | Volume, India-heavy. Mostly block A only — and that ratio is a reported finding |
-| **App Store** (P0) | `app-store-scraper` | ~500 | Cross-platform comparison |
+**Revised 2026-09-26 — `Docs/decisions.md` D-1.** The original plan had four sources: Reddit via `praw`, GP Help via `httpx` + `selectolax`, Play, and App Store via `app-store-scraper`. Tested on the day, Reddit's API is closed to new developers, GP Help threads carry no post text in their HTML, and `app-store-scraper` is unmaintained. The PM also widened the list to every source type [PS] names. Raw targets are planning figures; the P1A pilot measures yield and cost per record before the full collect.
 
-Public data only. Every collector records the `collect_query` that surfaced each item, so collection bias is auditable. The [CTX] §6.2 seed lexicon lives in `lexicon_v1.yaml` with per-term hit counts — a required reproducibility output.
+| Source | Method (`collect_method`) | Raw target | Why |
+|---|---|---|---|
+| **Reddit** | `apify` — `webdatalabs~reddit-scraper-pro` | ~4,500 | Longest narratives, real cue vocabulary, actual tactics. Carries blocks C and D |
+| **GP Help Community** | `headless_render` — Playwright on thread pages (fallback: `apify`) | ~1,500 | Explicit "can't find my photo" threads; replies carry workarounds |
+| **Play Store** | `public_scraper_lib` — `google-play-scraper` | ~2,000 | Volume, India-heavy. Mostly block A only — and that ratio is a reported finding |
+| **App Store** | `public_feed` — Apple's customer-review RSS, several countries | ~1,000 | Cross-platform comparison |
+| **YouTube** | `official_api` — Data API v3 comment threads | ~800 | Reactions to search and Ask Photos tutorials; "tried this, didn't work" |
+| **X** | `apify` — `apidojo~tweet-scraper` | ~600 | Real-time frustration, Ask Photos reactions |
+| **Quora** | `apify` — `fatihtahta~quora-scraper` | ~300 | Long-tail stories, Indian users |
+| **Stack Exchange** | `official_api` — Web Apps, Android, Ask Different | ~200 | Detailed, technical retrieval problems |
+| **Hacker News** | `official_api` — Algolia search | ~200 | Detailed comparisons with Apple Photos and others |
+
+Public data only — no login-walled content. **Reddit, X and Quora publish `Disallow: /` for all agents in robots.txt, and Apify's actors get past that**; the PM decided to use them anyway, and this is disclosed per record (`collect_method`), on the Data Bank and in Methodology (D-1). Every collector records the `collect_query` that surfaced each item, so collection bias is auditable. The [CTX] §6.2 seed lexicon lives in `lexicon_v1.yaml` with per-term hit counts — a required reproducibility output. Apify is billed separately from the $15 OpenAI ceiling (≤ $10/month).
 
 ### 5.2 The pilot decides everything
 
@@ -602,7 +610,7 @@ Deterministic Python tests cover what the browser cannot see: schema invariants,
 
 - **No secret is ever committed.** `OPENAI_API_KEY` lives only in Streamlit Cloud's secrets store; `.gitignore` covers `secrets.toml` and `.env`; CI runs a secret scan; `secrets.toml.example` is committed with placeholders.
 - **The author salt stays out of the repo.** `author_key` is a salted hash for within-author dedupe; committing the salt beside the hashes would make them reversible for any known handle. Supplied as an environment variable at collection time, never written down.
-- **The committed corpus is published data** — public material stored with permalinks, PII-scrubbed, quotes anonymised, no login-walled content. This is what makes committing `corpus.db` publicly defensible, and Methodology says so.
+- **The committed corpus is published data** — public material stored with permalinks, PII-scrubbed, quotes anonymised, no login-walled content. This is what makes committing `corpus.db` publicly defensible, and Methodology says so — including, per D-1, that Reddit, X and Quora were collected through Apify against their robots.txt, with `collect_method` on every record.
 
 The public repo is part of the deliverable: [CTX] §1.4 wants a link where the workflow can be tested, and a readable repo beside a working app is stronger than either alone.
 
@@ -656,7 +664,7 @@ Six pages. Each section page is a chain of numbered parts — one conclusion, on
 | AR-4 | My `R` dispositions are wrong and a codeable question is skipped | §3.4 — the pilot codes all 60 and measures; dispositions are data, not judgement |
 | AR-5 | 60 questions across four blocks degrade coding accuracy | Blocks are small and stage-scoped; κ per field; low-reliability fields barred from headlines |
 | AR-6 | Two models agree and are both wrong | Stated in Methodology; blind-read audit is the independent view; sanity strip lets the reader judge |
-| AR-7 | Scrapers break or rate-limit | Four independent sources; snapshot early; degrade to smaller-but-cited |
+| AR-7 | Scrapers break or rate-limit | Nine sources across five collection methods (D-1); snapshot early; degrade to smaller-but-cited |
 | AR-8 | Cold start reads as broken (observed: 78s) | Minimal deps; warm-up note; ping before the evaluation window |
 | AR-9 | Prompt-only rules drift (observed: `Caveat:`) | Anything that matters goes in the checker |
 | AR-10 | Push to `main` breaks the live deliverable | Sub-two-minute CI gate; Chrome smoke test after every deploy; `git revert` |

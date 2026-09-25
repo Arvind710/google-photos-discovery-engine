@@ -63,7 +63,7 @@ Build order is nav order; each phase ships its own page.
 | Phase | Duration | Dates | Ships | Gate |
 |---|---|---|---|---|
 | **P0 — Foundation & freeze** | 0.5d | Sep 26 AM | Repo, schema + deltas, frozen codebook, fixtures, harness, **blank app live** | P0-* |
-| **P1 — Data Bank** | 1d | Sep 26 PM – Sep 27 AM | Four collectors, cleaning, pilot + full collection, Data Bank page | P1-*, T-4 |
+| **P1 — Data Bank** | 1d | Sep 26 PM – Sep 27 AM | Nine collectors (D-1), cleaning, pilot + full collection, Data Bank page | P1-*, T-4 |
 | **P2 — Segmentation** | 0.5d | Sep 27 PM | Record → stories, buckets, `reaches_stage` | P2-*, T-1, T-5, T-6, T-9 |
 | **P3 — Coding & reliability** | 1.5d | Sep 28 – Sep 29 AM | Pilot on all 60 · coverage register · **batch all four blocks** · dual-coding, κ, blind-read | P3-*, T-2, T-7, T-8, T-10…T-12, T-20 |
 | **P4 — Analysis & opportunities** | 1d | Sep 29 | Cross-tabs, scoring, sensitivity, recommendation, Part 3 handoff, two pages | P4-* |
@@ -117,14 +117,15 @@ Two items are not controllable by writing code:
 
 ### 1.3 Blocked on you — resolve **Sep 26 morning**
 
-| Item | Consequence if late |
-|---|---|
-| **OpenAI API key + hard usage cap set to $15** | No pass can run. EC-OPS-1 says the cap precedes the first call, not the public URL |
-| **Reddit app credentials** (PRAW client id + secret) | The richest source is unavailable. Reddit carries blocks C and D almost single-handed; without it the corpus is Play Store reviews and the analysis loses its narrative depth |
-| **Public GitHub repo created, Streamlit Cloud linked to it** | No deploy path. P0 cannot close |
-| **Author-dedupe salt** as an env var, not a file | EC-OPS-7. Committing it beside the hashes makes them reversible |
+| Item | Consequence if late | Status (2026-09-26) |
+|---|---|---|
+| **OpenAI API key + hard usage cap set to $15** | No pass can run. EC-OPS-1 says the cap precedes the first call, not the public URL | ✅ Key in `.env`; $15 cap recorded in `evals/manual_checks.yaml` |
+| ~~**Reddit app credentials** (PRAW client id + secret)~~ → **Apify token** | The richest source is unavailable. Reddit carries blocks C and D almost single-handed; without it the corpus is Play Store reviews and the analysis loses its narrative depth | ✅ Reddit's API is closed to new developers; Reddit, X and Quora come through Apify instead (D-1). Token in `.env`, account upgraded to a $10/month limit |
+| **YouTube Data API key** (added by D-1) | YouTube comments unavailable | ✅ In `.env`, verified |
+| **Public GitHub repo created, Streamlit Cloud linked to it** | No deploy path. P0 cannot close | ✅ Live since P0 |
+| **Author-dedupe salt** as an env var, not a file | EC-OPS-7. Committing it beside the hashes makes them reversible | ✅ Generated into `.env`; never change it |
 
-Four items, all under thirty minutes. Everything else is mine.
+All resolved. Everything else is mine.
 
 ---
 
@@ -137,7 +138,7 @@ Four items, all under thirty minutes. Everything else is mine.
 
 | # | Task | Output |
 |---|---|---|
-| 0.1 | Repo, venv, `requirements.txt` (app only: streamlit, pandas, plotly, rank-bm25, openai, pyyaml) and `requirements-pipeline.txt` (praw, httpx, selectolax, google-play-scraper, app-store-scraper, datasketch) | Two files, **never merged** |
+| 0.1 | Repo, venv, `requirements.txt` (app only: streamlit, pandas, plotly, rank-bm25, openai, pyyaml) and `requirements-pipeline.txt` (praw, httpx, selectolax, google-play-scraper, app-store-scraper, datasketch — revised in P1 by D-1: praw and app-store-scraper out, playwright in) | Two files, **never merged** |
 | 0.2 | Directory tree per `architecture.md` §3 | Skeleton with `__init__.py` |
 | 0.3 | `pipeline/schema.sql` — arch §4 **plus all five Appendix A deltas** | `corpus.db` created empty; every invariant query runs against it |
 | 0.4 | `codebook/journey_v1.yaml` — **all 60 questions**, each with values, `not_stated`, `other`, stage, block, metric node | Loads; P0-INV-1 passes at 60 of 60 |
@@ -164,26 +165,29 @@ P0-INV-1…7 green · P0-OPS-1…3 green · blank app live · all five fixture f
 ## 3. Phase 1 — Data Bank
 
 **Objective:** a clean, auditable corpus with a visible funnel.
-**Duration:** 1 day · **Budget:** ~$0.05 (the lexicon probe; collection itself is free) · **Committed to date:** ~$0.35
+**Duration:** 1 day · **Budget:** ~$0.05 OpenAI (the lexicon probe) · **plus Apify, billed separately:** ~$2–4 of a $10/month limit (Reddit ≈ $0.38 per 1,000 records measured on Myntra; X ≈ $0.40, Quora ≈ $0.99 per 1,000 listed) · **Committed to date:** ~$0.35
 
 ### 3.1 Build tasks
 
+Sources and methods per `Docs/decisions.md` D-1 (revised 2026-09-26). Every collector stamps `collect_method` and `collect_query` on every row (A.10).
+
 | # | Task | Notes |
 |---|---|---|
-| 1.1 | `collect/reddit.py` | Six subreddits from arch §5.1. Checkpoint per subreddit; record `collect_query` on every row |
-| 1.2 | `collect/gp_help.py` | httpx + selectolax. Thread + replies; replies carry the workarounds |
-| 1.3 | `collect/play_store.py`, `collect/app_store.py` | Expect low yield from Play and **report the ratio** — that ratio is [CTX] §13's short-text bias, made visible |
+| 1.1 | `collect/reddit_apify.py`, `collect/x_apify.py`, `collect/quora_apify.py` | Ported from Myntra's `reddit_apify.py`: flatten nested comments, key on the platform's own id (not Apify's per-run id), drop bots and log it, report per-query yield with failures marked. Subreddits from [CTX] §6.1 (arch §5.1 never listed them), recorded in the run params. Apify runs outside the OpenAI budget but are still logged in `runs` |
+| 1.2 | `collect/gp_help.py` | Playwright renders thread pages; threads discovered from the listing pages (`/search` and `/api` are robots-disallowed). Thread + replies, per-post author; replies carry the workarounds. **Fallback:** Apify `burbn~google-forums-search`; if both fail, stop and tell the PM |
+| 1.3 | `collect/play_store.py`, `collect/app_store.py` | Play via `google-play-scraper`; App Store via Apple's review RSS across several countries (~500 per country cap). Expect low yield and **report the ratio** — that ratio is [CTX] §13's short-text bias, made visible |
+| 1.3a | `collect/youtube.py`, `collect/stackexchange.py`, `collect/hackernews.py` | Official APIs. YouTube: search is 100 of 10,000 daily units, comments 1 — few searches, many comments per video |
 | 1.4 | `clean/dedupe.py` | Exact hash across sources; near-dupe **only** within `(source, author_key)`. Jaccard > 0.85 |
 | 1.5 | `clean/language.py` | Detect; translate non-English into `text_en`. **`text_clean` stays canonical** — EC-CLEAN-4 |
 | 1.6 | `clean/scrub.py` | Typed placeholders. Assert zero email/phone/handle patterns survive |
-| 1.7 | **P1A — pilot collect**, ~600 raw, stratified across all four sources | Feeds P2 and P3A |
+| 1.7 | **P1A — pilot collect**, ~600 raw, stratified across all nine sources | Feeds P2 and P3A. Also measures Apify cost per record and GP Help render throughput before the full collect |
 | 1.8 | **P1E — full collect**, ~11,000 raw | Runs in background; write fixtures while it does |
 | 1.9 | `views/data_bank.py` — funnel, source composition, exclusion log, evidence explorer shell | Deploy |
 | 1.10 | `evals/test_p1_databank.py` | Written before 1.7 runs |
 
 ### 3.2 Exit gate
 
-P1-INV-1…6 green (accounting identity, `source_url`, idempotence, **zero PII**, exclusion reasons, no silent truncation) · all four sources non-zero · **T-4 lexicon recall ≤ 5%** · **P1-PROBE-1 consensus preservation green** · Data Bank page live and browser-checked → **P2 starts.**
+P1-INV-1…6 green (accounting identity, `source_url`, idempotence, **zero PII**, exclusion reasons, no silent truncation) · every configured source non-zero (nine, D-1) · **T-4 lexicon recall ≤ 5%** · **P1-PROBE-1 consensus preservation green** · Data Bank page live and browser-checked → **P2 starts.**
 
 > **On P1-MET-3.** Sample 200 lexicon-*rejected* records, run the relevance pass over them on `gpt-5-mini`, measure the relevant share. Above 5%, add the terms that surfaced and re-probe. ~$0.05, no labelling. This is the substitute for the gold-set recall measurement §15.7 took away, and it guards EC-PRE — a record the lexicon rejects never reaches a model and leaves no trace anywhere.
 
@@ -323,7 +327,7 @@ retrieval.py (4 channels, query registry) ──▶ gate() ──▶ verify.py �
 
 ## Appendix A — Schema deltas found while sequencing
 
-All five land in P0. Changing the schema after data is in it costs a re-run the budget cannot fund.
+All five land in P0. Changing the schema after data is in it costs a re-run the budget cannot fund. A.6–A.10 were found later and are listed below the table.
 
 | # | Delta | Why |
 |---|---|---|
@@ -332,6 +336,16 @@ All five land in P0. Changing the schema after data is in it costs a re-run the 
 | A.3 | **`analysis_coverage` PK becomes `(question, source)`**, with `source = '_all'` for the pooled row | P3-MET-11 requires coverage per source as well as pooled. The current PK of `question` alone cannot hold both |
 | A.4 | **`runs.estimate_usd`** alongside `cost_usd` | T-19 compares actual against estimate after every pass and halts at 1.5×. Without the estimate stored beside the actual, the check needs a human to remember the number |
 | A.5 | **Chunking is transient, not stored.** A long record stays one row; segmentation runs per chunk in memory and merges the stories | EC-COL-4 says chunks share one `record_id` — but `record_id` is the primary key, so chunks cannot be rows. Resolving it in the schema would break idempotence; resolving it in the segmenter costs nothing |
+
+Found later, all applied before any record existed, so none cost a re-run. Each is also described in the header of `pipeline/schema.sql`.
+
+| # | Delta | Found | Why |
+|---|---|---|---|
+| A.6 | **`stories.char_start`, `char_end`** — offsets into `records.text_clean`, with `char_end − char_start = length(text)` | P0 | P2-INV-2 (spans do not overlap) is uncheckable without offsets, and EC-ASK-6 wants them for exact rendering |
+| A.7 | **`analysis_reliability` carries raw agreement, κ, top-value share and marginals**; `degenerate` is a verdict | P0 | EC-VAL-2: κ alone bars correct but skewed fields |
+| A.8 | **`published`** — a singleton row pinning the run the app serves | P0 | EC-OPS-11, X-3: the app reads a pinned run, never "latest" |
+| A.9 | **`records.source` gains `youtube`, `stackexchange`, `hackernews`, `x`, `quora`** | P1 | The PM's source decision, `Docs/decisions.md` D-1 |
+| A.10 | **`records.collect_method`**, NOT NULL: `official_api`, `public_feed`, `public_scraper_lib`, `headless_render`, `apify` | P1 | D-1: three sources come through a third-party scraper against their robots policy, so how each record was obtained is disclosed per row, not only in prose |
 
 ---
 

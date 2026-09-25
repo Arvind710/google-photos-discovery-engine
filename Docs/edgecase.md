@@ -53,8 +53,11 @@ Ranked by damage × likelihood, ahead of the enumeration.
 | EC-COL-8 | GP Help thread is a support template with no user story | High apparent relevance, no content | Quality filter; logged `exclusions/quality` |
 | EC-COL-9 | No timestamp from source | The before/after Ask Photos cut breaks | `created_at` nullable; time analysis runs only over records that have it, coverage stated |
 | EC-COL-10 | Permalink dies after collection | Traceability breaks retroactively | `text_raw` stored verbatim at collect time **is** the evidence; the URL corroborates |
-| EC-COL-11 | Scraping blocked outright | Source unavailable | Four independent sources by design; degrade to smaller-but-cited and record the gap in composition rather than hiding it |
+| EC-COL-11 | Scraping blocked outright | Source unavailable | Nine sources across five collection methods (`Docs/decisions.md` D-1); degrade to smaller-but-cited and record the gap in composition rather than hiding it. For GP Help, the fallback order is fixed: Playwright render → Apify → tell the PM |
 | EC-COL-12 | A thread where several users each tell a retrieval story | Attribution wrong; one author credited with all | Segmentation carries the comment author per story; `author_key` is per story, not per record **[E]** |
+| **EC-COL-13** | **An Apify actor changes its output shape** (a field renamed, comments nested differently, a per-run id where the platform id was) | **Silent.** Records keep arriving, but empty, without authors, without comments, or duplicated on every re-run. Myntra's first probe found comments nested inside posts — treating items as flat would have kept ~5% of the text | Map on named fields and count what each mapping produced; P1-PROBE-2 checks field survival per actor on every run; key on the platform's own id, never the actor's run id **[E]** |
+| **EC-COL-14** | **GP Help rendering degrades** — Google changes the page, or the render returns before posts load | **Silent.** Threads collected with a title and no body, or with the original post but no replies (where the workarounds live) | Wait for the post container, not a timer; assert body length and reply count per thread; a run whose body-less share rises is halted, not published. Fallback per EC-COL-11 **[E]** |
+| EC-COL-15 | Collection method questioned by an evaluator | Credibility, not correctness | Disclosed rather than defended: `collect_method` on every record, source × method on the Data Bank, and D-1's full reasoning in Methodology |
 
 ---
 
@@ -136,7 +139,7 @@ Ranked by damage × likelihood, ahead of the enumeration.
 |---|---|---|---|
 | EC-COV-1 | A question marked `R` was actually codeable | Real signal skipped on my judgement | This is exactly why the pilot codes all 60 regardless of block. Dispositions are **data, not judgement**. **[E]** |
 | EC-COV-2 | High coverage but degenerate | 95% coded, 94% of them the same value. Looks informative, carries no information | Report the value distribution beside the coverage rate; flag `degenerate` above 85% concentration |
-| EC-COV-3 | Pilot coverage ≠ full-corpus coverage | Dispositions set on an unrepresentative sample | Pilot spread deliberately across all four sources; coverage recomputed after the full run and any drift reported. A question that crosses the threshold after the full run is noted, not quietly re-coded |
+| EC-COV-3 | Pilot coverage ≠ full-corpus coverage | Dispositions set on an unrepresentative sample | Pilot spread deliberately across all nine sources; coverage recomputed after the full run and any drift reported. A question that crosses the threshold after the full run is noted, not quietly re-coded |
 | EC-COV-4 | Coverage differs sharply by source | A question answerable on Reddit and never on Play Store | Report coverage **per source** as well as pooled. This is a finding about the sources, not a defect |
 | EC-COV-5 | The register is generated but never surfaced | [CTX] §9.5 requires it as an output | It is a published table on the Methodology page and the input to the Part 3 interview guide. **[E]** |
 
@@ -193,6 +196,8 @@ Plausible, well-formatted, wrong. **Build detection for these first.**
 | EC-VAL-2 | κ paradox bars a correct field | The gate fires and looks principled | Agreement + κ + marginals reported together |
 | EC-CODE-10 | `not_stated` over-used | Coverage drops, questions route to the register, nobody notices the signal was there | Cross-coder `not_stated` gap |
 | EC-COL-6 | One prolific author dominates | 200 stories sounds like 200 people | Distinct-author count beside every story count |
+| EC-COL-13 | An Apify actor's output shape drifts | Records still arrive, so the count looks healthy | Field-survival check per actor (P1-PROBE-2) |
+| EC-COL-14 | GP Help renders without post bodies or replies | Threads still arrive, with titles | Body length and reply count asserted per thread |
 | EC-CODE-15 | Inferred Stage 5 values read as fact | They are phrased like observations | `inferred` flag rendered wherever the value appears |
 
 ---

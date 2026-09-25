@@ -139,7 +139,9 @@ Before any paid call.
 | P1-INV-4 | INV | No email, phone or handle pattern survives in `text_clean` | **0 hits [EC-OPS-8]** |
 | P1-INV-5 | INV | Every exclusion carries a reason from the allowed enum | 100% |
 | P1-INV-6 | INV | No record is silently truncated. A record over the token cap is chunked on comment boundaries, and every chunk shares one `record_id` | 0 truncations **[EC-COL-4]** |
-| P1-MET-1 | MET | Each configured source contributed > 0 | All four **[EC-COL-1]** |
+| P1-MET-1 | MET | Each configured source contributed > 0 | All nine (`Docs/decisions.md` D-1) **[EC-COL-1]** |
+| P1-MET-4 | MET | Every record carries `collect_method`, and the Data Bank shows source × method | 100% (A.10, D-1) |
+| P1-PROBE-2 | PROBE | Collector field survival: for each Apify actor and the GP Help renderer, a sample of records has non-empty text, a permalink, an author and a date where the source provides one, and Reddit comments appear as their own records | 0 empty-field regressions **[EC-COL-13, EC-COL-14]** |
 | P1-MET-2 | MET | Distinct-author count reported per source | Present **[EC-COL-6]** |
 | **P1-MET-3** | MET | **Lexicon recall probe** | **T-4 ≤ 5%** |
 | **P1-PROBE-1** | PROBE | **Consensus-preservation test** | See below **[EC-CLEAN-1]** |
@@ -158,7 +160,7 @@ The most important test in P1, because the failure is invisible.
 
 The fixture also holds 5 records from a **single** author repeating near-identical text. **Assertion: 4 of the 5 are removed.** The test pins both directions — author-scoped dedupe active, cross-author dedupe absent.
 
-**Gate:** invariants green · four sources non-zero · T-4 met · P1-PROBE-1 green · funnel and exclusions browsable → deploy P1.
+**Gate:** invariants green · all nine configured sources non-zero · T-4 met · P1-PROBE-1 and P1-PROBE-2 green · funnel and exclusions browsable → deploy P1.
 
 ---
 
