@@ -22,12 +22,18 @@ from lib import db
 # Opportunities in P4, Ask AI and Try it in P5, the full How it works in P6.
 PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
     ("home.py", "How it works", "🔎", "", []),
+    ("data_bank.py", "Data Bank", "🗂️", "data_bank", [
+        ("what-was-read", "What was read"),
+        ("how-obtained", "How each source was obtained"),
+        ("set-aside", "What was set aside"),
+        ("thinnest", "Where it is thinnest"),
+        ("browse", "Read the records"),
+    ]),
 ]
 
 # Pinned in implementationplan.md §0.5 — shown on the front door as "coming",
 # never as nav links, until each is built.
 PLANNED: list[tuple[str, str]] = [
-    ("Data Bank", "Sources, the funnel from raw posts to retrieval stories, and every story"),
     ("Analysis", "Where retrieval breaks across the eleven stages, and what people remember"),
     ("Opportunities", "Ranked opportunity areas, the scoring behind them, and the recommendation"),
     ("Ask AI", "Questions answered only from the coded stories, with citations"),

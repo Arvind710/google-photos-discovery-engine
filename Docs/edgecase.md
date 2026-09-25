@@ -66,7 +66,7 @@ Ranked by damage × likelihood, ahead of the enumeration.
 | ID | Case | What breaks | Handling |
 |---|---|---|---|
 | **EC-CLEAN-1** | **Near-dedupe removes genuine repeated signal** | **Catastrophic and silent.** "Can't find old screenshots", said by 50 people, is the finding; dedupe reads it as duplication | Near-dupe **only** within `(source, author_key)`. Never across authors. Cross-author similarity is measured and *reported* as consensus strength, never removed. Jaccard > 0.85 **and** same author. **[E]** |
-| EC-CLEAN-2 | Exact dupe across sources (Reddit post quoted on a forum) | Double counting | Exact-hash dedupe across sources is safe; keep the earliest, log the other |
+| EC-CLEAN-2 | Exact dupe across sources (Reddit post quoted on a forum) | Double counting | Exact-hash dedupe; keep the earliest, log the other. **Across different authors only for text ≥ 25 words** — two people writing the same short line is consensus, not a copy (`Docs/decisions.md` D-3) |
 | EC-CLEAN-3 | PII scrub destroys meaning | A name inside a narrative gets masked and the sentence stops parsing | Typed placeholders (`[NAME]`, `[EMAIL]`) rather than deletion; sentence structure preserved |
 | **EC-CLEAN-4** | **Translation becomes the canonical text** | Coding and quoting happen on `text_en`; the reader sees the Hinglish original. Spans verify against one and display beside the other | **One canonical text for coding, quoting and verification.** Decision: code on `text_clean` (the original), give `text_en` to the model as an *aid* in the same prompt, and require spans from `text_clean`. See EC-CODE-4. **[E]** |
 | EC-CLEAN-5 | Language detection fails on short Hinglish | Misrouted or dropped | Never drop on language. `lang` is metadata; `unknown` is valid |

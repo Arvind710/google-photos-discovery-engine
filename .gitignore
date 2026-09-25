@@ -23,3 +23,7 @@ venv/
 # OS / exports
 .DS_Store
 Docs/*.zip
+
+# Raw collector payloads — UNSCRUBBED, kept locally so mappings can be re-run
+# without paying twice (EC-COL-13). Never committed (EC-OPS-8).
+data/raw/

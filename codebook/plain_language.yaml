@@ -56,3 +56,46 @@ metrics:
   kappa: >
     How often two different AI coders agreed, corrected for chance. It measures
     consistency, not correctness — two models can agree and both be wrong.
+
+# P1 — the Data Bank. Plain names for sources and for how each was collected
+# (Docs/decisions.md D-1). The method line is a disclosure, so it says plainly
+# where a platform's robots.txt was not followed.
+sources:
+  reddit:        {label: Reddit, kind: "community threads"}
+  gp_help:       {label: Google Photos Help Community, kind: "support-forum threads"}
+  play:          {label: Google Play reviews, kind: "app reviews"}
+  appstore:      {label: App Store reviews, kind: "app reviews"}
+  youtube:       {label: YouTube comments, kind: "comment threads under videos"}
+  stackexchange: {label: Stack Exchange, kind: "questions and answers"}
+  hackernews:    {label: Hacker News, kind: "comments and posts"}
+  x:             {label: X (Twitter), kind: "posts"}
+  quora:         {label: Quora, kind: "answers"}
+
+collect_methods:
+  official_api: >
+    The platform's own public API, used as documented.
+  public_feed: >
+    A public feed the platform publishes for this purpose.
+  public_scraper_lib: >
+    An open-source library that reads the public store listing.
+  headless_render: >
+    Public thread pages opened in a headless browser. The pages are allowed by
+    the site's robots.txt; the page's own script loads the posts from a path
+    that is not.
+  apify: >
+    A third-party scraping service (Apify). The platform's robots.txt disallows
+    all automated access and its own API was not available to this project;
+    collected anyway, by decision, and disclosed here.
+
+exclusion_reasons:
+  deleted: Deleted or removed before it was read
+  too_short: Too short to say anything (under 20 letters)
+  low_quality: Nothing in it that could be coded
+  exact_duplicate: The same words as an earlier record
+  near_duplicate_same_author: A near-repeat by the same person
+  lexicon_rejected: No search term matched
+  out_of_window: Outside the collection window
+  no_story: About photos, but no attempt to find one
+  span_unverified: Its evidence could not be found in the text
+  coding_failed: The model's answer could not be read
+  model_refusal: The model declined to code it

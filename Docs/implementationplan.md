@@ -346,6 +346,7 @@ Found later, all applied before any record existed, so none cost a re-run. Each 
 | A.8 | **`published`** — a singleton row pinning the run the app serves | P0 | EC-OPS-11, X-3: the app reads a pinned run, never "latest" |
 | A.9 | **`records.source` gains `youtube`, `stackexchange`, `hackernews`, `x`, `quora`** | P1 | The PM's source decision, `Docs/decisions.md` D-1 |
 | A.10 | **`records.collect_method`**, NOT NULL: `official_api`, `public_feed`, `public_scraper_lib`, `headless_render`, `apify` | P1 | D-1: three sources come through a third-party scraper against their robots policy, so how each record was obtained is disclosed per row, not only in prose |
+| A.11 | **`records.posts_json`** — for a thread stored as one record, each post's `author_key` and its offsets in `text_clean` | P1 | EC-COL-4 and the segmentation fixtures treat a thread as one record holding several people's stories. A story's author is then the author of the post its span starts in — looked up, not guessed by a model (A.2, EC-COL-12). Nullable and last, so it was added to the empty file in place |
 
 ---
 

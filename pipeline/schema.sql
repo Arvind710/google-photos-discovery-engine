@@ -26,6 +26,13 @@
 --        Applied before any record existed, so it cost nothing.
 --   A.10 (P1, 2026-09-26) records.collect_method on every row, so HOW a record
 --        was obtained is disclosed per record, not only in prose (D-1).
+--   A.11 (P1, 2026-09-26) records.posts_json — for a thread stored as ONE
+--        record (EC-COL-4), the post boundaries inside text_clean:
+--        [{"author_key": …, "start": …, "end": …}, …], end exclusive. A
+--        story's author is the author of the post its span starts in, so
+--        per-story authorship (A.2, EC-COL-12) is looked up, not guessed by a
+--        model. NULL for single-post records. Last column, so an in-place
+--        ALTER TABLE on an existing file matches a fresh build.
 
 PRAGMA foreign_keys = ON;
 
@@ -56,7 +63,8 @@ CREATE TABLE IF NOT EXISTS records (         -- raw collected material, immutabl
   region_hint    TEXT,                       -- a cross-tab dimension, never a filter ([CTX] §15.3)
   collect_query  TEXT,                       -- which lexicon term surfaced it — bias audit
   collected_at   TEXT NOT NULL,
-  ingest_run_id  TEXT NOT NULL
+  ingest_run_id  TEXT NOT NULL,
+  posts_json     TEXT                        -- A.11: post boundaries + per-post author_key
 );
 
 -- A.1: a marking table. `record_id` references a row that still exists.
@@ -200,6 +208,32 @@ CREATE TABLE IF NOT EXISTS analysis_coverage (      -- §3.4 register — all 60
 -- derived, recomputable for free, and land with the phase that fills them
 -- (P1 funnel, P4 the rest). Every one carries n, denominator and run_id
 -- (P3-INV-10).
+-- P1: the Data Bank's two tables. Derived, rebuilt whole by
+-- `python -m pipeline.analyse.funnel` after every collect or clean run.
+CREATE TABLE IF NOT EXISTS analysis_funnel (          -- [CTX] §8.4 view 1
+  step       TEXT NOT NULL,                  -- collected | excluded:<reason> | kept (P2 adds story steps)
+  step_order INTEGER NOT NULL,
+  source     TEXT NOT NULL,                  -- a source, or '_all'
+  n          INTEGER NOT NULL,
+  denom      INTEGER NOT NULL,               -- records collected from that source
+  n_authors  INTEGER,                        -- EC-COL-6
+  run_id     TEXT NOT NULL,
+  PRIMARY KEY (step, source)
+);
+
+CREATE TABLE IF NOT EXISTS analysis_sources (         -- source × method, D-1 disclosure
+  source         TEXT PRIMARY KEY,
+  collect_method TEXT NOT NULL,
+  n_records      INTEGER NOT NULL,
+  n_authors      INTEGER NOT NULL,
+  n_threads      INTEGER NOT NULL,           -- records holding more than one post (A.11)
+  n_dated        INTEGER NOT NULL,
+  earliest       TEXT, latest TEXT,
+  n_kept         INTEGER NOT NULL,
+  collect_usd    REAL,                       -- third-party spend (Apify); OpenAI is in runs.cost_usd
+  run_id         TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS analysis_crosstab (
   dim_a  TEXT NOT NULL, val_a TEXT NOT NULL,
   dim_b  TEXT NOT NULL, val_b TEXT NOT NULL,

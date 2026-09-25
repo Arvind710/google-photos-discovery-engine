@@ -69,3 +69,64 @@ Apify is billed separately from the $15 OpenAI ceiling. The PM upgraded the
 Apify account; the monthly limit is **$10** (cycle 2026-09-19 → 10-18, $0.00
 used at the time of writing). The P1A pilot measures the real cost per record
 before the full collect.
+
+---
+
+## D-2 — GP Help threads are screened on their listing text before rendering (2026-09-26, Claude, disclosed)
+
+Rendering a thread takes 2–3 seconds, and the forum's search is disallowed, so
+threads are found from the listing page (`/photos/threads?max_results=N`,
+which returns up to ~2,000 threads with title and first line in one load).
+Of 1,999 listed on 2026-09-26, **52 (2.6%)** mentioned finding or searching;
+the rest were deletion, backup, sync and account problems.
+
+So `pipeline/collect/gp_help.py` renders only threads whose title or first
+line matches a deliberately broad retrieval pattern (`SCREEN`). This is a
+recall-first gate in front of the model's relevance pass, and it has the same
+blind spot as the lexicon (EC-PRE): a thread that never says "find", "search",
+"looking for" and the like in its opening line is not collected. The counts —
+listed, matched, rendered, render failures — are stored in each run's params
+and shown on the Data Bank.
+
+## D-3 — Exact duplicates across different authors are kept when short (2026-09-26, Claude)
+
+Myntra's dedupe (ported) removed exact duplicates across authors as well as
+within one. For short text that is the EC-CLEAN-1 failure in another form: two
+different people writing the identical line "search can't find old photos"
+are two voices. The rule now removes an exact duplicate only when it shares an
+author with the kept copy, or when the text is ≥ 25 words, where identical
+wording means a quote or cross-post rather than coincidence. Near-duplicates
+remain same-author only. Pinned by
+`test_exact_duplicate_short_text_from_different_authors_is_consensus`.
+
+## D-4 — What the P1A pilot found in the collectors (2026-09-26, Claude)
+
+The pilot (981 records, all nine sources) surfaced four collector defects. Each
+was silent — records kept arriving and looked fine — and each is now pinned by
+a test.
+
+1. **The X actor refused work while reporting SUCCEEDED.** `apidojo~tweet-scraper`
+   caps runs per month for accounts on Apify's free plan; past the cap it
+   returns `{"noResults": true}` placeholders. Replaced by the pay-per-result
+   `kaitoeasyapi~twitter-x-data-tweet-scraper-pay-per-result-cheapest` (search
+   field `twitterContent`). `apify.log_says_limited()` now reads the run log
+   whenever a run returns only placeholders, and records the query as
+   **refused**, not as a zero yield (EC-COL-13).
+2. **Long X posts were clipped at 280 characters.** The mapper preferred
+   `fullText`, which in apidojo's output is the clipped field; `text` held the
+   whole post (up to 23,778 characters). Caught by P1-INV-6. The mapper now
+   takes the longer field, and the 18 affected records were re-mapped from the
+   saved raw payloads (run `repair-x-truncation`) rather than re-bought.
+3. **Permalinks carried usernames.** X URLs are `x.com/<handle>/status/<id>` and
+   Quora answer URLs end `/answer/<Author-Name>` — PII in a public corpus, and
+   outside the text the scrubber sees. Rewritten to `x.com/i/status/<id>` and to
+   the question page with `#answer-<id>` (run `repair-permalink-pii`, 205
+   records); P1-INV-4 now checks permalinks too.
+4. **Play's country parameter is not a region.** `en-IN` and `en-US` returned
+   the same reviews, so Play records carry no `region_hint`. App Store feeds are
+   per storefront and keep theirs.
+
+**Measured Reddit cost.** Whole threads (post + every comment) cost about
+**$6.70 per 1,000 threads** — Myntra's $0.38 per 1,000 counted each comment as a
+record. The full Reddit collect is sized to that figure, inside the $10 Apify
+limit.
