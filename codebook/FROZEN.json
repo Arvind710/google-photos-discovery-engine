@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "content_hash": "03257d4f792664ed2f8985491c226e0bbdbd7b0a9d501cc004a0c5f925165d65",
+  "version_string": "v1:03257d4f",
+  "frozen_at": "2026-09-25T19:12:33+00:00",
+  "files": [
+    "journey_v1.yaml",
+    "severity_v1.yaml",
+    "metric_nodes_v1.yaml"
+  ],
+  "n_questions": 60,
+  "note": "P0 freeze \u2014 60 questions from [SOL-JOURNEY] Part 2; six danger boundary notes; spine rule for wrong cues (5.3 vs Stage 2)"
+}

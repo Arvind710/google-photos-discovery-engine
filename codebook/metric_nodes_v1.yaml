@@ -1,0 +1,71 @@
+# metric_nodes_v1.yaml — [SOL-METRIC], the revised decomposition inside [SOL-JOURNEY]
+# (critique point 5). Every opportunity maps to one of these nodes ([CTX] §9.2
+# "metric leverage"). Frozen with the codebook.
+#
+#   Success rate = P(enters a retrieval path in GP)
+#                × [ P(found on attempt 1)
+#                  + P(not found on 1) × P(refines instead of quitting) × P(found after refinement) ]
+#   P(found on any attempt) = P(query captures a usable cue)
+#                           × P(target ranked where the user will see it)
+#                           × P(user recognises it)
+#
+# Stage 0 is the precondition the formula assumes: the target has to be in the
+# library, and indexable, for any factor above to be non-zero.
+
+version: v1
+formula: >
+  success = enters_gp_retrieval_path × [found_first + (1 − found_first) ×
+  refines_instead_of_quitting × found_after_refinement], where each "found" =
+  query_captures_usable_cue × target_ranked_visible × user_recognises_target,
+  all conditional on target_retrievable.
+
+nodes:
+  target_retrievable:
+    kind: precondition
+    label: The photo is in Google Photos and can be indexed
+    stages: ["0"]
+    owners: [library_data]
+  enters_gp_retrieval_path:
+    kind: factor
+    label: They look for it in Google Photos at all
+    stages: ["2", "3", "10"]
+    owners: [strategy]
+    note: Includes the invisible failure — people who never search because they learned it won't work.
+  query_captures_usable_cue:
+    kind: factor
+    label: What they search with carries a cue that can find it
+    stages: ["2", "4", "5"]
+    owners: [memory, expression, system]
+    note: Memory, expression and system understanding all live inside this one factor — which is why primary_stage, not this node, separates them.
+  target_ranked_visible:
+    kind: factor
+    label: The photo is shown where they will see it
+    stages: ["5"]
+    owners: [system]
+  user_recognises_target:
+    kind: factor
+    label: They recognise it when they see it
+    stages: ["6"]
+    owners: [presentation]
+  refines_instead_of_quitting:
+    kind: factor
+    label: After a miss, they try again rather than give up
+    stages: ["7", "8"]
+    owners: [recovery, persistence]
+  found_after_refinement:
+    kind: factor
+    label: Trying again gets them there
+    stages: ["6", "7"]
+    owners: [recovery]
+  # Not factors. Questions whose answers segment or measure, rather than drag
+  # down, the metric.
+  context:
+    kind: segmenting_variable
+    label: Who, why and how urgently — the segment, not a factor
+    stages: ["1"]
+    owners: [none]
+  outcome_measure:
+    kind: dependent_variable
+    label: What happened in the end
+    stages: ["9", "10"]
+    owners: [none]

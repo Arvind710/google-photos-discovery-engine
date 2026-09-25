@@ -1,0 +1,767 @@
+# journey_v1.yaml — THE codebook. Single source of truth for the coding prompts,
+# the evidence explorer's filters, the analytics and the app's labels
+# (architecture.md §3.5).
+#
+# Source: [SOL-JOURNEY] Part 2(a) (stages) and Part 2(b)/(c) (the question bank),
+# in `Docs/September_Problem_s_Solution_*.md`. Every one of the 60 questions
+# appears; every value is a slug of a bullet written there. Values are NEVER
+# invented. Every question also accepts `not_stated` and `other` — `other` is
+# written to story_codes as `other:<free text>`.
+#
+# FROZEN. The freeze record (hash + frozen_at) lives in codebook/FROZEN.json, not
+# here, because writing a timestamp into this file would change its own hash.
+# `pipeline.common.codebook.load()` refuses to run if this file's hash differs
+# from the frozen one. To change anything: bump to v1.1 and re-freeze
+# (EC-CODE-13). The P3 remediation loop (sharpening a boundary_note) is such a
+# bump, and it is expected.
+#
+# `block` is the STARTING disposition (arch §3.3). The pilot measures coverage
+# for all 60 and the effective disposition lives in `analysis_coverage`, not
+# here — so moving a question between the register and a block after the pilot
+# is data, not a codebook edit (arch §3.4).
+#
+# Blocks: A spine (all stories) · B memory & articulation (core) · C system &
+# recognition (reaches 5–6) · D adaptation to aftermath (reaches 7+) ·
+# R interview register · S structural (standing bias flag, not a variable).
+#
+# `select`: single | multi. `metric_node` keys live in metric_nodes_v1.yaml.
+
+version: v1
+
+# --------------------------------------------------------------------------
+# Spine fields (block A) that are not question-bank questions but are derived
+# from it. Enums mirror the CHECK constraints in pipeline/schema.sql.
+spine:
+  photo_class:
+    values: [sentimental, utility, both, unclear]
+    boundary_note: >
+      Utility = taken to keep information (medicine, receipt, ID, bill, whiteboard,
+      parking spot, screenshot of an address); the goal is to extract something.
+      Sentimental = taken to keep a moment (trip, person, event); the goal is to
+      see or share it again. `both` only when the story states both purposes;
+      `unclear` when the text gives no basis. Never infer from media_type alone —
+      a screenshot of a friend's message can be sentimental.
+  media_type:
+    values: [photo, screenshot, document, video, mixed]
+    boundary_note: >
+      A video-ONLY story is bucket `adjacent`, reason `video_out_of_scope`
+      ([CTX] §15.1). A story involving both a photo and a video is `mixed` and
+      stays in core. `document` = a photo of a paper document or card;
+      `screenshot` = a device screen capture.
+  outcome:
+    values: [found, found_after_struggle, substitute_accepted, abandoned_with_fallback,
+             abandoned_without_fallback, false_positive, found_later_by_accident, not_stated]
+  primary_stage:
+    values: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    boundary_note: >
+      The stage where the story FIRST went wrong, not the most dramatic one. Read
+      the story in journey order and stop at the first failure. If the photo was
+      never in Google Photos, that is Stage 0 even if the search also failed. If
+      the user produced usable cues and typed them, and the system returned
+      nothing or the wrong thing, that is Stage 5, not Stage 2. Stage 5 is the
+      most DISCUSSED failure — that is not evidence it came first (EC-CODE-2).
+      WRONG OR FUZZY CUES ARE PART OF WHAT "VAGUE" MEANS, not by themselves a
+      Stage 2 failure: if the user searched with at least one correct, usable cue
+      and the target was lost because another cue was wrong (the wrong year),
+      that is 5.3. Stage 2 is when what they remembered was not enough to form
+      any usable search at all. A search that was never run is Stage 3 if they
+      chose not to search, Stage 4 if they could not work out what to type.
+  failure_owner:
+    # Derived from primary_stage — never coded independently ([CTX] §5, §8.1).
+    from_stage: {"0": library_data, "1": none, "2": memory, "3": strategy, "4": expression,
+                 "5": system, "6": presentation, "7": recovery, "8": persistence,
+                 "9": none, "10": none}
+
+# --------------------------------------------------------------------------
+stages:
+  - id: "0"
+    name: Library state
+    owner: library_data
+    inferred: false
+    questions:
+      - id: "0.1"
+        block: A
+        select: single
+        text: Is the target actually in this Google Photos account?
+        plain: Whether the photo was ever in Google Photos at all
+        metric_node: target_retrievable
+        values: [yes_backed_up, device_only_backup_off_or_folder_excluded, other_account,
+                 someone_elses_library_or_shared, only_in_other_app, old_device_or_sd_or_other_cloud,
+                 trash_archive_or_locked_folder, deleted, never_taken_or_false_memory,
+                 not_stated, other]
+        boundary_note: >
+          Code a value other than yes_backed_up only when the story states or clearly
+          implies where the photo actually was. A story whose failure is explained by
+          this question alone is bucket `adjacent` (Stage 0), per [CTX] §7.2.
+      - id: "0.2"
+        block: B
+        select: multi
+        text: What metadata does it carry, and is it correct?
+        plain: Whether the photo's date, place and faces were recorded correctly
+        metric_node: target_retrievable
+        values: [date:correct, date:received_date_not_capture, date:scan_date, date:wrong_clock_or_timezone,
+                 location:present, location:absent, location:inaccurate,
+                 faces:grouped_named, faces:grouped_unnamed, faces:grouping_off_or_unavailable,
+                 organisation:in_album, organisation:not_in_album, organisation:captioned,
+                 organisation:favourited,
+                 not_stated, other]
+      - id: "0.3"
+        block: A
+        select: multi
+        text: How indexable is the content?
+        plain: Whether anything in the image itself could be searched for
+        metric_node: target_retrievable
+        values: [distinctive_subject, generic_subject, near_duplicate_or_burst, low_quality,
+                 text_heavy_ocr_dependent, key_element_small_in_frame, meaning_not_visual,
+                 not_stated, other]
+      - id: "0.4"
+        block: C
+        select: multi
+        text: What is the library's composition?
+        plain: How big and cluttered the library is
+        metric_node: target_retrievable
+        values: [size_hundreds, size_thousands, size_tens_of_thousands_plus,
+                 heavy_screenshot_meme_forward_clutter, heavy_duplication,
+                 several_peoples_photos_mixed, many_similar_events,
+                 not_stated, other]
+      - id: "0.5"
+        block: C
+        select: multi
+        text: What were the capture and organisation habits?
+        plain: How the photo was taken and whether the user organises
+        metric_node: target_retrievable
+        values: [taken_deliberately_as_note, taken_incidentally, received_not_taken,
+                 never_organises, makes_albums, favourites, captions, deletes_aggressively,
+                 not_stated, other]
+
+  - id: "1"
+    name: Trigger and intent
+    owner: none
+    inferred: false
+    questions:
+      - id: "1.1"
+        block: A
+        select: single
+        text: What triggered the need?
+        plain: Why they went looking for the photo
+        metric_node: context
+        values: [spontaneous, conversational, request, practical, calendar_or_social,
+                 creation, proof, revisit, resemblance,
+                 not_stated, other]
+        value_notes:
+          spontaneous: nostalgia, a random thought, a smell or song
+          conversational: someone mentions the trip, "remember that time…"
+          request: '"send me that pic"'
+          practical: doctor asks the medicine name; ID, receipt, warranty; parking spot; rebuying; recipe; whiteboard; an address or number
+          calendar_or_social: birthday, anniversary, death, farewell, throwback trend, a Memory surfacing something adjacent
+          creation: collage, wedding video, slideshow, profile picture, presentation
+          proof: settling an argument, insurance claim, complaint, legal evidence
+          revisit: going back to the place and wanting the café's name
+          resemblance: seeing something that reminds them of the photo
+      - id: "1.2"
+        block: B
+        select: multi
+        text: What will they do with it once found?
+        plain: What they needed the photo for
+        metric_node: context
+        values: [show_on_screen, send_or_share, extract_information, reminisce_privately,
+                 prove_or_verify, reuse_post_print_edit, get_whole_set, settle_own_doubt,
+                 not_stated, other]
+      - id: "1.3"
+        block: B
+        select: single
+        text: How specific is the target?
+        plain: Whether only one exact photo would do
+        metric_node: context
+        values: [exactly_one_photo, any_photo_from_moment, any_photo_of_person_or_object,
+                 only_information_inside, whole_event_set,
+                 not_stated, other]
+      - id: "1.4"
+        block: B
+        select: multi
+        text: What are the urgency and context?
+        plain: How much of a hurry they were in, and where
+        metric_node: context
+        values: [urgency:seconds_someone_waiting, urgency:minutes_under_stress, urgency:no_limit,
+                 urgency:planning_ahead,
+                 setting:one_handed_or_walking, setting:poor_network, setting:others_watching_screen,
+                 not_stated, other]
+      - id: "1.5"
+        block: A
+        select: single
+        text: How much does it matter?
+        plain: What was at stake
+        metric_node: context
+        values: [deep_sentimental, real_consequences_money_health_legal, mildly_nice_to_have,
+                 not_stated, other]
+      - id: "1.6"
+        block: R
+        select: single
+        text: Who is searching?
+        plain: Whose phone, and who was doing the searching
+        metric_node: context
+        values: [owner, family_member_on_owners_phone, searching_on_behalf_of_another,
+                 not_stated, other]
+
+  - id: "2"
+    name: Memory reconstruction
+    owner: memory
+    inferred: false
+    boundary_note: &stage2_vs_4 >
+      STAGE 2 vs STAGE 4 — the call that decides whether the problem is the user's
+      memory or the product's language understanding, which is the recommendation
+      (EC-CODE-7). Stage 2: the user COULD NOT REMEMBER the detail ("no idea which
+      year", "can't recall where"). Stage 4: the user REMEMBERED it but COULD NOT
+      SAY IT in a form the search accepts ("I know exactly what it looked like but
+      don't know what to type", "don't know the name of the medicine", "it was the
+      day after my interview"). Test: if the user had the right words, would the
+      memory have been enough? Yes → Stage 4. No → Stage 2.
+    questions:
+      - id: "2.1"
+        block: A
+        select: multi
+        text: Which cues do they recall?
+        plain: What they actually remember about the photo
+        metric_node: query_captures_usable_cue
+        values: [who:people_present, who:relationship, who:pets, who:who_took_it, who:present_not_in_frame,
+                 what:main_subject, what:objects, what:activity, what:visible_text, what:photo_type,
+                 where:place_type, where:named_place, where:city_or_region, where:indoor_outdoor, where:landmark,
+                 when:exact_date, when:year, when:season_weather_festival, when:time_of_day_or_light,
+                 when:life_period, when:relative_to_event,
+                 event:trip, event:festival, event:wedding, event:party, event:illness,
+                 perceptual:colours, perceptual:clothing, perceptual:composition, perceptual:orientation,
+                 perceptual:blur, perceptual:lighting,
+                 meaning:funny, meaning:embarrassing, meaning:gist,
+                 capture:why_taken, capture:before_or_after,
+                 source:received_whatsapp, source:screenshotted_from_app,
+                 library_position:near_other_photos, library_position:around_device_change,
+                 library_position:far_down,
+                 not_stated, other]
+      - id: "2.2"
+        block: B
+        select: multi
+        text: How confident and accurate is each cue?
+        plain: Whether what they remembered was right
+        metric_node: query_captures_usable_cue
+        # Written as one story_codes row per cue, with the cue in `value` and the
+        # judgement in `accuracy` (schema: accuracy is 2.2 only).
+        accuracy_values: [certain_correct, certain_wrong, range, relative_only, inferred]
+        values: [certain_correct, certain_wrong, range, relative_only, inferred,
+                 not_stated, other]
+        boundary_note: >
+          certain_wrong requires the story to REVEAL the truth later ("turns out it
+          was 2020"). A cue the user merely doubts is `range` or not coded. This is
+          the direct evidence for 5.3 — do not infer it from the search failing.
+      - id: "2.3"
+        block: R
+        select: single
+        text: How much do the cues narrow things down?
+        plain: Whether their clues were enough to single the photo out
+        metric_node: query_captures_usable_cue
+        values: [one_generic_cue_weak, several_weak_cues_combine, one_highly_distinctive_cue,
+                 not_stated, other]
+      - id: "2.4"
+        block: A
+        select: multi
+        text: What is typically missing?
+        plain: What they have forgotten about the photo
+        metric_node: query_captures_usable_cue
+        values: [date_or_year, exact_place_or_venue_name, album, whose_phone_took_it,
+                 word_for_the_thing, what_else_in_frame, photo_video_or_screenshot,
+                 which_app_or_account,
+                 not_stated, other]
+        boundary_note: *stage2_vs_4
+        value_boundary:
+          word_for_the_thing: >
+            Belongs HERE (Stage 2) only when the user does not know the thing itself.
+            If they know the thing and lack only the search term ("I know it's the
+            blue strip, don't know what to type"), that is 4.3 no_word_for_thing.
+      - id: "2.5"
+        block: B
+        select: multi
+        text: Why is it missing?
+        plain: Why they forgot it
+        metric_node: query_captures_usable_cue
+        values: [never_encoded, decay_over_time, interference_similar_events, conflation_of_two_memories,
+                 no_vocabulary, someone_elses_event, poor_encoding_stress_or_illness,
+                 not_stated, other]
+      - id: "2.6"
+        block: B
+        select: single
+        text: How sure are they the photo exists and is in Google Photos?
+        plain: Whether they were sure the photo existed and was in Google Photos
+        metric_node: enters_gp_retrieval_path
+        values: [certain, fairly_sure, unsure_ever_taken, unsure_gp_or_whatsapp, unsure_who_took_it,
+                 not_stated, other]
+      - id: "2.7"
+        block: B
+        select: multi
+        text: What is their mental model of how it can be found?
+        plain: How they believe Google Photos finds photos
+        metric_node: enters_gp_retrieval_path
+        values: [scroll_to_date, by_place, type_right_word, ask_gemini, search_wont_understand,
+                 unaware_search_finds_content, search_only_finds_tagged,
+                 not_stated, other]
+      - id: "2.8"
+        block: B
+        select: multi
+        text: Do they gather cues from outside before searching?
+        plain: Whether they looked up clues elsewhere before searching
+        metric_node: query_captures_usable_cue
+        values: [ask_companion, check_external_records, count_back_from_life_events,
+                 mentally_replay_scene, skip_straight_to_app,
+                 not_stated, other]
+        value_notes:
+          check_external_records: Maps Timeline, tickets, emails, bank statements, calendar, social posts, chat history
+
+  - id: "3"
+    name: Strategy selection
+    owner: strategy
+    inferred: false
+    questions:
+      - id: "3.1"
+        block: B
+        select: single
+        text: Where do they look first?
+        plain: Which app they looked in first
+        metric_node: enters_gp_retrieval_path
+        values: [google_photos, oem_gallery, whatsapp, own_instagram_or_facebook, email_or_drive,
+                 ask_person_who_took_it, someone_elses_phone, google_search_or_maps,
+                 not_stated, other]
+      - id: "3.2"
+        block: A
+        select: multi
+        text: Which mode do they use inside Google Photos?
+        plain: How they looked inside Google Photos
+        metric_node: enters_gp_retrieval_path
+        values: [timeline_scroll, timeline_scroll_with_scrubber, search_bar_keywords, ask_photos,
+                 people_places_things_chips, documents_or_screenshots_category, map_view,
+                 albums_memories_favourites, combined_search_then_scroll,
+                 not_stated, other]
+      - id: "3.3"
+        block: C
+        select: multi
+        text: Why that mode?
+        plain: Why they chose that way of looking
+        metric_node: enters_gp_retrieval_path
+        values: [habit, past_success_or_failure, matches_cue_type, perceived_speed,
+                 unaware_of_alternatives, distrust_of_search,
+                 not_stated, other]
+      - id: "3.4"
+        block: B
+        select: multi
+        text: If they avoid search, why?
+        plain: Why they did not use search at all
+        metric_node: enters_gp_retrieval_path
+        values: [dont_trust_it, dont_know_what_to_type, failed_before, prefer_visual_scanning,
+                 language_friction, ask_photos_unavailable_or_unknown, worry_what_shows_on_screen,
+                 not_stated, other]
+      - id: "3.5"
+        block: C
+        select: single
+        text: Do they plan a single path or a combination?
+        plain: Whether they used one way of looking or several
+        metric_node: enters_gp_retrieval_path
+        values: [single_mode, sequential_modes, search_for_anchor_then_scroll,
+                 not_stated, other]
+
+  - id: "4"
+    name: Cue translation (articulation)
+    owner: expression
+    inferred: false
+    boundary_note: *stage2_vs_4
+    questions:
+      - id: "4.1"
+        block: A
+        select: single
+        text: What shape does the first query take?
+        plain: What they typed first
+        metric_node: query_captures_usable_cue
+        # The literal query, where given, also goes to the `queries` table.
+        values: [single_noun, several_keywords, named_entity, full_natural_description, question,
+                 relative_time_phrase, exclusion, visual_description, event_plus_year,
+                 code_mixed_misspelt_or_synonym,
+                 not_stated, other]
+      - id: "4.2"
+        block: B
+        select: multi
+        text: Which cues make it into the query?
+        plain: Which of their memories made it into the search
+        metric_node: query_captures_usable_cue
+        values: [most_salient_only, uncertain_cues_left_out, wrong_cues_included_confidently,
+                 cues_dropped_assumed_unsupported, over_specified, keyword_compressed,
+                 not_stated, other]
+        boundary_note: *stage2_vs_4
+      - id: "4.3"
+        block: B
+        select: multi
+        text: What blocks expression?
+        plain: What stopped them saying what they remembered
+        metric_node: query_captures_usable_cue
+        values: [no_word_for_thing, cue_not_visual, cue_episodic_or_relational,
+                 cue_needs_personal_knowledge, cue_is_fuzzy_range, visual_impression_hard_to_word,
+                 typing_friction, belief_exact_terms_required,
+                 not_stated, other]
+        boundary_note: *stage2_vs_4
+      - id: "4.4"
+        block: C
+        select: multi
+        text: How does their mental model shape phrasing?
+        plain: How their idea of the search shaped what they typed
+        metric_node: query_captures_usable_cue
+        values: [keyword_mode, conversational_mode, guessing_system_labels, probing_what_system_understands,
+                 copying_suggestions_or_chips,
+                 not_stated, other]
+      - id: "4.5"
+        block: C
+        select: multi
+        text: Which structured inputs do they use?
+        plain: Which filters or shortcuts they used
+        metric_node: query_captures_usable_cue
+        values: [filters, date_picker, people_or_place_chips, suggested_queries, voice_input,
+                 similar_photos, none,
+                 not_stated, other]
+
+  - id: "5"
+    name: Interpretation and matching
+    owner: system
+    inferred: true   # every value renders as "inferred from user evidence", never as fact (EC-CODE-15)
+    questions:
+      - id: "5.1"
+        block: C
+        select: multi
+        text: Is the query parsed correctly?
+        plain: Whether search understood what they typed
+        metric_node: query_captures_usable_cue
+        values: [entities_misparsed, relative_time_unresolved, personal_reference_unresolved,
+                 place_name_misparsed, negation_ignored, code_mixed_language_failed,
+                 parsed_ok,
+                 not_stated, other]
+      - id: "5.2"
+        block: C
+        select: multi
+        text: Does the index contain the cue at all?
+        plain: Google Photos had never recorded the detail they searched for
+        voice: "It's clearly a photo of the medicine strip but searching the name finds nothing"
+        metric_node: query_captures_usable_cue
+        values: [missing_location, wrong_date, unnamed_face, text_not_ocrd, object_unrecognised,
+                 concept_not_modelled,
+                 not_stated, other]
+        boundary_note: &triple >
+          THE 5.2 / 5.3 / 5.4 TRIPLE — three owners, three different solves, often one
+          sentence of user text (EC-CODE-3). Do not collapse them.
+          5.2 INDEX: the cue was never recorded on the photo — no GPS, wrong date,
+          unnamed face, text not OCR'd, object not recognised. Even a perfect query
+          could not match it. Signal: the user's cue was CORRECT and the photo is
+          later found by another route that shows the data was missing.
+          5.3 FILTER: the system DISCARDED a correct target because one cue was wrong
+          or over-strict — the wrong year, too many ANDed terms. Signal: the user's
+          cue was WRONG or fuzzy, or adding a cue made results vanish.
+          5.4 RANKING: the target WAS returned, but buried — below the fold, among
+          near-duplicates, under clutter. Signal: the user eventually found it IN
+          the results after scrolling.
+          If the story does not let you tell which, code `not_stated` — never guess
+          between them.
+      - id: "5.3"
+        block: C
+        select: multi
+        text: Are cues treated as hard filters or soft signals?
+        plain: The system discarded the photo because one detail was wrong
+        voice: "I said 2019 and got nothing — turns out it was 2020"
+        metric_node: query_captures_usable_cue
+        values: [hard_filter_single_cue, and_logic_shrinks_recall, soft_ok,
+                 not_stated, other]
+        boundary_note: *triple
+      - id: "5.4"
+        block: C
+        select: multi
+        text: Is the target retrieved but badly ranked?
+        plain: The photo was in the results but buried
+        voice: "It was there, just 200 photos down"
+        metric_node: target_ranked_visible
+        values: [buried_below_fold, crowded_by_near_duplicates, recency_bias, clutter_ranked_above,
+                 not_stated, other]
+        boundary_note: *triple
+      - id: "5.5"
+        block: C
+        select: single
+        text: Can it infer across cues?
+        plain: Whether search could connect one clue to another
+        metric_node: query_captures_usable_cue
+        values: [cross_cue_inference_needed_and_absent, cross_cue_inference_worked,
+                 not_stated, other]
+        value_notes:
+          cross_cue_inference_needed_and_absent: e.g. "when I was sick" → a time window from nearby pharmacy photos; a trip from a location cluster
+      - id: "5.6"
+        block: A
+        select: single
+        text: What response type does the user see?
+        plain: What search showed them
+        metric_node: target_ranked_visible
+        values: [zero_results, far_too_many, irrelevant_results, confident_wrong_ask_photos_answer,
+                 cant_find_it_message, slow_response,
+                 not_stated, other]
+
+  - id: "6"
+    name: Scanning and recognition
+    owner: presentation
+    inferred: false
+    questions:
+      - id: "6.1"
+        block: C
+        select: single
+        text: What do they face?
+        plain: How many results they had to look through
+        metric_node: user_recognises_target
+        values: [zero_results, a_handful, hundreds, ask_photos_answer_with_few_photos,
+                 nothing_resembling_target,
+                 not_stated, other]
+      - id: "6.2"
+        block: R
+        select: multi
+        text: How do they scan?
+        plain: How they looked through the results
+        metric_node: user_recognises_target
+        values: [quick_thumbnail_scan, stop_at_first_plausible, open_full_screen_and_zoom,
+                 swipe_to_neighbours, check_info_panel, compare_near_duplicates,
+                 not_stated, other]
+      - id: "6.3"
+        block: C
+        select: single
+        text: How do they judge a match?
+        plain: How they decided a result was the one
+        metric_node: user_recognises_target
+        values: [instant_recognition, recognise_event_not_photo, partial_match, unsure_lookalikes,
+                 need_to_read_text_inside, verify_with_metadata,
+                 not_stated, other]
+      - id: "6.4"
+        block: C
+        select: multi
+        text: What makes judging hard?
+        plain: What made the results hard to judge
+        metric_node: user_recognises_target
+        values: [tiny_thumbnails, near_duplicates, many_similar_events, no_explanation_why_shown,
+                 documents_look_identical, others_watching_screen, screenshots_memes_mixed_in,
+                 not_stated, other]
+      - id: "6.5"
+        block: C
+        select: multi
+        text: What do results teach them?
+        plain: What seeing the results reminded them of
+        voice: "Seeing the beach photos made me realise it was 2021, not 2022"
+        metric_node: user_recognises_target
+        values: [corrected_cue, newly_recalled_detail, system_vocabulary, cue_was_wrong,
+                 may_be_in_another_app, nothing,
+                 not_stated, other]
+        boundary_note: >
+          Results as memory cues — the headline hypothesis. Code a value other than
+          `nothing` only when the story says the RESULTS caused the new knowledge.
+          A detail the user recalled on their own before searching is 2.x, not 6.5.
+      - id: "6.6"
+        block: R
+        select: single
+        text: How deep do they scan before deciding?
+        plain: How far down the results they went
+        metric_node: user_recognises_target
+        values: [first_screen_only, a_few_scrolls, exhaustive,
+                 not_stated, other]
+      - id: "6.7"
+        block: C
+        select: multi
+        text: What do they do on a near-hit?
+        plain: What they did with a photo that was close but not it
+        metric_node: found_after_refinement
+        values: [open_and_swipe_to_neighbours, read_date_jump_timeline, search_person_or_place_shown,
+                 ignore_it,
+                 not_stated, other]
+
+  - id: "7"
+    name: Diagnosis and adaptation
+    owner: recovery
+    inferred: false
+    questions:
+      - id: "7.1"
+        block: D
+        select: single
+        text: How do they explain the failure to themselves?
+        plain: What they thought went wrong
+        metric_node: refines_instead_of_quitting
+        values: [deleted_or_doesnt_exist, wrong_words, search_is_useless, my_memory_is_wrong,
+                 in_another_app_or_account, no_explanation_random_tweaks,
+                 not_stated, other]
+      - id: "7.2"
+        block: D
+        select: multi
+        text: Which tactic do they try next?
+        plain: What they tried next
+        metric_node: found_after_refinement
+        # Ordered: story_codes.seq keeps the order the story gives.
+        values: [rephrase_synonyms, add_cue_narrow, remove_cue_broaden, shift_time_range, swap_cue_type,
+                 switch_keywords_natural_language, use_chips_or_filters, switch_mode,
+                 anchor_and_pivot, leave_app_fetch_cue, repeat_same_query, quit,
+                 not_stated, other]
+      - id: "7.3"
+        block: D
+        select: multi
+        text: What new information do they use?
+        plain: What new information helped them try again
+        metric_node: found_after_refinement
+        values: [near_hit_metadata, detail_triggered_by_results, system_labels_or_suggestions,
+                 outside_confirmation, nothing_new,
+                 not_stated, other]
+      - id: "7.4"
+        block: D
+        select: multi
+        text: What is their emotional state?
+        plain: How they felt while searching
+        metric_node: refines_instead_of_quitting
+        # Severity input only, never a headline ([CTX] §4.3).
+        values: [frustration, self_doubt, sunk_cost_determination, anxiety_someone_waiting,
+                 embarrassment, resignation, enjoyment,
+                 not_stated, other]
+      - id: "7.5"
+        block: D
+        select: single
+        text: Does the product help them refine?
+        plain: Whether Google Photos helped them try again
+        metric_node: found_after_refinement
+        values: [suggestions, clarifying_questions, related_searches, nothing,
+                 not_stated, other]
+
+  - id: "8"
+    name: Persistence
+    owner: persistence
+    inferred: false
+    questions:
+      - id: "8.1"
+        block: R
+        select: single
+        text: How many attempts and how much time do they spend?
+        plain: How long they kept trying
+        metric_node: refines_instead_of_quitting
+        values: [one_attempt, few_attempts_minutes, many_attempts_under_hour, hour_or_more,
+                 not_stated, other]
+        value_notes:
+          _source: >
+            [SOL-JOURNEY] says "record query count, mode switches and total time";
+            the four bands are that instruction made codeable. Register by default:
+            [CTX] §3.3 names this as the example public data cannot answer.
+      - id: "8.2"
+        block: D
+        select: multi
+        text: What decides continue vs quit?
+        plain: What made them keep going or give up
+        metric_node: refines_instead_of_quitting
+        values: [stakes, sense_of_progress, time_pressure, easier_alternative_source,
+                 confidence_photo_exists, fatigue,
+                 not_stated, other]
+      - id: "8.3"
+        block: R
+        select: single
+        text: What shape does the path take?
+        plain: How their search unfolded over time
+        metric_node: refines_instead_of_quitting
+        values: [steady_narrowing, thrashing, mode_hopping, converging_through_anchor,
+                 wandering_into_browsing,
+                 not_stated, other]
+      - id: "8.4"
+        block: R
+        select: single
+        text: Do they get any sense of warmer or colder?
+        plain: Whether they could tell they were getting closer
+        metric_node: refines_instead_of_quitting
+        values: [results_drifting_toward_event, no_signal,
+                 not_stated, other]
+
+  - id: "9"
+    name: Outcome
+    owner: none
+    inferred: false
+    questions:
+      - id: "9.1"
+        block: A
+        select: multi
+        text: If found, how?
+        plain: How they finally found it
+        metric_node: outcome_measure
+        values: [path:first_query, path:refined_query, path:anchor_and_pivot, path:pure_scrolling,
+                 path:specific_mode, path:outside_help,
+                 decisive_cue:who, decisive_cue:what, decisive_cue:where, decisive_cue:when,
+                 decisive_cue:event, decisive_cue:perceptual, decisive_cue:source,
+                 not_stated, other]
+      - id: "9.2"
+        block: D
+        select: multi
+        text: What do they do after finding it?
+        plain: What they did with the photo once found
+        metric_node: outcome_measure
+        values: [share, show, zoom_or_read, screenshot, favourite, add_to_album, edit, print,
+                 not_stated, other]
+      - id: "9.3"
+        block: D
+        select: single
+        text: Did they settle for a substitute?
+        plain: Whether they made do with something else
+        metric_node: outcome_measure
+        values: [similar_photo_same_event, information_from_elsewhere, friends_copy,
+                 not_stated, other]
+      - id: "9.4"
+        block: A
+        select: multi
+        text: If abandoned, why, and what fallback?
+        plain: Why they gave up and what they did instead
+        metric_node: outcome_measure
+        values: [why:time_ran_out, why:frustration, why:belief_doesnt_exist, why:suspect_wrong_app,
+                 fallback:ask_friend_to_resend, fallback:search_whatsapp, fallback:check_social_posts,
+                 fallback:retake_or_rebuy, fallback:describe_verbally, fallback:search_google,
+                 aftermath:loss_or_annoyance,
+                 not_stated, other]
+      - id: "9.5"
+        block: R
+        select: single
+        text: Was the outcome false?
+        plain: Whether they gave up on a photo that was there, or took the wrong one
+        metric_node: outcome_measure
+        values: [false_negative_abandoned_reachable, false_positive_wrong_photo,
+                 not_stated, other]
+      - id: "9.6"
+        block: D
+        select: single
+        text: Was it found later by accident?
+        plain: Whether it turned up later by chance
+        metric_node: outcome_measure
+        values: [while_scrolling_for_else, through_memories,
+                 not_stated, other]
+
+  - id: "10"
+    name: Aftermath
+    owner: none
+    inferred: false
+    questions:
+      - id: "10.1"
+        block: D
+        select: single
+        text: How does trust change?
+        plain: How their trust in search changed
+        metric_node: enters_gp_retrieval_path
+        values: [more_search_use, less_search_use, stronger_preference_for_scrolling,
+                 not_stated, other]
+      - id: "10.2"
+        block: D
+        select: multi
+        text: Do they adopt preventive habits?
+        plain: What they now do so it doesn't happen again
+        metric_node: outcome_measure
+        values: [favourites, albums, captions, naming_faces, sending_to_self_whatsapp,
+                 saving_to_notes_or_drive, organising_documents,
+                 not_stated, other]
+      - id: "10.3"
+        block: S
+        select: single
+        text: Do they complain publicly?
+        plain: Whether they complained in public — true of every story here
+        metric_node: outcome_measure
+        # Structurally 100% in this corpus: every story IS a public post. Coded as
+        # a standing bias flag, not a variable (arch §3.3).
+        values: [reviews, reddit, community_forums,
+                 not_stated, other]

@@ -1,0 +1,3 @@
+# Test and lint tooling for local runs and CI. Not installed by Streamlit Cloud.
+pytest>=8.0
+ruff>=0.6

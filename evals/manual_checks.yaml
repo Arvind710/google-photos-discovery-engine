@@ -1,0 +1,9 @@
+# Checks a program cannot perform — recorded here by the PM, verified by
+# evals/test_p0_foundation.py (marker `manual`, excluded from CI so CI stays a
+# code check, included in the gate report so the gate cannot pass without them).
+
+# P0-OPS-2 / P5-OPS-3 (EC-OPS-1): the OpenAI console hard spend limit.
+# Set it at platform.openai.com → Settings → Limits BEFORE the first paid call,
+# then fill both fields.
+openai_hard_cap_usd: null      # must be 15
+openai_hard_cap_confirmed_at: null   # e.g. "2026-09-26T10:00+05:30"

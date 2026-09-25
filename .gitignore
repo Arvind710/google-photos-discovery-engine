@@ -1,0 +1,25 @@
+# Secrets — never committed (EC-OPS-6). CI secret scan backs this up.
+.streamlit/secrets.toml
+.env
+.env.*
+!.env.example
+# The author-dedupe salt is env-only; a salt file beside the hashes would make
+# them reversible (EC-OPS-7).
+*.salt
+
+# Raw LLM responses and quarantined calls (EC-CODE-11)
+data/quarantine/
+data/batch/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.pytest_junit.xml
+
+# OS / exports
+.DS_Store
+Docs/*.zip

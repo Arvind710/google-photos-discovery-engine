@@ -1,0 +1,41 @@
+# lexicon_v1.yaml — [CTX] §6.2 seed lexicon. NOT frozen: the lexicon is meant to
+# EXPAND from vocabulary found in relevant posts, and P1-MET-3 (the recall probe)
+# adds terms whenever >5% of rejected records turn out relevant (T-4).
+#
+# `hits` is filled per term by the collectors — the final lexicon with hit
+# counts is a required reproducibility output ([CTX] §6.2). Every record stores
+# the `collect_query` that surfaced it, so collection bias stays auditable.
+# Terms added after the seed carry `added_by` and `added_at`.
+
+version: v1
+terms:
+  direct:
+    - {term: "can't find photo", hits: null}
+    - {term: "cannot find a picture", hits: null}
+    - {term: "lost photo in google photos", hits: null}
+    - {term: "find old photo", hits: null}
+    - {term: "search not working", hits: null}
+    - {term: "search doesn't find", hits: null}
+    - {term: "ask photos", hits: null}
+    - {term: "photos search useless", hits: null}
+    - {term: "how to find a photo I don't remember when", hits: null}
+    - {term: "find photo without date", hits: null}
+  cue_shaped:
+    - {term: "photo from years ago", hits: null}
+    - {term: "picture of a receipt", hits: null}
+    - {term: "medicine photo", hits: null}
+    - {term: "screenshot I took", hits: null}
+    - {term: "photo someone sent me on whatsapp", hits: null}
+    - {term: "photo of a document", hits: null}
+    - {term: "that photo of", hits: null}
+    - {term: "remember taking a photo", hits: null}
+  workaround_shaped:
+    - {term: "scrolled for hours", hits: null}
+    - {term: "had to scroll", hits: null}
+    - {term: "asked my friend to send again", hits: null}
+    - {term: "searched whatsapp instead", hits: null}
+    - {term: "found it by accident", hits: null}
+  hinglish_hindi:
+    - {term: "photo nahi mil rahi", hits: null}
+    - {term: "purani photo kaise dhoondhe", hits: null}
+    - {term: "google photos me photo search", hits: null}

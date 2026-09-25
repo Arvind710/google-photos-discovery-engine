@@ -1,0 +1,44 @@
+# severity_v1.yaml — [CTX] §8.2's rubric as data. Shown verbatim on Methodology.
+# Frozen with the codebook: severity feeds scoring, so a rubric edit is a bump.
+#
+# Severity is per story, 1–5, combining four components. Each component is
+# scored 0–2 from the story's text; the total (0–8) maps to the 1–5 scale.
+# A component the story does not speak to scores 0 — never guessed.
+# Expected to have the weakest agreement of any field (EC-CODE-16): reported
+# with its κ, and barred from headlines if low_reliability like any other field.
+
+version: v1
+components:
+  stakes:
+    source: ["1.5"]
+    levels:
+      0: mildly nice-to-have, or not stated
+      1: deep sentimental value (a lost person, a once-only event)
+      2: real consequences — money, health, legal, or someone waiting on it
+  outcome:
+    source: [outcome]
+    # abandoned > substitute > found after struggle > found ([CTX] §8.2)
+    levels:
+      0: found, or found later by accident, or not stated
+      1: found after struggle, or substitute accepted
+      2: abandoned (with or without a fallback), or a false positive
+  effort:
+    source: ["8.1", "7.2"]
+    levels:
+      0: one attempt, or not stated
+      1: several attempts or minutes spent
+      2: an hour or more, "scrolled for hours", or repeated sessions
+  emotional_intensity:
+    source: ["7.4"]
+    # A severity input only — never a headline, never a sentiment score ([CTX] §4.3).
+    levels:
+      0: neutral, or not stated
+      1: stated frustration, annoyance or self-doubt
+      2: distress, panic, grief, or anxiety with someone waiting
+
+scale:   # total of the four components, 0–8
+  1: [0, 1]
+  2: [2, 3]
+  3: [4, 5]
+  4: [6]
+  5: [7, 8]

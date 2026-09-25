@@ -1,0 +1,58 @@
+# plain_language.yaml — how the app says things to someone who has never read
+# the codebook. `app/lib` is the only reader; no view hardcodes a label.
+# Rules carried over from the Myntra design language (§9): the plain name leads,
+# the code follows in small type; every metric explains itself; say what a
+# number is NOT before saying what it is.
+#
+# Question-level `plain` and `voice` live on each question in journey_v1.yaml,
+# so they cannot drift from the codebook. This file holds everything above the
+# question level. Not frozen — display copy, not coding input.
+
+stages:
+  "0":  {title: "Is the photo there to find?",        short: Library state}
+  "1":  {title: "Why they went looking",              short: Trigger and intent}
+  "2":  {title: "What they remember",                 short: Memory}
+  "3":  {title: "Where and how they look",            short: Strategy}
+  "4":  {title: "Putting the memory into words",      short: Articulation}
+  "5":  {title: "Does search understand it?",         short: Matching (inferred)}
+  "6":  {title: "Spotting it in the results",         short: Recognition}
+  "7":  {title: "Working out what went wrong",        short: Adaptation}
+  "8":  {title: "Keep going or give up",              short: Persistence}
+  "9":  {title: "How it ended",                       short: Outcome}
+  "10": {title: "What changed afterwards",            short: Aftermath}
+
+failure_owners:
+  library_data: The photo was never there, or its data was wrong
+  memory: They couldn't remember enough
+  strategy: They looked in the wrong place, or never searched
+  expression: They remembered it but couldn't put it into words
+  system: Search didn't understand or match what they gave it
+  presentation: It was in the results but hard to recognise
+  recovery: After a miss, they couldn't find a better way in
+  persistence: They gave up
+  none: Not a failure point
+
+inferred_label: "inferred from user evidence"
+
+proxy_warning: >
+  Every share here is a share of coded public stories — never a retrieval
+  success rate, never a share of users, never a share of searches. People post
+  when things go wrong, so quiet successes and people who never search are
+  under-counted by construction.
+
+metrics:
+  share: >
+    Out of the stories in the group named, the fraction with this property. It
+    is not a failure rate and not a share of Google Photos users. Below 30
+    stories we show only the count; from 30 to 79 the share is marked
+    directional.
+  n_authors: >
+    How many different people. 200 stories from 14 people is weaker evidence
+    than 200 from 180, so both counts always appear together.
+  coverage: >
+    How often the public text says anything at all about this question.
+    Low coverage is not a finding about users — it means the question needs an
+    interview, and it goes to the Part 3 guide.
+  kappa: >
+    How often two different AI coders agreed, corrected for chance. It measures
+    consistency, not correctness — two models can agree and both be wrong.

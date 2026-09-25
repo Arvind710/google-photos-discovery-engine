@@ -1,0 +1,17 @@
+# APP DEPENDENCIES ONLY — this is what Streamlit Community Cloud installs.
+# Keep minimal: cold start is what an evaluator sees first (EC-OPS-12, AR-8).
+# Pipeline deps live in requirements-pipeline.txt and MUST NOT appear here —
+# the two files are never merged (implementationplan.md §2.1, task 0.1).
+#
+# BUMP THE rebuild-token ON EVERY PUSH THAT TOUCHES app/lib/ (EC-OPS-10, X-4).
+# Streamlit Cloud reruns the entry script without restarting the process, so a
+# module already in sys.modules keeps its old definitions and a view calling a
+# new helper dies with AttributeError on the deployed app only. Editing this
+# file is what forces a real restart. Cost the Myntra build a deploy, 2026-08-22.
+# rebuild-token: 2026-09-26-a
+streamlit>=1.40
+pandas>=2.2
+plotly>=5.24
+rank-bm25>=0.2.2
+openai>=1.60
+PyYAML>=6.0

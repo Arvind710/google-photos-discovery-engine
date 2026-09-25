@@ -1,0 +1,39 @@
+# One workflow, under two minutes (architecture.md §9). Every push to main is a
+# deploy on Streamlit Cloud, so this is the gate in front of the live link.
+# NO LLM CALLS here: model-dependent evals cost money and run from the laptop,
+# with their reports committed (`needs_api`, `manual` are deselected).
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # full history, so the secret scan sees every commit
+
+      - name: Secret scan (T-18, EC-OPS-6)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install app + test deps (never the pipeline deps)
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Deterministic evals
+        # The repo-file secret scan inside P0-OPS-1 runs here too; it also
+        # catches the salt by value when AUTHOR_SALT is present locally.
+        run: pytest evals/ -m "not needs_api and not needs_corpus and not manual"
