@@ -1,8 +1,14 @@
 # OFFLINE PIPELINE ONLY — runs on the laptop, never on Streamlit Cloud.
 # Install on top of requirements.txt:  pip install -r requirements.txt -r requirements-pipeline.txt
-praw>=7.7
+#
+# No praw: Reddit's API is closed to new developers; Reddit, X and Quora come
+# through Apify's HTTP API (plain urllib, no client library). No
+# app-store-scraper: unmaintained and pins requests<2.24 (it broke the Myntra
+# environment); App Store reviews come from Apple's public RSS feed instead.
+# YouTube, Stack Exchange and Hacker News are plain HTTPS APIs. See
+# Docs/decisions.md D-1.
 httpx>=0.27
 selectolax>=0.3.21
 google-play-scraper>=1.2.7
-app-store-scraper>=0.3.5
+playwright>=1.47               # GP Help Community threads render client-side; `playwright install chromium`
 datasketch>=1.6

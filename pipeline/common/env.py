@@ -25,9 +25,10 @@ _LINE = re.compile(r"^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*[:=]\s*(.*?)\s
 
 ALIASES = {
     "OPENAI_API_KEY": ("OPENAI_API_KEY", "OPENAI_KEY"),
-    "REDDIT_CLIENT_ID": ("REDDIT_CLIENT_ID",),
-    "REDDIT_CLIENT_SECRET": ("REDDIT_CLIENT_SECRET",),
-    "REDDIT_USER_AGENT": ("REDDIT_USER_AGENT",),
+    # Reddit, X and Quora are collected through Apify (Docs/decisions.md D-1);
+    # Reddit's own API is closed to new developers.
+    "APIFY_TOKEN": ("APIFY_TOKEN", "APIFY_API_TOKEN", "APIFY_KEY"),
+    "YOUTUBE_API_KEY": ("YOUTUBE_API_KEY", "YOUTUBE"),
     "AUTHOR_SALT": ("AUTHOR_SALT",),
 }
 

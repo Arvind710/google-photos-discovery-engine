@@ -130,9 +130,9 @@ def _cols(con, table):
 
 
 def _record(con, rid="r1", text="I searched 'cafe goa' and it shows nothing at all."):
-    con.execute("INSERT INTO records (record_id, source, source_url, text_raw, text_clean,"
-                " collected_at, ingest_run_id) VALUES (?,?,?,?,?,?,?)",
-                (rid, "reddit", "https://reddit.com/x", text, text, "2026-09-26", "run"))
+    con.execute("INSERT INTO records (record_id, source, collect_method, source_url, text_raw,"
+                " text_clean, collected_at, ingest_run_id) VALUES (?,?,?,?,?,?,?,?)",
+                (rid, "reddit", "apify", "https://reddit.com/x", text, text, "2026-09-26", "run"))
     return text
 
 
@@ -159,6 +159,24 @@ def test_P0_INV_6_appendix_a_deltas_present(blank_db):
     assert "estimate_usd" in _cols(blank_db, "runs")                        # A.4
     assert {"char_start", "char_end"} <= _cols(blank_db, "stories")         # A.6
     assert {"raw_agreement", "top_share"} <= _cols(blank_db, "analysis_reliability")  # A.7
+    assert "collect_method" in _cols(blank_db, "records")                   # A.10
+
+
+def test_A9_A10_source_and_collect_method_enums(blank_db):
+    """D-1: the nine sources are accepted, each with a disclosed method; an
+    unknown source or a record with no method is refused."""
+    ok = [("youtube", "official_api"), ("x", "apify"), ("gp_help", "headless_render"),
+          ("appstore", "public_feed"), ("play", "public_scraper_lib")]
+    for i, (src, method) in enumerate(ok):
+        blank_db.execute("INSERT INTO records (record_id, source, collect_method, source_url,"
+                         " text_raw, text_clean, collected_at, ingest_run_id)"
+                         " VALUES (?,?,?,'u','t','t','d','r')", (f"ok{i}", src, method))
+    for rid, src, method in (("b1", "tiktok", "apify"), ("b2", "reddit", "praw"),
+                             ("b3", "reddit", None)):
+        with pytest.raises(sqlite3.IntegrityError):
+            blank_db.execute("INSERT INTO records (record_id, source, collect_method, source_url,"
+                             " text_raw, text_clean, collected_at, ingest_run_id)"
+                             " VALUES (?,?,?,'u','t','t','d','r')", (rid, src, method))
 
 
 def test_P0_INV_6_exclusions_mark_not_remove(blank_db):
@@ -226,6 +244,12 @@ def test_committed_corpus_db_matches_schema(root):
     con = sqlite3.connect(root / "data" / "corpus.db")
     tables = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     assert EXPECTED_TABLES <= tables
+    # CHECK constraints cannot be altered in place, so a schema edit leaves the
+    # committed file stale until it is rebuilt. Catch that here, not at the
+    # first collector write.
+    records_sql = con.execute("SELECT sql FROM sqlite_master WHERE name='records'").fetchone()[0]
+    assert "collect_method" in records_sql and "'quora'" in records_sql, \
+        "data/corpus.db predates A.9/A.10 — rebuild it from pipeline/schema.sql"
 
 
 # --------------------------------------------------------- runs (T-19, X-1)

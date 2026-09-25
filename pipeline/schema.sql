@@ -21,13 +21,26 @@
 --   A.7  (found in P0) analysis_reliability carries raw agreement, κ and the
 --        top-value share together, and `degenerate` is a verdict (EC-VAL-2).
 --   A.8  (found in P0) `published` pins the run the app serves (EC-OPS-11, X-3).
+--   A.9  (P1, 2026-09-26) five more sources, per the PM's source decision
+--        (Docs/decisions.md D-1): youtube, stackexchange, hackernews, x, quora.
+--        Applied before any record existed, so it cost nothing.
+--   A.10 (P1, 2026-09-26) records.collect_method on every row, so HOW a record
+--        was obtained is disclosed per record, not only in prose (D-1).
 
 PRAGMA foreign_keys = ON;
 
 -- ------------------------------------------------------------------ collect
 CREATE TABLE IF NOT EXISTS records (         -- raw collected material, immutable
   record_id      TEXT PRIMARY KEY,           -- sha1(source || native_id): re-ingest is idempotent (EC-CLEAN-7)
-  source         TEXT NOT NULL CHECK (source IN ('reddit','gp_help','play','appstore')),
+  source         TEXT NOT NULL CHECK (source IN (                                 -- A.9
+                   'reddit','gp_help','play','appstore',
+                   'youtube','stackexchange','hackernews','x','quora')),
+  collect_method TEXT NOT NULL CHECK (collect_method IN (                         -- A.10
+                   'official_api',       -- YouTube Data API, Stack Exchange API, HN Algolia
+                   'public_feed',        -- Apple's customer-review RSS feed
+                   'public_scraper_lib', -- google-play-scraper
+                   'headless_render',    -- GP Help Community thread pages (Playwright)
+                   'apify')),            -- Reddit, X, Quora (and GP Help fallback)
   source_url     TEXT NOT NULL CHECK (length(source_url) > 0),   -- no record without a permalink
   native_id      TEXT,
   author_key     TEXT,                       -- salted hash; salt is env-only (EC-OPS-7)
