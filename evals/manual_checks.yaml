@@ -5,5 +5,5 @@
 # P0-OPS-2 / P5-OPS-3 (EC-OPS-1): the OpenAI console hard spend limit.
 # Set it at platform.openai.com → Settings → Limits BEFORE the first paid call,
 # then fill both fields.
-openai_hard_cap_usd: null      # must be 15
-openai_hard_cap_confirmed_at: null   # e.g. "2026-09-26T10:00+05:30"
+openai_hard_cap_usd: 15            # set by the PM; recorded from their confirmation
+openai_hard_cap_confirmed_at: "2026-09-26T00:55+05:30"
