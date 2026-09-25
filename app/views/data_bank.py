@@ -64,7 +64,7 @@ def hbar(labels: list[str], values: list[int], texts: list[str], colours, height
     fig.update_layout(height=height or 70 + 38 * len(labels), margin=dict(l=10, r=10, t=10, b=10),
                       plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                       showlegend=False, yaxis=dict(showgrid=False),
-                      xaxis=dict(visible=False, range=[0, max(values or [1]) * 1.75]))
+                      xaxis=dict(visible=False, range=[0, max(values or [1]) * 2.3]))
     st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 
@@ -141,9 +141,10 @@ hbar([words.source(s) for s in src["source"]], src["n_records"].astype(int).toli
                                                                 src["n_authors"], strict=True)],
      [BLUE] * len(src))
 top = src.iloc[0]
-verdict(f"<b>{words.source(top['source'])}</b> is the largest source here "
-        f"({share(int(top['n_records']), collected).text} of records) — which says where "
-        f"people write at length about photos, not who has the problem.", BLUE)
+verdict(f"Source sizes reflect <b>how each was collected</b>, not where the problem is "
+        f"most common: {words.source(top['source'])} is the largest "
+        f"({share(int(top['n_records']), collected).text} of records) because every recent "
+        f"review was read, while the forums were searched.", BLUE)
 
 # ================================================================= PART 2
 section(2, "How each source was obtained",
@@ -212,10 +213,12 @@ section(4, "Where the collection is thinnest",
         "Three things later analysis depends on, per source: a date (for before and after "
         "Ask Photos), more than one post (replies carry the workarounds), and many "
         "different people rather than a few loud ones.", "#56B4E9", slug="thinnest")
+TD = "padding:.4rem .5rem;vertical-align:top"
 lines = ["<table style='border-collapse:collapse;font-size:.86rem;width:100%;max-width:900px'>"
          "<tr style='text-align:left;color:" + MUTED + ";font-size:.72rem;letter-spacing:.06em'>"
-         "<th style='padding:.35rem .5rem'>SOURCE</th><th>RECORDS</th><th>HAS A DATE</th>"
-         "<th>A THREAD, NOT ONE POST</th><th>RECORDS PER PERSON</th></tr>"]
+         "<th style='padding:.35rem .5rem'>SOURCE</th><th style='padding:.35rem .5rem'>RECORDS</th>"
+         "<th style='padding:.35rem .5rem'>HAS A DATE</th><th style='padding:.35rem .5rem'>A THREAD, "
+         "NOT ONE POST</th><th style='padding:.35rem .5rem'>RECORDS PER PERSON</th></tr>"]
 for _, r in src.iterrows():
     n = int(r["n_records"])
     dated, threads = share(int(r["n_dated"]), n), share(int(r["n_threads"]), n)
@@ -223,10 +226,10 @@ for _, r in src.iterrows():
     lines.append(
         f"<tr style='border-top:1px solid {HAIR}'><td style='padding:.4rem .5rem'>"
         f"{words.source(r['source'])}<div style='font-size:.72rem;color:{MUTED}'>"
-        f"{words.source_kind(r['source'])}</div></td><td>{n:,}</td>"
-        f"<td style='color:{dated.colour if dated.tier == 'insufficient' else 'inherit'}'>"
-        f"{dated.text}</td><td>{threads.text}</td>"
-        f"<td style='color:{BAD if per > 1.5 else 'inherit'}'>{per:.1f}</td></tr>")
+        f"{words.source_kind(r['source'])}</div></td><td style='{TD}'>{n:,}</td>"
+        f"<td style='{TD};color:{dated.colour if dated.tier == 'insufficient' else 'inherit'}'>"
+        f"{dated.text}</td><td style='{TD}'>{threads.text}</td>"
+        f"<td style='{TD};color:{BAD if per > 1.5 else 'inherit'}'>{per:.1f}</td></tr>")
 st.html("".join(lines) + "</table>")
 thin = src[src["n_records"] < 30]
 verdict(("Every source is above the floor where a share can be shown."
