@@ -333,7 +333,10 @@ def validate(cb: cbm.Codebook, it: Item, out: dict) -> Coded:
                     t = "_".join(_clean(a["o"]).lower().split())[:60]
                     if not t:
                         c.problems["other_without_text"] += 1
-                    v = f"other:{t or 'unspecified'}"
+                    # Free text that spells a listed value IS that value (D-10).
+                    listed = [x for x in cb.questions[qid]["values"]
+                              if t and (x == t or x.split(":")[-1] == t)]
+                    v = listed[0] if listed else f"other:{t or 'unspecified'}"
                 if not cb.is_valid_value(qid, v):                       # P3-INV-5
                     c.problems["invalid_value"] += 1
                     continue

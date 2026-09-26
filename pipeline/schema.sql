@@ -33,6 +33,10 @@
 --        per-story authorship (A.2, EC-COL-12) is looked up, not guessed by a
 --        model. NULL for single-post records. Last column, so an in-place
 --        ALTER TABLE on an existing file matches a fresh build.
+--   A.12 (P3, 2026-09-26) story_themes — emergent themes the PM approved after
+--        the codebook froze (codebook/emergent_themes_v1.yaml, D-10). A new
+--        table beside the frozen codebook, so no story is re-coded. Every tag
+--        carries a quote verified against text_clean.
 
 PRAGMA foreign_keys = ON;
 
@@ -167,6 +171,14 @@ CREATE TABLE IF NOT EXISTS queries (         -- literal queries users reported t
   attempt_no INTEGER,
   worked     INTEGER CHECK (worked IS NULL OR worked IN (0,1)),
   run_id     TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS story_themes (   -- A.12: emergent, not pre-registered
+  story_id   TEXT NOT NULL REFERENCES stories(story_id),
+  theme      TEXT NOT NULL,                  -- a key in codebook/emergent_themes_v1.yaml
+  span       TEXT NOT NULL CHECK (length(span) >= 15),   -- verified against text_clean (T-2/T-3)
+  run_id     TEXT NOT NULL,
+  PRIMARY KEY (story_id, theme, run_id)
 );
 
 -- --------------------------------------------------------------- validate

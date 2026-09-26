@@ -1,0 +1,337 @@
+{
+ "run_id": "emergent-themes-20260926-134431-791baf",
+ "counts": {
+  "looked_in_other_photo_app": 62,
+  "search_refuses_sensitive_terms": 9,
+  "no_album_scoped_search": 4,
+  "dropped_unverified": 2,
+  "auto_creation_lost": 3,
+  "stories_unanswered": 1
+ },
+ "dropped_unverified": [
+  {
+   "story_id": "42154082f6cb3289820e92a87acb27825e33bc15:0",
+   "theme": "looked_in_other_photo_app",
+   "quote": "I have checked in my google photos over and over and over,"
+  },
+  {
+   "story_id": "707149aded55c3fe002109c4191b7778cc600dda:0",
+   "theme": "looked_in_other_photo_app",
+   "quote": "i remembered I had google photos back then so there it was, on the google photos app"
+  }
+ ],
+ "tags": [
+  {
+   "story_id": "0440ba39731decfcaa2b3211d22c949528ab0cdb:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "08709edbcf2e95177707c13bf0b9b07c6a275a90:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "0c0460710fa462f8ad03c26d7a91e35937297a36:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "10b70a04f2974736aca58e54dc80b4ad6c82633f:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "1233de10dc517a78f662c1618c4d4f5e5ccbc658:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "14ed655bd0a022582467843de12eb960c2bf90a8:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "1d58cd6877f9f89ca1ae67d0099128407747c22f:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "1db94bd980098a185336b7e5a39feef37c8eded5:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "1e8838fe6fe7c3028b1b5caf63177262024a2878:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "1e8838fe6fe7c3028b1b5caf63177262024a2878:1",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "22dd42113b4b57784e2cae47998970301908fb61:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "238ec5be01df991cb6b8fd229ae91e29b2e35af4:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "282023a3841101500cfae4cf1984e8089f98f17a:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "3581be8104f7fedda6cc5f2c4dae079504c6446d:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "361113fc542003f97c361acbf8016cc369153ad7:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "38fca478216892da1515170d892112b303e1afd7:0",
+   "theme": "no_album_scoped_search"
+  },
+  {
+   "story_id": "38fca478216892da1515170d892112b303e1afd7:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "3d4dd0beaeefef45eda8f956662011d06057fef1:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "3e7d9ab96942779de9f63f0acf4c36d3477cc5fb:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "41c55163a31c64731392140386c6b69ed837a0cd:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "4805d74f385083a6803f241761906e952804a03c:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "4f97934e36516780fd57de1c6d42d5da089277a5:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "5044564d1b1696c6bfedce4ddff00747567a7d42:0",
+   "theme": "no_album_scoped_search"
+  },
+  {
+   "story_id": "5aa424e20fb350373a3f07e2dca84ed6c028b923:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "6495de1277bc4735b2a4f79de419b955d0e48c6c:0",
+   "theme": "auto_creation_lost"
+  },
+  {
+   "story_id": "6a6119b1682721ebb6783c90ad6759db7b90bcdc:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "6a7866df2d5f0db785d446a12de7b6dfe0f346d7:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "6b5a4912de3cd10b2ccf2f07757bc417ca500253:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "6de6a0a0800ce82b6b9495c807d55b15ca6fb2ae:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "71f704110f550a441de5bee6f5a112686df17340:0",
+   "theme": "auto_creation_lost"
+  },
+  {
+   "story_id": "765749899f7fa8a7f4c8527cc2337029e134b9ce:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "766e30fd23eb00164d7e03ece585379912584624:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "790de55c9d650cb50647f97841544a0c5b1b7275:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "88a83897e2c872e72ac85967d7fc5c158d43bbb0:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:3",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:4",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:5",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:7",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "8e564f1d1b5cd29f15ed0aaade5f4f57f59b8234:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "90c8b5f8d8913d764335d981d06c5dc02200c937:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "90ef11c63fffdcbde567fad2a7c5568c0ae88761:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "912c6cc3068a194559168f5b66e2dbc5bc867dc8:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "938c4e874ba2ef3a564a7bb80a4b5b18024bc3b4:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "96957e5405dd751a6ec504db1a3e852f74b58455:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "9754d8d92979538a21940600c39ef28a54db5b8c:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "98632f9b662a03a01b62b05257f0450e775a0736:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "9aae4115b88b81d9e81158074554890490d10841:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "a194bb983918c3d6054c047c4a1942b080ca86bf:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "a9267da0c42d4f499c22c934d3f214f68f75c0d4:0",
+   "theme": "auto_creation_lost"
+  },
+  {
+   "story_id": "ac7cfeda39451a237d2ad146b43c59993c4a9c0a:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "b7113e3689e0674b9cd8b089fb3bcd093e40d3eb:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "bb51e4bf9098197e7b7a505bd7eb4577706836b7:0",
+   "theme": "no_album_scoped_search"
+  },
+  {
+   "story_id": "bc5c550e736b8cf3ff06a1ac0de6b70da0f425ec:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "bd0814e008a05c107af20e04f47da7c6fd8f164c:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "beebc7898400af1a0cc9f1ea6c04d016e3940312:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "c49878f3a719ad0cc124817eef46e1a5ee5068c4:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "c58628535502370ebeabe6d42be4ba4aa39a480f:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "c9e8e350bd089aa00de926880b3e1909d2912df4:2",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "d4ba5414ba35ffcfb8f02edeaedcbf19b3a1482c:0",
+   "theme": "no_album_scoped_search"
+  },
+  {
+   "story_id": "d4bf4022fc82f5ca21c8419fb9ad7bd52e44ff42:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "d61372a756937f20e42f4a95ba72726b5b136b29:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "d7b6216c887b2d1915ff0d123ea1e1f2528f3cba:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "d8658981bb7b9f7a9966c8448f2111242522f8b2:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "d9be4ec964e6c6198f810b5b77eb4cfb31bb9c63:1",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "dc2535631942cc6b5a068698bf80431a03d4c971:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e0ada9bc6440b99ca8e115f3c199bbf4d0deb2bd:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e16d464d84efeb21d9cd48a77f6c7e5180cb3253:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e16dda193f32efc4013ff5629a4820382cfed04f:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e16f094c0c626bf345e6cd36675c11f640631123:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e285f21c15b4446ed13cf16168f4c49908a9316d:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e3c5e27b3bd410751b123c3df4555fb399f32830:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e58140cef39fa563a0deada9f6449a1d4cd4e28e:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e6600b3b1a7f061184a578f03a0b9da784298c86:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "e88cbdc51c29ce8b06700cf2a7a1dfac3b849c69:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "f0321bae7ddf531255f45656bb028e9865f592df:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "f98e92b17e37481cd9dac3c5545d78ea8db9bfa1:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "fa3a98f0f3f780a70c32c8c9f43c56dc0186314f:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "ff513a6314c7a0f1e26dcc25929dae442547c6e1:0",
+   "theme": "looked_in_other_photo_app"
+  }
+ ]
+}

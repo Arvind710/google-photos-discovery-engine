@@ -1,0 +1,330 @@
+{
+ "run_id": "emergent-themes-20260926-135401-abb7a1",
+ "counts": {
+  "stories_unanswered": 0,
+  "candidates:looked_in_other_photo_app": 16,
+  "candidates:search_refuses_sensitive_terms": 9,
+  "candidates:no_album_scoped_search": 4,
+  "candidates:auto_creation_lost": 5,
+  "looked_in_other_photo_app": 8,
+  "search_refuses_sensitive_terms": 5,
+  "auto_creation_lost": 3,
+  "no_album_scoped_search": 2
+ },
+ "dropped_unverified": [],
+ "unanswered": [],
+ "candidates_judged": [
+  {
+   "story_id": "0440ba39731decfcaa2b3211d22c949528ab0cdb:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "plan to check my iCloud or google photos if i took a screenshot",
+   "keep": false,
+   "reason": "Only plans to check, not actually looked elsewhere."
+  },
+  {
+   "story_id": "08709edbcf2e95177707c13bf0b9b07c6a275a90:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "Backing up on iCloud and Google Photos causes issues",
+   "keep": false,
+   "reason": "About deletions/backups, not searching another photo app."
+  },
+  {
+   "story_id": "1d58cd6877f9f89ca1ae67d0099128407747c22f:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "I post pretty much all of my photos there. I have about 5000 observations",
+   "keep": true,
+   "reason": "Directly compares iNaturalist findability against Google Photos."
+  },
+  {
+   "story_id": "1e8838fe6fe7c3028b1b5caf63177262024a2878:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "Can I reverse image search a screenshot I have to find the original photo in my photos app?",
+   "keep": false,
+   "reason": "Only uses Apple Photos; no other photo app involved."
+  },
+  {
+   "story_id": "1e8838fe6fe7c3028b1b5caf63177262024a2878:1",
+   "theme": "looked_in_other_photo_app",
+   "span": "I did \u201cpainting\u201d yesterday to no avail but today just did \u201cKids",
+   "keep": false,
+   "reason": "Only uses Apple Photos; no other photo app involved."
+  },
+  {
+   "story_id": "238ec5be01df991cb6b8fd229ae91e29b2e35af4:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "Google Photos doesn't let you search for monkeys!",
+   "keep": true,
+   "reason": "Reports \u201cmonkeys\u201d search blocked due to sensitive labeling."
+  },
+  {
+   "story_id": "282023a3841101500cfae4cf1984e8089f98f17a:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "the query \"fat\" returns nothing, despite the fact",
+   "keep": true,
+   "reason": "Describes censored terms like \u201cfat\u201d and \u201cgorilla\u201d returning nothing."
+  },
+  {
+   "story_id": "361113fc542003f97c361acbf8016cc369153ad7:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "I quickly opened my Google photos and scrolled up to find",
+   "keep": false,
+   "reason": "Only uses Google Photos, not another app."
+  },
+  {
+   "story_id": "38fca478216892da1515170d892112b303e1afd7:0",
+   "theme": "no_album_scoped_search",
+   "span": "can't find a way to search by the Album name",
+   "keep": false,
+   "reason": "Wants search by album name, not album-scoped search."
+  },
+  {
+   "story_id": "38fca478216892da1515170d892112b303e1afd7:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "Google has been uploading all photos on my phone and desktop to Google+ photos",
+   "keep": false,
+   "reason": "Not looking in another app; just mentions Google+ Photos."
+  },
+  {
+   "story_id": "5044564d1b1696c6bfedce4ddff00747567a7d42:0",
+   "theme": "no_album_scoped_search",
+   "span": "I have a lot of remodeling jobs by address in ALBUMS, I put an address",
+   "keep": false,
+   "reason": "Complains search can\u2019t find album names, not album-scoped search."
+  },
+  {
+   "story_id": "521c29fc46ec9919a0346e0aeb5b78ff493fd547:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "forces me to log in to Xiaomi Cloud",
+   "keep": false,
+   "reason": "Uses phone\u2019s Gallery/Cloud, which is excluded as another app."
+  },
+  {
+   "story_id": "54a104bfc9422a44ec21a80460b58a2d8fbd3582:0",
+   "theme": "auto_creation_lost",
+   "span": "I got a highlight on Google photos of a video on 19th December, 2022",
+   "keep": false,
+   "reason": "Missing original video, not trying to refind an auto-creation."
+  },
+  {
+   "story_id": "5aa424e20fb350373a3f07e2dca84ed6c028b923:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "so it\u2019s hard to find the photo i took of me holding",
+   "keep": true,
+   "reason": "Explicit word filtering blocks search for sensitive product text."
+  },
+  {
+   "story_id": "5d4974dfbb52e4696719c7eee8fc7a3e5a69e4e4:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "can't even find a single photo of a monkey I have stored there",
+   "keep": false,
+   "reason": "No refusal shown; just poor search results for \u201cmonkey.\u201d"
+  },
+  {
+   "story_id": "6322259aec44e3d345ff1447fd1e7710ee8c29f8:0",
+   "theme": "auto_creation_lost",
+   "span": "The only way I found around it was to go to google photos and search #AutoAwesome",
+   "keep": true,
+   "reason": "Finding Google AutoAwesome creations after losing easy access."
+  },
+  {
+   "story_id": "6495de1277bc4735b2a4f79de419b955d0e48c6c:0",
+   "theme": "auto_creation_lost",
+   "span": "How to find those \"We created a collage for you\" type things again?",
+   "keep": true,
+   "reason": "Wants to refind auto-created collage from a notification."
+  },
+  {
+   "story_id": "6a6119b1682721ebb6783c90ad6759db7b90bcdc:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "or it just says \"sorry , I can't help with that",
+   "keep": true,
+   "reason": "Gemini refuses searches containing forbidden words."
+  },
+  {
+   "story_id": "71f704110f550a441de5bee6f5a112686df17340:0",
+   "theme": "auto_creation_lost",
+   "span": "Google Photos shares these Spotlight videos with me and I really love them then they disappear",
+   "keep": true,
+   "reason": "Spotlight auto-created videos appear, then disappear and can't re-find."
+  },
+  {
+   "story_id": "766e30fd23eb00164d7e03ece585379912584624:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "Assistant wouldn't search my photos for the word grief. Said it was sensitive!",
+   "keep": true,
+   "reason": "Assistant refuses searching \u201cgrief,\u201d labeling it sensitive."
+  },
+  {
+   "story_id": "88a83897e2c872e72ac85967d7fc5c158d43bbb0:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "Google Photos: no result for vomit",
+   "keep": false,
+   "reason": "Zero results only; no refusal or censorship indicated."
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:3",
+   "theme": "looked_in_other_photo_app",
+   "span": "I decided to focus my mission on my Photobucket instead",
+   "keep": true,
+   "reason": "Looked in Photobucket to find photos from MySpace."
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:4",
+   "theme": "looked_in_other_photo_app",
+   "span": "I was going down memory lane and logging into photobucket helped",
+   "keep": true,
+   "reason": "Found photos by logging into Photobucket."
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:5",
+   "theme": "looked_in_other_photo_app",
+   "span": "My photobucket was deactivated. I paid them $5 and it was reactivated",
+   "keep": true,
+   "reason": "Accessed photos by reactivating Photobucket account."
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:7",
+   "theme": "looked_in_other_photo_app",
+   "span": "I just got into photobucket last night and was able to find my pictures thankfully",
+   "keep": true,
+   "reason": "Found pictures in Photobucket, another photo service."
+  },
+  {
+   "story_id": "a194bb983918c3d6054c047c4a1942b080ca86bf:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "Saw phots in my PC in Microsoft photos. Can't find photos",
+   "keep": true,
+   "reason": "They saw their photos in Microsoft Photos app."
+  },
+  {
+   "story_id": "a9267da0c42d4f499c22c934d3f214f68f75c0d4:0",
+   "theme": "auto_creation_lost",
+   "span": "Mine says \"No Unsaved Creations.\" I'm looking for an image",
+   "keep": false,
+   "reason": "Looking for own created image, not an app-made creation."
+  },
+  {
+   "story_id": "b7113e3689e0674b9cd8b089fb3bcd093e40d3eb:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "text search Apple photos in the upload widget and be disappointed",
+   "keep": true,
+   "reason": "They searched in Apple Photos as another app."
+  },
+  {
+   "story_id": "bb51e4bf9098197e7b7a505bd7eb4577706836b7:0",
+   "theme": "no_album_scoped_search",
+   "span": "If I type the name of the album and pink and green,",
+   "keep": true,
+   "reason": "Wants to search within a specific album only."
+  },
+  {
+   "story_id": "c49878f3a719ad0cc124817eef46e1a5ee5068c4:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "On that old Photobucket account I was hoping to find screenshots I made as a kid",
+   "keep": true,
+   "reason": "Looked in Photobucket for old screenshots."
+  },
+  {
+   "story_id": "d4ba5414ba35ffcfb8f02edeaedcbf19b3a1482c:0",
+   "theme": "no_album_scoped_search",
+   "span": "I asked it to find stuff from a specific album and it completely returned",
+   "keep": true,
+   "reason": "Tried restricting search to a specific album; failed."
+  },
+  {
+   "story_id": "e285f21c15b4446ed13cf16168f4c49908a9316d:0",
+   "theme": "looked_in_other_photo_app",
+   "span": "Using Import from device in the File menu, it sees all +16K photos and videos (not 12K),",
+   "keep": false,
+   "reason": "Used Adobe Bridge to import, not searching another photo library."
+  },
+  {
+   "story_id": "fa3a98f0f3f780a70c32c8c9f43c56dc0186314f:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "but now when I do that it says I can't search using those terms",
+   "keep": false,
+   "reason": "Refusal concerns date terms, not sensitive or offensive words."
+  },
+  {
+   "story_id": "fbe5c7a8efdd53048d937149e2122eab77ceec42:0",
+   "theme": "search_refuses_sensitive_terms",
+   "span": "Tried \"edited\" but it didn't work",
+   "keep": false,
+   "reason": "Query yielded no results, without refusal or censorship."
+  }
+ ],
+ "tags": [
+  {
+   "story_id": "1d58cd6877f9f89ca1ae67d0099128407747c22f:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "238ec5be01df991cb6b8fd229ae91e29b2e35af4:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "282023a3841101500cfae4cf1984e8089f98f17a:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "5aa424e20fb350373a3f07e2dca84ed6c028b923:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "6322259aec44e3d345ff1447fd1e7710ee8c29f8:0",
+   "theme": "auto_creation_lost"
+  },
+  {
+   "story_id": "6495de1277bc4735b2a4f79de419b955d0e48c6c:0",
+   "theme": "auto_creation_lost"
+  },
+  {
+   "story_id": "6a6119b1682721ebb6783c90ad6759db7b90bcdc:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "71f704110f550a441de5bee6f5a112686df17340:0",
+   "theme": "auto_creation_lost"
+  },
+  {
+   "story_id": "766e30fd23eb00164d7e03ece585379912584624:0",
+   "theme": "search_refuses_sensitive_terms"
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:3",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:4",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:5",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:7",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "a194bb983918c3d6054c047c4a1942b080ca86bf:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "b7113e3689e0674b9cd8b089fb3bcd093e40d3eb:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "bb51e4bf9098197e7b7a505bd7eb4577706836b7:0",
+   "theme": "no_album_scoped_search"
+  },
+  {
+   "story_id": "c49878f3a719ad0cc124817eef46e1a5ee5068c4:0",
+   "theme": "looked_in_other_photo_app"
+  },
+  {
+   "story_id": "d4ba5414ba35ffcfb8f02edeaedcbf19b3a1482c:0",
+   "theme": "no_album_scoped_search"
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+# emergent_themes_v1.yaml — themes found AFTER the codebook froze, by the
+# residual pass (synthesise/residual.py), and approved by the PM ([CTX] §8.3).
+#
+# NOT part of the frozen codebook (journey_v1.yaml, v1:03257d4f) and not in its
+# hash: adding them there would force a v1.1 bump and a re-code of every story.
+# They live beside it, in `story_themes`, tagged by synthesise/themes.py with a
+# verified quote per tag. They were not pre-registered, so they are reported as
+# EMERGING — counts only, below the evidence floor, never ranked or scored —
+# and carried into the Part 3 interview guide as hypotheses (Docs/decisions.md
+# D-10).
+
+version: v1
+approved_by: PM
+approved_at: "2026-09-26"
+source_run: residual-themes-20260926-132130-ef4c74    # the residual pass that proposed them
+
+themes:
+  search_refuses_sensitive_terms:
+    label: Search refuses a word as sensitive
+    stage: "5"
+    definition: >
+      Search refuses, blocks, censors or deliberately returns nothing for a word
+      the person believes the product treats as sensitive or offensive ("monkey",
+      "gorilla", "grief"), so a photo they know exists cannot be searched for by
+      what is in it. A search that simply finds nothing, with no sign of a
+      refusal or a filter, is NOT this theme.
+  auto_creation_lost:
+    label: A Spotlight, collage or Memory can't be found again
+    stage: "0"
+    definition: >
+      Something the app made for them — a Spotlight or Memories video, a collage,
+      an animation, a "we created this for you" notification — that they saw,
+      want again, and cannot find. The target is the app's creation, not one of
+      their own photos.
+  no_album_scoped_search:
+    label: Can't search within one album
+    stage: "4"
+    definition: >
+      They want to limit a search to one album or collection, or combine an
+      album with other words ("pink and green" inside the fashion album), and the
+      app searches the whole library instead.
+  looked_in_other_photo_app:
+    label: Looked in another photo app or service
+    stage: "3"
+    definition: >
+      They looked for the photo in, or compare the search with, another photo
+      library app or photo service — Apple Photos, Amazon Photos, OneDrive,
+      Photobucket, Flickr, iNaturalist and the like. Not WhatsApp or other
+      messaging apps, email, Drive, or the phone's own gallery: codebook question
+      3.1 already has values for those. Google Photos itself is never "another
+      app", and merely mentioning another app is not looking there.

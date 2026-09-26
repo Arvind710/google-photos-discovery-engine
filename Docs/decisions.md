@@ -466,3 +466,47 @@ what search did, how results looked, or what came after. B, C and D are in
 **Spend.** P3 total $7.91 (plan: $7.25 committed plus a $2.40 re-run reserve).
 Project total **$12.78 of $15**; $2.22 remains for P4 ($0.60 planned) and P5
 (Ask AI, $2.80 planned — it must be cut to fit).
+
+## D-10 — Four emergent themes, approved by the PM and kept beside the frozen codebook (2026-09-26, decided by the PM)
+
+**What the residual pass proposed.** 12 candidate groups (`residual_*.json`, D-9).
+Checked against what the coder actually stored, 6 were already counted under
+listed values — only_in_other_app, trash_archive_or_locked_folder, timeline
+scrolling, object_unrecognised / text_not_ocrd, irrelevant_results,
+unnamed_face — and 2 were loose groupings. Four hold something no value in the
+60 questions holds. **The PM approved those four** ([CTX] §8.3):
+
+| Theme | Definition, short | Candidates (mini) → confirmed (gpt-5) | Stories · people |
+|---|---|---|---|
+| `search_refuses_sensitive_terms` | search refuses or filters a word as sensitive ("monkey", "grief", "fat") | 9 → 5 | 5 (1 core) · 5 |
+| `auto_creation_lost` | a Spotlight, collage or "we made this for you" can't be found again | 5 → 3 | 3 · 3 |
+| `no_album_scoped_search` | can't search within one album | 4 → 2 | 2 · 2 |
+| `looked_in_other_photo_app` | looked in another photo app or service | 16 → 8 | 8 (3 core) · 8 — 4 of them Photobucket: old accounts, not rival search |
+
+**Where they live.** `codebook/emergent_themes_v1.yaml` (not in the freeze hash)
+and a new table `story_themes` (schema A.12). Adding them to `journey_v1.yaml`
+would force a v1.1 bump and re-coding all 331 stories (~$4 against $2.22 left);
+a table beside it re-codes nothing.
+
+**How they were counted.** `pipeline/synthesise/themes.py` reads every live
+story: gpt-5-mini proposes tags with a quote, the quote must be found verbatim
+in the story, then gpt-5 confirms each tag against the definition — the D-8
+pattern. The first mini-only run tagged 62 stories "looked in another photo
+app", nearly all for merely mentioning Google Photos; confirmation was added and
+the definition gained one sentence ("Google Photos itself is never another
+app"). The table holds confirmed tags only; the artifact keeps every candidate
+and gpt-5's reason. Cost: $0.043 (mini-only run) + $0.037 + $0.027. The second
+run first recorded $0.21, pricing the mini tokens at gpt-5 rates; its row was
+repaired from the saved batch outputs, and the code now opens one run per model.
+
+**How they may be used.** Not pre-registered and all below 30 stories, so:
+counts only, never a share, never ranked or scored, and labelled "emerging —
+found after the codebook" wherever shown (P4). Their weight is as hypotheses for
+the Part 3 interview guide; `search_refuses_sensitive_terms` is the clearest
+case of a failure only a system change can fix.
+
+**One more fix from the same review.** A coder's `other:` text that spells a
+listed value is now that value (`classify.blocks.validate`); one stored row
+(`0.1 other:only_in_other_app`) was corrected, and a test pins that none remain.
+
+**Spend: $12.89 of $15.**

@@ -425,3 +425,46 @@ def test_no_stage0_story_without_library_evidence(con):
     photo was unreachable. Fixed by `blocks recode` (D-9)."""
     bad = B.stage0_suspects(con)
     assert not bad, f"{len(bad)} stories coded Stage 0 without library evidence"
+
+
+def test_other_text_that_spells_a_listed_value_becomes_that_value(codebook):
+    text = "The photo was only in WhatsApp, never in Google Photos, so search found nothing."
+    a = _answer(codebook, ("A",))
+    a["spine"]["primary_stage"] = "0"
+    a["spine"]["primary_stage_quote"] = "only in WhatsApp, never in Google Photos"
+    a["q0_1"] = {"v": "other", "o": "only in other app", "q": ""}
+    c = B.validate(codebook, _item(text), a)
+    assert ("0.1", "only_in_other_app", None, None) in c.rows
+
+
+@pytest.mark.needs_corpus
+def test_no_other_value_duplicates_a_listed_value(con, codebook):
+    dup = [(q, v) for q, v in con.execute("SELECT question, value FROM story_codes WHERE"
+                                          " value LIKE 'other:%' AND question <> '10.3'")
+           if any(x == v[6:] or x.split(":")[-1] == v[6:] for x in codebook.questions[q]["values"])]
+    assert not dup, dup[:5]
+
+
+def test_emergent_themes_live_outside_the_frozen_codebook():
+    from pipeline.common import codebook as cbm
+    from pipeline.synthesise import themes
+    t = themes.load_themes()
+    assert set(t) == {"search_refuses_sensitive_terms", "auto_creation_lost",
+                      "no_album_scoped_search", "looked_in_other_photo_app"}
+    assert all(v["definition"] and v["label"] for v in t.values())
+    assert "emergent_themes_v1.yaml" not in cbm.FROZEN_FILES               # D-10: not in the hash
+
+
+@pytest.mark.needs_corpus
+def test_emergent_theme_tags_are_verified_and_on_live_stories(con):
+    from pipeline.synthesise import themes
+    known = set(themes.load_themes())
+    rows = con.execute("SELECT t.story_id, t.theme, t.span, r.text_clean FROM story_themes t"
+                       " JOIN stories s USING (story_id) JOIN records r USING (record_id)"
+                       ).fetchall()
+    assert rows, "no emergent-theme tags — python -m pipeline.synthesise.themes"
+    assert all(r["theme"] in known for r in rows)
+    assert all(r["span"] in r["text_clean"] and len(r["span"]) >= 15 for r in rows)  # T-2/T-3
+    dead = con.execute("SELECT count(*) FROM story_themes WHERE story_id IN (SELECT story_id"
+                       " FROM exclusions WHERE story_id IS NOT NULL)").fetchone()[0]
+    assert dead == 0
