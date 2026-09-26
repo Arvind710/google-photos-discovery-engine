@@ -66,7 +66,9 @@ def share(n: int, denom: int) -> Share:
     p = n / denom
     if denom < COMPARABLE:
         lo, hi = wilson(n, denom)
-        return Share(f"{_pct(p)} ({n} of {denom}; {_pct(lo)}–{_pct(hi)}) · directional",
+        # Said plainly (2026-09-27): "directional" and a bare interval meant nothing to a
+        # reader; the tier keeps its internal name.
+        return Share(f"{_pct(p)} ({n} of {denom}) · rough guide, likely {_pct(lo)}–{_pct(hi)}",
                      "directional", WARN, n, denom, p)
     return Share(f"{_pct(p)} ({n} of {denom})", "comparable", BLUE, n, denom, p)
 

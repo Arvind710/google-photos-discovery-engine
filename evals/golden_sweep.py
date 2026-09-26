@@ -76,7 +76,7 @@ def one(client, q: dict) -> dict:
             "route_ok": a.route in q["expect"], "verified": a.verified,
             "problems": a.report.problems() if a.report else [a.error or "no report"],
             "repaired": a.repaired, "withheld": a.withheld, "fails": fails, "gap": a.verdict.gap if a.verdict else "",
-            "planned_by": a.planned_by, "draft": a.draft, "cut": a.cut,
+            "planned_by": a.planned_by, "draft": a.draft, "cut": a.cut, "dropped": a.dropped,
             "cost_estimated": sorted(set(a.estimated) | set(pre.estimated if pre else [])),
             "text": text, "seconds": round(a.seconds, 1),
             "cost_usd": round(a.cost_usd + (pre.cost_usd if pre else 0), 5), "usage": usage,
@@ -87,8 +87,12 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--only", nargs="*")
     ap.add_argument("--workers", type=int, default=4)
+    # A second question set (evals/fixtures/hard_questions.yaml) runs under its own name
+    # and file, so the gate tests — which read the latest "golden" artifact — never grade it.
+    ap.add_argument("--file", default=str(GOLDEN))
+    ap.add_argument("--name", default="golden")
     args = ap.parse_args()
-    qs = yaml.safe_load(GOLDEN.read_text())["questions"]
+    qs = yaml.safe_load(Path(args.file).read_text())["questions"]
     if args.only:
         qs = [q for q in qs if q["id"] in set(args.only)]
     from openai import OpenAI
@@ -104,9 +108,9 @@ def main() -> int:
     # answers — about $0.002 a question, estimated at $0.004 until a sweep measures it.
     plan_est = max(0.0013 * len(qs), .01)
     synth_est = max(0.0040 * len(qs), .02)
-    with rmod.Run(con, "ask-golden-plan", model=A.PLANNER_MODEL, estimate_usd=plan_est,
+    with rmod.Run(con, f"ask-{args.name}-plan", model=A.PLANNER_MODEL, estimate_usd=plan_est,
                   prompt_version=A.PROMPT_VERSION, n=len(qs)) as rp, \
-         rmod.Run(con, "ask-golden-synth", model=A.SYNTHESIS_MODEL, estimate_usd=synth_est,
+         rmod.Run(con, f"ask-{args.name}-synth", model=A.SYNTHESIS_MODEL, estimate_usd=synth_est,
                   prompt_version=A.PROMPT_VERSION, n=len(qs)) as rs:
         with ThreadPoolExecutor(args.workers) as ex:
             rows = list(ex.map(lambda q: one(client, q), qs))
@@ -124,6 +128,7 @@ def main() -> int:
                                  for r in rows),
             "planned_by_rules": sum(r["planned_by"] == "rules" for r in rows),
             "late_served_whole_paragraphs": sum(bool(r.get("cut")) for r in rows),
+            "repaired_by_dropping": sum(bool(r.get("dropped")) for r in rows),
             "cost_estimated_rows": sum(bool(r["cost_estimated"]) for r in rows),
             "assertion_fails": sum(bool(r["fails"]) for r in rows),
             "problems_by_type": {k: sum(1 for r in rows for p in r["problems"]
@@ -140,7 +145,7 @@ def main() -> int:
         out = {"run_id": rs.run_id, "plan_run": rp.run_id, "prompt_version": A.PROMPT_VERSION,
                "subset": bool(args.only), "summary": summary, "rows": rows}
     ART.mkdir(parents=True, exist_ok=True)
-    (ART / f"golden_{rs.run_id}.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
+    (ART / f"{args.name}_{rs.run_id}.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
     print(json.dumps(summary, indent=1))
     for r in rows:
         flag = "ok " if r["route_ok"] and r["verified"] and not r["fails"] else "BAD"

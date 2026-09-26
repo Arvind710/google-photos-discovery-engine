@@ -9,17 +9,18 @@
 # question level. Not frozen — display copy, not coding input.
 
 stages:
-  "0":  {title: "Is the photo there to find?",        short: Library state}
-  "1":  {title: "Why they went looking",              short: Trigger and intent}
-  "2":  {title: "What they remember",                 short: Memory}
-  "3":  {title: "Where and how they look",            short: Strategy}
-  "4":  {title: "Putting the memory into words",      short: Articulation}
-  "5":  {title: "Does search understand it?",         short: Matching (inferred)}
-  "6":  {title: "Spotting it in the results",         short: Recognition}
-  "7":  {title: "Working out what went wrong",        short: Adaptation}
-  "8":  {title: "Keep going or give up",              short: Persistence}
-  "9":  {title: "How it ended",                       short: Outcome}
-  "10": {title: "What changed afterwards",            short: Aftermath}
+  # `short` is the chart label; plain words, never the codebook's own terms (2026-09-27).
+  "0":  {title: "Is the photo there to find?",        short: "Was the photo there?"}
+  "1":  {title: "Why they went looking",              short: "Why they looked"}
+  "2":  {title: "What they remember",                 short: "What they remember"}
+  "3":  {title: "Where and how they look",            short: "Where they looked"}
+  "4":  {title: "Putting the memory into words",      short: "Putting it into words"}
+  "5":  {title: "Does search understand it?",         short: "Did search understand?"}
+  "6":  {title: "Spotting it in the results",         short: "Spotting it in results"}
+  "7":  {title: "Working out what went wrong",        short: "Trying another way"}
+  "8":  {title: "Keep going or give up",              short: "Keep going or give up"}
+  "9":  {title: "How it ended",                       short: "How it ended"}
+  "10": {title: "What changed afterwards",            short: "Afterwards"}
 
 failure_owners:
   library_data: The photo was never there, or its data was wrong
@@ -42,20 +43,21 @@ proxy_warning: >
 
 metrics:
   share: >
-    Out of the stories in the group named, the fraction with this property. It
-    is not a failure rate and not a share of Google Photos users. Below 30
-    stories we show only the count; from 30 to 79 the share is marked
-    directional.
+    Out of the cases in the group named, the fraction with this property. It is
+    not a failure rate and not a share of Google Photos users. Below 30 cases we
+    show only the count; from 30 to 79 the share is marked as only a rough guide.
   n_authors: >
-    How many different people. 200 stories from 14 people is weaker evidence
-    than 200 from 180, so both counts always appear together.
+    How many different people. 200 cases from 14 people is weaker evidence than
+    200 from 180, so both counts always appear together.
   coverage: >
-    How often the public text says anything at all about this question.
-    Low coverage is not a finding about users — it means the question needs an
-    interview, and it goes to the Part 3 guide.
+    How often the posts say anything at all about this question. When few do, it
+    says nothing about users — it means the question needs an interview, and it
+    goes to the interview guide.
   kappa: >
-    How often two different AI coders agreed, corrected for chance. It measures
-    consistency, not correctness — two models can agree and both be wrong.
+    The agreement score is how often two AI readers gave the same answer, after
+    allowing for agreement by chance: 1 is perfect agreement, 0 is no better than
+    chance. It shows the reading was consistent, not that it was right — two
+    readers can agree and both be wrong.
 
 # P1 — the Data Bank. Plain names for sources and for how each was collected
 # (Docs/decisions.md D-1). The method line is a disclosure, so it says plainly
@@ -73,29 +75,30 @@ sources:
 
 collect_methods:
   official_api: >
-    The platform's own public API, used as documented.
+    The platform's own official way for programs to read public posts, used as
+    the platform documents it.
   public_feed: >
-    A public feed the platform publishes for this purpose.
+    A public feed the platform publishes for anyone to read.
   public_scraper_lib: >
-    An open-source library that reads the public store listing.
+    A free, open tool that reads the public app-store listing.
   headless_render: >
-    Public thread pages opened in a headless browser. The pages are allowed by
-    the site's robots.txt; the page's own script loads the posts from a path
-    that is not.
+    Public thread pages opened by an automated browser. The site's published
+    rules for automated visitors allow the pages themselves, but not the address
+    each page uses to load its posts.
   apify: >
-    A third-party scraping service (Apify). The platform's robots.txt disallows
-    all automated access and its own API was not available to this project;
-    collected anyway, by decision, and disclosed here.
+    A paid collection service (Apify). The site's published rules for automated
+    visitors forbid all automated collection, and its official access was not
+    available to this project; collected anyway, by decision, and disclosed here.
 
 exclusion_reasons:
   deleted: Deleted or removed before it was read
   too_short: Too short to say anything (under 20 letters)
-  low_quality: Nothing in it that could be coded
+  low_quality: Nothing in it the study could use
   exact_duplicate: The same words as an earlier record
   near_duplicate_same_author: A near-repeat by the same person
   lexicon_rejected: Never mentions a photo, picture or screenshot
-  out_of_window: Outside the collection window
+  out_of_window: Posted outside the dates collected
   no_story: About photos, but no attempt to find one
-  span_unverified: Its evidence could not be found in the text
-  coding_failed: The model's answer could not be read
-  model_refusal: The model declined to code it
+  span_unverified: The passage quoted as evidence was not found word for word in the post
+  coding_failed: The AI reader's answer could not be read
+  model_refusal: The AI reader declined to read it

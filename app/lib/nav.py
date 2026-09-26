@@ -20,49 +20,37 @@ from lib import db
 # (module filename, title, icon, url_path, [(slug, label), ...])
 # P0 shipped the front door, P1 the Data Bank, P4 Analysis and Opportunities;
 # P5 Ask AI and Try it; P6 the full How it works and Methodology.
+# 2026-09-27 (the PM): "hide 'How it works' and 'Try it'" — both pages stay in
+# app/views/ but are not routed; Data Bank, the first section, is the front door.
+HIDDEN = ["home.py", "try_it.py"]
 PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
-    ("home.py", "How it works", "🔎", "", [
-        ("what", "What the numbers are"),
-        ("funnel", "From records to stories"),
-        ("codebook", "The codebook"),
-        ("register", "What posts can answer"),
-        ("reliability", "How far to trust it"),
-        ("sanity", "Ten stories to judge"),
-        ("scoring", "How opportunities rank"),
-        ("limits", "What it cannot tell you"),
-        ("gates", "The gates it passed"),
-    ]),
     ("data_bank.py", "Data Bank", "🗂️", "data_bank", [
         ("what-was-read", "What was read"),
         ("how-obtained", "How each source was obtained"),
         ("set-aside", "What was set aside"),
         ("thinnest", "Where it is thinnest"),
-        ("stories", "From records to stories"),
-        ("coverage", "What the stories can answer"),
+        ("stories", "From records to cases"),
+        ("coverage", "What the cases can answer"),
         ("browse", "Read the records"),
     ]),
     ("analysis.py", "Analysis", "📊", "analysis", [
         ("stages", "Where it first breaks"),
         ("photo-type", "By kind of photo"),
-        ("owners", "Who owns the failure"),
+        ("owners", "Whose side the problem is on"),
         ("memory", "What people remember"),
         ("modes", "How they looked"),
-        ("hypotheses", "What posts cannot test"),
+        ("hypotheses", "Ideas the posts can't test"),
         ("sources", "Across sources"),
-        ("emerging", "Emerging themes"),
+        ("emerging", "Patterns noticed later"),
     ]),
     ("opportunities.py", "Opportunities", "🎯", "opportunities", [
         ("recommendation", "The recommendation"),
         ("candidates", "The candidates"),
-        ("weights", "Weights and sensitivity"),
-        ("two-by-two", "Two criteria at a time"),
+        ("weights", "Does the ranking hold?"),
+        ("two-by-two", "Two scores at a time"),
         ("handoff", "What the interviews should test"),
     ]),
     ("ask.py", "Ask AI", "💬", "ask", []),
-    ("try_it.py", "Try it", "🧪", "try_it", [
-        ("live", "Run it on a post"),
-        ("stored", "Read a coded story"),
-    ]),
 ]
 
 # Pinned in implementationplan.md §0.5 — shown on the front door as "coming",

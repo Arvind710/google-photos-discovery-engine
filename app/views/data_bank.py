@@ -81,6 +81,14 @@ def hbar(labels: list[str], values: list[int], texts: list[str], colours, height
     st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 
+def _q_label(qid: str) -> str:
+    """A study question in plain words for a chart row — never its number (2026-09-27)."""
+    from lib import plain
+    t = plain.reader_words(plain.question(qid))
+    t = t[:1].upper() + t[1:]
+    return t if len(t) <= 58 else t[:56].rstrip() + "…"
+
+
 # ------------------------------------------------------------------- data
 st.title("Data Bank")
 st.html(f"<div style='color:{MUTED};font-size:1.02rem;margin:-.5rem 0 .4rem;max-width:72ch;"
@@ -111,27 +119,8 @@ by_method = src.groupby("collect_method")["n_records"].sum().to_dict()
 apify_n = int(by_method.get("apify", 0))
 apify_share = share(apify_n, collected)
 
-st.warning(words.proxy_warning(), icon="⚠️")
 
-CHAIN = [
-    (f"<b>{collected:,}</b> records read", f"from {n_sources} public sources, "
-     f"{people:,} people", BLUE),
-    ("<b>How</b> each was<br>obtained", f"{apify_share.text} through a third-party "
-     "scraper", BAD),
-    (f"<b>{excluded:,}</b> set aside,<br>none deleted", "every one with its reason", WARN),
-    ("Where it is<br><b>thinnest</b>", "dates, threads and authors, per source", "#56B4E9"),
-]
-arrow = (f"<div style='align-self:center;color:{MUTED};font-size:1.4rem;"
-         f"padding:0 .25rem'>&rsaquo;</div>")
-st.html("<div style='display:flex;flex-wrap:wrap;gap:.25rem;margin:.8rem 0 .2rem'>"
-        + arrow.join(
-            f"<div style='flex:1;min-width:150px;border-top:4px solid {c};"
-            f"padding:.55rem .5rem .1rem 0'><div style='font-size:.64rem;letter-spacing:.12em;"
-            f"color:{MUTED};font-weight:700'>{i}</div><div style='font-size:.95rem;"
-            f"line-height:1.35;margin:.15rem 0 .3rem'>{h}</div><div style='font-size:.76rem;"
-            f"color:{MUTED};line-height:1.35'>{f}</div></div>"
-            for i, (h, f, c) in enumerate(CHAIN, 1))
-        + "</div>")
+# The four numbered cards that summarised the page are gone (the PM, 2026-09-27).
 
 # ================================================================= PART 1
 section(1, f"{collected:,} records from {n_sources} sources, written by {people:,} people",
@@ -162,7 +151,8 @@ verdict(f"Source sizes reflect <b>how each was collected</b>, not where the prob
 # ================================================================= PART 2
 section(2, "How each source was obtained",
         "Stated per source and stored on every record, because an evaluator will ask. "
-        "Where a platform's robots.txt was not followed, that is said here in plain words.",
+        "Where a site's published rules for automated collection were not followed, that "
+        "is said here in plain words.",
         BAD, slug="how-obtained")
 cards = []
 for m in METHOD_ORDER:
@@ -183,8 +173,9 @@ for m in METHOD_ORDER:
         f"<div style='font-size:.86rem;line-height:1.5;margin-top:.3rem;max-width:80ch'>"
         f"{words.method(m)}</div></div>")
 st.html("".join(cards))
-verdict(f"<b>{apify_share.text}</b> of what was read came through a third-party scraper "
-        f"against the platforms' stated robots policy. It is public, not login-walled, "
+verdict(f"<b>{apify_share.text}</b> of what was read came through a paid collection service, "
+        f"against those sites' published rules for automated collection. It is public, not "
+        f"behind a login, "
         f"stripped of names, emails, phone numbers and handles before it was stored, and "
         f"marked on every record — so any finding can be re-checked without it.", BAD)
 
@@ -246,14 +237,14 @@ for _, r in src.iterrows():
         f"<td style='{TD};color:{BAD if per > 1.5 else 'inherit'}'>{per:.1f}</td></tr>")
 st.html("".join(lines) + "</table>")
 thin = src[src["n_records"] < 30]
-verdict(("Every source is above the floor where a share can be shown."
+verdict(("Every source has at least 30 records — enough for a percentage to mean something."
          if thin.empty else
          f"<b>{', '.join(words.source(s) for s in thin['source'])}</b> "
          f"{'is' if len(thin) == 1 else 'are'} below 30 records, so "
          f"{'its' if len(thin) == 1 else 'their'} shares appear as counts only, and no "
          f"comparison is drawn from {'it' if len(thin) == 1 else 'them'}."), "#56B4E9")
-note("Grey counts with no percentage are below 30 records: too few for a share to mean "
-     "anything. From 30 to 79 a share is marked directional.")
+note("Grey counts with no percentage are below 30 records: too few for a percentage to mean "
+     "anything. From 30 to 79 a percentage is marked as only a rough guide.")
 
 # ================================================================= PART 5
 # From P2: the unit changes from records to retrieval stories ([CTX] §5).
@@ -261,43 +252,47 @@ stor = funnel[funnel["step"].str.startswith("stories")]
 if not stor.empty:
     sall = stor[stor["source"] == "_all"].set_index("step")
     n_st, n_core = int(sall.loc["stories", "n"]), int(sall.loc["stories:core", "n"])
-    section(5, f"{n_st:,} retrieval stories, {n_core:,} of them core",
-            "A story is one person's attempt to find one photo they believe exists. A thread "
-            "can hold several people's stories; most reviews hold none. From here on, every "
-            "number counts stories and the people who told them, not records.",
+    section(5, f"{n_st:,} search cases, {n_core:,} of them about a vaguely remembered photo",
+            "A case is one person's attempt to find one photo they believe exists. A thread "
+            "can hold several people's cases; most reviews hold none. From here on, every "
+            "number counts cases and the people who told them, not records.",
             OK, slug="stories")
     cols = st.columns(3)
     for col, b, label, sub in (
-            (cols[0], "stories:core", "core", "a known photo, vaguely remembered"),
-            (cols[1], "stories:adjacent", "adjacent", "precise cues, or the photo was never there"),
-            (cols[2], "stories:irrelevant", "irrelevant", "a search story outside the scope")):
+            (cols[0], "stories:core", "vaguely remembered", "the photo they wanted, only "
+             "half-remembered — the heart of the study"),
+            (cols[1], "stories:adjacent", "exact or already gone", "they knew the photo "
+             "exactly, or it was never there — counted apart"),
+            (cols[2], "stories:irrelevant", "out of scope", "a search, but not for a photo")):
         sh = share(int(sall.loc[b, "n"]), n_st)
         col.html(f"<div style='border-top:3px solid {OK};padding-top:.5rem'>"
                  f"<div style='font-size:1.9rem;font-weight:750;line-height:1'>"
                  f"{int(sall.loc[b, 'n']):,}</div><div style='font-size:.9rem;margin-top:.15rem'>"
                  f"{label} · {int(sall.loc[b, 'n_authors'] or 0):,} people</div>"
-                 f"<div style='font-size:.76rem;color:{MUTED}'>{sh.text} of stories · {sub}"
+                 f"<div style='font-size:.76rem;color:{MUTED}'>{sh.text} of cases · {sub}"
                  f"</div></div>")
     per_src = (stor[(stor["source"] != "_all") & (stor["step"] == "stories:core")]
                .sort_values("n", ascending=False))
     hbar([words.source(s) for s in per_src["source"]], per_src["n"].astype(int).tolist(),
-         [f" {int(n):,} core of {int(d):,} stories · {int(a or 0):,} people" for n, d, a in
+         [f" {int(n):,} vaguely remembered of {int(d):,} cases · {int(a or 0):,} people"
+          for n, d, a in
           zip(per_src["n"], per_src["denom"], per_src["n_authors"], strict=True)],
          [OK] * len(per_src))
     floor = 300                                            # [CTX] §14.3, T-20
-    verdict((f"<b>{n_core:,} core stories</b> clears the {floor} the engine needs to compare "
-             f"segments ([CTX] §14.3). Which of them are coded, and how, is the next step."
+    verdict((f"<b>{n_core:,} vaguely remembered cases</b> clears the {floor} needed to "
+             f"compare groups of cases."
              if n_core >= floor else
-             f"<b>{n_core:,} core stories</b> is below the {floor} the engine was designed "
-             f"for, after two rounds of extra collection. That is itself a finding: most public "
-             f"talk about not finding a photo is about photos that were lost or deleted, not "
-             f"about photos someone remembers only vaguely. Comparisons between groups are "
-             f"therefore directional at best."), OK if n_core >= floor else WARN)
-    note("One AI model reads every record and proposes stories. A second, stronger model "
-         "then checks each one against the project's written definitions: it drops "
-         "complaints that are not an attempt to find a photo, and settles core versus "
-         "adjacent. Each story is stored as an exact passage of the post it came from, never "
-         "a paraphrase. Stories the second model dropped are kept, marked, not deleted.")
+             f"<b>{n_core:,} vaguely remembered cases</b> is below the {floor} the study was "
+             f"designed for, after two rounds of extra collection. That is itself a finding: "
+             f"most public talk about not finding a photo is about photos that were lost or "
+             f"deleted, not about photos someone remembers only vaguely. Comparisons between "
+             f"groups are therefore only a rough guide at best."), OK if n_core >= floor else WARN)
+    note("One AI model reads every record and proposes cases. A second, stronger model "
+         "then checks each one against the study's written definitions: it drops "
+         "complaints that are not an attempt to find a photo, and decides whether the person "
+         "remembered the photo vaguely or exactly. Each case is stored as an exact passage of "
+         "the post it came from, never "
+         "a paraphrase. Cases the second model dropped are kept, marked, not deleted.")
 
 # ================================================================= PART 6
 # From P3: what the coded stories can answer, and how far the coding agrees
@@ -307,22 +302,22 @@ rel = db.query("SELECT * FROM analysis_reliability")
 if not cov.empty:
     n_q = len(cov)
     coded = cov[cov["disposition"] == "coded"]
-    section(6, f"{len(coded)} of {n_q} questions can be answered from public stories",
-            "Every story was asked every question its length allows. A question that nearly "
-            "every story leaves unanswered is not dropped: it becomes an interview question for "
+    section(6, f"{len(coded)} of the {n_q} questions the study asks of every case can be "
+               f"answered from public posts",
+            "Every case was asked every question its length allows. A question that nearly "
+            "every case leaves unanswered is not dropped: it becomes an interview question for "
             "the next part of the research.", "#CC79A7", slug="coverage")
     cov = cov.assign(asked=cov["n_coded"] + cov["n_not_stated"],
                      _k=cov["question"].map(lambda q: tuple(int(x) for x in q.split("."))))
     cov = cov.sort_values("_k")
     shown = cov[cov["asked"] > 0]
-    hbar([f"{q} · {words.stage(str(st))}" for q, st in zip(shown["question"], shown["stage"],
-                                                          strict=True)],
+    hbar([_q_label(q) for q in shown["question"]],
          shown["n_coded"].astype(int).tolist(),
          [f" {share(int(n), int(a)).text}" + (" · interview" if d == "register" else "")
           for n, a, d in zip(shown["n_coded"], shown["asked"], shown["disposition"], strict=True)],
          ["#CC79A7" if d == "coded" else "#BBBBBB" for d in shown["disposition"]],
          height=60 + 22 * len(shown))
-    verdict(f"<b>{n_q - len(coded)} questions</b> are answered by so few stories that they "
+    verdict(f"<b>{n_q - len(coded)} questions</b> are answered by so few cases that they "
             f"go to the interview guide instead — public posts rarely say how many attempts "
             f"were made or how people scan results, so only watching someone search can.",
             "#CC79A7")
@@ -331,14 +326,14 @@ if not cov.empty:
         spine = rel[~rel["field"].str.startswith("q:")].set_index("field")
         ps = spine.loc["primary_stage"] if "primary_stage" in spine.index else None
         counts = rel["verdict"].value_counts().to_dict()
-        note(f"A second AI model coded {int(rel['n'].max())} of the stories again. "
-             + (f"On the stage where a story first went wrong, the two agree "
+        note(f"A second AI reader read {int(rel['n'].max())} of the cases again. "
+             + (f"On where a case first went wrong, the two agreed "
                 f"{share(round(ps['raw_agreement'] * ps['n']), int(ps['n'])).text} of the time "
-                f"(κ {ps['value']:.2f}). " if ps is not None else "")
-             + f"Of {len(rel)} coded fields, {counts.get('ok', 0)} agree well, "
-             f"{counts.get('degenerate', 0)} are nearly constant, and "
-             f"{counts.get('low_reliability', 0)} agree too little to carry a headline. "
-             + words.metric("kappa"))
+                f"(an agreement score of {ps['value']:.2f}). " if ps is not None else "")
+             + f"Of the {len(rel)} details both read, {counts.get('ok', 0)} agree well, "
+             f"{counts.get('degenerate', 0)} almost always get the same answer, so the score "
+             f"says little, and {counts.get('low_reliability', 0)} agree too little to rest a "
+             f"finding on. " + words.metric("kappa"))
 
 # ========================================================== read it yourself
 st.html(nav.anchor("browse"))
@@ -373,7 +368,7 @@ for _, r in rows.iterrows():
     with st.expander(f"{words.source(r['source'])} · {str(r['created_at'] or '')[:10]} · "
                      f"{md(head)}"):
         st.text(t[:4000] + ("…" if len(t) > 4000 else ""))
-        st.caption(f"found by: {md(r['collect_query'] or '—')} · context: "
+        st.caption(f"found with the search: {md(r['collect_query'] or '—')} · posted in: "
                    f"{md(r['thread_context'] or '—')} · language: {r['lang'] or '—'}")
         st.link_button("Open where it was posted ↗", r["source_url"])
 if len(rows) == 60:

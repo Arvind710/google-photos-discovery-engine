@@ -14,7 +14,9 @@ from datetime import date
 
 import streamlit as st
 
-LIMITS = {"ask": {"session": 6, "day": 25}, "try": {"session": 2, "day": 8}}
+# Ask AI: 15 a visit (the PM, 2026-09-27: "make min question limit to 15 in a session");
+# 60 a day across all visitors — about $0.18 at gpt-5-mini's measured ~$0.003 an answer.
+LIMITS = {"ask": {"session": 15, "day": 60}, "try": {"session": 2, "day": 8}}
 
 
 @st.cache_resource(show_spinner=False)

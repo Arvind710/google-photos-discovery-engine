@@ -15,7 +15,7 @@ import re
 import streamlit as st
 import yaml
 
-from lib import db, ui, words
+from lib import db, plain, ui, words
 from lib.evidence import share
 
 ROOT = db.ROOT
@@ -24,7 +24,7 @@ st.title("Google Photos Discovery Engine")
 st.html("<div style='font-size:1.02rem;max-width:72ch;margin:-.4rem 0 1rem;line-height:1.55'>"
         "Why do people fail to find a photo they <i>partly</i> remember? This engine reads public "
         "posts, reviews and forum threads about searching Google Photos, splits them into "
-        "individual retrieval stories, and codes each one against an eleven-stage retrieval "
+        "individual search cases, and codes each one against an eleven-stage retrieval "
         "journey — to find where retrieval breaks, and where intelligence is actually needed. "
         "This page is how it was done, and how far to trust it.</div>")
 
@@ -56,14 +56,14 @@ STEPS = [
      "Reddit, X, YouTube…", ui.BLUE),
     ("2 · Clean", "PII scrubbed, repeats by the same person removed", "consensus from different "
      "people kept", ui.SKY),
-    ("3 · Find stories", f"<b>{stories}</b> retrieval stories", "one AI model proposes, a "
+    ("3 · Find cases", f"<b>{stories}</b> search cases", "one AI model proposes, a "
      "stronger one confirms", ui.GREEN),
-    ("4 · Code", f"<b>{core}</b> core stories × 60 questions", f"frozen codebook "
+    ("4 · Code", f"<b>{core}</b> core cases × 60 questions", f"frozen codebook "
      f"{ui.esc(cb['version'])}; every code backed by a quote", ui.ORANGE),
     ("5 · Check", "quotes found verbatim; a second model re-codes", "agreement, adjudication, "
      "a blind read", ui.PINK),
     ("6 · Rank and ask", "opportunities scored on pre-registered weights", "Ask AI answers only "
-     "from the stories, checked in code", ui.RED),
+     "from the cases, checked in code", ui.RED),
 ]
 arrow = f"<div style='align-self:center;color:{ui.MUTED};font-size:1.3rem'>&rsaquo;</div>"
 st.html("<div style='display:flex;flex-wrap:wrap;gap:.25rem;margin:.6rem 0 .3rem'>" + arrow.join(
@@ -79,13 +79,13 @@ ui.section(1, "What the numbers are — and what they are not",
            "Google Photos' goal is the share of users who find a photo they remember but cannot "
            "precisely describe. That rate needs usage logs, which no one outside Google has.",
            ui.BLUE, slug="what")
-ui.verdict(f"Every figure here counts <b>stories people chose to post</b> — {core} core "
-           f"stories from {core_people} people. It says how often something appears in what "
+ui.verdict(f"Every figure here counts <b>cases people chose to post</b> — {core} core "
+           f"cases from {core_people} people. It says how often something appears in what "
            "people wrote, which is evidence about <i>why</i> retrieval fails. It is never a "
            "retrieval success rate, a share of users, or a share of searches.", ui.BLUE)
 
 # ================================================================= PART 2
-ui.section(2, f"From {collected:,} records to {core} core stories",
+ui.section(2, f"From {collected:,} records to {core} core cases",
            "What was read, what was set aside, and what was left. Nothing is deleted: every "
            "record set aside is still in the database with its reason (the Data Bank shows "
            "them).", ui.GREEN, slug="funnel")
@@ -93,17 +93,17 @@ steps = [("records read", collected, n("collected", "n_authors")),
          ("never mention a photo", n("excluded:lexicon_rejected"), None),
          ("too short to say anything", n("excluded:too_short"), None),
          ("about photos, no attempt to find one", n("excluded:no_story"), None),
-         ("retrieval stories", stories, n("stories", "n_authors")),
+         ("search cases", stories, n("stories", "n_authors")),
          ("core: a known photo, vaguely remembered", core, core_people),
          ("adjacent: precise memories, or photos that were gone", n("stories:adjacent"),
           n("stories:adjacent", "n_authors"))]
 ui.hbar([s for s, _, _ in steps], [v for _, v, _ in steps],
         [f" {v:,}" + (f" · {p:,} people" if p else "") for _, v, p in steps],
         [ui.GREEN if i >= 4 else ui.GREY for i in range(len(steps))])
-ui.verdict(f"<b>{core} core stories</b> — fewer than the 300 the engine was designed for. Most "
+ui.verdict(f"<b>{core} core cases</b> — fewer than the 300 the engine was designed for. Most "
            "public talk about not finding a photo is about photos that were deleted or never "
            "backed up, not photos remembered vaguely; that is itself a finding. Every comparison "
-           "below 30 stories is shown as a count only.", ui.ORANGE)
+           "below 30 cases is shown as a count only.", ui.ORANGE)
 with st.expander(f"The search lexicon — {len(meth['lexicon'])} terms, with how many records "
                  "each surfaced first"):
     st.html("<table style='font-size:.84rem;border-collapse:collapse'><tr style='color:"
@@ -116,17 +116,17 @@ with st.expander(f"The search lexicon — {len(meth['lexicon'])} terms, with how
                 f"{t['hits']:,}</td><td style='padding:.2rem .6rem'>{t['core_stories']}</td></tr>"
                 for t in sorted(meth["lexicon"], key=lambda t: -t["hits"])) + "</table>")
     ui.note("A record is counted under the term that found it first. Store reviews and the "
-            "Google Photos Help listing were read whole, not searched, so their stories trace "
+            "Google Photos Help listing were read whole, not searched, so their cases trace "
             "to no term.")
 
 # ================================================================= PART 3
 journey = yaml.safe_load((ROOT / "codebook" / "journey_v1.yaml").read_text())
 cov = db.query("SELECT question, n_coded, n_not_stated, disposition FROM analysis_coverage"
                " WHERE source='_all'").set_index("question")
-ui.section(3, "Sixty questions, frozen before the stories were read",
+ui.section(3, "Sixty questions, frozen before the cases were read",
            "The codebook is an eleven-stage journey and 60 questions with fixed answers, written "
            "from the case's solution document. A model may answer only with a listed value or "
-           "'not stated', and every key answer needs a quote found word for word in the story.",
+           "'not stated', and every key answer needs a quote found word for word in the case.",
            ui.ORANGE, slug="codebook")
 rows = []
 for stg in journey["stages"]:
@@ -159,8 +159,8 @@ with st.expander("The severity rubric"):
 
 # ================================================================= PART 4
 ui.section(4, f"{int((cov['disposition'] == 'coded').sum())} of 60 questions can be answered "
-              "from public stories — the rest go to the interviews",
-           "For every question: of the stories asked it, how many said anything at all. Above "
+              "from public cases — the rest go to the interviews",
+           "For every question: of the cases asked it, how many said anything at all. Above "
            "85% 'not stated', the question moves to the interview guide for the next part of "
            "the research — named, not dropped.", ui.PINK, slug="register")
 reg_rows = []
@@ -204,24 +204,24 @@ checks = [
     ("Every quote is real", f"{sp['n']:,} evidence quotes, each found word for word in the post it "
      f"came from and at least {sp['min_len']} characters long. A code whose quote could not be "
      "found was dropped and counted."),
-    ("A second model coded 100 stories again",
-     f"On where a story first went wrong they agree "
+    ("A second model coded 100 cases again",
+     f"On where a case first went wrong they agree "
      f"{share(round(spine.loc['primary_stage', 'raw_agreement'] * spine.loc['primary_stage', 'n']), int(spine.loc['primary_stage', 'n'])).text}"
      f" (κ {spine.loc['primary_stage', 'value']:.2f}). Of {len(rel)} coded fields, "
      f"{counts.get('ok', 0)} agree well, {counts.get('degenerate', 0)} are nearly constant, and "
      f"{counts.get('low_reliability', 0)} agree too little to carry a finding: "
      f"{ui.esc(', '.join(low))}. Those never feed a headline or a score."),
     ("A third call settled the disagreements",
-     f"On {adj['disputed']} stories where the coders differed, a stronger model sided with the "
+     f"On {adj['disputed']} cases where the coders differed, a stronger model sided with the "
      f"first coder {adj['primary']} times, the second {adj['secondary']}, and neither "
      f"{adj['neither']} — a working reference, not proof."),
     ("A blind reader, with no codebook",
-     f"Read {br['n']} confidently coded stories and named where each went wrong in its own "
+     f"Read {br['n']} confidently coded cases and named where each went wrong in its own "
      f"words: it matched the coded stage in "
      f"{share(round(br['stage_agreement'] * br['n']), br['n']).text}. The misses are listed for "
      "inspection — the only view of the coding the codebook did not shape."),
-    ("Hand-written test stories",
-     f"{fx['n']} stories written with a known right answer: the stage was right in "
+    ("Hand-written test cases",
+     f"{fx['n']} cases written with a known right answer: the stage was right in "
      f"{share(round(fx['primary_stage'] * fx['n']), fx['n']).text}. They prove the rules are "
      "applied as written — not accuracy on messy real posts."),
 ]
@@ -231,8 +231,8 @@ st.html("".join(ui.card(f"<div style='font-weight:700;font-size:.92rem'>{h}</div
 ui.note(words.metric("kappa"))
 
 # ================================================================= PART 6
-ui.section(6, "Judge the coding yourself — ten stories, chosen at random",
-           "Each story as it was posted (names and handles replaced), the codes the engine gave "
+ui.section(6, "Judge the coding yourself — ten cases, chosen at random",
+           "Each case as it was posted (names and handles replaced), the codes the engine gave "
            "it, and the quote behind each code.", ui.SKY, slug="sanity")
 ids = meth["sanity_strip"]
 ph = ",".join("?" * len(ids))
@@ -272,7 +272,7 @@ ui.verdict("A candidate must pass two gates — Google Photos can fix it, and fi
            f"{w['evidence_strength']}, reach {w['reach']}, registered "
            f"{ui.esc(sc['pre_registered_at'][:16].replace('T', ' '))} IST. Severity (weight "
            f"{w['severity']}) is left out of the headline because the coders did not agree on it, "
-           "and shown as a sensitivity row. A candidate with fewer than 30 core stories is scored "
+           "and shown as a sensitivity row. A candidate with fewer than 30 core cases is scored "
            "but not ranked; 1,000 random reweightings test whether the order holds.", ui.ORANGE)
 ui.note("The gates and reach are judgements: proposed by the AI, approved by the product manager "
         "before the ranking ran, with a one-line reason each (Opportunities page).")
@@ -284,13 +284,14 @@ ui.section(8, "What this engine cannot tell you", "Stated here so they are not d
 standing = ["public_selection_bias", "thin_core", "stage5_inferred", "missing_cuts",
             "interview_register", "low_reliability_fields", "adjacent_apart", "emerging_themes"]
 st.html("<ul style='font-size:.9rem;line-height:1.6;max-width:80ch'>" + "".join(
-    f"<li>{ui.esc(flags[f])}</li>" for f in standing if f in flags.index) + "</ul>")
-LIM_PLAIN = {"P2-MET-1": "Two AI models agreed on how many stories a post holds in 35 of 100 "
-                         "cases; the stronger model now confirms every story",
-             "P2-MET-2": "They agreed on how far a story goes in 55 of 100; the higher of the two "
+    f"<li>{ui.esc(plain.reader_words(flags[f]))}</li>" for f in standing if f in flags.index)
+    + "</ul>")
+LIM_PLAIN = {"P2-MET-1": "Two AI models agreed on how many cases a post holds in 35 of 100 "
+                         "cases; the stronger model now confirms every case",
+             "P2-MET-2": "They agreed on how far a case goes in 55 of 100; the higher of the two "
                          "is always kept, so no coding is skipped",
-             "P2-MET-4": "97 of every 100 records read held no retrieval story at all",
-             "T-20": "115 core stories, not the 300 planned — paid collection ran out",
+             "P2-MET-4": "97 of every 100 records read held no search case at all",
+             "T-20": "115 core cases, not the 300 planned — paid collection ran out",
              "P3-MET-9-B": "Posts answer the memory questions less often than hoped",
              "P3-MET-9-C": "Posts rarely describe what search did or how results looked",
              "P3-MET-9-D": "Posts rarely describe what people did after a miss"}

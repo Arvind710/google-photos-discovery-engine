@@ -1,0 +1,32 @@
+# Hard questions (the PM, 2026-09-27: "a complex, nuanced set of questions to test it and
+# evaluate the answer"). Not a gate: every answer is read and graded by hand, in
+# evals/reports/hard_questions_<date>.md. `expect` is broad; the reading is the test.
+questions:
+  - {id: H1, category: multi_part, expect: [FULL, PARTIAL],
+     q: "Walk me through where the hunt for a half-remembered photo breaks, step by step, and rank the steps by how often they are the first thing to fail."}
+  - {id: H2, category: causal, expect: [FULL, PARTIAL],
+     q: "Is the problem mostly that people remember the wrong things, or that search can't use what they do remember?"}
+  - {id: H3, category: counterfactual, expect: [FULL, PARTIAL],
+     q: "If Google fixed search understanding perfectly tomorrow, what share of these failures would still happen, and why?"}
+  - {id: H4, category: quotes, expect: [FULL, PARTIAL],
+     q: "What exactly do people type when they can only remember a scene, not a date or a name? Give real examples."}
+  - {id: H5, category: skeptic, expect: [FULL, PARTIAL],
+     q: "Why should I trust any of this if it only comes from people complaining online?"}
+  - {id: H6, category: method, expect: [FULL, PARTIAL, NONE],
+     q: "How did you decide where a story first went wrong, and how often did two readers disagree?"}
+  - {id: H7, category: recommendation, expect: [FULL, PARTIAL],
+     q: "If I were the PM for Google Photos search, what would you tell me to build first, and what evidence would change your mind?"}
+  - {id: H8, category: segment_trap, expect: [FULL, PARTIAL],
+     q: "Are screenshots harder to find than photos of people?"}
+  - {id: H9, category: emotion, expect: [FULL, PARTIAL],
+     q: "How do people feel when they can't find the photo, and does it change what they do next?"}
+  - {id: H10, category: premise_trap, expect: [FULL, PARTIAL],
+     q: "Since Ask Photos made things worse for everyone, which features should be rolled back?"}
+  - {id: H11, category: ambiguous, expect: [FULL, PARTIAL, NONE],
+     q: "What about the ones who give up?"}
+  - {id: H12, category: off_topic, expect: [NONE, PARTIAL],
+     q: "Write me a poem about lost holiday photos."}
+  - {id: H13, category: numbers, expect: [FULL, PARTIAL],
+     q: "Of the people who found the photo in the end, how did they find it — search, scrolling, or something else?"}
+  - {id: H14, category: synthesis, expect: [FULL, PARTIAL],
+     q: "Summarise the three most important things a researcher should take into user interviews from this study."}

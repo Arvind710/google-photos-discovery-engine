@@ -907,3 +907,60 @@ remembered cases to "pet photos" (I2), and F2 once said the problem "clusters" i
 unclear photos without a check catching it. The fallback, when it is served, is still a plain list.
 The rest of the site still says "stories". **Spend $19.18 recorded of $21** (the v3 sweeps and the
 halted run: $0.64).
+
+## D-16 — Ask AI after the PM's second review: repair instead of replace, every claim backed, and the site in plain words (2026-09-27, decided by the PM)
+
+**The PM, after using v3 live:** the page still jerked ("fast up and down oscillations, about 5-6
+in under a sec"); an out-of-scope answer "suddenly switched to a bare list"; an in-scope question
+("the entire retrieval journey … where is the biggest problem") was replaced the same way; "yes" to
+an offer got an answer with none of the promised words; "change 'stories' to 'cases' on the other
+pages"; 15 questions a visit; hide How it works and Try it; remove the yellow box; plain language
+on Data Bank, Analysis and Opportunities; "ask a complex, nuanced set of questions … and evaluate";
+link each quote to its post; "whenever you make a claim, follow it up by quotes or numbers … the
+suggestions … should always have a logical reason … a series of logical steps"; use the other
+cases only when needed; remove the Data Bank cards; a shorter Ask AI intro.
+
+**What changed (`ask_v3.9` → `ask_v3.17`).**
+1. **The oscillation** — read in Streamlit 1.64's own code: with a chat input on the page, its
+   scroll container checks every 17 ms whether the view has left the bottom and, 34 ms later,
+   animates it back; the v3 keeper pushed the other way. On the Ask AI page the container's scripted
+   `scrollTop` is now ignored (`_scroll_guard`); the reader's own scrolling is untouched; one scroll
+   of our own brings a new question to the top (`_bring_into_view`). Measured: 0 reversals on a
+   first answer and a follow-up.
+2. **Repair, not replace** — a sentence that fails an absolute check is dropped and the rest
+   re-checked (`analyst.repair`); the fallback only when the opening claim fails, a list item would
+   go, or more than 40% would. The fallback is prose, not a list. Sentences are split only at
+   punctuation followed by a space, with citations and quotes masked (a filename and a citation key
+   were split once each).
+3. **"Yes" asks the offer** (`ask._take_up`); offers must be answerable from the evidence.
+4. **The posts' own words** — retrieval now hands the writer each post's verbatim evidence span
+   for the question asked (what they typed first: "forest", "passport", "chicken coop"…); rules
+   route typed-first, feelings, how they found it, and giving up to their questions.
+5. **Every claim backed** — `check_claims_have_evidence` (absolute): "most", "many", "often",
+   "biggest"… need a figure or quote in the sentence or beside it; reasoning, marked as such, is
+   exempt and must show its steps. A what-if names the figures that remain; examples are quoted
+   when asked for; a "Since X, …" premise is flagged in a rules plan.
+6. **Evidence panel** — each quote links to where it was posted ("Open the post ↗").
+7. **The other cases** reach the writer only when the question needs them (`ADJACENT_NEEDED`).
+8. **The site** — How it works and Try it hidden (kept, not routed; Data Bank is the front door);
+   the yellow box removed; "cases" everywhere a reader looks; stage numbers, codebook names,
+   "core/adjacent", "κ", "directional", "robots.txt", "metric leverage" and the like rewritten in
+   plain words on Data Bank, Analysis and Opportunities (a browser scan of the three pages finds
+   none left outside people's own posts); share text reads "rough guide, likely 17–41%"; the
+   Data Bank's four cards removed; the Ask AI intro shortened; 15 questions a visit, 60 a day.
+
+| Run | Set | Served as written or repaired | Fell back | Late | Max s | Cost |
+|---|---|---|---|---|---|---|
+| v3.12 `…215810-89102a` | golden 26 | 22 | 4 | 0 | 9.5 | $0.066 |
+| v3.14 `…221115-ed6bff` | golden 26 | 24 | 2 | 0 | 8.8 | $0.072 |
+| v3.16 `…222459-17225e` | golden 26 | 23 | 3 | 0 | 9.5 | $0.068 |
+| **v3.17 `…222902-ead0cb`** | **golden 26** | **23** | **3** | **0** | **9.5** | **$0.070** |
+| **v3.17 `…223013-071c8a`** | **hard 14** | **12** | **2** | **0** | **9.5** | **$0.036** |
+
+The golden set gained J1 (the PM's journey question) and W1 ("Show which words people tried
+first", a "yes" follow-up). Hard questions graded in `evals/reports/hard_questions_20260927.md`.
+
+**Still open, stated.** Comparisons without a known kind word and wrong glosses of correct figures
+slip past the checks (H8, H6); a fraction is matched to any share its sentence cites; the "few
+posts say anything about this — N of 331 do" lines count all cases. **Spend $19.95 of $21.**
+

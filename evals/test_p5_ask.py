@@ -188,7 +188,7 @@ def _golden():
 @pytest.mark.needs_corpus
 def test_T13_route_correctness_on_the_golden_set():
     g = _golden()
-    assert g["summary"]["n"] == 24 and g["summary"]["T13_route"] >= 0.90, \
+    assert g["summary"]["n"] >= 24 and g["summary"]["T13_route"] >= 0.90, \
         [(r["id"], r["route"], r["expect"]) for r in g["rows"] if not r["route_ok"]]
 
 
@@ -232,7 +232,10 @@ VIEWS = ROOT / "app" / "views"
 
 def test_pages_in_nav_and_no_longer_planned():
     from lib import nav
-    assert {"ask.py", "try_it.py"} <= {p[0] for p in nav.PAGES}
+    assert "ask.py" in {p[0] for p in nav.PAGES}
+    # 2026-09-27, the PM: "hide 'How it works' and 'Try it'" — kept, not routed.
+    assert {"home.py", "try_it.py"} <= set(nav.HIDDEN)
+    assert not {"home.py", "try_it.py"} & {p[0] for p in nav.PAGES}
     assert not {"Ask AI", "Try it"} & {t for t, _ in nav.PLANNED}
 
 
@@ -270,7 +273,8 @@ def test_P5_OPS_4_pages_render_without_a_key(page, monkeypatch):
 
 def test_P5_OPS_1_2_caps_are_set():
     from lib import caps
-    assert caps.LIMITS["ask"]["session"] <= 10 and caps.LIMITS["ask"]["day"] <= 50
+    # 15 a visit is the PM's floor (2026-09-27); the day cap bounds the public page's spend.
+    assert caps.LIMITS["ask"]["session"] >= 15 and caps.LIMITS["ask"]["day"] <= 100
     assert caps.LIMITS["try"]["session"] <= 3 and caps.LIMITS["try"]["day"] <= 15
 
 
@@ -423,9 +427,9 @@ def test_a_fallback_flags_a_false_premise_before_any_figure(con):
         queries=[_q("stage_prevalence")],
         premise={"asserts": "most failures are deletions", "status": "contradicted",
                  "correction": ""})
-    head, bullets = text.split("\n- ", 1)
+    head, rest = text.split("\n\n", 1)                          # v3.9: prose, not a list
     assert "takes as given something these cases do not show" in head
-    assert "already gone" in bullets.split("\n")[0]              # the premise's own stage first
+    assert "already gone" in rest.split("]]")[0]                 # the premise's own stage first
 
 
 @pytest.mark.needs_corpus
@@ -434,7 +438,10 @@ def test_a_split_fallback_shows_one_stage_across_the_kinds_of_photo(con):
     text, _ = _fallback_for(con, "And how does that split by kind of photo?", "FULL",
                             evidence_needed=["segment_split", "verbatim"],
                             queries=[_q("stage_by_photo_class")])
-    bullets = [ln for ln in text.splitlines() if ln.startswith("- ") and "[[story|" not in ln]
+    # v3.9: the figures are one paragraph; each sentence ends in its own citation.
+    bullets = [x + "]]" for x in re.split(r"\]\]\s*", text) if "[[analysis_crosstab|" in x + "]]"
+               and "photo_class:" in x]
+    bullets = [b.split("\n")[-1] for b in bullets]
     groups = {re.search(r"photo_class:(\w+)\]\]", b).group(1) for b in bullets}
     stages = {re.search(r"primary_stage=(\d+)@", b).group(1) for b in bullets}
     assert len(groups) >= 2 and len(stages) == 1 and stages != {"9"}
@@ -744,7 +751,7 @@ def test_the_budget_and_the_claim_on_the_page():
     src = (VIEWS / "ask.py").read_text()
     assert 'TYPICAL = "about 15 seconds"' in src and "on_text=show" in src
     # ask_v3: `_hold_still` keeps the answer in place (the scroll hold fought the page).
-    assert "_hold_still()" in src and "ask-done" in src and "scrollBy" in src
+    assert "_scroll_guard()" in src and "_bring_into_view()" in src
 
 
 @pytest.mark.needs_corpus
@@ -854,7 +861,7 @@ def test_a_what_to_fix_fallback_leads_with_the_ranked_opportunity(con):
     got = R.retrieve(con, p)
     v = R.gate(p, got, q)
     text = A.fallback(v, got, p)
-    first = next(ln for ln in text.splitlines() if ln.startswith("- "))
+    first = text.split("\n\n")[1].split("]]")[0] + "]]"         # v3.9: the first figure
     assert "[[analysis_opportunity|stage5]]" in first and "enough cases to rank" in first
     assert V.check(text, v.route, got.rows(), got.records(), question=q, gap=v.gap).ok
 
@@ -928,7 +935,7 @@ def test_the_ask_page_footer_stamp_is_in_plain_words():
                         "records collected 2026-09-25 to 2026-09-26 · codebook v1:03257d4f")
     assert s.startswith("Data version 1.0 — 115 cases") and "109 people" in s
     assert not P.check_jargon(s) and "codebook" not in s
-    assert 'nav.footer(plain=page.url_path == "ask")' in (ROOT / "app" / "Home.py").read_text()
+    assert "nav.footer(plain=True)" in (ROOT / "app" / "Home.py").read_text()
 
 
 @pytest.mark.parametrize("q", ["Does that differ for photos of receipts and documents?",
@@ -1137,7 +1144,8 @@ def test_a_stored_answer_redraws_as_prose_with_its_evidence_below(monkeypatch):
            "refs": {"analysis_crosstab|k5": {"group": "What the figures say",
                                              "detail": "In 31 of 115 cases (27%) …"},
                     "story|s1": {"group": "What people wrote", "detail": "A post on Reddit",
-                                 "quote": "it found nothing at all"}},
+                                 "quote": "it found nothing at all",
+                                 "url": "https://www.reddit.com/r/x/comments/1"}},
            "replaced": None, "problems": [], "foot": "✓ checked · full answer · 7s"}
     at.session_state["threads"] = {"t1": {"id": "t1", "title": "x", "messages": [
         {"role": "user", "content": "Does search understand them?"}, msg]}}
@@ -1165,3 +1173,94 @@ def test_a_denial_excuses_only_the_comparison_right_after_it():
     assert V.check_comparison("We can't say whether utility photos behave differently — but "
                               "the cases show a different pattern for utility photos.")
     assert not V.check_comparison("We cannot say whether memory photos fare better than others.")
+
+
+
+def test_a_draft_is_repaired_by_dropping_the_failing_sentence_not_replaced():
+    """The PM, 2026-09-27: a streamed answer "suddenly switched to a bare list". A
+    sentence that fails an absolute check is dropped and the rest re-checked; the
+    fallback only when the opening claim itself fails or too little is left."""
+    good = ("**Search misreading the cue is the commonest first failure.** "
+            "[[analysis_crosstab|k5]]\n\nAbout a quarter of cases went wrong there first "
+            "[[analysis_crosstab|k5]]. Roughly half of them were deleted "
+            "[[analysis_crosstab|k5]]. My read is that people type one plain word and the "
+            "search takes it too literally, which is where fixes should start, and why "
+            "the interviews should begin with what people type.\n\n*Want more?*")
+    rep = V.check(good, "FULL", ROWS, RECS)
+    assert any(p.startswith(A.ABSOLUTE) for p in rep.problems())
+    fixed, gone = A.repair(good, rep, "FULL")
+    assert "Roughly half" not in fixed and gone and "About a quarter" in fixed
+    assert not any(p.startswith(A.ABSOLUTE) for p in V.check(fixed, "FULL", ROWS,
+                                                             RECS).problems())
+    bad_claim = good.replace("Search misreading the cue is the commonest first failure.",
+                             "Roughly half of all hunts fail at search.")
+    assert A.repair(bad_claim, V.check(bad_claim, "FULL", ROWS, RECS), "FULL") is None
+
+
+def test_yes_to_an_answers_offer_asks_the_offer():
+    """The PM, 2026-09-27: "yes" to "Want to see which words people tried first?" got
+    an answer with no words in it — "yes" had been read as a question of its own."""
+    src = (VIEWS / "ask.py").read_text()
+    ns = {"re": re}
+    exec(src[src.index("_YES = "):src.index("def _accept(")], ns)
+    msgs = [{"role": "assistant", "text": "x\n\n*Want to see which words people tried first?*"}]
+    assert ns["_take_up"]("yes please", msgs) == "Show which words people tried first."
+    assert ns["_take_up"]("yes, and receipts?", msgs) == "yes, and receipts?"
+    assert "q = _take_up(q, thread[\"messages\"])" in src
+
+
+def test_the_ask_page_stops_scripted_scrolls_instead_of_fighting_them():
+    """The PM, 2026-09-27: "fast up and down oscillations, about 5-6 in under a sec"."""
+    src = (VIEWS / "ask.py").read_text()
+    assert 'Object.defineProperty(el, "scrollTop"' in src and "__askOwnScroll" in src
+    assert "_hold_still" not in src and "scrollBy" not in src
+
+
+def test_repair_never_splits_a_citation_at_the_dot_in_its_key():
+    """v3.11, F1 and I2: "core.primary_stage" was split as a sentence end and rejoined as
+    "core. primary_stage"; the citation no longer matched and the answer was withheld."""
+    key = "core.primary_stage=0@photo_class:_all"
+    rows = ROWS + [{"_cite": {"table": "analysis_crosstab", "key": key}, "stories": 31, "of": 115}]
+    t = ("**Search misreading the cue is the commonest first failure.** [[analysis_crosstab|k5]]"
+         f"\n\nAbout a quarter went wrong there first [[analysis_crosstab|{key}]]. Roughly half "
+         "of them were deleted [[analysis_crosstab|k5]]. My read is that people type one plain "
+         "word and the search takes it too literally, which is where fixes should start, and "
+         "why the interviews should begin with what people type.\n\n*Want more?*")
+    fixed, _ = A.repair(t, V.check(t, "FULL", rows, RECS), "FULL")
+    assert f"[[analysis_crosstab|{key}]]" in fixed
+    assert not any(p.startswith(A.ABSOLUTE) for p in V.check(fixed, "FULL", rows, RECS).problems())
+
+
+
+def test_a_quote_in_the_evidence_links_to_where_it_was_posted():
+    """The PM, 2026-09-27: "where there is a quote, mention the link to the actual quote"."""
+    src = (VIEWS / "ask.py").read_text()
+    assert "Open the post ↗" in src and 're.match(r"https?://", url)' in src
+    import inspect
+
+    from lib import retrieval as R
+    assert "r.source_url" in inspect.getsource(R._stories)
+
+
+@pytest.mark.needs_corpus
+@pytest.mark.parametrize("q,needed", [
+    ("How often does a wrong year act as a hard filter that hides the photo?", False),
+    ("Does that differ for utility photos?", False),
+    ("What happens when a photo was deleted and never backed up?", True),
+    ("How many stories were collected overall?", True)])
+def test_the_other_cases_reach_the_writer_only_when_the_question_needs_them(con, q, needed):
+    """The PM, 2026-09-27: "include adjacent records in ask ai answers only if they are
+    needed for an answer"."""
+    p = R.normalise_plan(A.rule_plan(q), q)
+    assert p["adjacent_needed"] is needed
+    got = R.retrieve(con, p)
+    if not needed:
+        A._core_only(got)
+        assert not [r for r in got.rows()
+                    if str((r.get("_cite") or {}).get("key", "")).startswith("adjacent.")
+                    or str(r.get("step")) in ("stories", "stories:adjacent")]
+
+
+def test_the_data_bank_has_no_summary_cards_above_part_1():
+    """The PM, 2026-09-27: "remove the horizontal cards 1, 2, 3, 4"."""
+    assert "CHAIN = [" not in (VIEWS / "data_bank.py").read_text()

@@ -302,7 +302,7 @@ def test_share_helper_tiers():
     assert low.tier == "insufficient" and low.text == "7 of 29" and low.pct is None
     assert "%" not in low.text                           # no percentage below the floor
     mid = share(20, 50)
-    assert mid.tier == "directional" and "40% (20 of 50" in mid.text and "directional" in mid.text
+    assert mid.tier == "directional" and "40% (20 of 50" in mid.text and "rough guide" in mid.text
     hi = share(128, 412)
     assert hi.tier == "comparable" and hi.text == "31% (128 of 412)"
     for s in (mid, hi):

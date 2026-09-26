@@ -57,10 +57,10 @@ def test_the_page_carries_every_part_the_plan_names():
     for piece in ("STEPS = [", "lexicon", "severity rubric", "sanity_strip", "pre_registered_at",
                   "limitations", 'glob("gate_P*.md")'):
         assert piece in src, piece
+    # The page is kept whole but no longer routed (the PM, 2026-09-27: "hide 'How it
+    # works'"); Data Bank is the front door.
     from lib import nav
-    home = next(p for p in nav.PAGES if p[0] == "home.py")
-    assert [s for s, _ in home[4]] == ["what", "funnel", "codebook", "register", "reliability",
-                                      "sanity", "scoring", "limits", "gates"]
+    assert "home.py" in nav.HIDDEN and nav.PAGES[0][0] == "data_bank.py"
 
 
 def test_user_text_on_how_it_works_is_escaped():

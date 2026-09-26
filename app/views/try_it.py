@@ -22,7 +22,7 @@ SAMPLE = ("I remember a pic of a small café in Goa from a trip, no idea which y
 st.title("Try it")
 st.html(f"<div style='color:{ui.MUTED};font-size:1.02rem;margin:-.5rem 0 .4rem;max-width:72ch;"
         f"line-height:1.55'>Paste a post about trying to find a photo, and the same pipeline "
-        f"that coded the corpus runs on it: one model finds the story, a stronger one checks "
+        f"that coded the corpus runs on it: one model finds the case, a stronger one checks "
         f"it against the definitions, and a third pass codes it against the 60 questions — "
         f"every quote located in your text or thrown away.</div>")
 
@@ -93,26 +93,26 @@ if tr:
                        f"<td style='padding:.15rem 0'>{ui.esc(plain(', '.join(v)))}</td></tr>"
                        for q, v in c["codes"].items())
         st.html(f"<table style='font-size:.84rem'>{rows}</table>")
-        ui.note(f"Questions the story does not speak to are coded 'not stated' and not shown. "
+        ui.note(f"Questions the case does not speak to are coded 'not stated' and not shown. "
                 f"{c['dropped_quotes']} quote(s) the coder offered could not be found in the text "
                 f"and were dropped, as in the corpus. Stage 5 answers are inferred from what the "
                 f"person says.")
-        ui.verdict(f"In the corpus this story would join <b>Analysis Part 1</b> at Stage "
+        ui.verdict(f"In the corpus this case would join <b>Analysis Part 1</b> at Stage "
                    f"{sp['primary_stage']}, <b>Part 2</b> under {ui.esc(sp['photo_class'])} "
                    f"photos, and the <b>Stage {sp['primary_stage']} opportunity card</b>.",
                    ui.BLUE)
     ui.note(f"This run: {tr.seconds:.0f}s. {caps.left('try')} runs left in this visit.")
 
 # =========================================================== stored
-ui.section(2, "Or read a story the engine already coded", "Free, and exactly what the corpus "
-           "holds: the story, its coding, and the quote behind each code.", ui.GREEN,
+ui.section(2, "Or read a case the engine already coded", "Free, and exactly what the corpus "
+           "holds: the case, its coding, and the quote behind each code.", ui.GREEN,
            slug="stored")
 pick = db.query("SELECT p.story_id, p.primary_stage, p.photo_class, substr(s.text,1,80) AS head"
                 " FROM story_spine p JOIN stories s USING (story_id) WHERE s.bucket='core'"
                 " AND s.story_id NOT IN (SELECT story_id FROM exclusions WHERE story_id IS NOT"
                 " NULL) ORDER BY p.coding_conf DESC, p.story_id LIMIT 40")
 if not pick.empty:
-    sid = st.selectbox("Story", pick["story_id"].tolist(),
+    sid = st.selectbox("Case", pick["story_id"].tolist(),
                        format_func=lambda x: (lambda r: f"Stage {r['primary_stage']} · "
                                               f"{r['photo_class']} · {r['head']}…")(
                            pick[pick["story_id"] == x].iloc[0]))
@@ -141,5 +141,5 @@ if not pick.empty:
     n_core = int(db.query("SELECT n FROM analysis_funnel WHERE source='_all' AND"
                           " step='stories:core'").iloc[0]["n"])
     # A count, not a share: 60 questions of ONE story are not a sample of anything.
-    ui.note(f"One of {n_core} core stories; {len(cd)} of the codebook's 60 questions have an "
+    ui.note(f"One of {n_core} core cases; {len(cd)} of the codebook's 60 questions have an "
             f"answer for it.")

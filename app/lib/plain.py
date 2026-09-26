@@ -336,10 +336,13 @@ def sentence(r: dict) -> str | None:
         what = FIELD.get(f) or question(f[2:])
         n = int(r.get("n") or 0)
         r["stories_agreed"] = round(float(r.get("raw_agreement") or 0) * n)
+        # Both sides stated, so "how often did they disagree?" needs no arithmetic by the
+        # writer (hard question H6: it subtracted 100 − 69 and the sentence was dropped).
+        r["stories_disagreed"] = n - r["stories_agreed"]
         tail = (" — too rarely to rely on it." if r.get("verdict") == "low_reliability"
                 else ".")
         return (f"Two AI readers went through {n} stories separately and agreed on {what} in "
-                f"{r['stories_agreed']} of them{tail}")
+                f"{r['stories_agreed']} of them and disagreed in {r['stories_disagreed']}{tail}")
     if t == "analysis_method_flags":
         return flag(k, r.get("text", ""))
     if t == "analysis_opportunity":
@@ -631,6 +634,10 @@ def build(got, *, story_chars: int = 600, max_facts: int = 30) -> Tags:
         where = SOURCE.get(s.get("source"), s.get("source"))
         body = s["text"].replace(" …[cut]", "")
         body = body if len(body) <= story_chars else body[:story_chars] + " …"
+        if s.get("said"):
+            # The post's own words on the question, as the coder marked them — inside
+            # the fence: they are a stranger's words like the rest of the post.
+            body = f"(On {s['said_on']}, the post says: “{s['said']}”)\n{body}"
         tags.add("S", f"[[story|{s['story_id']}]]",
                  f"A post on {where}:\n{V.FENCE_OPEN} >>>\n{V.fence(body)}\n{V.FENCE_CLOSE}")
     return tags

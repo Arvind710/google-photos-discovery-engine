@@ -54,12 +54,12 @@ def run(client, text: str) -> Trace:
         found = seg.merge(rec, [seg.parse_output(seg._output_text(resp), req)[u.uid]
                                 for u in req])
     except Exception as exc:                                      # noqa: BLE001
-        tr.error = f"The story finder could not be reached: {exc}"
+        tr.error = f"The case finder could not be reached: {exc}"
         return tr
     if not found.stories:
-        tr.notes.append("No retrieval story was found in this text — no one trying to find a "
+        tr.notes.append("No search case was found in this text — no one trying to find a "
                         "particular photo. In the corpus such records are kept and marked "
-                        "'no story', never deleted.")
+                        "'no case', never deleted.")
         tr.seconds = time.time() - t0
         return tr
     cands = [C.Candidate(f"s{k}", "reddit", None, s.text, "", s.bucket, s.reaches_stage)
@@ -83,7 +83,7 @@ def run(client, text: str) -> Trace:
             "char_end": s.char_end})
     kept = [s for s in tr.stories if s["is_story"]]
     if not kept:
-        tr.notes.append("The finder proposed a story, and the stronger model rejected it "
+        tr.notes.append("The finder proposed a case, and the stronger model rejected it "
                         "against the written definition — as it rejected most candidates in "
                         "the corpus.")
         tr.seconds = time.time() - t0
@@ -107,7 +107,7 @@ def run(client, text: str) -> Trace:
     c = B.validate(cb, it, ans)
     if c.fatal:
         tr.notes.append("The coder's quote for the stage could not be found in the text, so "
-                        "in the corpus this story would be re-coded once, then marked "
+                        "in the corpus this case would be re-coded once, then marked "
                         "'span unverified' and counted — never written unverified.")
         tr.seconds = time.time() - t0
         return tr

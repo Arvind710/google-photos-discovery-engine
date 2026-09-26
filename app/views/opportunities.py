@@ -16,17 +16,23 @@ import plotly.graph_objects as go
 import streamlit as st
 import yaml
 
-from lib import db, ui, words
+from lib import db, plain, ui, words
 from lib.evidence import share
 
 ROOT = db.ROOT
 SCORING = yaml.safe_load((ROOT / "codebook" / "scoring_v1.yaml").read_text())
-CRIT = {"metric_leverage": "Metric leverage", "frequency": "Frequency",
-        "evidence_strength": "Evidence strength", "reach": "Reach", "severity": "Severity"}
-GATES = {"addressable_by_gp": "Google Photos can fix it", "ai_necessity": "Needs intelligence"}
+# Plain names (2026-09-27: no internal concept a newcomer cannot read at once).
+CRIT = {"metric_leverage": "How much fixing it helps people find the photo",
+        "frequency": "How often it happens", "evidence_strength": "How solid the evidence is",
+        "reach": "How many different people it affects", "severity": "How serious it is"}
+GATES = {"addressable_by_gp": "Google Photos can fix it",
+         "ai_necessity": "Fixing it needs AI, not just a design change"}
+KIND_NAME = {"sentimental": "kept as memories", "utility": "kept for information",
+             "both": "both", "unclear": "reason not said"}
 HEADLINE = ("metric_leverage", "frequency", "evidence_strength", "reach")
-STATUS = {"ranked": ("RANKED", ui.GREEN), "below_floor": ("TOO FEW STORIES TO RANK", ui.ORANGE),
-          "gated_out": ("GATED OUT", ui.RED), "not_a_failure": ("NOT A FAILURE", ui.GREY)}
+STATUS = {"ranked": ("RANKED", ui.GREEN), "below_floor": ("TOO FEW CASES TO RANK", ui.ORANGE),
+          "gated_out": ("RULED OUT — FAILS A CHECK", ui.RED),
+          "not_a_failure": ("NOT A FAILURE", ui.GREY)}
 
 st.title("Opportunities")
 st.html(f"<div style='color:{ui.MUTED};font-size:1.02rem;margin:-.5rem 0 .4rem;max-width:72ch;"
@@ -51,14 +57,51 @@ cands = opp[opp["status"] != "not_a_failure"]
 denom = int(opp["denom"].iloc[0])
 ranked = cands[cands["status"] == "ranked"]
 
-st.warning(words.proxy_warning(), icon="⚠️")
-ui.note("Everything on this page is a <b>hypothesis for the Part 3 interviews</b>, built from "
-        f"{denom} core stories — fewer than the 300 the engine was designed for. It says where to "
-        "look first, not what is true of Google Photos users.")
+ui.note("Everything on this page is <b>an idea for the follow-up interviews to test</b>, built "
+        f"from {denom} cases of someone hunting for a vaguely remembered photo — fewer than the "
+        "300 the study was designed for. It says where to look first, not what is true of "
+        "Google Photos users.")
+
+
+# The stored recommendation was written in the study's own vocabulary; the reader sees
+# plain words (2026-09-27). Display only — the stored text and its checks are unchanged.
+_PLAIN_TERMS = [
+    (r"\bin the Part 3 (?:interviews|research)\b", "in the follow-up interviews"),
+    (r"\bPart 3\b", "the follow-up interviews"),
+    (r"\bhypothes[ie]s\b", "idea to test"),
+    (r"\bsensitivity (?:tests?|analysis|rows?)\b", "re-runs with the scores weighted differently"),
+    (r"\bmain pool\b", "vaguely remembered cases"),
+    (r"\bleverage\b", "gain"),
+    (r"[“\"]?\bunclear\b[”\"]?(?= (?:everyday )?photos| \(| cases| and| contexts)",
+     "reason-not-said"),
+    (r"\bsentimental\b", "kept-as-memory"), (r"\bSentimental\b", "Kept-as-memory"),
+    (r"\bpractical\b(?= \(| photos| cases| \d)", "kept-for-information"),
+    (r"\butility\b", "kept-for-information"),
+    (r"\(not practical\)", "(not kept-for-information)"),
+    (r"\bunclear\b(?= \d)", "reason-not-said"),
+    (r"\bcodebook questions?\b", "study questions"), (r"\bcodebook\b", "study's questions"),
+    (r"\bkappa\b|κ", "agreement score"),
+    (r"\badjacent cases?\b", "cases where the photo was known exactly or already gone"),
+    (r"\badjacent\b", "known-exactly-or-gone"),
+    (r"\bevidence floor\b", "minimum of 30 cases"),
+    (r"\s*\(\[?CTX\]?\s*§[\d.]+\)", ""),
+    (r"\benters gp retrieval path\b", "sits on Google Photos' search path"),
+    (r"\bgp retrieval\b", "Google Photos search"), (r"\bretrieval\b", "finding the photo"),
+    (r"\bpure practical\b", "purely kept-for-information"),
+]
+
+
+def _plain_terms(t: str) -> str:
+    import re
+    for pat, rep in _PLAIN_TERMS:
+        t = re.sub(pat, rep, t)
+    return t
 
 
 def fmt(text: str) -> str:
-    return ui.esc(text)
+    # Stored, model-written text says "stories"; the reader sees "cases" (D-15).
+    # Also its stage numbers and code names ("Stage 5", "core stories", "metric node").
+    return ui.esc(_plain_terms(plain.reader_words(plain.desnake(str(text)))))
 
 
 # ================================================================= PART 1
@@ -66,23 +109,27 @@ rec = syn.get("recommendation")
 if rec:
     top = cands[cands["candidate_id"] == rec["top"]["candidate_id"]].iloc[0]
     ui.section(1, fmt(top["label"]),
-               f"The recommended opportunity: Stage {top['primary_stage']}, "
-               f"{share(int(top['n_core']), denom).text} of core stories, {int(top['n_authors'])} "
-               f"people. {fmt(rec['label'])}", ui.GREEN, slug="recommendation")
+               f"The recommended problem to fix: “{words.stage_title(top['primary_stage'])}”, "
+               f"the first thing to go wrong in {share(int(top['n_core']), denom).text} of the "
+               f"cases, told by {int(top['n_authors'])} people. {fmt(rec['label'])}", ui.GREEN,
+               slug="recommendation")
     ui.verdict(fmt(rec["top"]["problem_statement"]["text"]), ui.GREEN)
-    step_name = {"metric_node": "Which factor of success it drags down", "evidence": "The evidence",
-                 "stage": "Where in the journey", "root_cause": "Why, as a hypothesis"}
+    step_name = {"metric_node": "Which part of finding a photo it breaks",
+                 "evidence": "The evidence", "stage": "Where in the hunt",
+                 "root_cause": "Why, as a best guess to test"}
     st.html("".join(ui.card(f"<div style='font-size:.7rem;font-weight:700;letter-spacing:.08em;"
                             f"color:{ui.MUTED}'>{step_name[c['step']].upper()}</div>"
                             f"<div style='font-size:.92rem;line-height:1.5;margin-top:.2rem'>"
                             f"{fmt(c['text'])}</div>", ui.GREEN)
                     for c in rec["top"]["chain"]))
-    blocks = [("Target segment", f"<b>{fmt(rec['target_segment']['direction'])}</b> — "
-                                 f"{fmt(rec['target_segment']['why']['text'])}"),
-              ("Root cause, as a hypothesis", fmt(rec["root_cause_hypothesis"]["text"])),
-              ("Where intelligence is needed", fmt(rec["intelligence_needed"]["text"])),
-              ("Runner-up", f"<b>{fmt(rec['runner_up']['candidate_id'])}</b> — "
-                            f"{fmt(rec['runner_up']['why_not_top']['text'])}")]
+    ru = cands[cands["candidate_id"] == rec["runner_up"]["candidate_id"]]
+    ru_name = fmt(ru.iloc[0]["label"]) if len(ru) else fmt(rec["runner_up"]["candidate_id"])
+    blocks = [("Who to design for first", f"<b>{fmt(rec['target_segment']['direction'])}</b> — "
+                                          f"{fmt(rec['target_segment']['why']['text'])}"),
+              ("Why it happens, as a best guess to test", fmt(rec["root_cause_hypothesis"]["text"])),
+              ("Where AI is needed", fmt(rec["intelligence_needed"]["text"])),
+              ("Second choice", f"<b>{ru_name}</b> — "
+                                f"{fmt(rec['runner_up']['why_not_top']['text'])}")]
     st.html("".join(f"<div style='margin:.8rem 0;max-width:80ch'><div style='font-weight:700;"
                     f"font-size:.95rem'>{h}</div><div style='font-size:.9rem;line-height:1.55'>"
                     f"{b}</div></div>" for h, b in blocks))
@@ -90,17 +137,17 @@ if rec:
             "this wrong</div><ul style='font-size:.9rem;line-height:1.55;max-width:80ch'>"
             + "".join(f"<li>{fmt(f['text'])}</li>" for f in rec["falsifiers"]) + "</ul>")
     ui.note("<b>Caveats.</b> " + " ".join(fmt(c["text"]) for c in rec["caveats"]))
-    ui.note("Written by an AI model from the engine's own tables only; every statement cites the "
-            "rows it rests on, and every number in it was checked against them in code.")
+    ui.note("Written by an AI model from the study's own figures only; every number in it was "
+            "checked against those figures by the software.")
 else:
     ui.section(1, "The recommendation", "Not generated yet.", ui.GREEN, slug="recommendation")
 
 # ================================================================= PART 2
 ui.section(2, f"{len(cands)} candidates, {len(ranked)} can be ranked",
-           "One candidate per stage where something went wrong. Two gates come first — can "
-           "Google Photos fix it, and does fixing it need intelligence rather than a UI tweak — "
-           "then five weighted scores, each 1–5 with a reason. A candidate with fewer than 30 core "
-           "stories is shown but not ranked.", ui.BLUE, slug="candidates")
+           "One candidate for each point in the hunt where something went wrong. Two checks "
+           "come first — can Google Photos fix it, and does fixing it need AI rather than a "
+           "design change — then five scores, each from 1 to 5 with its reason. A candidate "
+           "with fewer than 30 cases is shown but not ranked.", ui.BLUE, slug="candidates")
 st.html("<div style='display:flex;flex-wrap:wrap;gap:.6rem;font-size:.85rem'>" + "".join(
     f"<div>{ui.chip(STATUS[s][0], STATUS[s][1])} {int((cands['status'] == s).sum())}</div>"
     for s in ("ranked", "below_floor", "gated_out")) + "</div>")
@@ -117,37 +164,39 @@ for _, c in cands.iterrows():
                     f"{ui.GREEN if v['passed'] else ui.RED}'>{v['score']}</td><td style='padding:"
                     f".15rem 0;color:{ui.MUTED};font-size:.8rem'>{fmt(v['why'])}</td></tr>"
                     for g, v in c["gates"].items())
-    modes = ", ".join(f"{fmt(k.split(' ', 1)[1].replace('_', ' '))} ({v})"
+    modes = ", ".join(f"{fmt(plain.words(k.split(' ', 1)[1]))} ({v})"
                       for k, v in d["failure_modes"].items()) or "none stated"
     quotes = "".join(ui.quote(q["span"], words.source(q["source"])) for q in d["quotes"][:3])
     st.html(ui.card(
         f"<div style='display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap'>"
-        f"<div style='font-weight:700;font-size:1rem'>Stage {c['primary_stage']} · "
-        f"{fmt(c['label'])}</div><div>{ui.chip(label, colour)}"
+        f"<div style='font-weight:700;font-size:1rem'>{fmt(c['label'])}</div>"
+        f"<div>{ui.chip(label, colour)}"
         + (f" <b>#{int(c['rank_headline'])}</b>" if pd.notna(c["rank_headline"]) else "")
         + "</div></div>"
         f"<div style='font-size:.82rem;color:{ui.MUTED};margin:.2rem 0 .4rem'>"
-        f"{share(int(c['n_core']), denom).text} core stories · {int(c['n_authors'])} people · "
-        f"{int(c['n_adjacent'])} adjacent at the same stage · "
-        + ", ".join(f"{k} {v}" for k, v in d["photo_class"].items()) + "</div>"
+        f"{share(int(c['n_core']), denom).text} cases · {int(c['n_authors'])} people · "
+        f"{int(c['n_adjacent'])} more where the person knew the photo exactly or it was gone · "
+        + ", ".join(f"{KIND_NAME.get(k, k)} {v}" for k, v in d["photo_class"].items()) + "</div>"
         f"<div style='font-size:.84rem;margin:.2rem 0'>{fmt(c['status_reason'])}</div>"
         f"<table style='font-size:.84rem;margin:.4rem 0'>{gates}</table>"
         f"<table style='font-size:.84rem;margin:.4rem 0'>{scores}</table>"
-        f"<div style='font-size:.82rem;margin:.3rem 0'><b>What the stories say went wrong:</b> "
+        f"<div style='font-size:.82rem;margin:.3rem 0'><b>What the cases say went wrong:</b> "
         f"{modes}</div>{quotes}", colour, dim=c["status"] != "ranked"))
-ui.note("⚠︎ Severity: the two AI coders agreed on it too little (κ 0.33), so it is left out of the "
-        "headline score and shown only as a sensitivity row below. What search did (Stage 5) "
-        "is inferred from what users say — nobody outside Google can see it.")
+ui.note("⚠︎ How serious it is: the two AI readers agreed on it too rarely (an agreement score "
+        "of 0.33, where 1 is perfect), so it is left out of the main score and only tried as a "
+        "variation below. What search did is worked out from what people wrote — nobody outside "
+        "Google can see it.")
 ui.verdict(f"<b>{fmt(ranked.iloc[0]['label']) if len(ranked) else 'Nothing'}</b> is the only "
-           f"candidate with enough stories to rank. The others are named, scored and kept, for "
+           f"candidate with enough cases to rank. The others are named, scored and kept, for "
            f"the interviews to size.", ui.BLUE)
 
 # ================================================================= PART 3
 w0 = SCORING["weights"]
-ui.section(3, "The ranking does not depend on the weights",
-           f"Weights were registered before any ranking ran "
-           f"({SCORING['pre_registered_at'][:16].replace('T', ' ')} IST). Move them to see "
-           f"whether the order changes; 1,000 random moves of up to 10 points were also tried.",
+ui.section(3, "The ranking does not depend on how much each score counts",
+           f"How much each score counts was fixed before any ranking ran "
+           f"({SCORING['pre_registered_at'][:16].replace('T', ' ')} IST). Move the sliders to "
+           f"see whether the order changes; the ranking was also re-run 1,000 times with those "
+           f"amounts nudged at random by up to 10 points.",
            ui.ORANGE, slug="weights")
 cols = st.columns(4)
 w = {k: cols[i].slider(CRIT[k], 0, 50, int(w0[k]), key=f"w_{k}") for i, k in enumerate(HEADLINE)}
@@ -156,9 +205,9 @@ tot = sum(w.values()) or 1
 order = sorted(((sum(w[k] * c["scores"][k]["score"] for k in HEADLINE) / tot, c)
                 for _, c in pool.iterrows()), key=lambda x: -x[0])
 st.html("<ol style='font-size:.9rem;line-height:1.6'>" + "".join(
-    f"<li>Stage {c['primary_stage']} · {fmt(c['label'])} — score {s:.2f}"
+    f"<li>{fmt(c['label'])} — score {s:.2f}"
     + ("" if c["status"] == "ranked" else f" <span style='color:{ui.MUTED}'>(illustrative: "
-                                          f"too few stories to rank)</span>") + "</li>"
+                                          f"too few cases to rank)</span>") + "</li>"
     for s, c in order) + "</ol>")
 sh = sens[(sens["variant"] == "headline") & (sens["pool"] == "gates_passed")].sort_values(
     "top_share", ascending=False)
@@ -166,16 +215,18 @@ sv = sens[(sens["variant"] == "with_severity") & (sens["pool"] == "gates_passed"
     "top_share", ascending=False)
 if len(sh):
     lead = sh.iloc[0]
-    ui.verdict(f"Stage {lead['candidate_id'].removeprefix('stage')} comes first in "
+    lead_row = cands[cands["candidate_id"] == lead["candidate_id"]]
+    lead_name = fmt(lead_row.iloc[0]["label"]) if len(lead_row) else fmt(lead["candidate_id"])
+    ui.verdict(f"<b>{lead_name}</b> comes first in "
                f"{share(round(lead['top_share'] * lead['draws']), int(lead['draws'])).text} "
-               f"random weightings — and in "
+               f"of the random re-runs — and in "
                f"{share(round(sv.iloc[0]['top_share'] * sv.iloc[0]['draws']), int(sv.iloc[0]['draws'])).text}"
-               f" with severity added back. It scores at least as high as every other candidate "
-               f"on every criterion, so no weighting can overtake it.", ui.ORANGE)
+               f" with seriousness added back in. It scores at least as high as every other "
+               f"candidate on every score, so no balance of the scores can overtake it.", ui.ORANGE)
 
 # ================================================================= PART 4
-ui.section(4, "Two criteria at a time", "Pick any two criteria; each dot is a candidate, sized "
-           "by its core stories. Greyed dots are too few to rank.", ui.PINK, slug="two-by-two")
+ui.section(4, "Two scores at a time", "Pick any two scores; each dot is a candidate, sized by "
+           "its number of cases. Greyed dots are too few to rank.", ui.PINK, slug="two-by-two")
 axes = {**CRIT, **GATES}
 c1, c2 = st.columns(2)
 ax = c1.selectbox("Across", list(axes), index=list(axes).index("frequency"),
@@ -189,7 +240,7 @@ def val(c, k):
 
 fig = go.Figure(go.Scatter(
     x=[val(c, ax) for _, c in cands.iterrows()], y=[val(c, ay) for _, c in cands.iterrows()],
-    mode="markers+text", text=[f"Stage {s}" for s in cands["primary_stage"]],
+    mode="markers+text", text=[words.stage(s) for s in cands["primary_stage"]],
     textposition="top center",
     marker=dict(size=[10 + int(n) for n in cands["n_core"]],
                 color=[STATUS[s][1] for s in cands["status"]], opacity=.8),
@@ -202,11 +253,12 @@ st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 # ================================================================= PART 5
 ho = syn.get("handoff")
-ui.section(5, "What the interviews should test", "The handoff to Part 3: hypotheses, who to "
-           "recruit, observed search tasks modelled on real stories, and an interview prompt for "
-           "every question public posts could not answer.", ui.SKY, slug="handoff")
+ui.section(5, "What the interviews should test", "For the follow-up interviews: ideas to "
+           "test, who to recruit, search tasks to watch people do (modelled on real cases), and "
+           "an interview question for everything public posts could not answer.", ui.SKY,
+           slug="handoff")
 if ho:
-    st.html("<div style='font-weight:700;font-size:.95rem'>Hypotheses</div><ol style='font-size:"
+    st.html("<div style='font-weight:700;font-size:.95rem'>Ideas to test</div><ol style='font-size:"
             ".9rem;line-height:1.55;max-width:80ch'>" + "".join(
                 f"<li>{fmt(h['text'])}<div style='color:{ui.MUTED};font-size:.8rem'>Test: "
                 f"{fmt(h['test_how'])}</div></li>" for h in ho["hypotheses"]) + "</ol>")
@@ -214,21 +266,21 @@ if ho:
             ":.9rem;line-height:1.55;max-width:80ch'>" + "".join(
                 f"<li><b>{fmt(s['criterion'])}</b> — {fmt(s['text'])}</li>"
                 for s in ho["screener"]) + "</ul>")
-    st.html("<div style='font-weight:700;font-size:.95rem'>Observed search tasks</div>" + "".join(
+    st.html("<div style='font-weight:700;font-size:.95rem'>Search tasks to watch people do</div>"
+            + "".join(
         ui.card(f"<div style='font-size:.9rem'>{fmt(t['task'])}</div><div style='color:"
                 f"{ui.MUTED};font-size:.8rem;margin-top:.2rem'>Watch for: {fmt(t['watch_for'])}"
                 f"</div>", ui.SKY) for t in ho["observed_tasks"]))
     by_stage: dict[str, list] = {}
     for p in ho["interview_prompts"]:
         by_stage.setdefault(str(p["stage"]), []).append(p)
-    with st.expander(f"Interview prompts for the {len(ho.get('register', []))} questions public "
+    with st.expander(f"Interview questions for the {len(ho.get('register', []))} things public "
                      f"posts could not answer"):
         for s in sorted(by_stage, key=lambda x: int(x) if x.isdigit() else 99):
-            st.html(f"<div style='font-weight:700;margin-top:.5rem'>Stage {ui.esc(s)} · "
+            st.html(f"<div style='font-weight:700;margin-top:.5rem'>"
                     f"{words.stage_title(s)}</div><ul style='font-size:.88rem'>" + "".join(
-                        f"<li>{fmt(p['prompt'])} <span style='color:{ui.MUTED};font-size:.75rem'>"
-                        f"({fmt(p['question_id'])})</span></li>" for p in by_stage[s]) + "</ul>")
-    with st.expander("Probes for the four emerging themes"):
+                        f"<li>{fmt(p['prompt'])}</li>" for p in by_stage[s]) + "</ul>")
+    with st.expander("Questions about the four patterns noticed later"):
         st.html("<ul style='font-size:.88rem'>" + "".join(
             f"<li>{fmt(p['prompt'])}</li>" for p in ho["theme_probes"]) + "</ul>")
 else:

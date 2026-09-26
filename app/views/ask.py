@@ -20,8 +20,8 @@ on screen by the fallback, with a line saying so. The draft is visible for the
 second or two it takes to check — the PM's trade for words that appear as they
 are written, and why the status line reads "checking" until the check is done.
 
-While an answer streams the page never scrolls past its first line, and when it
-lands nothing moves (`_hold_still`).
+When a question is asked the page makes one scroll, bringing it to the top, and
+then only the reader moves it (`_scroll_guard`, `_bring_into_view`).
 
 NO JUMP WHEN IT LANDS (ask_v3, the PM: "there is a huge jerk post an answer
 completion"). The answer used to be streamed into one layout and then the page
@@ -157,10 +157,9 @@ fun = db.query("SELECT n, n_authors FROM analysis_funnel WHERE source='_all'"
                " AND step='stories:core'")
 CORE = int(fun.iloc[0]["n"]) if not fun.empty else 0
 PEOPLE = int(fun.iloc[0]["n_authors"]) if not fun.empty else 0
-IDENTITY = (f"Answers come from <b>{CORE} cases</b> — public posts in which {PEOPLE} people "
-            "described hunting for a photo they only vaguely remembered. Every figure and quote "
-            "is checked, the evidence sits under each answer, and it says plainly when the "
-            "evidence runs out.")
+# Short (the PM, 2026-09-27: "shorter, crispier").
+IDENTITY = (f"Answers draw on <b>{CORE} real cases</b> of people hunting for a half-remembered "
+            "photo. Every figure and quote is checked; the evidence sits under each answer.")
 
 
 @st.cache_resource(show_spinner=False)
@@ -208,10 +207,14 @@ def _refs(a: A.Answer) -> dict[str, dict]:
         return out
     for s in a.retrieved.records():
         text = s["text"].replace(" …[cut]", "…")
+        url = str(s.get("source_url") or "")
         out[f"story|{s['story_id']}"] = {
             "group": GROUP["story"],
             "detail": f"A post on {P.SOURCE.get(s['source'], s['source'])}",
-            "quote": text[:420] + ("…" if len(text) > 420 else "")}
+            "quote": text[:420] + ("…" if len(text) > 420 else ""),
+            # Where it was posted, as the Data Bank links it (the PM, 2026-09-27: "where
+            # there is a quote, mention the link to the actual quote in the evidence box").
+            "url": url if re.match(r"https?://", url) else ""}
     for r in a.retrieved.rows():
         c = r.get("_cite")
         if c:
@@ -251,9 +254,12 @@ def _evidence(msg: dict) -> None:
             for r in items:
                 body = "<div style='font-size:.86rem;line-height:1.5;margin:.3rem 0'>"
                 if r.get("quote"):
+                    link = (f" · <a href='{ui.esc(r['url'])}' target='_blank' "
+                            f"rel='noopener noreferrer'>Open the post ↗</a>"
+                            if r.get("url") else "")
                     body += (f"<div style='border-left:3px solid {ACCENT};padding-left:.7rem'>"
                              f"“{ui.esc(r['quote'])}”<div style='color:{MUTED};font-size:.74rem;"
-                             f"margin-top:.15rem'>{ui.esc(r['detail'])}</div></div>")
+                             f"margin-top:.15rem'>{ui.esc(r['detail'])}{link}</div></div>")
                 else:
                     body += f"• {ui.esc(r['detail'])}"
                 html.append(body + "</div>")
@@ -289,55 +295,88 @@ def _render_answer(msg: dict) -> None:
     _below(msg)
 
 
-def _hold_still(top_margin: int = 64, settle_s: float = 2.0) -> None:
-    """Keep the answer where the reader is looking (ask_v3, the PM: "a huge jerk post
-    an answer completion"). Measured in the browser: the words streamed in without the
-    page moving, and when the answer finished — the evidence panel and footer added —
-    Streamlit's chat view glided the page 426 px to the bottom, taking the answer's
-    first lines off screen. (The old 12-second hold then fought that scroll.)
+def _scroll_guard() -> None:
+    """On this page only the reader, and `_bring_into_view`, move the page (the PM:
+    "fast up and down oscillations, about 5-6 in under a sec").
 
-    This script remembers where the answer sits while it streams, never lets a long
-    answer scroll past its own first line, and when the finished marker appears it
-    cancels any scroll that would move the answer, for `settle_s`. One instant
-    correction cancels a smooth scroll mid-flight. The reader's own scroll, tap or
-    key stops it at once."""
-    components.html(f"""<script>
+    Why, read from Streamlit 1.64's own code: when a chat input is on the page, its
+    scroll container checks every 17 ms whether the view has left the bottom and,
+    34 ms later, animates it back down (`scrollTop = …` each frame) — always, on a
+    first answer, because a page shorter than the window counts as "at the bottom".
+    Every scroll made to keep an answer in place was undone 34 ms later, and re-made:
+    the oscillation. Winning that fight is impossible; this ends it. The container's
+    `scrollTop` setter ignores scripted scrolls while this page is open, so Streamlit's
+    pull does nothing; the reader's own scrolling (wheel, touch, keys, the bar) does
+    not go through that setter and is untouched. Leaving the page restores it."""
+    components.html(r"""<script>
     const doc = window.parent.document, win = window.parent;
-    let stop = false, last = null, doneAt = null;
-    ["wheel", "touchstart", "keydown", "mousedown"].forEach(e =>
-        doc.addEventListener(e, () => {{ stop = true; }}, {{once: true, passive: true}}));
-    const scroller = el => {{
-      for (let n = el; n; n = n.parentElement) {{
-        const o = win.getComputedStyle(n).overflowY;
-        if ((o === "auto" || o === "scroll") && n.scrollHeight > n.clientHeight) return n;
-      }}
-      return doc.scrollingElement;
-    }};
-    const frame = () => {{
-      if (stop) return;
-      const m = doc.querySelectorAll(".ask-a");
-      if (m.length) {{
-        const msg = m[m.length - 1].closest('[data-testid="stChatMessage"]');
-        const top = msg.getBoundingClientRect().top;
-        const done = msg.querySelector(".ask-done") !== null;
-        if (!done) {{
-          if (top < {top_margin}) scroller(msg).scrollBy({{top: top - {top_margin},
-                                                          behavior: "instant"}});
-          else last = top;
-        }} else {{
-          if (doneAt === null) doneAt = Date.now();
-          if (last !== null && Math.abs(top - last) > 1)
-            scroller(msg).scrollBy({{top: top - last, behavior: "instant"}});
-          if (Date.now() - doneAt > {int(settle_s * 1000)}) return;
-        }}
-      }}
-      win.requestAnimationFrame(frame);
-    }};
-    win.requestAnimationFrame(frame);
+    const onAsk = () => /\/ask\/?$/.test(win.location.pathname);
+    const guard = () => {
+      const el = doc.querySelector('[data-testid="stAppScrollToBottomContainer"]');
+      if (!el) { setTimeout(guard, 100); return; }
+      if (el.__askGuard) return;
+      const d = Object.getOwnPropertyDescriptor(Element.prototype, "scrollTop");
+      Object.defineProperty(el, "scrollTop", {configurable: true,
+        get() { return d.get.call(this); },
+        set(v) { if (!onAsk() || win.__askOwnScroll) d.set.call(this, v); }});
+      el.__askGuard = true;
+    };
+    guard();
     </script>""", height=0)
 
 
+def _bring_into_view(margin: int = 72) -> None:
+    """One scroll, when a new answer starts: the question just asked to the top of
+    the window, so the answer is read from its first line as it streams. Then
+    nothing moves until the reader scrolls."""
+    components.html(f"""<script>
+    const doc = window.parent.document, win = window.parent;
+    const go = (tries) => {{
+      const m = doc.querySelectorAll(".ask-a");
+      const el = doc.querySelector('[data-testid="stAppScrollToBottomContainer"]');
+      if (!m.length || !el) {{ if (tries < 30) setTimeout(() => go(tries + 1), 50); return; }}
+      const msgs = [...doc.querySelectorAll('[data-testid="stChatMessage"]')];
+      const ans = m[m.length - 1].closest('[data-testid="stChatMessage"]');
+      const q = msgs[msgs.indexOf(ans) - 1] || ans;
+      const dy = q.getBoundingClientRect().top - el.getBoundingClientRect().top - {margin};
+      if (Math.abs(dy) < 4) return;
+      win.__askOwnScroll = true;
+      el.scrollTop = el.scrollTop + dy;
+      win.__askOwnScroll = false;
+    }};
+    go(0);
+    </script>""", height=0)
+
+
+_scroll_guard()
 thread = _active()
+
+
+_YES = re.compile(r"^\s*(?:yes|yeah|yep|yup|sure|ok|okay|please|go ahead|do it|go on|y|yes please|"
+                  r"sure thing|absolutely|of course)[\s.!,]*(?:please|thanks)?[\s.!]*$", re.I)
+_OFFER = re.compile(r"^\s*(?:would you like|do you want|want|shall i|should i|can i)\s+(?:me\s+)?"
+                    r"(?:to\s+)?", re.I)
+
+
+def _take_up(q: str, messages: list) -> str:
+    """"yes" to an answer's closing offer is that offer, asked (the PM, 2026-09-27: the
+    answer ended "Want to see which words people tried first?", "yes" was sent, and the
+    next answer did not show any words — "yes" had been read as a question of its own).
+    "Want to see which words people tried first?" → "Show which words people tried first.";
+    "Would you like me to list them by kind?" → "List them by kind."."""
+    if not _YES.match(q or "") or not messages or messages[-1].get("role") != "assistant":
+        return q
+    lines = [ln.strip() for ln in str(messages[-1].get("text") or "").strip().splitlines()
+             if ln.strip()]
+    last = lines[-1].strip("*_ ") if lines else ""
+    if not last.endswith("?"):
+        return q
+    rest = _OFFER.sub("", last).rstrip("?").strip()
+    shown = re.sub(r"^(?:see|know|look at|show you|pull|pull together|get)\s+", "", rest,
+                   flags=re.I)
+    if not rest:
+        return q
+    return f"Show {shown}." if shown != rest else f"{rest[:1].upper()}{rest[1:]}."
 
 
 def _accept(q: str) -> None:
@@ -347,6 +386,7 @@ def _accept(q: str) -> None:
     streamed in while the previous screen's leftover elements (the welcome block)
     were still on the page, and when the run ended Streamlit removed them all at
     once: the page shrank and the answer jumped (measured 95 px → 263 px)."""
+    q = _take_up(q, thread["messages"])
     why = A.screen(q) or caps.blocked("ask")
     thread["messages"].append({"role": "user", "content": q})
     if thread["title"] == "New chat":
@@ -397,7 +437,7 @@ else:
                 f"<div style='font-size:1.9rem;font-weight:750;line-height:1.25;"
                 f"margin-top:.3rem'>What can I help you with?</div>"
                 f"<div style='color:{MUTED};font-size:.9rem;line-height:1.55;margin:.5rem auto 0;"
-                f"max-width:56ch'>{IDENTITY} Most land in {TYPICAL}.</div></div>")
+                f"max-width:56ch'>{IDENTITY}</div></div>")
         with st.container():
             typed = st.chat_input("Ask anything about how people search for old photos…",
                                   key="ask_first")
@@ -409,12 +449,7 @@ else:
             for col, (chip, q) in zip(st.columns(len(row)), row, strict=True):
                 if col.button(chip, key=f"sugg{q[:18]}"):
                     _accept(q)
-        st.html(f"<div style='text-align:center;margin:1.4rem 0 .2rem'><span style='font-size:"
-                f".75rem;color:{MUTED};border:1px solid {HAIR};border-radius:999px;padding:.2rem"
-                f" .55rem'><span style='display:inline-block;width:.45rem;height:.45rem;"
-                f"border-radius:50%;background:{WARN};margin-right:.4rem;vertical-align:middle'>"
-                "</span>every figure counts <b>public posts</b> — not users, not searches, "
-                "not a success rate</span></div>")
+
 
 # ------------------------------------------------------------- a new answer
 # Drawn where the next message goes, in the transcript's own slots, filled in place.
@@ -430,7 +465,7 @@ if st.session_state.get("answering") == thread["id"] and thread["messages"] \
         top, words, under = st.empty(), st.empty(), st.empty()
         top.html(_restated_html(f"{STAGE['plan']} · usually {TYPICAL}"))
         under.caption(STAGE["retrieve"])
-        _hold_still()
+        _bring_into_view()
 
         def show(so_far: str) -> None:
             words.markdown(_escape_md(P.reader_words(so_far)) + " ▌", unsafe_allow_html=False)

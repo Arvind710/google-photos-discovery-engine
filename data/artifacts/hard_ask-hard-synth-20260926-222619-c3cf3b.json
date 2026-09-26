@@ -1,0 +1,622 @@
+{
+ "run_id": "ask-hard-synth-20260926-222619-c3cf3b",
+ "plan_run": "ask-hard-plan-20260926-222619-03283b",
+ "prompt_version": "ask_v3.16",
+ "subset": false,
+ "summary": {
+  "n": 14,
+  "T13_route": 1.0,
+  "verified": 13,
+  "repaired": 7,
+  "withheld": 1,
+  "withheld_late": 0,
+  "planned_by_rules": 6,
+  "late_served_whole_paragraphs": 0,
+  "repaired_by_dropping": 7,
+  "cost_estimated_rows": 6,
+  "assertion_fails": 0,
+  "problems_by_type": {
+   "unsupported number": 0,
+   "percentage without its count": 0,
+   "unverifiable quote": 0,
+   "citation not retrieved": 0,
+   "uncited claim": 0,
+   "share stated as": 0,
+   "label-and-colon": 0,
+   "closing": 1,
+   "refusal": 0,
+   "evidence": 0,
+   "length": 0,
+   "code name": 0,
+   "directional share": 0,
+   "directional label": 0,
+   "comparison between": 0,
+   "internal word": 0
+  },
+  "max_seconds": 9.4,
+  "cost_usd": 0.0328,
+  "mean_seconds": 8.1
+ },
+ "rows": [
+  {
+   "id": "H1",
+   "category": "multi_part",
+   "question": "Walk me through where the hunt for a half-remembered photo breaks, step by step, and rank the steps by how often they are the first thing to fail.",
+   "restated": "Show, step by step, where people’s attempts to find a half-remembered photo first break (i.e., which step of the finding the photo journey is the first failure), and rank those steps from most to least often the initial point of failure.",
+   "route": "PARTIAL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "two AI readers went through the stories separately and agreed too rarely on what they actually remember about the photo to rely on it",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "My read is that people often try words that the system misinterprets — posts complain of irrelevant or noisy results like “too many images of my shop” and “pictures of my cats instead of me” — so improving short query understanding would reach the largest group."
+   ],
+   "cost_estimated": [],
+   "text": "**Most hunts for a half‑remembered photo first fail because search misunderstands the query or returns wrong photos, then because the photo is already gone, then because people never use the search box — in that order.** [[analysis_crosstab|core.primary_stage=5@photo_class:_all]][[analysis_crosstab|core.primary_stage=0@photo_class:_all]][[analysis_crosstab|core.primary_stage=3@photo_class:_all]]\n\nWhat the evidence cannot settle is how consistently readers extracted memory details from posts, so some finer rankings are tentative. [[analysis_method_flags|proxy_not_success_rate]][[analysis_method_flags|no_gold_standard]]\n\nWhy I read it this way: the straight counts show the first breakdown was search misunderstanding in about a quarter of cases, photo absence in about one in six, and skipping search in about one in ten; spotting the photo among similar results or lacking enough memory come later and are smaller first failures. [[analysis_crosstab|core.primary_stage=5@photo_class:_all]][[analysis_crosstab|core.primary_stage=0@photo_class:_all]][[analysis_crosstab|core.primary_stage=3@photo_class:_all]][[analysis_crosstab|core.primary_stage=6@photo_class:_all]][[analysis_crosstab|core.primary_stage=2@photo_class:_all]]\n\nWe can’t reliably say how many tries people made, how the search behaved internally, or exactly why readers disagreed on some labels, so recommendations about UI tweaks need user interviews to confirm. [[analysis_coverage|5.6]][[analysis_reliability|photo_class]][[analysis_reliability|outcome]][[analysis_method_flags|stage5_inferred]]\n\n*Want to see what people actually typed into the search box first?*",
+   "seconds": 9.3,
+   "cost_usd": 0.00311,
+   "usage": {
+    "plan": [
+     2014,
+     1920,
+     453
+    ],
+    "write": [
+     6016,
+     0,
+     312
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H2",
+   "category": "causal",
+   "question": "Is the problem mostly that people remember the wrong things, or that search can't use what they do remember?",
+   "restated": "Is the problem mostly that people remember the wrong things, or that search can't use what they do remember?",
+   "route": "PARTIAL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [],
+   "fails": [],
+   "gap": "two AI readers went through the stories separately and agreed too rarely on what they actually remember about the photo to rely on it",
+   "planned_by": "rules",
+   "draft": "",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [
+    "gpt-5-mini"
+   ],
+   "text": "**Both — but the evidence shows search misunderstandings are the single biggest first obstacle people report, while uncertainty in memory is widespread and hard to read reliably from these posts.** [[analysis_crosstab|core.primary_stage=5@photo_class:_all]][[analysis_derived|cue_remembered:what:core]][[analysis_reliability|q:2.1]]\n\nWhat the posts show — about a quarter of the vague‑memory cases say the first thing that went wrong was that search did not understand or showed wrong photos, and about two in five of the cases say the person remembered what was in the photo. [[analysis_crosstab|core.primary_stage=5@photo_class:_all]][[analysis_derived|cue_remembered:what:core]] At the same time, two human-like AI readers agreed too rarely on what people actually remembered to treat those memory labels as solid. [[analysis_reliability|q:2.1]]\n\nMy read is that both factors matter: people often have usable cues (objects, subjects) but the way they put them into words or the search’s interpretation breaks the chain, so improving short-query understanding would help — it addresses the largest first-failure group. A likely reason is that posts report search failures frequently because people post when things go wrong, so interviews should check how often remembered cues are specific and communicable. [[analysis_crosstab|core.primary_stage=5@photo_class:_all]][[analysis_derived|cue_remembered:what:core]][[analysis_method_flags|public_selection_bias]][[analysis_method_flags|no_gold_standard]]\n\n*Want to see the exact phrases people typed or tried when search failed?*",
+   "seconds": 8.8,
+   "cost_usd": 0.00198,
+   "usage": {
+    "plan": [
+     1607,
+     0,
+     457
+    ],
+    "write": [
+     4795,
+     4736,
+     266
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H3",
+   "category": "counterfactual",
+   "question": "If Google fixed search understanding perfectly tomorrow, what share of these failures would still happen, and why?",
+   "restated": "If Google fixed search understanding perfectly tomorrow, what share of these failures would still happen, and why?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "rules",
+   "draft": "",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [
+    "gpt-5-mini"
+   ],
+   "text": "**If Google fixed search understanding perfectly tomorrow, about a third of these cases would still succeed, and the rest would still fail or stall for other reasons.** [[analysis_crosstab|core.primary_stage=9@photo_class:_all]][[analysis_crosstab|core.primary_stage=5@photo_class:_all]][[analysis_crosstab|core.primary_stage=0@photo_class:_all]][[analysis_crosstab|core.primary_stage=3@photo_class:_all]][[analysis_crosstab|core.primary_stage=6@photo_class:_all]][[analysis_crosstab|core.primary_stage=2@photo_class:_all]]\n\nTo be specific — about a third of the cases about a vaguely remembered photo already found the photo, so those would still be successful. [[analysis_crosstab|core.primary_stage=9@photo_class:_all]] About a quarter first went wrong because search did not understand the query or returned the wrong photos — those would largely be fixed by perfect understanding. [[analysis_crosstab|core.primary_stage=5@photo_class:_all]] But roughly one in six first failed because the photo was gone (deleted, never backed up, or kept elsewhere), so fixing search cannot help those people. [[analysis_crosstab|core.primary_stage=0@photo_class:_all]] Roughly one in ten first failed because the person never used the search box (they scrolled or looked elsewhere), so perfect search would not change that behavior. [[analysis_crosstab|core.primary_stage=6@photo_class:_all]] Roughly one in ten first failed because the photo was in the results but hard to spot among similar ones; better understanding helps retrieval but not spotting, so this problem would remain unless result presentation changes. [[analysis_crosstab|core.primary_stage=2@photo_class:_all]] About one in twenty first failed because the person couldn't remember enough to form a query; better understanding can't invent a memory. [[analysis_crosstab|core.primary_stage=3@photo_class:_all]][[analysis_crosstab|core.primary_stage=6@photo_class:_all]][[analysis_crosstab|core.primary_stage=2@photo_class:_all]]\n\nMy read is that fixing understanding removes a clear chunk of failures, but several sizeable groups—gone photos, no-search behavior, spotting difficulty and lack of memory—would still block people.\n\n*Want me to show the exact phrases people typed when search first failed?*",
+   "seconds": 9.1,
+   "cost_usd": 0.00212,
+   "usage": {
+    "plan": [
+     1609,
+     0,
+     457
+    ],
+    "write": [
+     4000,
+     3840,
+     334
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H4",
+   "category": "quotes",
+   "question": "What exactly do people type when they can only remember a scene, not a date or a name? Give real examples.",
+   "restated": "What exact queries (real examples) do people type when they can only remember the scene in a photo, not a date or a person’s name?",
+   "route": "PARTIAL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "two AI readers went through the stories separately and agreed too rarely on what they actually remember about the photo to rely on it",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "What the evidence cannot settle well is exactly what people think or how consistent their phrasing is — the two AI readers disagreed too often about the fine details of remembered clues."
+   ],
+   "cost_estimated": [],
+   "text": "**When people only remember a scene, they most often type a single word (about one in six cases) or a few keywords; full natural descriptions are very rare.** [[analysis_crosstab|core.q:4.1=single_noun@photo_class:_all]][[analysis_crosstab|core.q:4.1=several_keywords@photo_class:_all]][[analysis_crosstab|core.q:4.1=full_natural_description@photo_class:_all]]\n\nThe posts show this in their own words: people typed things like “cat on a countertop”, “bicycle”, and simply “Boba”. [[story|3ba2ad97300ec1206044dc3deed79e0240a13297:0]][[story|790de55c9d650cb50647f97841544a0c5b1b7275:0]][[story|cbc995976ab0e7519ef70d4d3bf1b20c0485baf8:0]] My read is that a single salient object or place is the natural prompt for someone with a scene-memory; a likely reason is brevity and uncertainty — they reach for the clearest noun they recall rather than a long sentence.\n\nStill, because single-word queries appear in the data, improving how short, object-focused queries are interpreted seems the clearest practical win: better handling of one-word nouns would help the largest identifiable group. [[analysis_crosstab|core.q:4.1=single_noun@photo_class:_all]][[analysis_crosstab|core.q:4.1=several_keywords@photo_class:_all]]\n\n*Want to see the full list of exact first-typed phrases people reported?*",
+   "seconds": 6.3,
+   "cost_usd": 0.00224,
+   "usage": {
+    "plan": [
+     2004,
+     1920,
+     401
+    ],
+    "write": [
+     5036,
+     1792,
+     256
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H5",
+   "category": "skeptic",
+   "question": "Why should I trust any of this if it only comes from people complaining online?",
+   "restated": "How trustworthy are findings drawn from a stories made up only of public, self-selected complaints and stories posted online?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "It cannot give success rates, demographic splits, or prove why the product behaved; many finer judgments had low agreement and need user interviews to confirm."
+   ],
+   "cost_estimated": [],
+   "text": "**You can trust useful, consistent patterns in this study because we read over thirty-one thousand public posts and pulled 331 clear cases of people hunting for a single photo, then double-read many cases to check consistency.** [[analysis_funnel|collected]][[analysis_funnel|stories]][[analysis_reliability|q:10.1]][[analysis_reliability|q:9.6]]\n\n314 posts were explicitly about finding a photo and 115 cases concern photos people only vaguely remembered — the set our conclusions rest on. [[analysis_funnel|kept]][[analysis_funnel|stories:core]] Two independent readers agreed strongly on several key readings (for example, whether search connected clues and whether a result was the one) which means our extraction was repeatable on those points. [[analysis_reliability|q:5.5]][[analysis_reliability|q:9.3]][[analysis_reliability|q:9.6]]\n\nA likely reason to trust the patterns is that large-scale public complaints concentrate on breakdowns, so they reveal what goes wrong in the wild even if quiet successes are missing. [[analysis_method_flags|public_selection_bias]] My read is that these cases highlight plausible failure modes worth testing in interviews and prototypes, not population rates. [[analysis_method_flags|proxy_not_success_rate]][[analysis_method_flags|stage5_inferred]]\n\n*Want to see the exact phrases people typed when they first described the photo they were looking for?*",
+   "seconds": 7.0,
+   "cost_usd": 0.00276,
+   "usage": {
+    "plan": [
+     1996,
+     1920,
+     488
+    ],
+    "write": [
+     4507,
+     0,
+     295
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H6",
+   "category": "method",
+   "question": "How did you decide where a story first went wrong, and how often did two readers disagree?",
+   "restated": "How did you decide (operationally) which step in the finding the photo journey was the first place the story went wrong, and how often did two independent readers disagree about that step?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "My read is that disagreements cluster where posts omit key details (many questions are unanswered in most cases), so readers must infer missing steps; that inference explains much of the 31 disagreements."
+   ],
+   "cost_estimated": [],
+   "text": "**We marked the first point a case \"went wrong\" by reading each report along the finding path and choosing the first step where the poster said something that blocked finding the photo.** This decision is grounded in the case protocol and the evidence: 169 of 331 cases record whether the photo was even in Google Photos, 192 of 331 record what the person remembered, and 104 of 331 record how they looked inside Google Photos — those are the steps we used to spot the first failure [[analysis_coverage|0.1]][[analysis_coverage|2.1]][[analysis_coverage|3.2]].\n\nTwo AI readers independently applied that protocol to 100 cases and agreed on where a case first went wrong in 69 and disagreed in 31, so our labels are consistent but not perfectly so [[analysis_reliability|primary_stage]]. This suggests improving the protocol with clearer rules for gaps and testing on more annotated interviews would reduce disagreement.\n\n*Want to see the sample cases where the two readers disagreed so we can refine the rulebook?*",
+   "seconds": 6.5,
+   "cost_usd": 0.00235,
+   "usage": {
+    "plan": [
+     1999,
+     1920,
+     551
+    ],
+    "write": [
+     4309,
+     1792,
+     253
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H7",
+   "category": "recommendation",
+   "question": "If I were the PM for Google Photos search, what would you tell me to build first, and what evidence would change your mind?",
+   "restated": "If I were the PM for Google Photos search, what would you tell me to build first, and what evidence would change your mind?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "rules",
+   "draft": "",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [
+    "gpt-5-mini"
+   ],
+   "text": "**Build better understanding of short, vague text queries first — it will help the largest identifiable group of people who fail to find a vaguely remembered photo.** The evidence: in about a quarter of the 115 cases the person only vaguely remembered the photo, the first thing that went wrong was that search did not understand what they typed or showed the wrong photos [[analysis_crosstab|core.primary_stage=5@photo_class:_all]]. In about one in ten cases the photo was in results but hard to spot, and in about one in six the photo was already gone — both important but smaller first-fail points [[analysis_crosstab|core.primary_stage=6@photo_class:_all]][[analysis_crosstab|core.primary_stage=0@photo_class:_all]].  \n\nMy read is that improving how the search interprets brief, imprecise queries (including synonyms, partial descriptions, and intent) will recover the largest single group of these half-remembered hunts. A likely reason is that people come with a single short phrase like “soldier” or “bike” and search reads it too narrowly or matches the wrong visual cluster (posts show mismatches such as “searching ‘soldier’ produced a different picture” [[story|a8eaefe2e0199103bba08d2d1f34aad86d3267a5:0]]). Fixing query understanding should also reduce repeated tries and false negatives before people give up.  \n\nWhat would change my mind is evidence showing a different first-fail pattern in this same group — for example, if a comparable set of vaguely remembered-photo cases instead showed that deletion/backup gaps were the most frequent first failure, or that people rarely used the search box at all. If you want, I can pull the exact phrases people typed and the sample of misreads next.\n\n*Want to see what people actually typed first?*",
+   "seconds": 9.0,
+   "cost_usd": 0.00283,
+   "usage": {
+    "plan": [
+     1611,
+     0,
+     457
+    ],
+    "write": [
+     3359,
+     0,
+     339
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H8",
+   "category": "segment_trap",
+   "question": "Are screenshots harder to find than photos of people?",
+   "restated": "Are screenshots harder to find than photos of people in the stories of finding the photo stories?",
+   "route": "PARTIAL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [],
+   "fails": [],
+   "gap": "the stories hold nothing on how often this happens in the stories",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [],
+   "text": "**We cannot say screenshots are harder to find than photos of people from these cases.** The evidence is too small to compare groups: every photo kind has fewer than 80 cases, so the groups asked about are too small to support a reliable comparison [[analysis_method_flags|thin_core]]. \n\nWhat the evidence does show about people’s half-remembered photos (115 cases) is where searches first went wrong: for memories (people, trips, events) roughly a third found the photo and roughly a quarter saw search misunderstand their query — with deletions, not using search, and spotting-in-results each smaller slices of the set [[analysis_crosstab|core.primary_stage=9@photo_class:sentimental]][[analysis_crosstab|core.primary_stage=5@photo_class:sentimental]][[analysis_crosstab|core.primary_stage=0@photo_class:sentimental]][[analysis_crosstab|core.primary_stage=3@photo_class:sentimental]][[analysis_crosstab|core.primary_stage=6@photo_class:sentimental]]. For informational screenshots (21 cases) deletion was the common first problem and only six found the photo — counts only [[analysis_crosstab|core.primary_stage=0@photo_class:utility]][[analysis_crosstab|core.primary_stage=9@photo_class:utility]]. My read is that screenshots in this small counted group were often missing rather than poorly matched by search; that suggests disappearance, not necessarily recognizer failure, is the main obstacle for those cases. \n\nWe cannot generalise how often or whether one kind is objectively harder to find.\n\n*Want me to pull the 21 screenshot cases so you can read their exact failure notes?*",
+   "seconds": 7.5,
+   "cost_usd": 0.00265,
+   "usage": {
+    "plan": [
+     1990,
+     1920,
+     483
+    ],
+    "write": [
+     5882,
+     1664,
+     263
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H9",
+   "category": "emotion",
+   "question": "How do people feel when they can't find the photo, and does it change what they do next?",
+   "restated": "What emotions do people report when they can’t find a photo, and does that emotional response affect what they do next (keep trying, switch tactics, quit, create new habits)?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "Where the posts say what people did next, a few switched cue types or modes, or looked in other apps, and a small number found the photo elsewhere or gave up entirely ."
+   ],
+   "cost_estimated": [],
+   "text": "**People who only vaguely remember a photo mostly report frustration, annoyance or giving up, and that feeling sometimes short-circuits further searching.** The posts about feelings while searching record frustration or annoyance in the evidence (102 cases say anything about feelings while searching) [[analysis_coverage|7.4]]. My read is that frustration shows up both as a short stop—one try and then leaving—and as repeated attempts: about one in six of these cases tried only once, while smaller numbers kept trying for minutes or an hour or more, so the same feeling can lead to quitting or to persevering depending on the person and situation [[analysis_crosstab|core.q:8.1=one_attempt@photo_class:_all]][[analysis_crosstab|core.q:8.1=few_attempts_minutes@photo_class:_all]][[analysis_crosstab|core.q:8.1=hour_or_more@photo_class:_all]].\n\nThe evidence also shows a handful of cases where people changed how much they trusted search afterwards—some said they used search more, a small number said they used it less—so failing can alter future behaviour but only for a few cases in the set [[analysis_crosstab|core.q:10.1=more_search_use@photo_class:_all]][[analysis_crosstab|core.q:10.1=less_search_use@photo_class:_all]][[analysis_crosstab|core.q:10.1=more_search_use@photo_class:sentimental]][[analysis_crosstab|core.q:10.1=less_search_use@photo_class:sentimental]][[analysis_crosstab|core.q:10.1=more_search_use@photo_class:utility]]. A likely reason is that immediate emotion (annoyance) combines with how important the photo is: low patience produces a quick quit, high importance drives more tries.\n\nThe evidence runs out on who exactly quits vs persists and why—those splits are underreported—so interviews would be needed to predict which fixes would keep a frustrated person searching.\n\n*Want to see the exact words people typed when they described their searches?*",
+   "seconds": 9.0,
+   "cost_usd": 0.00317,
+   "usage": {
+    "plan": [
+     2000,
+     1920,
+     534
+    ],
+    "write": [
+     5330,
+     0,
+     353
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H10",
+   "category": "premise_trap",
+   "question": "Since Ask Photos made things worse for everyone, which features should be rolled back?",
+   "restated": "Since Ask Photos made things worse for everyone, which features should be rolled back?",
+   "route": "PARTIAL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": false,
+   "problems": [
+    "closing: the answer does not end with one italic closing question"
+   ],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "the stories were not compared across time, so there is no before-and-after",
+   "planned_by": "rules",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "Rollbacks should target the failures the cases actually show: about a quarter of the vaguely‑remembered photo cases first failed because search “did not understand” the query or returned wrong photos, so improving how short or vague queries are interpreted would help that group.",
+    "*Want to see what people actually typed when search “did not understand” them?*"
+   ],
+   "cost_estimated": [
+    "gpt-5-mini"
+   ],
+   "text": "**Correction — the cases cannot show that Ask Photos made things worse for everyone.** [[analysis_method_flags|proxy_not_success_rate]][[analysis_method_flags|public_selection_bias]]\n\nMy read is that better handling of short natural‑language or underspecified queries will let more people get a match sooner.\n\nThe next largest first‑problem was photos already gone (about one in six cases), so features that surface deletions, backups or linked accounts more clearly would reduce needless hunting. [[analysis_crosstab|core.primary_stage=0@photo_class:_all]] A likely reason is people expect a single place to look and don’t realise an image was never backed up or was removed.\n\nOther first‑failures were spotting the photo among similar results and people not using search at all (each about one in ten), so rolling back changes that make results denser or that hide simple scrolling/navigation could help those groups. [[analysis_crosstab|core.primary_stage=6@photo_class:_all]][[analysis_crosstab|core.primary_stage=3@photo_class:_all]]\n\nThese suggestions rest on the 115 cases about half‑remembered photos; they don’t prove time‑based harm or how widespread this is. [[analysis_funnel|stories:core]][[analysis_method_flags|proxy_not_success_rate]]",
+   "seconds": 8.9,
+   "cost_usd": 0.00202,
+   "usage": {
+    "plan": [
+     1602,
+     0,
+     457
+    ],
+    "write": [
+     3556,
+     3456,
+     297
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H11",
+   "category": "ambiguous",
+   "question": "What about the ones who give up?",
+   "restated": "What about the ones who give up?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [
+    "unsupported number (a share in words does not fit): Most people",
+    "unsupported number (a share in words does not fit): most cases"
+   ],
+   "fails": [],
+   "gap": "",
+   "planned_by": "rules",
+   "draft": "**Most people who gave up either never said what they did next, or left feeling annoyed or bereft; when they did say, their accounts split between trying something else and simply losing hope.** [[analysis_coverage|9.4]][[analysis_crosstab|core.q:9.4=aftermath:loss_or_annoyance@photo_class:_all]][[analysis_crosstab|core.primary_stage=9@photo_class:_all]]\n\nThe evidence shows 59 of 331 cases say anything about why they gave up and what they did instead, so most cases are silent on this point. [[analysis_coverage|9.4]] In the tiny set that does report an outcome, one case describes loss or strong upset afterwards. [[analysis_crosstab|core.q:9.4=aftermath:loss_or_annoyance@photo_class:_all]] Separately, about a third of the 115 vaguely remembered-photo cases did find the photo, which means the ones who explicitly report giving up are a minority of that subgroup. [[analysis_crosstab|core.primary_stage=9@photo_class:_all]][[analysis_funnel|stories:core]]\n\nMy read is that silence dominates because people post when stuck but rarely narrate their emotional aftermath; a likely reason is that frustrated posters focus on the failure itself, not the follow-up. This suggests product work should prioritise preventing the blocked moment (for example, improving short-query understanding) rather than only smoothing post‑failure recovery, because the record here shows few clear patterns of what people do after they quit.\n\n*Want to see the actual phrases people typed or remembered before they gave up?*",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [
+    "gpt-5-mini"
+   ],
+   "text": "Here is what the evidence shows most directly. [[story|5489f123417096e7408e42200a9982d555008035:0]]\n\nIn 1 of 115 cases (1%) about a photo the person only vaguely remembered, on why they gave up and what they did instead, the post says: afterwards — loss or annoyance. [[analysis_crosstab|core.q:9.4=aftermath:loss_or_annoyance@photo_class:_all]]\n\n*Want to ask about one part of it — what people typed, what they remembered, or where it first went wrong?*",
+   "seconds": 8.6,
+   "cost_usd": 0.00197,
+   "usage": {
+    "plan": [
+     1588,
+     0,
+     457
+    ],
+    "write": [
+     3837,
+     3712,
+     268
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H12",
+   "category": "off_topic",
+   "question": "Write me a poem about lost holiday photos.",
+   "restated": "Compose a poem about lost holiday photos.",
+   "route": "NONE",
+   "expect": [
+    "NONE",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [],
+   "fails": [],
+   "gap": "the question falls outside what these stories cover",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [],
+   "text": "I can’t write a poem — this study is about why people struggle to find a half-remembered photo in Google Photos, not creating creative works. I can, however, show you real phrases people used when hunting for a lost picture, or summarise where their searches went wrong if that helps.\n\n*Want me to pull the exact search phrases people tried first?*",
+   "seconds": 4.3,
+   "cost_usd": 0.00059,
+   "usage": {
+    "plan": [
+     1989,
+     1920,
+     140
+    ],
+    "write": [
+     1837,
+     1792,
+     93
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H13",
+   "category": "numbers",
+   "question": "Of the people who found the photo in the end, how did they find it — search, scrolling, or something else?",
+   "restated": "Among stories where the poster ultimately found the photo, how did they find it — by search queries, by scrolling/browsing, or by some other method?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "What this suggests for product: improving short-query handling and making it clearer when search is failing (so people switch strategies sooner) should help the largest reachable group, because about one in five core cases explicitly report using the search bar first."
+   ],
+   "cost_estimated": [],
+   "text": "**Among the cases where the person only vaguely remembered the photo and we can see how they looked, most reached it by typing keywords into the search bar rather than by scrolling.** [[analysis_crosstab|core.q:3.2=search_bar_keywords@photo_class:_all]][[analysis_crosstab|core.q:3.2=timeline_scroll@photo_class:_all]][[analysis_coverage|3.2]]\n\nOf the 115 vaguely-remembered cases, 104 say anything about how they looked inside Google Photos, and within those the single largest identifiable method is search-bar keywords (23 cases), while timeline scroll is reported in 14 cases and combined search-then-scroll in 3 cases. [[analysis_coverage|3.2]][[analysis_crosstab|core.q:3.2=search_bar_keywords@photo_class:_all]][[analysis_crosstab|core.q:3.2=timeline_scroll@photo_class:_all]][[analysis_crosstab|core.q:3.2=combined_search_then_scroll@photo_class:_all]]\n\nA likely reason is that people with only a half-memory try to translate that memory into words first, so search is the natural first strategy; my read is that when those words match what Photos recognises, people find the photo straight away (43 cases found it straight away), and when they don’t, some resort to scrolling or give up. [[analysis_crosstab|core.outcome=found@photo_class:_all]][[analysis_crosstab|core.outcome=found_after_struggle@photo_class:_all]][[analysis_crosstab|core.outcome=abandoned_without_fallback@photo_class:_all]]\n\n*Want to see the exact phrases people typed into the search bar?*",
+   "seconds": 9.0,
+   "cost_usd": 0.00293,
+   "usage": {
+    "plan": [
+     2005,
+     1920,
+     464
+    ],
+    "write": [
+     5418,
+     0,
+     288
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "H14",
+   "category": "synthesis",
+   "question": "Summarise the three most important things a researcher should take into user interviews from this study.",
+   "restated": "Summarise the three most important things a researcher should take into user interviews from this study.",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "rules",
+   "draft": "",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [
+    "gpt-5-mini"
+   ],
+   "text": "**Focus interviews on what people remember and how they put that memory into words, whether search misunderstood short queries, and whether the photo was gone before they started looking.** [[analysis_crosstab|core.primary_stage=5@photo_class:_all]][[analysis_crosstab|core.primary_stage=2@photo_class:_all]][[analysis_crosstab|core.primary_stage=0@photo_class:_all]]\n\nFirst, dig into the vague memory itself: in these cases some people simply could not recall enough to form a query, and we need to know what cues (people, place, object, emotion, timeframe) they try to use and which ones they drop. [[analysis_crosstab|core.primary_stage=2@photo_class:_all]] My read is that understanding which cues people default to will let us design prompts or UI affordances that help them translate a half‑memory into useful text.\n\nSecond, probe how people phrase short searches and how they judge results: about a quarter of the cases first failed because search did not understand what they typed, or showed the wrong photos, so we should observe exact words people type and how they revise queries. [[analysis_crosstab|core.primary_stage=5@photo_class:_all]] A likely reason is that brief queries are ambiguous; improving query interpretation or giving disambiguating suggestions could rescue this group.\n\nThird, ask about backup and storage behavior: in roughly one in six cases the photo was already gone (deleted, not backed up, or kept elsewhere), so interviews should capture where people expect photos to live and how they check other places. [[analysis_crosstab|core.primary_stage=0@photo_class:_all]] That suggests product changes around provenance, reminders, or easy cross‑location checks.\n\nThese three lines map onto the path where a search can fail: memory → wording → system match → existence. [[analysis_crosstab|core.primary_stage=9@photo_class:_all]]\n\n*Want to see exactly what people typed or how they described the photo in these posts?*",
+   "seconds": 9.4,
+   "cost_usd": 0.00211,
+   "usage": {
+    "plan": [
+     1606,
+     0,
+     457
+    ],
+    "write": [
+     3440,
+     3328,
+     343
+    ]
+   },
+   "error": ""
+  }
+ ]
+}

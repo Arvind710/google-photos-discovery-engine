@@ -30,11 +30,12 @@ from lib import nav  # noqa: E402  (must follow the sys.path line above)
 st.set_page_config(page_title="Google Photos Discovery Engine", page_icon="🔎",
                    layout="wide", initial_sidebar_state="expanded")
 
-SECTIONS = [st.Page(VIEWS / f, title=t, icon=i, default=(u == ""))
-            for f, t, i, u, _ in nav.PAGES]
+SECTIONS = [st.Page(VIEWS / f, title=t, icon=i, url_path=u or None, default=(k == 0))
+            for k, (f, t, i, u, _) in enumerate(nav.PAGES)]
 
-# The built-in nav is hidden so lib/nav.py can draw a pinned one.
+# The built-in nav is hidden so lib/nav.py can draw a pinned one. The first
+# section is the front door, served at "/" (its url_path then reads "").
 page = st.navigation(SECTIONS, position="hidden")
-nav.render(page.url_path, VIEWS)
+nav.render(page.url_path or nav.PAGES[0][3], VIEWS)
 page.run()
-nav.footer(plain=page.url_path == "ask")   # Ask AI: no project words (D-14)
+nav.footer(plain=True)   # every page: no project words (D-14; all pages since 2026-09-27)

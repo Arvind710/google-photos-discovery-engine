@@ -312,7 +312,8 @@ def tokenise(text: str) -> list[str]:
 
 def _stories(con) -> list[dict]:
     return [dict(r) for r in con.execute(
-        "SELECT s.story_id, s.bucket AS population, s.text, r.source, p.primary_stage,"
+        "SELECT s.story_id, s.bucket AS population, s.text, r.source, r.source_url,"
+        " p.primary_stage,"
         " p.photo_class, p.outcome, p.why FROM stories s JOIN records r USING (record_id)"
         f" JOIN story_spine p USING (story_id) WHERE {LIVE}")]
 
@@ -340,17 +341,36 @@ def channel2(con, plan: dict, k: int = 6) -> list[dict]:
         pool = narrowed if len(narrowed) >= 3 else pool
     if not pool:
         return []
+    # What the post itself says ON the subject — the coder's verbatim evidence span
+    # for that question (what they typed first: "passport", "chicken coop"…), or for
+    # where it first went wrong. Posts that have one come first, and the writer is
+    # shown the span (the PM, 2026-09-27: "where are the user quotations or the words
+    # that people tried?" — the spans existed; retrieval never passed them on).
+    field_ = subject or ("primary_stage" if stages else None)
+    spans: dict[str, str] = {}
+    if field_:
+        for sid, span in con.execute("SELECT story_id, span FROM evidence WHERE field=? AND "
+                                     "verified=1", (field_,)):
+            spans.setdefault(sid, span)
+    about = plain.question(subject) if subject else "where it first went wrong"
     terms = tokenise(" ".join([str(plan.get("restated", "")),
                                " ".join(plan.get("sub_questions") or [])]))
     bm = BM25Okapi([tokenise(s["text"]) or ["_"] for s in pool])
     scores = bm.get_scores(terms or ["_"])
-    ranked = sorted(zip(scores, range(len(pool)), strict=True), key=lambda x: -x[0])
+    ranked = sorted(zip(scores, range(len(pool)), strict=True),
+                    key=lambda x: (pool[x[1]]["story_id"] not in spans, -x[0]))
     out = []
-    for _, i in ranked[:k]:
+    for _, i in ranked[:(k + 2 if spans else k)]:
         s = pool[i]
-        t = s["text"] if len(s["text"]) <= 700 else s["text"][:700] + " …[cut]"
-        out.append({**s, "text": t,
-                    "_cite": {"table": "story", "key": s["story_id"]}})
+        t, span = s["text"], spans.get(s["story_id"])
+        if len(t) > 700:
+            at = t.find(span) if span else -1
+            lo = max(0, at - 250) if at > 450 else 0
+            t = ("… " if lo else "") + t[lo:lo + 700] + " …[cut]"
+        row = {**s, "text": t, "_cite": {"table": "story", "key": s["story_id"]}}
+        if span:
+            row["said"], row["said_on"] = span, about
+        out.append(row)
     return out
 
 
@@ -529,6 +549,21 @@ SUBJECT_RULES: list[tuple[str, str]] = [
     (r"\b(?:understand|match|misread|misinterpret)\w*\b.*\b(?:search|typ(?:e|ed|es|ing)|"
      r"clues?|quer|words?)|"
      r"\bsearch\b.*\b(?:understand|match)", "stage:5"),
+    # After stage:5, which is first-match ("Does the search misread what people type?").
+    # What people typed first (the PM, 2026-09-27: "Show which words people tried first"
+    # was planned with no subject, so no typed words were retrieved).
+    (r"\b(?:words?|terms?|quer(?:y|ies)|phrases?|keywords?)\b.*\b(?:tried|typed|used|type|"
+     r"search(?:ed)?)\b|\b(?:typed|type|tried|search(?:ed)? for)\b.*\bfirst\b|"
+     r"\bwhat (?:do |did )?(?:people|users|they) (?:type|typed|search)|\bformulate (?:a )?searches",
+     "question:4.1"),
+    # Hard questions, 2026-09-27 (H9, H11, H13): each was answered with the generic first-
+    # failure figures because no rule named the codebook question it is about.
+    (r"\bfeel|\bfelt\b|\bemotion|\bfrustrat|\bupset\b|\bangry\b|\bsad\b|\bpanic",
+     "question:7.4"),
+    (r"\bhow (?:did|do|does) (?:they|people|users|someone) (?:finally |eventually )?find\b|"
+     r"\bhow (?:they|people) (?:finally |eventually )?found\b|\bfound (?:the photo|it) in the end",
+     "question:9.1"),
+    (r"\bgive up\b|\bgave up\b|\bgiving up\b|\babandon", "question:9.4"),
 ]
 CLASS_WORDS = [(r"\bboth\b.*\b(?:sentimental|practical|reasons)\b", "both"),
                # The everyday names too: "Does that differ for photos of receipts and
@@ -539,10 +574,24 @@ CLASS_WORDS = [(r"\bboth\b.*\b(?:sentimental|practical|reasons)\b", "both"),
                (r"\bsentimental\b", "sentimental")]
 
 
+# The other cases — the person knew the photo exactly, or it was already gone — enter an
+# answer only when the question is about them or about everything collected (the PM,
+# 2026-09-27: "include adjacent records in ask ai answers only if they are needed").
+ADJACENT_NEEDED = re.compile(
+    r"\b(?:adjacent|exact(?:ly)?|knew|known|precise(?:ly)?|deleted|gone|lost|missing|never "
+    r"backed|backed up|backup|all (?:the )?(?:cases|stories|posts)|overall|in total|altogether|"
+    r"how many (?:stories|cases|posts|records|people)|every case|whole (?:set|collection))\b", re.I)
+
+
 def normalise_plan(plan: dict, question: str) -> dict:
     """Apply the registered subject and photo-type rules to the plan."""
     q = (question or "").lower()
     p = {**plan, "entities": dict(plan.get("entities") or {})}
+    p["adjacent_needed"] = bool(ADJACENT_NEEDED.search(q))
+    if not p["adjacent_needed"]:
+        p["entities"]["populations"] = ["core"]
+        p["queries"] = [{**x, "args": {**(x.get("args") or {}), "population": "core"}}
+                        for x in (p.get("queries") or [])]
     subj = next((s for pat, s in SUBJECT_RULES if re.search(pat, q)), None)
     if subj:
         p["subject"] = subj

@@ -292,6 +292,34 @@ def check_proportions(text: str, rows: list[dict]) -> list[str]:
     return bad
 
 
+# The PM, 2026-09-27: "whenever you make a claim, follow it up by quotes or numbers that
+# exactly match or support that claim." A sentence that states a quantity in vague words
+# must carry its figure or a quote — itself or in the very next sentence (a bold opening
+# claim is followed by its evidence). Reasoning, marked as such, is exempt: it must show
+# its steps instead (the writer's instructions).
+_VAGUE = re.compile(r"\b(?:most|mostly|majority|many|often|usually|commonly|common|typically|"
+                    r"rarely|rare|seldom|frequently|frequent|few|dominant|dominates|largest|biggest"
+                    r"|leading)\b", re.I)
+_REASONING = re.compile(r"\b(?:my read|likely|suggests?|probably|perhaps|may|might|could|"
+                        r"this means|reasoning|i think|would)\b", re.I)
+_SUPPORT = re.compile(r"\d|“|\"|\bhandful\b|\bnone\b|\bone case\b|\bsingle case\b", re.I)
+
+
+def check_claims_have_evidence(text: str) -> list[str]:
+    t = CITATION.sub(" ", text or "")
+    sents = [x.strip() for x in re.split(r"(?<=[.!?])[\"”’*_)]*\s+", t) if x.strip()]
+    bad = []
+    for i, sent in enumerate(sents):
+        bare = sent.strip("*_ ")
+        if bare.endswith("?") or not _VAGUE.search(bare) or _REASONING.search(bare):
+            continue
+        near = sents[max(0, i - 1):i + 2]        # the figure may sit just before or after
+        if any(_SUPPORT.search(x) or _FRACTION_RE.search(x) for x in near):
+            continue
+        bad.append(bare[:90])
+    return bad
+
+
 def check_directional(text: str) -> list[str]:
     return [b for kind, b in _directional(text) if kind == "unlabelled"]
 
@@ -364,8 +392,11 @@ _KIND_SUPER = re.compile(rf"(?P<pre>[^.;\n]{{0,24}})\b{_KIND}\b[^.;\n]{{0,40}}\b
 _SCOPE = re.compile(r"\b(?:for|among|within|in|about)\b", re.I)
 
 _KIND_WORDS = r"(?:kinds? of photos?|types? of photos?|photo(?:'s)? (?:kind|type)s?)"
-_KIND_DIFFER = re.compile(rf"\b(?:differ\w*|depends? on)\b[^.;\n]{{0,40}}\b(?:{_KIND_WORDS}|{_KIND})\b|"
-                          rf"\b{_KIND_WORDS}\b[^.;\n]{{0,40}}\bdiffer\w*\b", re.I)
+# "the same across photo kinds" (v3.10, U1) claims what "differs" claims: a comparison.
+_KIND_DIFFER = re.compile(rf"\b(?:differ\w*|depends? on|the same|similar|alike)\b[^.;\n]{{0,40}}"
+                          rf"\b(?:{_KIND_WORDS}|{_KIND})\b|"
+                          rf"\b{_KIND_WORDS}\b[^.;\n]{{0,40}}\b(?:differ\w*|the same|similar|alike)\b",
+                          re.I)
 
 
 def check_comparison(text: str) -> list[str]:
@@ -557,6 +588,7 @@ def italicise_closing(text: str) -> str:
     m = re.search(r"(?<=[.!)”\]])\s+(\*?[A-Z][^.!?\n*]{3,200}\?\*?)$", t)
     if m and "\n" not in m.group(1):
         t = t[:m.start()].rstrip() + "\n\n" + m.group(1)
+    t = re.sub(r"([^\n*]\?)\s*\*\s*$", r"\1", t)     # a stray closing "*" (v3.11, N2)
     lines = t.split("\n")
     last = lines[-1].strip() if lines else ""
     if last.endswith("?") and not re.fullmatch(r"[*_].*[*_]", last) and len(last.split()) <= 30:
@@ -616,6 +648,7 @@ class Report:
     comparison: list[str] = field(default_factory=list)    # no kind of photo differs
     jargon: list[str] = field(default_factory=list)        # plain words (D-14)
     proportions: list[str] = field(default_factory=list)   # a share in words must fit (v3)
+    unbacked: list[str] = field(default_factory=list)      # a claim with no figure or quote
 
     def problems(self) -> list[str]:
         out = []
@@ -626,6 +659,7 @@ class Report:
                               self.floor_claim),
                              ("unsupported number (a share in words does not fit)",
                               self.proportions),
+                             ("claim without its figure or quote", self.unbacked),
                              ("percentage without its count", self.percentages),
                              ("unverifiable quote", self.quotes),
                              ("citation not retrieved", self.citations),
@@ -747,6 +781,7 @@ def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
     rep.arithmetic = check_share_arithmetic(text)
     rep.floor_claim = check_floor_claim(text)
     rep.proportions = check_proportions(text, rows) if route != "NONE" else []
+    rep.unbacked = check_claims_have_evidence(text) if route != "NONE" else []
     rep.percentages = check_percentages(text)
     rep.quotes = check_quotes(text, records, rows, question)
     rep.citations = check_citations(text, rows, records)
