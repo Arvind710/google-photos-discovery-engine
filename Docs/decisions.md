@@ -20,14 +20,14 @@ relevant public discussions".
 
 | Source | Method (`records.collect_method`) | Evidence, 2026-09-26 |
 |---|---|---|
-| Reddit | `apify` — `webdatalabs~reddit-scraper-pro` | Reddit's self-serve API is closed to new developers (Myntra, `Docs/DECISIONS.md` 2026-08-19). Same actor Myntra used: 10 runs, $1.80, 4,750 records ≈ $0.38 per 1,000 |
+| Reddit | `apify` — `webdatalabs~reddit-scraper-pro` | Reddit's self-serve API is closed to new developers (Myntra, `Docs/DECISIONS.md` 2026-08-19). Same actor Myntra used: 10 runs, $1.80, 4,750 records ≈ $0.38 per 1,000. **Those were comment-level records; whole threads cost ~$6.70 per 1,000 (D-4)** |
 | GP Help Community | `headless_render` — Playwright renders thread pages | Thread HTML carries no post text; the page loads it from `support.google.com/*/api`. Rendered, a thread yields the original post, its author and every reply. Fallback if rendering fails at scale: `apify` via `burbn~google-forums-search`; if that fails too, the PM is told |
 | Play Store | `public_scraper_lib` — `google-play-scraper` | Myntra's route, 3,200 reviews collected |
 | App Store | `public_feed` — Apple's customer-review RSS | 50 reviews per page in US and IN; capped near 500 per country, so several countries. `app-store-scraper` dropped: unmaintained, pins `requests<2.24` (broke the Myntra environment) |
 | YouTube | `official_api` — YouTube Data API v3 | Key verified. Search costs 100 of 10,000 daily units, comments 1 — few searches, many comments |
 | Stack Exchange | `official_api` — api.stackexchange.com | ~250 matching questions across Web Apps, Android and Ask Different for one query |
 | Hacker News | `official_api` — HN Algolia search | 547 comments for "google photos" search |
-| X / Twitter | `apify` — `apidojo~tweet-scraper` | ~$0.40 per 1,000 tweets |
+| X / Twitter | `apify` — `apidojo~tweet-scraper` **(replaced in the pilot by `kaitoeasyapi~twitter-x-data-tweet-scraper-pay-per-result-cheapest`, D-4)** | ~$0.40 per 1,000 tweets |
 | Quora | `apify` — `fatihtahta~quora-scraper` | ~$0.99 per 1,000 records |
 
 Schema deltas **A.9** (the five new `source` values) and **A.10**
@@ -76,9 +76,14 @@ before the full collect.
 
 Rendering a thread takes 2–3 seconds, and the forum's search is disallowed, so
 threads are found from the listing page (`/photos/threads?max_results=N`,
-which returns up to ~2,000 threads with title and first line in one load).
+which returns up to N threads with title and first line in one load).
 Of 1,999 listed on 2026-09-26, **52 (2.6%)** mentioned finding or searching;
 the rest were deletion, backup, sync and account problems.
+
+*Update after the collect runs:* the listing honours larger N. It returned
+1,998 of 2,000 in the pilot and **4,998 of 5,000** in the full collect. The
+`SCREEN` pattern used in those runs is broader than the probe above: it matched
+119 and 328 threads respectively (`runs.params_json.render`).
 
 So `pipeline/collect/gp_help.py` renders only threads whose title or first
 line matches a deliberately broad retrieval pattern (`SCREEN`). This is a
@@ -160,8 +165,40 @@ chosen terms. **Reddit ends at 306 threads, not the ~4,500 records
 records and PRAW's zero cost. Each thread carries its full comment tree
 (264 hold more than one post), so this is fewer, richer records, and it is the
 first place to add volume if Phase 3's pilot projects fewer than 300 core
-stories (the §0.4 loop-back). Apify this cycle: $6.06 of $10.
+stories (the §0.4 loop-back). Apify this cycle: $6.06 of $10. *(Topped up to
+448 threads before P2 — see D-6.)*
 
 **YouTube over-delivered.** 3,845 comment threads against ~800 planned: the same
 popular videos answer many terms. 91% of YouTube text never mentions a photo and
 is set aside by the gate; 1,086 YouTube records go forward.
+
+## D-6 — Reddit top-up on the terms the budget stop skipped, and Apify costs re-read (2026-09-26, decided by the PM)
+
+**Why.** D-5's budget stop meant Reddit was searched on only 15 of the 26
+lexicon terms. The 11 never run included **every utility-shaped term**
+("picture of a receipt", "medicine photo", "photo of a document", "photo someone
+sent me on whatsapp"). Sentimental vs utility is the axis every view splits on
+([CTX] §15.4), and Reddit is the richest source, so its coverage was lopsided
+before any story was counted. This is the §0.4 P1-F top-up, taken before P2
+rather than after P3's pilot. It is collection only, with no schema or codebook
+change, and the P1 gate was re-passed afterwards (60/60).
+
+**What ran.** Seven terms: the four utility terms above, plus "found it by
+accident", "how to find a photo I don't remember when" and "purani photo kaise
+dhoondhe". Each ran as its own collect run at `-n 3` (9 subreddits × 3 threads).
+A guard refused to start a term that could take the top-up past $2.85.
+**142 new threads** (48 already held); Reddit is now **448 threads holding 5,493
+posts**. The ~4,500 in `architecture.md` §5.1 counted posts, so that target is now met. Kept for
+segmentation: 5,420 (was 5,291).
+
+**Cost.** $1.88 on the Apify account ($6.06 → $7.94 of $10); ~$0.27 per term, as
+D-5 measured. **$2.06 remains** for the cycle, which ends after submission.
+
+**A collector bug this found.** `apify.run_actor` read a run's cost the moment
+the run reported SUCCEEDED, but Apify keeps billing it for a short while after.
+One run recorded $0.012 and settled at $0.242, and every earlier collect was
+under-recorded ($3.90 recorded against $6.06 spent). The runner now re-reads
+until the cost stops changing (`settled_usage`, pinned by a test). Every
+recorded run was re-read from Apify's own records (run `repair-apify-usage`,
+$5.52 → $6.99 recorded; the rest of the account total is the refused X actor,
+the aborted Reddit run and the shape probes).
