@@ -23,12 +23,14 @@ from dataclasses import dataclass, field
 
 from lib import retrieval as R
 from lib import verify as V
+from lib.evidence import COMPARABLE
 
-PROMPT_VERSION = "ask_v1.7"   # v1.1 subject · v1.2 planner low, default queries · v1.3 per-paragraph numbers,
+PROMPT_VERSION = "ask_v1.8"   # v1.1 subject · v1.2 planner low, default queries · v1.3 per-paragraph numbers,
 # withhold · v1.4 subject and photo-type rules on the question's own words ·
 # v1.5 gap numbers supported, question-named photo types only, citation completion ·
 # v1.6 plain words in the brief + the code-name check; the fallback names its gap ·
-# v1.7 fallback cites stories, never quotes them; an unretrieved citation is absolute
+# v1.7 fallback cites stories, never quotes them; an unretrieved citation is absolute ·
+# v1.8 directional label + kinds-of-photo comparison checks; question rows carry their meaning
 # `low`, not `minimal`: at minimal the planner mis-named the subject on 2 of 24
 # golden questions (S5, R3), and a wrong subject is a wrong route. Cost: fractions of a cent.
 PLANNER_MODEL, PLANNER_EFFORT = "gpt-5-mini", "low"
@@ -186,7 +188,8 @@ CITATIONS. Cite by copying a key exactly as the brief shows it: [[analysis_cross
 or its paragraph starts with `Interpretation:` to mark your own reading. Cite only keys in
 the brief.
 
-NUMBERS. Copy every number from the brief. NEVER compute one — no sums, differences or
+NUMBERS. Copy a share WHOLE, as the brief writes it — when it ends "· directional", keep
+that: "27% (13 of 48; 17%–41%) · directional". Copy every number from the brief. NEVER compute one — no sums, differences or
 percentages you worked out. A share is written the way the brief's `share` field writes
 it: "27% (31 of 115)"; where the brief gives only "6 of 21", give only the count — the
 group is too small for a percentage. Never a percentage without its "n of N".
@@ -223,7 +226,8 @@ PARTIAL — answer the supported part, and in the first two sentences say plainl
   own words, what the stories cannot support and why.
 NONE — do not answer. Three sentences at most: what this engine covers, that it does not
   hold what this question needs, and what kind of data would. NO numbers, NO quotation
-  marks, NO citations, and no consolation finding.
+  marks, NO citations, and no consolation finding. Never offer to analyse other data:
+  this engine holds only these stories.
 
 If the brief flags a FALSE PREMISE, correct it in the first sentence.
 Answer in English, whatever the question's language; quote stories in their own language."""
@@ -270,6 +274,13 @@ def brief(p: dict, got: R.Retrieved, v: R.Verdict, question: str) -> str:
                      f"{v.gap}")
     if v.caveats:
         parts.append("**Too thin to report as shares:** " + "; ".join(v.caveats))
+    split = [r for r in got.facts + got.counter.get("rivals", [])
+             if r.get("group") not in (None, "_all") and isinstance(r.get("of"), int)]
+    if split and all(r["of"] < COMPARABLE for r in split):
+        parts.append("**Kinds of photo:** no kind of photo can be claimed to differ from "
+                     f"another — every kind has fewer than {COMPARABLE} core stories. Give each "
+                     "kind's own figure; never call one kind harder, more common, or where "
+                     "people 'most often' struggle.")
     prem = p.get("premise") or {}
     if prem.get("status") in ("contradicted", "unverifiable") and prem.get("asserts"):
         parts.append(f"**FALSE PREMISE — correct it first:** {prem['asserts']} — "

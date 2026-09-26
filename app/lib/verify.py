@@ -26,6 +26,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
+from lib.evidence import COMPARABLE, FLOOR
+
 CITATION = re.compile(r"\[\[([a-z_]+)\|([^\]]+)\]\]")
 QUOTE = re.compile(r"[\"“]([^\"“”]{3,400})[\"”]")
 _NUM = re.compile(r"(?<![\w.])(\d[\d,]*(?:\.\d+)?)\s*(%)?")
@@ -144,6 +146,42 @@ def check_percentages(text: str) -> list[str]:
         if not re.search(r"\b\d[\d,]* of \d[\d,]*\b", around):
             bad.append(m.group(0))
     return bad
+
+
+_SHARE_N = re.compile(r"(\d+(?:\.\d+)?)%\s*\((\d[\d,]*) of (\d[\d,]*)"
+                      r"|(\d[\d,]*) of (\d[\d,]*)\s*\((\d+(?:\.\d+)?)%\)")
+
+
+def check_directional(text: str) -> list[str]:
+    """[CTX] §15.5: a share over a group of 30–79 is shown AND labelled
+    directional. share() writes "27% (13 of 48; 17%–41%) · directional"; an
+    answer that keeps "27% (13 of 48)" and drops the label reads as settled
+    (sweep 9: S1, F1, U2). Not absolute: it triggers the repair."""
+    t = QUOTE.sub(" ", CITATION.sub(" ", text or ""))
+    bad = []
+    for m in _SHARE_N.finditer(t):
+        n = int((m.group(3) or m.group(5)).replace(",", ""))
+        if FLOOR <= n < COMPARABLE and "directional" not in t[m.start():m.end() + 70].lower():
+            bad.append(m.group(0))
+    return bad
+
+
+_KIND = r"(?:sentimental|utility|practical|unclear)"
+_MORE = (r"(?:most|more|less|least|fewer|harder|hardest|easier|easiest|higher|highest|lower|"
+         r"lowest|mainly|mostly|skews?|skewed|bigger|biggest|larger|largest|dominat\w*|than)")
+_KIND_COMPARE = re.compile(rf"\b{_KIND}\b[^.;\n]{{0,40}}\b{_MORE}\b|\b{_MORE}\b[^.;\n]{{0,40}}"
+                           rf"\b{_KIND}\b", re.I)
+
+
+def check_comparison(text: str) -> list[str]:
+    """No kind of photo can be claimed to differ from another: every kind has
+    fewer than 80 core stories, below the floor where [CTX] §15.5 allows a
+    difference to be claimed (the Analysis page says so). Sweep 9's first
+    starter answered "people most often struggle with sentimental photos".
+    Flags a comparative word within a few words of a kind of photo, in the
+    answer's own words. Not absolute: it triggers the repair."""
+    t = QUOTE.sub(" ", CITATION.sub(" ", text or ""))
+    return [m.group(0)[:80] for m in _KIND_COMPARE.finditer(t)]
 
 
 def _norm(s: str) -> str:
@@ -270,6 +308,8 @@ class Report:
     evidence: list[str] = field(default_factory=list)      # P5-INV-7, -9
     length: list[str] = field(default_factory=list)
     codes: list[str] = field(default_factory=list)         # plain words, not slugs
+    directional: list[str] = field(default_factory=list)   # [CTX] §15.5 label
+    comparison: list[str] = field(default_factory=list)    # no kind of photo differs
 
     def problems(self) -> list[str]:
         out = []
@@ -282,7 +322,9 @@ class Report:
                              ("label-and-colon opening", self.label_colon),
                              ("closing", self.closing), ("refusal", self.refusal),
                              ("evidence", self.evidence), ("length", self.length),
-                             ("code name instead of plain words", self.codes)):
+                             ("code name instead of plain words", self.codes),
+                             ("directional share not labelled", self.directional),
+                             ("comparison between kinds of photo", self.comparison)):
             out += [f"{label}: {x}" for x in items]
         return out
 
@@ -315,6 +357,8 @@ def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
     rep.proxy = check_proxy(text)
     rep.label_colon = check_label_colon(text)
     rep.codes = check_codes(text)
+    rep.directional = check_directional(text)
+    rep.comparison = check_comparison(text)
     words = len(CITATION.sub(" ", text).split())
     if words > 200:
         rep.length = [f"{words} words, over the 200 limit"]

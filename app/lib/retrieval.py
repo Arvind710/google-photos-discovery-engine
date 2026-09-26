@@ -27,6 +27,8 @@ import re
 import sqlite3
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from functools import cache
+from pathlib import Path
 
 from lib import words
 from lib.evidence import FLOOR, share
@@ -77,6 +79,21 @@ def _xt(con, dim_a: str, dim_b: str, segment: bool, limit: int) -> list[dict]:
     return out
 
 
+@cache
+def _question_plain(qid: str) -> str:
+    """What a codebook question MEANS, from the frozen codebook's `plain` line:
+    without it the model read "8.1 one attempt" as quitting and filed 5.2 index
+    gaps under hard filters (sweep 9)."""
+    import yaml
+    cb = yaml.safe_load((Path(__file__).resolve().parents[2] / "codebook" /
+                         "journey_v1.yaml").read_text())
+    for st in cb["stages"]:
+        for q in st["questions"]:
+            if q["id"] == qid:
+                return q["plain"]
+    return ""
+
+
 def _about(dim_a: str, val: str) -> str:
     pop, _, f = dim_a.partition(".")
     if f == "primary_stage" and val == "9":
@@ -88,7 +105,8 @@ def _about(dim_a: str, val: str) -> str:
     if f == "failure_owner":
         return f"{pop} stories whose failure is owned by: {words.owner(val)}"
     if f.startswith("q:"):
-        return f"{pop} stories answering question {f[2:]} with {val}"
+        return (f"{pop} stories answering question {f[2:]} ({_question_plain(f[2:])}) "
+                f"with {val}")
     return f"{pop} stories with {f} = {val}"
 
 

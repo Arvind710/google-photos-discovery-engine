@@ -455,3 +455,42 @@ def test_an_unretrieved_citation_is_absolute():
     probs = V.check(bad, "FULL", ROWS, RECS).problems()
     assert any(x.startswith("citation not retrieved") for x in probs)
     assert any(x.startswith(A.ABSOLUTE) for x in probs)
+
+
+# ================================== v1.8: what sweep 9's answers got wrong in reasoning
+@pytest.mark.parametrize("text, n_bad", [
+    ("Sentimental stories: 27% (13 of 48) first fail at search.", 1),               # S1
+    ("Sentimental: 27% (13 of 48; 17%–41%) · directional.", 0),
+    ("Of 48 sentimental stories, 13 of 48 (27%) fail at search.", 1),
+    ("27% (31 of 115) of core stories.", 0),                                       # comparable
+    ("Utility: 3 of 21.", 0),                                                      # no share
+])
+def test_a_directional_share_keeps_its_label(text, n_bad):
+    assert len(V.check_directional(text)) == n_bad
+
+
+@pytest.mark.parametrize("text, flagged", [
+    ("People most often struggle with sentimental photos.", True),                 # S1
+    ("Sentimental stories more often start with a single noun.", True),            # U2
+    ("Sentimental hunts skew more noun-first than unclear ones.", True),           # S4
+    ("Sentimental: 13 of 48; utility: 3 of 21 — no difference can be claimed.", False),
+    ('One wrote "utility photos are harder" [[story|s1]].', False),                # a quote
+])
+def test_a_comparison_between_kinds_of_photo_is_flagged(text, flagged):
+    assert bool(V.check_comparison(text)) == flagged
+
+
+def test_the_new_rules_trigger_the_repair_but_never_withhold():
+    assert not any(a.startswith(("directional", "comparison")) for a in A.ABSOLUTE)
+
+
+@pytest.mark.needs_corpus
+def test_the_brief_says_no_kind_of_photo_differs_and_questions_carry_their_meaning(con):
+    q = "What kinds of old photos do users struggle to retrieve?"
+    p = R.normalise_plan(_plan(evidence_needed=["segment_split", "verbatim"],
+                               queries=[_q("stage_by_photo_class"),
+                                        _q("question_values", question="5.2")]), q)
+    got = R.retrieve(con, p)
+    b = A.brief(p, got, R.gate(p, got, q), q)
+    assert "no kind of photo can be claimed to differ" in b
+    assert "question 5.2 (Google Photos had never recorded the detail they searched for)" in b

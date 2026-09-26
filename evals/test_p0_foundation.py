@@ -389,7 +389,9 @@ def _tracked_files(root: Path) -> list[Path]:
 
 
 SECRET_PATTERNS = [
-    re.compile(rb"sk-(?:proj-)?[A-Za-z0-9_-]{20,}"),         # OpenAI keys
+    # OpenAI keys. The left boundary matters: without it "ask-golden-synth-2026…"
+    # (a run id) matched, once the golden-sweep artifacts were committed.
+    re.compile(rb"(?<![A-Za-z0-9])sk-(?:proj-)?[A-Za-z0-9_-]{20,}"),
     re.compile(rb"gh[pousr]_[A-Za-z0-9]{30,}"),              # GitHub tokens
     re.compile(rb"(?i)client_secret[ \t]*[:=][ \t]*[\"']?[A-Za-z0-9_-]{16,}"),
     re.compile(rb"(?i)AUTHOR_SALT[ \t]*[:=][ \t]*[\"']?\S{8,}"),
@@ -425,6 +427,7 @@ def test_P0_OPS_1_scanner_catches_a_planted_secret():
     for planted in (key, salt_line, secret_line):
         assert any(p.search(b"x = " + planted) for p in SECRET_PATTERNS), planted
     assert not any(p.search(b"AUTHOR" + b"_SALT=\nNEXT=value-here") for p in SECRET_PATTERNS)
+    assert not any(p.search(b"run ask-golden-synth-20260926-170921-1deede") for p in SECRET_PATTERNS)
 
 
 def test_P0_OPS_3_gitignore_covers_secrets(root):

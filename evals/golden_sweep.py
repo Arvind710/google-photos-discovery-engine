@@ -117,7 +117,7 @@ def main() -> int:
                                   "unverifiable quote", "citation not retrieved",
                                   "uncited claim", "share stated as", "label-and-colon",
                                   "closing", "refusal", "evidence", "length",
-                                  "code name")},
+                                  "code name", "directional share", "comparison between")},
             "cost_usd": round(rp.cost_usd() + rs.cost_usd(), 4),
             "mean_seconds": round(sum(r["seconds"] for r in rows) / len(rows), 1)}
         out = {"run_id": rs.run_id, "plan_run": rp.run_id, "prompt_version": A.PROMPT_VERSION,

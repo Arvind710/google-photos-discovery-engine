@@ -681,5 +681,15 @@ reasoning errors no check catches (an unsupported sentimental-vs-utility compari
 dropped "directional" label on the first starter, among others); listed in the gate
 report's appendix, with one more iteration proposed to the PM.
 
-**Spend: $16.02 recorded of $17** (sweeps $2.65 in all; Try it $0.07), plus ≈ $0.09 of live
+**The iteration (PM-approved), `ask_v1.8`:** a checker rule keeping "directional" on a
+share over 30–79 stories; a rule flagging a comparison between kinds of photo (none can be
+claimed below 80); a brief line saying so; question rows carrying the codebook's plain
+meaning; refusals may not offer other analyses. Sweep 10 (`ask-golden-synth-20260926-172723-47a3b0`):
+T-13 24/24, 0 absolute problems served, **P5 gate 76/76**. No served answer now claims one
+kind of photo is harder. Cost: withheld drafts rose from 3 to 7 — three quoted a row's
+plain-word label and the stories-only quote rule withheld them. The fix (allow a short quote
+matching a row's own label) needs a full sweep, which the recorded $17 ceiling now refuses;
+left to the PM.
+
+**Spend: $16.34 recorded of $17** (sweeps $2.97 in all; Try it $0.07), plus ≈ $0.09 of live
 page checks that the read-only app does not record.
