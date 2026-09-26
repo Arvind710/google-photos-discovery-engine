@@ -407,12 +407,62 @@ evidence; no failure is Stage 9), `stage0_without_evidence` flags it at
 validation, `blocks recode` re-codes exactly those stories, and a corpus test
 fails until none remain. The fixtures will be re-run at v1.2 first.
 
-**Blocked on billing (2026-09-26).** The dual-coding and blind-read batches were
-refused by OpenAI: "Billing hard limit has been reached". The recorded spend is
-$10.35 (runs table; it reconciles with 3.md's $4.88 plus this session's $5.46),
-below the $15 console cap recorded in `evals/manual_checks.yaml`. Either the
-console limit is lower than recorded, or other usage on the same account counts
-against it. No paid call runs until the PM has checked the console. Still to run
-once it is resolved, about $2.3 projected: fixtures at v1.2 (~$0.72), the Stage 0
-re-code (~$0.8), dual coding (~$0.4), adjudication (~$0.2), blind read (~$0.1),
-residual themes (~$0.05).
+**Billing (2026-09-26).** The first dual-coding and blind-read batches were refused
+("Billing hard limit has been reached") at $10.35 recorded spend, below the $15
+recorded cap. The PM added credits; nothing ran while it was blocked.
+
+**v1.2 and the Stage 0 re-code.** Fixtures at v1.2 (Batch, $0.68): T-8 90%,
+triple 89% (question level), Stage 2 vs 4 100%, codes recall 79%. The new rule
+had one side effect on the fixtures: `tri-C-52` (a correct cue, a WRONG STORED
+date) moved from 5 to 0, because the rule lists "its date or place data wrong"
+as Stage 0 evidence while the triple note calls it 5.2. Not iterated again, to
+keep money for P4–P5; it can affect only the few re-coded stories that mention a
+wrong stored date. The 84 suspects were re-coded (`code-recode`, $0.73 + $0.08
+re-code); one request stalled for 20 minutes and the batch was cancelled with 83
+done, so that one story keeps its v1.1 coding.
+
+**The check itself was too broad, and was narrowed after reading the results.**
+After the re-code 25 stories were still Stage 0 with 0.1 `not_stated`. Read one by
+one, they SAY the photo vanished from the library ("it's vanished", "missing
+from May 2015, backup always on") without saying where it went — a correct
+Stage 0, and the codebook's 0.1 note forbids naming a place the story does not
+state. The defect actually found is narrower: Stage 0 on a story that ends with
+the photo FOUND and says nothing about it being unreachable (the quiet
+successes). `stage0_without_evidence` now flags exactly that; none remain.
+Core primary stages after the re-code: 5 → 36, 9 → 30, 0 → 20, 2/3/6 → 9 each,
+1 → 2. No stage is over P3-MET-6's 45% flag.
+
+**Reliability (P3-MET-4/5).** 100 stories stratified by source × photo_class ×
+primary_stage, coded again by gpt-5-mini ($0.18): primary_stage κ 0.63 (raw
+0.71), photo_class 0.70, media_type 0.81, failure_owner 0.65, metric_node 0.61 —
+`ok`; **outcome κ 0.51 and severity κ 0.33 are `low_reliability`** and barred from
+headline claims and from scoring weights beyond what P4-INV-3 allows. Across all
+66 fields: 44 ok, 14 low_reliability, 8 degenerate. Cross-coder not_stated gaps
+over 20pp: 1.5, 1.6, 6.2, 6.6, 7.3, 7.5.
+
+**Adjudication** (gpt-5, $0.22) on 63 disputed stories: primary upheld 48,
+secondary 34, neither 4. On primary_stage alone gpt-5 sided with gpt-5-mini more
+often (16 to 12). A silver standard, not correctness (EC-VAL-3).
+
+**Blind read** (P3-MET-12). Only 36 stories reached coding_conf 0.8, so the
+sample is now the 2n most confident, round-robin across stages: 60 stories,
+$0.17 (a first 36-story run cost $0.09). Stage agreement 77%; the disagreement
+candidates cluster on Stage 9 vs 0/3 ("nothing went wrong" vs "it was never
+there / they never searched") and 5 vs 9.
+
+**Residual themes** (P4-MET-2): 12 candidate groups from 187 `other:` values,
+126 low-confidence stories and 14 blind-read disagreements — e.g. search that
+censors sensitive terms, Spotlight creations that cannot be found again,
+album-scoped search. Several overlap existing values. None is applied until
+the PM approves ([CTX] §8.3). The first run included 10.3's structural
+`other:` values by mistake and was re-run without them ($0.15 + $0.13).
+
+**Block yield (T-7) — stated limitations.** A 0.343 · B 0.202 · C 0.147 · D 0.212.
+The gate itself is sound: below it, C yields 0.000 and D 0.063, so nothing is
+lost by gating (the EC-SEG-5 check). Inside it, public posts rarely describe
+what search did, how results looked, or what came after. B, C and D are in
+`evals/limitations.yaml`.
+
+**Spend.** P3 total $7.91 (plan: $7.25 committed plus a $2.40 re-run reserve).
+Project total **$12.78 of $15**; $2.22 remains for P4 ($0.60 planned) and P5
+(Ask AI, $2.80 planned — it must be cut to fit).

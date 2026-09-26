@@ -44,7 +44,7 @@ SCHEMA = B._obj({"groups": {"type": "array", "items": B._obj({
 def gather(con) -> dict:
     others = [dict(r) for r in con.execute(
         "SELECT story_id, question, value FROM story_codes WHERE value LIKE 'other:%'"
-        " ORDER BY question")]
+        " AND question <> '10.3' ORDER BY question")]     # 10.3 is set in code (D-9)
     low = [dict(r) for r in con.execute(
         "SELECT p.story_id, p.primary_stage, p.why, substr(s.text, 1, 500) AS text"
         " FROM story_spine p JOIN stories s USING (story_id) WHERE p.coding_conf < 0.6")]

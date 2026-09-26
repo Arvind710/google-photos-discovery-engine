@@ -66,3 +66,49 @@ T-20:
     cells show counts only. Headline claims stay at one dimension. The Part 3
     interviews carry more of the weight.
   disclosed_in: [Docs/decisions.md D-8, Data Bank Part 5 verdict, deck]
+
+# P3-MET-9 (T-7, block yield ≥ 25%), 2026-09-26. Measured over every
+# (story, question) row a block produced, after the Stage 0 re-code.
+P3-MET-9-B:
+  threshold: "T-7 ≥ 0.25 — non-not_stated share where Block B ran"
+  measured: 0.202
+  iterations: 0
+  why_fewer: >
+    T-7's remediation is the reaches_stage gate (EC-SEG-5/6), and Block B is not
+    gated: it is asked of every core story. There is no gate to move. On the
+    questions the coverage register keeps as `coded`, Block B yields 0.348.
+  mitigation: >
+    Low-yield B questions (0.2, 1.4, 2.5, 2.8, 3.4, 4.3) are routed to the
+    interview register by coverage, not dropped; every share is over the
+    stories that answered, with the count beside it.
+  disclosed_in: [Docs/decisions.md D-9, Data Bank Part 6, Methodology (P6)]
+
+P3-MET-9-C:
+  threshold: "T-7 ≥ 0.25 — non-not_stated share where Block C ran"
+  measured: 0.147
+  iterations: 0
+  why_fewer: >
+    The gate is not what is wrong. Where the gate would NOT have run C
+    (reaches_stage < 5, core stories coded in full), C yields 0.000 — nothing is
+    lost below the gate (the EC-SEG-5 check). Inside the gate it yields 0.152:
+    public posts rarely describe what search did or how results looked. Moving
+    the gate up would cut cost, not raise what the text says (EC-SEG-6, the
+    cheap direction), and risks the expensive one.
+  mitigation: >
+    Stage 5 and 6 questions below 15% coverage go to the interview register
+    (5.2, 5.3, 5.4, 5.5, 6.3, 6.4, 6.7 among them), where observed search tasks
+    can answer them.
+  disclosed_in: [Docs/decisions.md D-9, Data Bank Part 6, Methodology (P6)]
+
+P3-MET-9-D:
+  threshold: "T-7 ≥ 0.25 — non-not_stated share where Block D ran"
+  measured: 0.212
+  iterations: 0
+  why_fewer: >
+    As for C: below the gate (reaches_stage < 7) D yields 0.063, inside it
+    0.228. The shortfall is how little public posts say about adaptation and
+    aftermath, not the gate.
+  mitigation: >
+    9.2, 9.3, 9.6, 10.1 and 10.2 go to the interview register; the rest are
+    reported with coverage beside every share.
+  disclosed_in: [Docs/decisions.md D-9, Data Bank Part 6, Methodology (P6)]

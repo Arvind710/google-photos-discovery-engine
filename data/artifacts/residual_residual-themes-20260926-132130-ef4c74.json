@@ -1,0 +1,154 @@
+{
+ "run_id": "residual-themes-20260926-132130-ef4c74",
+ "inputs": {
+  "other_values": 187,
+  "low_confidence": 126,
+  "blind_read_disagreements": 14
+ },
+ "groups": [
+  {
+   "name": "YouTube comments as source",
+   "what": "Stories originated in YouTube comment threads, a platform/source not enumerated in the codebook.",
+   "question": "10.3",
+   "kind": "new",
+   "exemplars": [
+    "01192a9c842936207627a844f3fe8170827e655f:0",
+    "060c984f8fcc79a6fdbde845e0f44a7c42d2649e:0",
+    "06432d22b4484adc206076a4cc101f7bd4a38ffa:0",
+    "0ce5fc073f7b0a5b3a36861bfe013174353c2d90:0",
+    "16c9ca5ab6107b307c1ae6a51b3deb22a1e3a56d:0"
+   ]
+  },
+  {
+   "name": "X/Twitter posts as source",
+   "what": "Stories came from posts on X (formerly Twitter), which wasn\u2019t captured in the source options.",
+   "question": "10.3",
+   "kind": "new",
+   "exemplars": [
+    "0440ba39731decfcaa2b3211d22c949528ab0cdb:0",
+    "0c0460710fa462f8ad03c26d7a91e35937297a36:0",
+    "0c231b118e7363be9d205be40e16be4db2a97217:0",
+    "0ef3821f2d59998617a4b53f428fd49c9a22d2ff:0",
+    "10b70a04f2974736aca58e54dc80b4ad6c82633f:0"
+   ]
+  },
+  {
+   "name": "Apple Photos mentioned",
+   "what": "Users referenced Apple Photos as the other app/tool involved.",
+   "question": "3.1",
+   "kind": "new",
+   "exemplars": [
+    "1e8838fe6fe7c3028b1b5caf63177262024a2878:1",
+    "eb1a88bd470868f13eabf5ce1386418e831b7917:0"
+   ]
+  },
+  {
+   "name": "Sensitive/censored terms block search",
+   "what": "Search refuses or censors certain concepts (e.g., \u2018grief\u2019, \u2018fat\u2019, \u2018Black people\u2019), preventing retrieval.",
+   "question": "7.1",
+   "kind": "new",
+   "exemplars": [
+    "238ec5be01df991cb6b8fd229ae91e29b2e35af4:0",
+    "282023a3841101500cfae4cf1984e8089f98f17a:0",
+    "766e30fd23eb00164d7e03ece585379912584624:0"
+   ]
+  },
+  {
+   "name": "Locked/Hidden/Archive barriers",
+   "what": "Items in Locked or Hidden folders (or moved to Archive) become invisible or hard to locate in the main library.",
+   "question": "new",
+   "kind": "new",
+   "exemplars": [
+    "0701fc361d2cf788b4471f6ded6cbc4e8aaa8df5:0",
+    "0719834ba614c6cc69da3973d8f0865d1c02daf9:0",
+    "a8117748aa1e6dc1bdcf834e1b1615013c7622e2:0",
+    "7c5a064da6323dc3128f27e4e6b0d08d9b49af4a:0",
+    "d2255720b2fa2300dfa79098601bf0c96f6ddc32:0"
+   ]
+  },
+  {
+   "name": "Deep scrolling to find",
+   "what": "Users bypassed search and scrolled far back through timelines to locate items.",
+   "question": "new",
+   "kind": "new",
+   "exemplars": [
+    "321456a1706f437995abffba17ab2f68612bf01a:0",
+    "bc5c550e736b8cf3ff06a1ac0de6b70da0f425ec:0",
+    "bd0814e008a05c107af20e04f47da7c6fd8f164c:0",
+    "e58ae2ef17027823d4aac979417e6bd78227e129:0",
+    "e6600b3b1a7f061184a578f03a0b9da784298c86:0"
+   ]
+  },
+  {
+   "name": "OCR/text exact string failures",
+   "what": "Queries for VINs, serial numbers, addresses, or exact strings often failed to retrieve matching photos.",
+   "question": "new",
+   "kind": "new",
+   "exemplars": [
+    "33dd763b1d8fb1aac1afd0a4f6fcb1cec82b40ef:0",
+    "ac7cfeda39451a237d2ad146b43c59993c4a9c0a:0",
+    "5044564d1b1696c6bfedce4ddff00747567a7d42:0",
+    "b838d5ca6c0c07e03a6dcac47ba56ab3ce5fdb49:0"
+   ]
+  },
+  {
+   "name": "People/face grouping unreliable",
+   "what": "Face detection and grouping missed key people or could not be managed (hide/unhide), blocking person-based retrieval.",
+   "question": "new",
+   "kind": "new",
+   "exemplars": [
+    "4e994e83098c8b15d054604f7a8231a9a653047d:0",
+    "51dc1308f2cf74549de911cb8b842ebeeee7863f:0",
+    "9754d8d92979538a21940600c39ef28a54db5b8c:0",
+    "6b5a4912de3cd10b2ccf2f07757bc417ca500253:1"
+   ]
+  },
+  {
+   "name": "Wrong/transfer dates break time-based finding",
+   "what": "Photos organized by upload/transfer date or bad EXIF (vs taken date) undermined date-based browsing/search.",
+   "question": "new",
+   "kind": "new",
+   "exemplars": [
+    "d12c9914bfb24ebdb2acd51a78cbfd0a168069a7:0",
+    "3b53d4e5bf5f572ac92dce7bbc1051e9491c662a:0",
+    "dc4802445a1589683e42b2c4b78195c187ed393d:0"
+   ]
+  },
+  {
+   "name": "Third\u2011party app media missing",
+   "what": "Media from apps like WhatsApp, Xender, or InShot didn\u2019t appear in Google Photos when users tried to find it.",
+   "question": "new",
+   "kind": "new",
+   "exemplars": [
+    "d7b6216c887b2d1915ff0d123ea1e1f2528f3cba:0",
+    "a8f305cb05c3940433ba56d309435f108efc9244:0",
+    "f9d86a9c067a7420a8d89e8a3e18f10f53be7736:0",
+    "1a180b8bf5e63a3412dea0a8e91283945c39bf5e:0"
+   ]
+  },
+  {
+   "name": "Auto\u2011creations are hard to re\u2011find",
+   "what": "Spotlight videos/collages surfaced by notifications later disappear or lack a stable place to find them again.",
+   "question": "new",
+   "kind": "new",
+   "exemplars": [
+    "6495de1277bc4735b2a4f79de419b955d0e48c6c:0",
+    "71f704110f550a441de5bee6f5a112686df17340:0"
+   ]
+  },
+  {
+   "name": "Basic object search underperforms",
+   "what": "Simple object/concept queries (e.g., cats, monkeys, cheese, car engines) returned too few or irrelevant results.",
+   "question": "new",
+   "kind": "new",
+   "exemplars": [
+    "332db06724651c79605b4cc2b95c975ffd506919:0",
+    "5d4974dfbb52e4696719c7eee8fc7a3e5a69e4e4:0",
+    "779a4ab6c05a566699aa57a7a0e44a5d88cf3d42:0",
+    "dc2535631942cc6b5a068698bf80431a03d4c971:0"
+   ]
+  }
+ ],
+ "finding": "12 candidate group(s) for the PM to approve or reject ([CTX] \u00a78.3); none is applied until approved.",
+ "applied": false
+}

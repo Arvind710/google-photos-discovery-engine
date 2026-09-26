@@ -1,0 +1,625 @@
+{
+ "run_id": "code-adjudicate-20260926-131818-bc2dc4",
+ "dual_run": "code-dual-20260926-130810-dd5151",
+ "disputed_stories": 63,
+ "upheld": {
+  "primary_stage:primary": 12,
+  "primary": 48,
+  "photo_class:primary": 14,
+  "primary_stage:secondary": 16,
+  "secondary": 34,
+  "outcome:primary": 17,
+  "media_type:primary": 5,
+  "outcome:neither": 2,
+  "neither": 4,
+  "outcome:secondary": 11,
+  "photo_class:secondary": 4,
+  "photo_class:neither": 1,
+  "media_type:secondary": 3,
+  "primary_stage:neither": 1
+ },
+ "rows": [
+  {
+   "value": "9",
+   "upheld": "primary",
+   "reason": "No evidence of library-state issue; only says \u201ccan\u2019t find,\u201d no stage described.",
+   "story_id": "2f6fb3f2ee87b1ba4b06a4e3786f964394e1af14:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "unclear",
+   "upheld": "primary",
+   "reason": "No purpose stated; only called \u201cbahut hi jaruri\u201d (very important).",
+   "story_id": "95aecd3021fb5d9ffd94226a85a3bc80415d47cd:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "6",
+   "upheld": "secondary",
+   "reason": "Describes hours of scrolling, a scanning/recognition burden.",
+   "story_id": "e58ae2ef17027823d4aac979417e6bd78227e129:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "found_after_struggle",
+   "upheld": "primary",
+   "reason": "States they got the photos after hours of effort.",
+   "story_id": "e58ae2ef17027823d4aac979417e6bd78227e129:0",
+   "field": "outcome"
+  },
+  {
+   "value": "photo",
+   "upheld": "primary",
+   "reason": "Only photos are mentioned; no video or screenshots hinted.",
+   "story_id": "4805d74f385083a6803f241761906e952804a03c:0",
+   "field": "media_type"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "primary",
+   "reason": "No explicit statement they succeeded or failed in finding all.",
+   "story_id": "4805d74f385083a6803f241761906e952804a03c:0",
+   "field": "outcome"
+  },
+  {
+   "value": "unclear",
+   "upheld": "primary",
+   "reason": "Purpose not specified; only asks for year-old pictures.",
+   "story_id": "656069dd4b68d085698b09d83e6d4a9c9c3b4a27:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "document",
+   "upheld": "primary",
+   "reason": "A receipt photo is a photo of a paper document.",
+   "story_id": "0ef3821f2d59998617a4b53f428fd49c9a22d2ff:0",
+   "field": "media_type"
+  },
+  {
+   "value": "utility",
+   "upheld": "primary",
+   "reason": "Remodeling job photos by address indicate practical, work-related retrieval.",
+   "story_id": "5044564d1b1696c6bfedce4ddff00747567a7d42:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "neither",
+   "reason": "No resolution given; user only asks for recovery options.",
+   "story_id": "69d8275a310e9d641ab1490a3c685a745284a699:0",
+   "field": "outcome"
+  },
+  {
+   "value": "abandoned_without_fallback",
+   "upheld": "primary",
+   "reason": "They declare final loss: \u201cnot in google photos... nor in the trash. they are GONE.\u201d",
+   "story_id": "d9be4ec964e6c6198f810b5b77eb4cfb31bb9c63:1",
+   "field": "outcome"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "They\u2019re still searching; no statement of giving up or fallback.",
+   "story_id": "5a5a7e9e6057b6a14e6fbb63fcd9ebc0b6242e86:0",
+   "field": "outcome"
+  },
+  {
+   "value": "found_after_struggle",
+   "upheld": "secondary",
+   "reason": "\u201cHad to scroll so far back\u201d signals difficulty before successfully finding it",
+   "story_id": "e6600b3b1a7f061184a578f03a0b9da784298c86:0",
+   "field": "outcome"
+  },
+  {
+   "value": "0",
+   "upheld": "primary",
+   "reason": "They recall details and report 2018 timeline empty, a library-state issue.",
+   "story_id": "6e178135b85234ff78e84e7f33385a2208cdf91d:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "mixed",
+   "upheld": "primary",
+   "reason": "They say \u201cphotos and videos,\u201d indicating both types are involved.",
+   "story_id": "6e178135b85234ff78e84e7f33385a2208cdf91d:0",
+   "field": "media_type"
+  },
+  {
+   "value": "4",
+   "upheld": "primary",
+   "reason": "They solved it by typing \u201crecently added\u201d \u2014 a wording/articulation issue.",
+   "story_id": "dc4802445a1589683e42b2c4b78195c187ed393d:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "unclear",
+   "upheld": "secondary",
+   "reason": "No stated purpose beyond finding old uploads; sentiment not specified.",
+   "story_id": "dc4802445a1589683e42b2c4b78195c187ed393d:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "found",
+   "upheld": "secondary",
+   "reason": "They report success: typing \u201crecently added\u201d on Android worked.",
+   "story_id": "dc4802445a1589683e42b2c4b78195c187ed393d:0",
+   "field": "outcome"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "No evidence of library-state issue; only a generic \u201ccan\u2019t find it.\u201d",
+   "story_id": "ca3c4022164a7f654f61a7dc848d7ecddf0ff90b:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "0",
+   "upheld": "secondary",
+   "reason": "They say photos were only reachable via a special URL.",
+   "story_id": "e384c5e3839693baf3aa74aa086023baa9c4492b:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "found_after_struggle",
+   "upheld": "primary",
+   "reason": "They located them via that URL and could delete them.",
+   "story_id": "e384c5e3839693baf3aa74aa086023baa9c4492b:0",
+   "field": "outcome"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "Story only states the ending; no earlier failure described.",
+   "story_id": "50a6d38c274f9d8a917ca8a997a2cb271fb4252a:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "found_after_struggle",
+   "upheld": "primary",
+   "reason": "\u201cfinally found\u201d implies effort before success.",
+   "story_id": "50a6d38c274f9d8a917ca8a997a2cb271fb4252a:0",
+   "field": "outcome"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "No failure described; they immediately found the photo and celebrated.",
+   "story_id": "6a8898572ac71fc685d3ddaad1f63daec7a5c2c3:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "1",
+   "upheld": "primary",
+   "reason": "It\u2019s a general help request; no search/strategy attempt described.",
+   "story_id": "0fc3102abf37d74faf958db744fb8ff9f37f2f3d:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "3",
+   "upheld": "secondary",
+   "reason": "No search described; only complaint that video isn\u2019t appearing",
+   "story_id": "bd75fdf91e6c9cb21b978f992a5e79287289b1ea:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "unclear",
+   "upheld": "neither",
+   "reason": "Story only describes selecting/downloading by date, not the photos\u2019 purpose",
+   "story_id": "88b9e1b024c6dff110f99aba332af2dcef667382:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "3",
+   "upheld": "primary",
+   "reason": "No search attempt described; only says can\u2019t find in folders.",
+   "story_id": "57629bc55c2fa959e6abb86749872ac49e971a95:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "9",
+   "upheld": "primary",
+   "reason": "Only final failure stated; no described search or step.",
+   "story_id": "898d959323969546545b3ffe65826e30dd438ea7:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "both",
+   "upheld": "primary",
+   "reason": "Mentions \u201cdog beach\u201d and \u201cphotos as notes\u201d like cheese/spices.",
+   "story_id": "dc2535631942cc6b5a068698bf80431a03d4c971:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "utility",
+   "upheld": "primary",
+   "reason": "Work task to retrieve original asset; informational, not sentimental.",
+   "story_id": "21e3bb4e9ec67356485124747d751c71f31d0ce2:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "General pattern described; no single attempt\u2019s outcome specified.",
+   "story_id": "21e3bb4e9ec67356485124747d751c71f31d0ce2:0",
+   "field": "outcome"
+  },
+  {
+   "value": "6",
+   "upheld": "primary",
+   "reason": "No evidence of a strategy choice issue; only inability to find while scanning.",
+   "story_id": "2f5da5d28f8d5041f30c4bd6bab8decffb838c34:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "abandoned_without_fallback",
+   "upheld": "primary",
+   "reason": "They explicitly gave up without any fallback: \u201cSucks, but oh well.\u201d",
+   "story_id": "d1374ea05435bd046ded7923e5e419ca232a93fc:0",
+   "field": "outcome"
+  },
+  {
+   "value": "found",
+   "upheld": "primary",
+   "reason": "They explicitly say they went back to find the screenshot.",
+   "story_id": "6de6a0a0800ce82b6b9495c807d55b15ca6fb2ae:0",
+   "field": "outcome"
+  },
+  {
+   "value": "found",
+   "upheld": "primary",
+   "reason": "They say \u201cphoto to mil gye\u201d and only struggled to download.",
+   "story_id": "19586848dfc43d7f3b06cc0372d17ab36be9c40b:1",
+   "field": "outcome"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "Only mentions eventual success; no described search or system failure.",
+   "story_id": "63ba791b6a28d195d7a0db8acebf12d3aaf84de1:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "unclear",
+   "upheld": "secondary",
+   "reason": "No stated purpose or subject; only generic app creations.",
+   "story_id": "6495de1277bc4735b2a4f79de419b955d0e48c6c:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "mixed",
+   "upheld": "secondary",
+   "reason": "They say \u201ccollage/slideshow,\u201d implying image or video; thus mixed.",
+   "story_id": "6495de1277bc4735b2a4f79de419b955d0e48c6c:0",
+   "field": "media_type"
+  },
+  {
+   "value": "photo",
+   "upheld": "secondary",
+   "reason": "They explicitly say \u201cphotos\u201d; nothing indicates screenshots specifically are targeted or found.",
+   "story_id": "b04adbe4a6087fb5b1fc19d991c31eb247de5fea:2",
+   "field": "media_type"
+  },
+  {
+   "value": "5",
+   "upheld": "primary",
+   "reason": "They searched and misclassification blocked retrieval, implying search-stage failure.",
+   "story_id": "c809fcbc0296cb70c3b562e06d080f1d423842f0:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "unclear",
+   "upheld": "secondary",
+   "reason": "No stated purpose for the video in the text.",
+   "story_id": "c809fcbc0296cb70c3b562e06d080f1d423842f0:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "video",
+   "upheld": "secondary",
+   "reason": "Target is explicitly a video despite appearing as a picture.",
+   "story_id": "c809fcbc0296cb70c3b562e06d080f1d423842f0:0",
+   "field": "media_type"
+  },
+  {
+   "value": "unclear",
+   "upheld": "primary",
+   "reason": "No purpose stated; only says the 2022 photo was found.",
+   "story_id": "19586848dfc43d7f3b06cc0372d17ab36be9c40b:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "Only the end state is described, no search details.",
+   "story_id": "bb22e350914583e0d83bdffc9f3f46240abcf996:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "substitute_accepted",
+   "upheld": "primary",
+   "reason": "They settled for a different-age photo (\u201csettle for this one\u201d).",
+   "story_id": "bb22e350914583e0d83bdffc9f3f46240abcf996:0",
+   "field": "outcome"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "Asking for help; no statement they stopped searching or accepted loss.",
+   "story_id": "b819ff3f23929395ca720d2c34245a86e7bfa3a4:0",
+   "field": "outcome"
+  },
+  {
+   "value": "5",
+   "upheld": "primary",
+   "reason": "Query returned wrong results about a wedding instead of party.",
+   "story_id": "50aee66bc91c783509c972b3f44b764fbf536234:1",
+   "field": "primary_stage"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "primary",
+   "reason": "They report irrelevant results but never say they found it.",
+   "story_id": "50aee66bc91c783509c972b3f44b764fbf536234:1",
+   "field": "outcome"
+  },
+  {
+   "value": "substitute_accepted",
+   "upheld": "primary",
+   "reason": "They shared a different photo after failing to find the target",
+   "story_id": "a2c5d2fa138219a3384bc6d3d11e7d279c898657:0",
+   "field": "outcome"
+  },
+  {
+   "value": "unclear",
+   "upheld": "primary",
+   "reason": "No purpose stated; just says can\u2019t find screenshot and pictures.",
+   "story_id": "66081f42b4934ef4f1f11ce9df3cb68d04b701db:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "mixed",
+   "upheld": "primary",
+   "reason": "Mentions both \u201cek screenshot\u201d and \u201ckuch picture,\u201d implying screenshot plus photos.",
+   "story_id": "66081f42b4934ef4f1f11ce9df3cb68d04b701db:0",
+   "field": "media_type"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "Only failure end-state mentioned, no steps or attempts described.",
+   "story_id": "640ade38bc3987629937d7d68997d0b28e3c28eb:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "Asking for help; no stated resolution or abandonment.",
+   "story_id": "d61372a756937f20e42f4a95ba72726b5b136b29:0",
+   "field": "outcome"
+  },
+  {
+   "value": "5",
+   "upheld": "primary",
+   "reason": "They report \u201cGoogle Photos missed this one\u201d during the face search.",
+   "story_id": "2edc0815448a5010155b975aa4b0a1e79b86c71a:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "neither",
+   "reason": "They never say they found that missed photo later.",
+   "story_id": "2edc0815448a5010155b975aa4b0a1e79b86c71a:0",
+   "field": "outcome"
+  },
+  {
+   "value": "unclear",
+   "upheld": "primary",
+   "reason": "Purpose not stated; only asks for \u201crelated photos\u201d.",
+   "story_id": "bf064d87af2bec4bbfcd9f01b055bc52e650fceb:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "abandoned_without_fallback",
+   "upheld": "primary",
+   "reason": "They state the photo couldn\u2019t be recovered; no fallback mentioned.",
+   "story_id": "a846e21ddc6d9080546a1bd9c59fa87b18c845df:0",
+   "field": "outcome"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "No retrieval attempt described; only a hypothetical feature request.",
+   "story_id": "8719c1475bb410fa3323b4a432623dd6502b2fba:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "sentimental",
+   "upheld": "primary",
+   "reason": "Describes a personal moment \u201cphoto of me next to a giant bell.\u201d",
+   "story_id": "8719c1475bb410fa3323b4a432623dd6502b2fba:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "No failure described; they typed a query and found results immediately.",
+   "story_id": "c0d1dafa88ec6dba2c4741ebdda4c7a72aed14ac:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "utility",
+   "upheld": "primary",
+   "reason": "Searching serial numbers is extracting information, a utility purpose.",
+   "story_id": "ac7cfeda39451a237d2ad146b43c59993c4a9c0a:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "No memory or search steps described; only the final state is reported.",
+   "story_id": "13c83c4d63cabfee54ac7ee7f9faf8fe91157833:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "primary",
+   "reason": "They only say \u201ccan\u2019t find it,\u201d not that they stopped or used a fallback.",
+   "story_id": "13c83c4d63cabfee54ac7ee7f9faf8fe91157833:0",
+   "field": "outcome"
+  },
+  {
+   "value": "0",
+   "upheld": "secondary",
+   "reason": "They state the face was hidden/blocked, a library-state issue.",
+   "story_id": "51dc1308f2cf74549de911cb8b842ebeeee7863f:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "sentimental",
+   "upheld": "primary",
+   "reason": "Searching for a person/pet face implies sentimental photos.",
+   "story_id": "51dc1308f2cf74549de911cb8b842ebeeee7863f:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "6",
+   "upheld": "secondary",
+   "reason": "Problem described as heavy scrolling/visual scanning, not a strategy decision.",
+   "story_id": "bc5c550e736b8cf3ff06a1ac0de6b70da0f425ec:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "found_after_struggle",
+   "upheld": "primary",
+   "reason": "\u201chad to scroll way too far back\u201d implies effort before success.",
+   "story_id": "bc5c550e736b8cf3ff06a1ac0de6b70da0f425ec:0",
+   "field": "outcome"
+  },
+  {
+   "value": "sentimental",
+   "upheld": "primary",
+   "reason": "Old personal video, \u201cvery important\u201d suggests sentimental intent over information use.",
+   "story_id": "e0ada9bc6440b99ca8e115f3c199bbf4d0deb2bd:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "Story doesn\u2019t state how it ended, only that they couldn\u2019t find it.",
+   "story_id": "e0ada9bc6440b99ca8e115f3c199bbf4d0deb2bd:0",
+   "field": "outcome"
+  },
+  {
+   "value": "utility",
+   "upheld": "secondary",
+   "reason": "They wanted to copy it to computer to use it for something.",
+   "story_id": "90ef11c63fffdcbde567fad2a7c5568c0ae88761:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "substitute_accepted",
+   "upheld": "primary",
+   "reason": "Couldn\u2019t find HD original; used the Google Photos version instead.",
+   "story_id": "beebc7898400af1a0cc9f1ea6c04d016e3940312:0",
+   "field": "outcome"
+  },
+  {
+   "value": "unclear",
+   "upheld": "primary",
+   "reason": "No purpose stated; just resolving Drive\u2013Photos visibility.",
+   "story_id": "c9e8e350bd089aa00de926880b3e1909d2912df4:2",
+   "field": "photo_class"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "The story never states a resolution or that they gave up.",
+   "story_id": "a05782ee9d2d5e96c1be61610034c0b3fe1b2e82:0",
+   "field": "outcome"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "No clear statement of finding it or abandoning with a fallback.",
+   "story_id": "3b53d4e5bf5f572ac92dce7bbc1051e9491c662a:0",
+   "field": "outcome"
+  },
+  {
+   "value": "9",
+   "upheld": "neither",
+   "reason": "No described failure; they just scrolled and found it.",
+   "story_id": "41c55163a31c64731392140386c6b69ed837a0cd:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "5",
+   "upheld": "secondary",
+   "reason": "Assistant refused the query as sensitive, a system-side search failure.",
+   "story_id": "766e30fd23eb00164d7e03ece585379912584624:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "They only ask if recovery is possible; no ending stated.",
+   "story_id": "a8961b273cd067ed02b0cc5d369a85d20b572540:0",
+   "field": "outcome"
+  },
+  {
+   "value": "0",
+   "upheld": "primary",
+   "reason": "They say \u201cbin pe click ho gya\u201d\u2014photo in trash (Stage 0).",
+   "story_id": "ad513e0cfaeb4ea741a169e3924146676c23cb3d:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "photo",
+   "upheld": "primary",
+   "reason": "They explicitly mention \u201cphoto,\u201d not video as the target.",
+   "story_id": "ad513e0cfaeb4ea741a169e3924146676c23cb3d:0",
+   "field": "media_type"
+  },
+  {
+   "value": "found_after_struggle",
+   "upheld": "primary",
+   "reason": "One hour struggling, then recovered instantly using the video.",
+   "story_id": "ad513e0cfaeb4ea741a169e3924146676c23cb3d:0",
+   "field": "outcome"
+  },
+  {
+   "value": "3",
+   "upheld": "primary",
+   "reason": "They\u2019re restored; problem is where to look, not library state.",
+   "story_id": "c96644dd2110f70c686817ae091590d8a22a75c6:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "9",
+   "upheld": "secondary",
+   "reason": "No evidence of a search; only a vague complaint.",
+   "story_id": "621615f75a606b192b6588dffe3e8e2a4bd8e733:0",
+   "field": "primary_stage"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "primary",
+   "reason": "They note a humorous wrong result but never state how it ended.",
+   "story_id": "a8eaefe2e0199103bba08d2d1f34aad86d3267a5:0",
+   "field": "outcome"
+  },
+  {
+   "value": "unclear",
+   "upheld": "primary",
+   "reason": "No purpose stated; only mentions a deleted video not found.",
+   "story_id": "d118972ff90b291d72f2d4da936f721329ae0dcb:0",
+   "field": "photo_class"
+  },
+  {
+   "value": "not_stated",
+   "upheld": "secondary",
+   "reason": "Reports failure but doesn\u2019t state giving up or any fallback.",
+   "story_id": "d118972ff90b291d72f2d4da936f721329ae0dcb:0",
+   "field": "outcome"
+  }
+ ]
+}

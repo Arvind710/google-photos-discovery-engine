@@ -1,0 +1,925 @@
+{
+ "run_id": "blind-read-20260926-131603-47e556",
+ "n": 60,
+ "stage_agreement": 0.7666666666666667,
+ "note": "Disagreement candidates are for inspection, not a score (EC-VAL-7).",
+ "confusion": {
+  "4->2": 1,
+  "5->9": 3,
+  "6->3": 1,
+  "9->8": 1,
+  "5->3": 2,
+  "9->0": 3,
+  "9->1": 1,
+  "5->0": 1,
+  "9->3": 1
+ },
+ "coded_stage5_share": 0.2833333333333333,
+ "reader_stage5_share": 0.18333333333333332,
+ "themes": [
+  [
+   "icloud storage exhaustion",
+   1
+  ],
+  [
+   "ai photo search",
+   1
+  ],
+  [
+   "missing highlights navigation",
+   1
+  ],
+  [
+   "upload vs taken date",
+   1
+  ],
+  [
+   "search works well",
+   1
+  ],
+  [
+   "cluttered google photos results",
+   1
+  ],
+  [
+   "accurate ai photo search",
+   1
+  ],
+  [
+   "accidental deletion by child",
+   1
+  ],
+  [
+   "text search in photos",
+   1
+  ],
+  [
+   "manual timeline scrolling",
+   1
+  ],
+  [
+   "apple photos search failure",
+   1
+  ],
+  [
+   "ai search convenience",
+   1
+  ],
+  [
+   "panic deletion data loss",
+   1
+  ],
+  [
+   "long-term image retrieval",
+   1
+  ],
+  [
+   "semantic search mismatch",
+   1
+  ],
+  [
+   "visual search success",
+   1
+  ],
+  [
+   "backup not enabled",
+   1
+  ],
+  [
+   "photo search aids memory",
+   1
+  ],
+  [
+   "siri-photos relation limitation",
+   1
+  ],
+  [
+   "place-name search success",
+   1
+  ],
+  [
+   "lost after account deletion",
+   1
+  ],
+  [
+   "inconsistent face recognition",
+   1
+  ],
+  [
+   "unexpected cloud backup",
+   1
+  ],
+  [
+   "library cache mismatch",
+   1
+  ],
+  [
+   "ephemeral recommendations, search",
+   1
+  ],
+  [
+   "google photos search success",
+   1
+  ],
+  [
+   "accidental deletion",
+   1
+  ],
+  [
+   "ambiguous keyword search",
+   1
+  ],
+  [
+   "recovering deleted photo",
+   1
+  ],
+  [
+   "unexpected data loss",
+   1
+  ],
+  [
+   "label removal aftermath",
+   1
+  ],
+  [
+   "lost phone, cloud backup",
+   1
+  ],
+  [
+   "accidental photo deletion",
+   1
+  ],
+  [
+   "ai search regression",
+   1
+  ],
+  [
+   "search that just works",
+   1
+  ],
+  [
+   "drive-photos sync gap",
+   1
+  ],
+  [
+   "google photos search indexing",
+   1
+  ],
+  [
+   "effortless photo retrieval",
+   1
+  ],
+  [
+   "locked folder recovery limits",
+   1
+  ],
+  [
+   "album-scoped search missing",
+   1
+  ],
+  [
+   "deleted older photos",
+   1
+  ],
+  [
+   "deleted beyond trash",
+   1
+  ],
+  [
+   "date search broken",
+   1
+  ],
+  [
+   "voice photo search",
+   1
+  ],
+  [
+   "missing from trash",
+   1
+  ],
+  [
+   "wrong date metadata",
+   1
+  ],
+  [
+   "reassuring a child",
+   1
+  ],
+  [
+   "deleted app, no backup",
+   1
+  ],
+  [
+   "google photos smart search",
+   1
+  ],
+  [
+   "photo rediscovery success",
+   1
+  ],
+  [
+   "fragmented photo storage",
+   1
+  ],
+  [
+   "photo search mismatch",
+   1
+  ],
+  [
+   "cloud backup consolidation",
+   1
+  ],
+  [
+   "recovering permanently deleted photo",
+   1
+  ],
+  [
+   "search worked perfectly",
+   1
+  ],
+  [
+   "android photo recovery",
+   1
+  ],
+  [
+   "permanently deleted photos",
+   1
+  ],
+  [
+   "overbroad search query",
+   1
+  ],
+  [
+   "search beats organization",
+   1
+  ],
+  [
+   "trash auto-deletion",
+   1
+  ]
+ ],
+ "disagreement_candidates": [
+  {
+   "story_id": "dc4802445a1589683e42b2c4b78195c187ed393d:0",
+   "coded_stage": "4",
+   "coded_why": "Couldn\u2019t express cue as app option; needed specific phrase",
+   "reader_stage": "2",
+   "agree": false,
+   "target": "Recently uploaded old photos and videos in Google Photos",
+   "what_went_wrong": "They couldn\u2019t remember the date the photos were taken.",
+   "stage": "2",
+   "theme": "Upload vs taken date"
+  },
+  {
+   "story_id": "3ba2ad97300ec1206044dc3deed79e0240a13297:0",
+   "coded_stage": "5",
+   "coded_why": "Search interpretation was the critical step and it succeeded",
+   "reader_stage": "9",
+   "agree": false,
+   "target": "a cat on a countertop photo",
+   "what_went_wrong": "Nothing went wrong; the search worked immediately.",
+   "stage": "9",
+   "theme": "search works well"
+  },
+  {
+   "story_id": "1233de10dc517a78f662c1618c4d4f5e5ccbc658:0",
+   "coded_stage": "6",
+   "coded_why": "Had to scan past heavy clutter to reach the target",
+   "reader_stage": "3",
+   "agree": false,
+   "target": "a photo from 2019",
+   "what_went_wrong": "Too many Bill Hader photos cluttered the scroll.",
+   "stage": "3",
+   "theme": "cluttered Google Photos results"
+  },
+  {
+   "story_id": "33066815ea92be7b3a4cea9ebed1925587632315:0",
+   "coded_stage": "9",
+   "coded_why": "No failure described; they simply found it",
+   "reader_stage": "8",
+   "agree": false,
+   "target": "A 2014 Jonghyun concert photo",
+   "what_went_wrong": "They thought the photo was lost.",
+   "stage": "8",
+   "theme": "Unexpected cloud backup"
+  },
+  {
+   "story_id": "1e8838fe6fe7c3028b1b5caf63177262024a2878:0",
+   "coded_stage": "5",
+   "coded_why": "Search returned many results; target was buried and needed scrolling",
+   "reader_stage": "3",
+   "agree": false,
+   "target": "the original family chat background photo",
+   "what_went_wrong": "The background recommendation rotated out and wasn\u2019t visible anymore.",
+   "stage": "3",
+   "theme": "ephemeral recommendations, search"
+  },
+  {
+   "story_id": "c0aa521442f65a37f7d93d6bc8a92c6d83a8383d:0",
+   "coded_stage": "9",
+   "coded_why": "Only outcome stated: they found the photo.",
+   "reader_stage": "0",
+   "agree": false,
+   "target": "an 8-year-old photo",
+   "what_went_wrong": "The photo had been deleted from Google Photos.",
+   "stage": "0",
+   "theme": "Recovering deleted photo"
+  },
+  {
+   "story_id": "707149aded55c3fe002109c4191b7778cc600dda:0",
+   "coded_stage": "9",
+   "coded_why": "They simply opened Google Photos and saw it.",
+   "reader_stage": "1",
+   "agree": false,
+   "target": "A photo from their lost iPhone 6",
+   "what_went_wrong": "They dropped the iPhone in a lake and lost it.",
+   "stage": "1",
+   "theme": "Lost phone, cloud backup"
+  },
+  {
+   "story_id": "bb51e4bf9098197e7b7a505bd7eb4577706836b7:0",
+   "coded_stage": "5",
+   "coded_why": "Search couldn\u2019t combine album constraint with keywords, yielding zero results",
+   "reader_stage": "3",
+   "agree": false,
+   "target": "pink and green photos inside one album",
+   "what_went_wrong": "Search covered the whole library, yielding overwhelming results",
+   "stage": "3",
+   "theme": "album-scoped search missing"
+  },
+  {
+   "story_id": "b2358d9efca162742579284a99c00a353586c178:0",
+   "coded_stage": "9",
+   "coded_why": "They simply scrolled back and found it.",
+   "reader_stage": "0",
+   "agree": false,
+   "target": "their first Beatles photo in Google Photos",
+   "what_went_wrong": "Earlier Beatles photos were deleted in 2020, so the 'first' isn\u2019t accurate.",
+   "stage": "0",
+   "theme": "deleted older photos"
+  },
+  {
+   "story_id": "d12c9914bfb24ebdb2acd51a78cbfd0a168069a7:0",
+   "coded_stage": "5",
+   "coded_why": "Photo misdated ~76 years, making normal retrieval fail",
+   "reader_stage": "0",
+   "agree": false,
+   "target": "a specific photo in Google Photos",
+   "what_went_wrong": "The photo\u2019s date metadata was wrong, filed 76 years back.",
+   "stage": "0",
+   "theme": "wrong date metadata"
+  },
+  {
+   "story_id": "4db4390d3fd5129838d5ff58ab6dae6627e89ae2:0",
+   "coded_stage": "5",
+   "coded_why": "They searched and system returned the desired set successfully.",
+   "reader_stage": "9",
+   "agree": false,
+   "target": "a specific 2017 desert car photo with Kevin",
+   "what_went_wrong": "Nothing went wrong; search found it via keywords.",
+   "stage": "9",
+   "theme": "Google Photos smart search"
+  },
+  {
+   "story_id": "ba42e17407384893c6ebd5110c2000ee744688b8:0",
+   "coded_stage": "9",
+   "coded_why": "No failure described; they simply found it.",
+   "reader_stage": "3",
+   "agree": false,
+   "target": "Screenshot from [HANDLE]\u2019s launch day",
+   "what_went_wrong": "Photos were scattered across HDD, laptop, and PC backups",
+   "stage": "3",
+   "theme": "Cloud backup consolidation"
+  },
+  {
+   "story_id": "346adeec584d4ac2df9090145e995deb4acb616e:0",
+   "coded_stage": "5",
+   "coded_why": "They searched successfully; no earlier failure occurred.",
+   "reader_stage": "9",
+   "agree": false,
+   "target": "old fall photos",
+   "what_went_wrong": "Nothing went wrong; first result matched perfectly.",
+   "stage": "9",
+   "theme": "search worked perfectly"
+  },
+  {
+   "story_id": "9fa0ece8f28355ed6ca9cc877b6576d463a5bcac:0",
+   "coded_stage": "9",
+   "coded_why": "Only states that the pic was found.",
+   "reader_stage": "0",
+   "agree": false,
+   "target": "a deleted photo on Android",
+   "what_went_wrong": "They had deleted it from their gallery.",
+   "stage": "0",
+   "theme": "Android photo recovery"
+  }
+ ],
+ "agreements": [
+  {
+   "story_id": "bb3ae8ef74ae6eae4b8c0d68d039586faeb9b82c:0",
+   "coded_stage": "0",
+   "coded_why": "Photos not present/available due to iCloud optimize and unrecoverable flags",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Seven iCloud Photos not downloading full resolution",
+   "what_went_wrong": "iCloud storage filled up while Optimize iPhone Storage was enabled.",
+   "stage": "0",
+   "theme": "iCloud storage exhaustion"
+  },
+  {
+   "story_id": "790de55c9d650cb50647f97841544a0c5b1b7275:0",
+   "coded_stage": "2",
+   "coded_why": "They lacked the date memory but searched by subject.",
+   "reader_stage": "2",
+   "agree": true,
+   "target": "a photo of a bicycle",
+   "what_went_wrong": "They couldn\u2019t remember when it was taken.",
+   "stage": "2",
+   "theme": "AI photo search"
+  },
+  {
+   "story_id": "88b9e1b024c6dff110f99aba332af2dcef667382:0",
+   "coded_stage": "3",
+   "coded_why": "They lacked a navigational path to day view without Highlights.",
+   "reader_stage": "3",
+   "agree": true,
+   "target": "All photos from a specific day",
+   "what_went_wrong": "That day had no Highlights, so no day header to open.",
+   "stage": "3",
+   "theme": "Missing highlights navigation"
+  },
+  {
+   "story_id": "50aee66bc91c783509c972b3f44b764fbf536234:0",
+   "coded_stage": "9",
+   "coded_why": "They queried once and it returned the exact photo.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "Photos of me on the beach with friends X and Y",
+   "what_went_wrong": "Nothing; Google Photos found exactly the requested picture.",
+   "stage": "9",
+   "theme": "Accurate AI photo search"
+  },
+  {
+   "story_id": "c5a3a5953be0957f5a22f9c732d9fb30142dc86a:0",
+   "coded_stage": "0",
+   "coded_why": "They state the videos were deleted and not in bin",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "my haircut videos",
+   "what_went_wrong": "Cousin deleted the videos, and they\u2019re not in the bin anymore.",
+   "stage": "0",
+   "theme": "Accidental deletion by child"
+  },
+  {
+   "story_id": "90c8b5f8d8913d764335d981d06c5dc02200c937:0",
+   "coded_stage": "2",
+   "coded_why": "They couldn\u2019t recall when the photo was taken",
+   "reader_stage": "2",
+   "agree": true,
+   "target": "a photo of posters taken earlier this year",
+   "what_went_wrong": "They couldn't remember when they took the photo.",
+   "stage": "2",
+   "theme": "text search in photos"
+  },
+  {
+   "story_id": "41c55163a31c64731392140386c6b69ed837a0cd:0",
+   "coded_stage": "3",
+   "coded_why": "They chose timeline scrolling as the retrieval strategy.",
+   "reader_stage": "3",
+   "agree": true,
+   "target": "photo of me with long hair",
+   "what_went_wrong": "Had to manually scroll back to 2012 to find it.",
+   "stage": "3",
+   "theme": "manual timeline scrolling"
+  },
+  {
+   "story_id": "b7113e3689e0674b9cd8b089fb3bcd093e40d3eb:0",
+   "coded_stage": "5",
+   "coded_why": "Apple Photos search failed; Google Photos search succeeded instantly",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "A specific years-old photo to upload",
+   "what_went_wrong": "Apple Photos picker search failed to find it.",
+   "stage": "5",
+   "theme": "Apple Photos search failure"
+  },
+  {
+   "story_id": "a2d48f97439d430f6d2399321a058252025a6085:0",
+   "coded_stage": "9",
+   "coded_why": "Found immediately with Ask Photos, no earlier failure.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "a specific camping trip photo",
+   "what_went_wrong": "Nothing; it found the photo instantly.",
+   "stage": "9",
+   "theme": "AI search convenience"
+  },
+  {
+   "story_id": "a05782ee9d2d5e96c1be61610034c0b3fe1b2e82:0",
+   "coded_stage": "0",
+   "coded_why": "They permanently deleted the photos from trash",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Recently deleted Google Photos pictures with boyfriend",
+   "what_went_wrong": "I emptied Google Photos trash, permanently deleting the photos",
+   "stage": "0",
+   "theme": "Panic deletion data loss"
+  },
+  {
+   "story_id": "21e3bb4e9ec67356485124747d751c71f31d0ce2:0",
+   "coded_stage": "2",
+   "coded_why": "They can\u2019t recall the file name to formulate a precise search",
+   "reader_stage": "2",
+   "agree": true,
+   "target": "the original elephant photo from the collection",
+   "what_went_wrong": "Nobody remembered the original photo\u2019s filename or details.",
+   "stage": "2",
+   "theme": "long-term image retrieval"
+  },
+  {
+   "story_id": "c06874c9c9acadf8038072c41b2d0d2c08c2bc10:0",
+   "coded_stage": "5",
+   "coded_why": "Search returned wrong/insufficient results despite usable cues and queries",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "photo of sister with dog in the pool",
+   "what_went_wrong": "Search returned unrelated results, including 'hot-dog' and non-dog photos.",
+   "stage": "5",
+   "theme": "semantic search mismatch"
+  },
+  {
+   "story_id": "765749899f7fa8a7f4c8527cc2337029e134b9ce:0",
+   "coded_stage": "9",
+   "coded_why": "Found immediately with first search query",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "a photo of my driver\u2019s license",
+   "what_went_wrong": "Nothing went wrong; search found it immediately.",
+   "stage": "9",
+   "theme": "visual search success"
+  },
+  {
+   "story_id": "d9be4ec964e6c6198f810b5b77eb4cfb31bb9c63:1",
+   "coded_stage": "0",
+   "coded_why": "Files not present in account or trash after deletion",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Niece\u2019s sweet 16 photos and videos",
+   "what_went_wrong": "They were never actually backed up to Google Photos.",
+   "stage": "0",
+   "theme": "Backup not enabled"
+  },
+  {
+   "story_id": "112f493208a69edd002fcc3b5194ae1643a18c55:0",
+   "coded_stage": "2",
+   "coded_why": "They lacked place memory despite recalling the subject.",
+   "reader_stage": "2",
+   "agree": true,
+   "target": "my photos of medlar fruit",
+   "what_went_wrong": "I couldn\u2019t remember where I\u2019d seen one recently.",
+   "stage": "2",
+   "theme": "photo search aids memory"
+  },
+  {
+   "story_id": "367bee9a3b7f8d8de3c11003db69dc7dfc2e7224:0",
+   "coded_stage": "5",
+   "coded_why": "Search parses relational term \u201cMom\u201d but returns zero results",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "Photos of my mom",
+   "what_went_wrong": "Siri didn\u2019t link the \u201cMom\u201d relation to her Photos person.",
+   "stage": "5",
+   "theme": "Siri-Photos relation limitation"
+  },
+  {
+   "story_id": "60e4d41e4a9ee0a0bd8fe9b5e1d9f2a9329fd3fa:0",
+   "coded_stage": "9",
+   "coded_why": "They found it immediately via place search.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "photo from a 2013 trip",
+   "what_went_wrong": "Nothing; the search worked immediately.",
+   "stage": "9",
+   "theme": "place-name search success"
+  },
+  {
+   "story_id": "0beaeecb29162c5c63915b976cd7cca0976409fb:0",
+   "coded_stage": "0",
+   "coded_why": "Photo lived in a deleted Orkut account, not accessible.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Photoshopped Orkut picture combining two Telugu actresses",
+   "what_went_wrong": "They had deleted the Orkut account containing the photo",
+   "stage": "0",
+   "theme": "Lost after account deletion"
+  },
+  {
+   "story_id": "7796bf24e6d7ddd46a2837013aadf7a98152c101:0",
+   "coded_stage": "5",
+   "coded_why": "Search by face misses known photos within a face group",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "photos of a person missing from their face group",
+   "what_went_wrong": "Face recognition didn\u2019t match some photos to the person.",
+   "stage": "5",
+   "theme": "inconsistent face recognition"
+  },
+  {
+   "story_id": "938c4e874ba2ef3a564a7bb80a4b5b18024bc3b4:0",
+   "coded_stage": "0",
+   "coded_why": "Photo persists in upload picker while absent in library",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "a deleted September 2025 photo on their phone",
+   "what_went_wrong": "The photo wasn't in the Photos app library they searched.",
+   "stage": "0",
+   "theme": "library cache mismatch"
+  },
+  {
+   "story_id": "f0321bae7ddf531255f45656bb028e9865f592df:0",
+   "coded_stage": "9",
+   "coded_why": "No failure described; first query succeeded.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "Screenshot of a Snap featuring Drake",
+   "what_went_wrong": "Nothing; the keyword search worked immediately.",
+   "stage": "9",
+   "theme": "Google Photos search success"
+  },
+  {
+   "story_id": "16c9ca5ab6107b307c1ae6a51b3deb22a1e3a56d:0",
+   "coded_stage": "0",
+   "coded_why": "They say the item was deleted, a Stage 0 library issue",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "the deleted video to edit",
+   "what_went_wrong": "They accidentally deleted the video they needed to edit.",
+   "stage": "0",
+   "theme": "accidental deletion"
+  },
+  {
+   "story_id": "cbc995976ab0e7519ef70d4d3bf1b20c0485baf8:0",
+   "coded_stage": "5",
+   "coded_why": "Search for \u201cBoba\u201d returned Boba Fett photos instead of the tea place.",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "photo of a specific boba tea place",
+   "what_went_wrong": "The search matched \u201cBoba\u201d to Boba Fett photos instead.",
+   "stage": "5",
+   "theme": "ambiguous keyword search"
+  },
+  {
+   "story_id": "214bb9e00ff67cd4b5d14cb1043f950d6f205895:0",
+   "coded_stage": "0",
+   "coded_why": "Photos seem deleted from the library",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "my mom\u2019s childhood photos",
+   "what_went_wrong": "The photos disappeared\u2014deleted randomly without the user deleting them.",
+   "stage": "0",
+   "theme": "unexpected data loss"
+  },
+  {
+   "story_id": "238ec5be01df991cb6b8fd229ae91e29b2e35af4:0",
+   "coded_stage": "5",
+   "coded_why": "Search couldn\u2019t use the correct concept: monkeys label was removed.",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "my Japan monkey photo",
+   "what_went_wrong": "Google Photos won\u2019t let you search for monkeys",
+   "stage": "5",
+   "theme": "Label removal aftermath"
+  },
+  {
+   "story_id": "98632f9b662a03a01b62b05257f0450e775a0736:0",
+   "coded_stage": "0",
+   "coded_why": "Photos were deleted from original device during import setting.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "friend\u2019s imported iPhone photos deleted from Mac",
+   "what_went_wrong": "Import used delete-after-import, removing them from her phone.",
+   "stage": "0",
+   "theme": "accidental photo deletion"
+  },
+  {
+   "story_id": "9a7306c83836251e47a6ca073afd34441115de00:0",
+   "coded_stage": "5",
+   "coded_why": "They typed good cues but search missed clear matches.",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "all photos of yellow trucks",
+   "what_went_wrong": "Search failed to match many obvious yellow truck photos.",
+   "stage": "5",
+   "theme": "AI search regression"
+  },
+  {
+   "story_id": "aa1520f4fbb8f25b2e1435cc95c2f9fd8d6616fe:0",
+   "coded_stage": "9",
+   "coded_why": "No difficulty; first query found it.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "a picture of a tattoo from six years ago",
+   "what_went_wrong": "Nothing; the search immediately found it.",
+   "stage": "9",
+   "theme": "search that just works"
+  },
+  {
+   "story_id": "c9e8e350bd089aa00de926880b3e1909d2912df4:2",
+   "coded_stage": "0",
+   "coded_why": "Photos existed only in Drive, not appearing in Google Photos",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Shared Drive photos in Google Photos",
+   "what_went_wrong": "Photos saved from Drive didn\u2019t appear in Google Photos library",
+   "stage": "0",
+   "theme": "Drive-Photos sync gap"
+  },
+  {
+   "story_id": "c6af9dfa5d9eb9733869f6f5824fc1c29a4acbae:0",
+   "coded_stage": "5",
+   "coded_why": "Keyword searches return far too few results despite many matching photos.",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "All their dog photos in Google Photos",
+   "what_went_wrong": "Keyword search returned only a few of the dog photos.",
+   "stage": "5",
+   "theme": "Google Photos search indexing"
+  },
+  {
+   "story_id": "4bc6fae93ac441d7708072e0871976ae3562b9a6:0",
+   "coded_stage": "9",
+   "coded_why": "Found instantly with a simple keyword search",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "passport and driving licence photos",
+   "what_went_wrong": "Nothing; searching \u201cpassport\u201d found them immediately.",
+   "stage": "9",
+   "theme": "Effortless photo retrieval"
+  },
+  {
+   "story_id": "0f5c640f702c992d952eaad7d83878e9243a2b90:0",
+   "coded_stage": "0",
+   "coded_why": "Item was in Locked Folder which doesn\u2019t back up",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "A deleted photo/video from Locked Folder",
+   "what_went_wrong": "Recovery didn\u2019t include items from the Locked Folder.",
+   "stage": "0",
+   "theme": "Locked Folder recovery limits"
+  },
+  {
+   "story_id": "42529531479d94c63703412b94c9139531d45bf9:0",
+   "coded_stage": "0",
+   "coded_why": "Photo permanently deleted from trash",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "A photo of their college exam paper",
+   "what_went_wrong": "They deleted the photo, then deleted it from the trash folder.",
+   "stage": "0",
+   "theme": "Deleted beyond trash"
+  },
+  {
+   "story_id": "fa3a98f0f3f780a70c32c8c9f43c56dc0186314f:0",
+   "coded_stage": "5",
+   "coded_why": "Date queries return an error and no results",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "photos from July 2016",
+   "what_went_wrong": "Google Photos stopped accepting date searches like \u201cJuly 2016\u201d or years.",
+   "stage": "5",
+   "theme": "Date search broken"
+  },
+  {
+   "story_id": "14ed655bd0a022582467843de12eb960c2bf90a8:0",
+   "coded_stage": "9",
+   "coded_why": "No failure; first query found photos.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "photos of my bike from last year",
+   "what_went_wrong": "Nothing went wrong.",
+   "stage": "9",
+   "theme": "voice photo search"
+  },
+  {
+   "story_id": "5a6814b70030756d1c5474826a2df080b8e74b8c:0",
+   "coded_stage": "0",
+   "coded_why": "They say the photos were deleted and not in trash.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "A deleted photo in Google Photos Trash",
+   "what_went_wrong": "They deleted it but it never appeared in Google Photos\u2019 Trash.",
+   "stage": "0",
+   "theme": "missing from trash"
+  },
+  {
+   "story_id": "17caf4ddd1fe5fab0f25b03f339f23ba7758ad92:0",
+   "coded_stage": "9",
+   "coded_why": "They simply found and showed the photo without difficulty described.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "Photo of kid with Santa two years ago",
+   "what_went_wrong": "Nothing; found it easily with Google Photos.",
+   "stage": "9",
+   "theme": "Reassuring a child"
+  },
+  {
+   "story_id": "ff513a6314c7a0f1e26dcc25929dae442547c6e1:0",
+   "coded_stage": "0",
+   "coded_why": "They believe WhatsApp and its backup were deleted so not in library",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "old WhatsApp shared photos and videos",
+   "what_went_wrong": "WhatsApp and its backup were deleted.",
+   "stage": "0",
+   "theme": "deleted app, no backup"
+  },
+  {
+   "story_id": "e7e4eb6a20b124405577ba1cd0fa0775014739c9:0",
+   "coded_stage": "9",
+   "coded_why": "Only outcome stated; no failure described.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "old baby photos",
+   "what_went_wrong": "Nothing went wrong.",
+   "stage": "9",
+   "theme": "Photo rediscovery success"
+  },
+  {
+   "story_id": "4805d74f385083a6803f241761906e952804a03c:0",
+   "coded_stage": "0",
+   "coded_why": "They searched across multiple accounts/devices, not one library.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "photos from each of my kid\u2019s first 12 birthdays",
+   "what_went_wrong": "The photos were scattered across multiple accounts and devices, not in one place.",
+   "stage": "0",
+   "theme": "Fragmented photo storage"
+  },
+  {
+   "story_id": "a8eaefe2e0199103bba08d2d1f34aad86d3267a5:0",
+   "coded_stage": "5",
+   "coded_why": "They searched a usable cue and got an irrelevant result.",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "WWII Air Force photo of my great grandpa",
+   "what_went_wrong": "Google Photos returned an unrelated picture for 'soldier'",
+   "stage": "5",
+   "theme": "photo search mismatch"
+  },
+  {
+   "story_id": "7b5a3e4de5a20f75375d88b25b8ecae3bb00929f:0",
+   "coded_stage": "0",
+   "coded_why": "They state it was permanently deleted from Google Photos.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Screenshot of girlfriend\u2019s wide\u2011angle close\u2011up pose",
+   "what_went_wrong": "She permanently deleted it from Google Photos and the trash",
+   "stage": "0",
+   "theme": "Recovering permanently deleted photo"
+  },
+  {
+   "story_id": "b12eb55c15c1a11c7a7111945405a6c476acee96:0",
+   "coded_stage": "0",
+   "coded_why": "They say the photo was deleted and now missing everywhere",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Photos from Oct 17\u201318, 2023 deleted from private folder",
+   "what_went_wrong": "They were permanently deleted from the phone\u2019s private/locked folder.",
+   "stage": "0",
+   "theme": "permanently deleted photos"
+  },
+  {
+   "story_id": "0ef3821f2d59998617a4b53f428fd49c9a22d2ff:0",
+   "coded_stage": "5",
+   "coded_why": "Search term returned an overwhelming number of results",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "photo of a scrap receipt",
+   "what_went_wrong": "Searching 'scrap' returned too many irrelevant shop photos.",
+   "stage": "5",
+   "theme": "overbroad search query"
+  },
+  {
+   "story_id": "302f3f58333fa007cec6f83c7aacce323701f6bd:0",
+   "coded_stage": "9",
+   "coded_why": "They searched and immediately found relevant photos without difficulty.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "photos of their driveway",
+   "what_went_wrong": "They wish it weren\u2019t tied to Google.",
+   "stage": "9",
+   "theme": "Search beats organization"
+  },
+  {
+   "story_id": "3025cf2f8f6147c69d1451f941c5b0057ddaaceb:0",
+   "coded_stage": "0",
+   "coded_why": "They say it was deleted and gone from Trash.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "a deleted screen recording video",
+   "what_went_wrong": "It was auto-deleted from Google Photos Trash.",
+   "stage": "0",
+   "theme": "Trash auto-deletion"
+  }
+ ]
+}

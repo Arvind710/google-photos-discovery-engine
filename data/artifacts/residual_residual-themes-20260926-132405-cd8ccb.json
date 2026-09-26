@@ -1,0 +1,157 @@
+{
+ "run_id": "residual-themes-20260926-132405-cd8ccb",
+ "inputs": {
+  "other_values": 8,
+  "low_confidence": 126,
+  "blind_read_disagreements": 14
+ },
+ "groups": [
+  {
+   "name": "Used non\u2011Google apps/services to find photos",
+   "what": "People reported using other apps/services (Apple Photos, Photobucket, Allo/Assistant, iNaturalist) instead of Google Photos to look for the picture.",
+   "question": "3.1",
+   "kind": "new",
+   "exemplars": [
+    "14ed655bd0a022582467843de12eb960c2bf90a8:0",
+    "1d58cd6877f9f89ca1ae67d0099128407747c22f:0",
+    "1e8838fe6fe7c3028b1b5caf63177262024a2878:1",
+    "eb1a88bd470868f13eabf5ce1386418e831b7917:0",
+    "c49878f3a719ad0cc124817eef46e1a5ee5068c4:0"
+   ]
+  },
+  {
+   "name": "Only in another app/source, not in Google Photos",
+   "what": "Targets lived in third\u2011party sources (e.g., WhatsApp, Xender, InShot) so they weren\u2019t findable in Google Photos.",
+   "question": "0.1",
+   "kind": "new",
+   "exemplars": [
+    "a194bb983918c3d6054c047c4a1942b080ca86bf:0",
+    "d7b6216c887b2d1915ff0d123ea1e1f2528f3cba:0",
+    "a8f305cb05c3940433ba56d309435f108efc9244:0",
+    "f9d86a9c067a7420a8d89e8a3e18f10f53be7736:0",
+    "1a180b8bf5e63a3412dea0a8e91283945c39bf5e:0"
+   ]
+  },
+  {
+   "name": "Sensitive/banned concept blocks search",
+   "what": "Queries were refused or heavily censored (e.g., grief, fat, race terms) making the photo unfindable.",
+   "question": "7.1",
+   "kind": "new",
+   "exemplars": [
+    "238ec5be01df991cb6b8fd229ae91e29b2e35af4:0",
+    "766e30fd23eb00164d7e03ece585379912584624:0",
+    "282023a3841101500cfae4cf1984e8089f98f17a:0"
+   ]
+  },
+  {
+   "name": "Wrong or upload-date metadata hides photos",
+   "what": "Photos were filed under transfer/upload or incorrect dates, so date-based finding failed.",
+   "question": "5.2",
+   "kind": "new",
+   "exemplars": [
+    "3b53d4e5bf5f572ac92dce7bbc1051e9491c662a:0",
+    "d12c9914bfb24ebdb2acd51a78cbfd0a168069a7:0",
+    "dc4802445a1589683e42b2c4b78195c187ed393d:0"
+   ]
+  },
+  {
+   "name": "People/face search and grouping failures",
+   "what": "Face detection/grouping didn\u2019t find key people or couldn\u2019t be controlled, blocking people-based retrieval.",
+   "question": "5.3",
+   "kind": "new",
+   "exemplars": [
+    "4e994e83098c8b15d054604f7a8231a9a653047d:0",
+    "9754d8d92979538a21940600c39ef28a54db5b8c:0",
+    "51dc1308f2cf74549de911cb8b842ebeeee7863f:0",
+    "6b5a4912de3cd10b2ccf2f07757bc417ca500253:1",
+    "3ba2ad97300ec1206044dc3deed79e0240a13297:1"
+   ]
+  },
+  {
+   "name": "Album\u2011scoped search missing",
+   "what": "Users wanted to limit search to a specific album or use album info (like addresses) but Photos only searched the whole library.",
+   "question": "5.4",
+   "kind": "new",
+   "exemplars": [
+    "bb51e4bf9098197e7b7a505bd7eb4577706836b7:0",
+    "5044564d1b1696c6bfedce4ddff00747567a7d42:0"
+   ]
+  },
+  {
+   "name": "Auto\u2011creations/Spotlights are ephemeral and hard to re\u2011find",
+   "what": "Surfaces like Spotlight videos/collages appear then disappear with no obvious place to retrieve them later.",
+   "question": "7.1",
+   "kind": "new",
+   "exemplars": [
+    "71f704110f550a441de5bee6f5a112686df17340:0",
+    "6495de1277bc4735b2a4f79de419b955d0e48c6c:0",
+    "1e8838fe6fe7c3028b1b5caf63177262024a2878:0"
+   ]
+  },
+  {
+   "name": "Hidden/Locked/Archived items hard to locate after moves/restores",
+   "what": "Items in special containers (Hidden, Locked/Safe Folder, Archive) or restored media were hard to find in the main library.",
+   "question": "0.1",
+   "kind": "new",
+   "exemplars": [
+    "0701fc361d2cf788b4471f6ded6cbc4e8aaa8df5:0",
+    "0719834ba614c6cc69da3973d8f0865d1c02daf9:0",
+    "d2255720b2fa2300dfa79098601bf0c96f6ddc32:0",
+    "7c5a064da6323dc3128f27e4e6b0d08d9b49af4a:0",
+    "c96644dd2110f70c686817ae091590d8a22a75c6:0"
+   ]
+  },
+  {
+   "name": "Deep scrolling as fallback",
+   "what": "Users had to scroll far back through the timeline to locate items because targeted retrieval wasn\u2019t working.",
+   "question": "6.1",
+   "kind": "new",
+   "exemplars": [
+    "bc5c550e736b8cf3ff06a1ac0de6b70da0f425ec:0",
+    "bd0814e008a05c107af20e04f47da7c6fd8f164c:0",
+    "4217b5d02ba957a72904fa796a4bd54327cf19d2:0",
+    "e6600b3b1a7f061184a578f03a0b9da784298c86:0",
+    "bab90b1de62ccbe1ae30a49d63fb19f823c1c5c8:0"
+   ]
+  },
+  {
+   "name": "Object/text queries return too few/zero matches",
+   "what": "Search recall was unexpectedly low for clear object/text queries (e.g., VIN, monkeys, cheese, serial numbers).",
+   "question": "5.1",
+   "kind": "new",
+   "exemplars": [
+    "332db06724651c79605b4cc2b95c975ffd506919:0",
+    "33dd763b1d8fb1aac1afd0a4f6fcb1cec82b40ef:0",
+    "5d4974dfbb52e4696719c7eee8fc7a3e5a69e4e4:0",
+    "dc2535631942cc6b5a068698bf80431a03d4c971:0",
+    "ac7cfeda39451a237d2ad146b43c59993c4a9c0a:0"
+   ]
+  },
+  {
+   "name": "Search returns irrelevant false positives",
+   "what": "Results surfaced clearly off\u2011target matches despite precise queries (e.g., brand/person misfires, wrong event, wrong food).",
+   "question": "5.5",
+   "kind": "new",
+   "exemplars": [
+    "d8658981bb7b9f7a9966c8448f2111242522f8b2:0",
+    "50aee66bc91c783509c972b3f44b764fbf536234:1",
+    "f5070c83a77ef22125ec9701b9a7b16b906a4e41:3",
+    "3ba2ad97300ec1206044dc3deed79e0240a13297:1"
+   ]
+  },
+  {
+   "name": "Overwhelmingly similar photos/clutter impede finding",
+   "what": "Large volumes of near\u2011duplicate or similar photos made targeted retrieval impractical or demotivating.",
+   "question": "6.2",
+   "kind": "new",
+   "exemplars": [
+    "1233de10dc517a78f662c1618c4d4f5e5ccbc658:0",
+    "288686453f119a687c2aef30ec30311e10c46575:0",
+    "bc5c550e736b8cf3ff06a1ac0de6b70da0f425ec:0",
+    "321456a1706f437995abffba17ab2f68612bf01a:0"
+   ]
+  }
+ ],
+ "finding": "12 candidate group(s) for the PM to approve or reject ([CTX] \u00a78.3); none is applied until approved.",
+ "applied": false
+}

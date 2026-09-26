@@ -1,8 +1,7 @@
 """The blind-read audit — the only genuinely independent view of the coding
 (architecture.md §5.5, P3-MET-12, EC-VAL-1, EC-VAL-7).
 
-A sample of CONFIDENTLY coded stories (coding_conf ≥ 0.8), spread across
-primary stages, is read by gpt-5 with NO codebook and no sight of the codes:
+A sample of the most CONFIDENTLY coded stories, spread across primary stages, is read by gpt-5 with NO codebook and no sight of the codes:
 what is this person trying to find, what went wrong first, in their own words,
 and which of the eleven journey stages that was. Where the reader's stage
 differs from the coded one, the story is listed as a DISAGREEMENT CANDIDATE for
@@ -47,8 +46,12 @@ SCHEMA = B._obj({"target": B.STR, "what_went_wrong": B.STR,
 
 
 def sample(con, n: int, seed: int = 30) -> list[str]:
-    rows = con.execute("SELECT story_id, primary_stage FROM story_spine WHERE coding_conf >= 0.8"
-                       " ORDER BY story_id").fetchall()
+    """The 2n most confidently coded live stories, then round-robin across
+    primary stages. Only 36 stories reached coding_conf 0.8 (2026-09-26), so a
+    fixed cut-off could not yield ~60 (arch §5.5)."""
+    rows = con.execute("SELECT story_id, primary_stage FROM story_spine WHERE story_id NOT IN"
+                       " (SELECT story_id FROM exclusions WHERE story_id IS NOT NULL)"
+                       " ORDER BY coding_conf DESC, story_id LIMIT ?", (2 * n,)).fetchall()
     by: dict[str, list[str]] = defaultdict(list)
     for r in rows:
         by[r["primary_stage"]].append(r["story_id"])

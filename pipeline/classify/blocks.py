@@ -241,15 +241,20 @@ DATA_WRONG = {"date:received_date_not_capture", "date:scan_date", "date:wrong_cl
               "location:absent", "location:inaccurate", "faces:grouping_off_or_unavailable"}
 
 
-def stage0_without_evidence(stage: str, codes: dict[str, list[str]]) -> bool:
-    """Stage 0 (library_data) with nothing in 0.1 or 0.2 saying the photo was
-    unreachable. Found in the v1.1 corpus run: quiet successes ("searched
-    'passport' and found it") and bare "can't find it" stories were coded 0
-    because the codebook has no "nothing went wrong" stage (D-9)."""
+def stage0_without_evidence(stage: str, codes: dict[str, list[str]],
+                            outcome: str = "not_stated") -> bool:
+    """Stage 0 (library_data) contradicted by the story itself: it ends with the
+    photo found, and nothing in 0.1 or 0.2 says the photo was unreachable. Found in the v1.1 corpus run: quiet
+    successes ("searched 'passport' and found it") coded 0, because the codebook
+    has no "nothing went wrong" stage (D-9). A story that says the photo
+    vanished from the library — even one that was backed up first — is Stage 0,
+    and is not flagged."""
     if stage != "0":
         return False
     reach = [v for v in codes.get("0.1", []) if v not in ("yes_backed_up", "not_stated")]
-    return not reach and not DATA_WRONG & set(codes.get("0.2", []))
+    if reach or DATA_WRONG & set(codes.get("0.2", [])):
+        return False
+    return outcome in ("found", "found_after_struggle")
 
 
 def metric_node(stage: str, codes: dict[str, list[str]], outcome: str) -> str:
@@ -344,7 +349,7 @@ def validate(cb: cbm.Codebook, it: Item, out: dict) -> Coded:
             else:
                 c.problems["quote_unverified"] += 1
     c.rows.append(("10.3", SOURCE_KIND_103[it.source], None, None))
-    if stage0_without_evidence(stage, c.codes):
+    if stage0_without_evidence(stage, c.codes, sp["outcome"]):
         c.problems["stage0_without_evidence"] += 1
     for k, qq in enumerate(out["queries"], 1):
         t = " ".join(qq["text"].split()).strip("'\"‘’“”")
@@ -780,8 +785,9 @@ def stage0_suspects(con) -> set[str]:
     for r in con.execute("SELECT story_id, question, value FROM story_codes"
                          " WHERE question IN ('0.1','0.2')"):
         codes.setdefault(r[0], {}).setdefault(r[1], []).append(r[2])
-    return {r[0] for r in con.execute("SELECT story_id FROM story_spine WHERE primary_stage='0'")
-            if stage0_without_evidence("0", codes.get(r[0], {}))}
+    return {r[0] for r in con.execute("SELECT story_id, outcome FROM story_spine"
+                                      " WHERE primary_stage='0'")
+            if stage0_without_evidence("0", codes.get(r[0], {}), r[1])}
 
 
 if __name__ == "__main__":

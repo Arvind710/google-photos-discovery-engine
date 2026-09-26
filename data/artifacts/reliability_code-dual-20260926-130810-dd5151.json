@@ -1,0 +1,1088 @@
+{
+ "dual_run": "code-dual-20260926-130810-dd5151",
+ "n": 100,
+ "fields": [
+  {
+   "field": "photo_class",
+   "metric": "kappa",
+   "value": 0.7016,
+   "raw_agreement": 0.81,
+   "top_share": 0.45,
+   "marginals": "{\"sentimental\": 45, \"unclear\": 38, \"utility\": 16, \"both\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "media_type",
+   "metric": "kappa",
+   "value": 0.8077,
+   "raw_agreement": 0.92,
+   "top_share": 0.75,
+   "marginals": "{\"photo\": 75, \"video\": 10, \"screenshot\": 8, \"mixed\": 6, \"document\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "primary_stage",
+   "metric": "kappa",
+   "value": 0.6303,
+   "raw_agreement": 0.71,
+   "top_share": 0.33,
+   "marginals": "{\"0\": 33, \"5\": 25, \"9\": 15, \"3\": 11, \"2\": 6, \"6\": 5, \"1\": 4, \"4\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "outcome",
+   "metric": "kappa",
+   "value": 0.5084,
+   "raw_agreement": 0.7,
+   "top_share": 0.52,
+   "marginals": "{\"not_stated\": 52, \"found\": 20, \"found_after_struggle\": 11, \"abandoned_without_fallback\": 10, \"abandoned_with_fallback\": 3, \"substitute_accepted\": 3, \"found_later_by_accident\": 1}",
+   "n": 100,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "failure_owner",
+   "metric": "kappa",
+   "value": 0.6507,
+   "raw_agreement": 0.73,
+   "top_share": 0.33,
+   "marginals": "{\"library_data\": 33, \"system\": 25, \"none\": 19, \"strategy\": 11, \"memory\": 6, \"presentation\": 5, \"expression\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "metric_node",
+   "metric": "kappa",
+   "value": 0.6059,
+   "raw_agreement": 0.7,
+   "top_share": 0.33,
+   "marginals": "{\"target_retrievable\": 33, \"query_captures_usable_cue\": 32, \"outcome_measure\": 15, \"enters_gp_retrieval_path\": 11, \"user_recognises_target\": 5, \"context\": 4}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "severity",
+   "metric": "kappa",
+   "value": 0.3323,
+   "raw_agreement": 0.63,
+   "top_share": 0.61,
+   "marginals": "{\"1\": 61, \"2\": 28, \"3\": 7, \"4\": 4}",
+   "n": 100,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:0.1",
+   "metric": "kappa",
+   "value": 0.6789,
+   "raw_agreement": 0.81,
+   "top_share": 0.61,
+   "marginals": "{\"not_stated\": 61, \"deleted\": 15, \"yes_backed_up\": 12, \"trash_archive_or_locked_folder\": 4, \"old_device_or_sd_or_other_cloud\": 3, \"other_account\": 2, \"only_in_other_app\": 2, \"device_only_backup_off_or_folder_excluded\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:0.2",
+   "metric": "jaccard",
+   "value": 0.9773,
+   "raw_agreement": 0.9773,
+   "top_share": 0.9545,
+   "marginals": "{\"not_stated\": 42, \"date:wrong_clock_or_timezone\": 1, \"organisation:favourited\": 1}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:0.3",
+   "metric": "jaccard",
+   "value": 0.815,
+   "raw_agreement": 0.81,
+   "top_share": 0.86,
+   "marginals": "{\"not_stated\": 86, \"text_heavy_ocr_dependent\": 7, \"distinctive_subject\": 4, \"distinctive_subject|text_heavy_ocr_dependent\": 1, \"distinctive_subject|near_duplicate_or_burst\": 1, \"near_duplicate_or_burst\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:0.4",
+   "metric": "jaccard",
+   "value": 0.9457,
+   "raw_agreement": 0.9457,
+   "top_share": 0.9565,
+   "marginals": "{\"not_stated\": 88, \"size_tens_of_thousands_plus\": 2, \"size_thousands\": 1, \"several_peoples_photos_mixed|size_tens_of_thousands_plus\": 1}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:0.5",
+   "metric": "jaccard",
+   "value": 0.8913,
+   "raw_agreement": 0.8913,
+   "top_share": 0.9348,
+   "marginals": "{\"not_stated\": 86, \"taken_deliberately_as_note\": 2, \"never_organises\": 1, \"makes_albums\": 1, \"received_not_taken\": 1, \"favourites\": 1}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:1.1",
+   "metric": "kappa",
+   "value": 0.4834,
+   "raw_agreement": 0.71,
+   "top_share": 0.68,
+   "marginals": "{\"not_stated\": 68, \"practical\": 15, \"spontaneous\": 9, \"request\": 2, \"revisit\": 2, \"creation\": 1, \"conversational\": 1, \"proof\": 1, \"calendar_or_social\": 1}",
+   "n": 100,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:1.2",
+   "metric": "jaccard",
+   "value": 0.7235,
+   "raw_agreement": 0.7045,
+   "top_share": 0.7045,
+   "marginals": "{\"not_stated\": 31, \"send_or_share\": 6, \"extract_information\": 4, \"settle_own_doubt\": 1, \"reminisce_privately\": 1, \"show_on_screen\": 1}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:1.3",
+   "metric": "kappa",
+   "value": 0.4806,
+   "raw_agreement": 0.6818,
+   "top_share": 0.5,
+   "marginals": "{\"not_stated\": 22, \"exactly_one_photo\": 11, \"any_photo_of_person_or_object\": 5, \"only_information_inside\": 4, \"whole_event_set\": 1, \"any_photo_from_moment\": 1}",
+   "n": 44,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:1.4",
+   "metric": "jaccard",
+   "value": 0.8864,
+   "raw_agreement": 0.8864,
+   "top_share": 0.9773,
+   "marginals": "{\"not_stated\": 43, \"urgency:minutes_under_stress\": 1}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:1.5",
+   "metric": "kappa",
+   "value": 0.4021,
+   "raw_agreement": 0.71,
+   "top_share": 0.83,
+   "marginals": "{\"not_stated\": 83, \"deep_sentimental\": 11, \"real_consequences_money_health_legal\": 5, \"mildly_nice_to_have\": 1}",
+   "n": 100,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:1.6",
+   "metric": "kappa",
+   "value": 0.2653,
+   "raw_agreement": 0.5909,
+   "top_share": 0.75,
+   "marginals": "{\"owner\": 33, \"not_stated\": 11}",
+   "n": 44,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:2.1",
+   "metric": "jaccard",
+   "value": 0.5615,
+   "raw_agreement": 0.44,
+   "top_share": 0.42,
+   "marginals": "{\"not_stated\": 42, \"when:year\": 5, \"what:main_subject\": 4, \"what:visible_text\": 3, \"what:photo_type\": 3, \"what:photo_type|what:visible_text\": 3, \"what:photo_type|who:people_present|who:relationship\": 2, \"when:relative_to_event\": 2, \"what:main_subject|when:year|who:people_present\": 2, \"when:exact_date\": 2, \"when:season_weather_festival|when:year\": 1, \"what:main_subject|what:objects\": 1}",
+   "n": 100,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:2.2",
+   "metric": "jaccard",
+   "value": 0.8636,
+   "raw_agreement": 0.8636,
+   "top_share": 0.8636,
+   "marginals": "{\"not_stated\": 38, \"when:year=certain_correct\": 2, \"what:main_subject=certain_correct\": 1, \"what:photo_type=certain_correct|what:visible_text=certain_correct\": 1, \"when:year=range\": 1, \"what:objects=certain_correct\": 1}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:2.3",
+   "metric": "kappa",
+   "value": 0.37,
+   "raw_agreement": 0.7045,
+   "top_share": 0.6364,
+   "marginals": "{\"not_stated\": 28, \"one_generic_cue_weak\": 10, \"one_highly_distinctive_cue\": 4, \"several_weak_cues_combine\": 2}",
+   "n": 44,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:2.4",
+   "metric": "jaccard",
+   "value": 0.71,
+   "raw_agreement": 0.7,
+   "top_share": 0.76,
+   "marginals": "{\"not_stated\": 76, \"which_app_or_account\": 11, \"date_or_year\": 4, \"date_or_year|exact_place_or_venue_name\": 2, \"date_or_year|what_else_in_frame\": 2, \"album\": 2, \"album|date_or_year|exact_place_or_venue_name|which_app_or_account\": 1, \"word_for_the_thing\": 1, \"album|date_or_year\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:2.5",
+   "metric": "jaccard",
+   "value": 0.9545,
+   "raw_agreement": 0.9545,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 44}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:2.6",
+   "metric": "kappa",
+   "value": 0.2468,
+   "raw_agreement": 0.7273,
+   "top_share": 0.7727,
+   "marginals": "{\"not_stated\": 34, \"certain\": 7, \"unsure_ever_taken\": 2, \"fairly_sure\": 1}",
+   "n": 44,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:2.7",
+   "metric": "jaccard",
+   "value": 0.8182,
+   "raw_agreement": 0.8182,
+   "top_share": 0.8182,
+   "marginals": "{\"not_stated\": 36, \"type_right_word\": 6, \"scroll_to_date\": 2}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:2.8",
+   "metric": "jaccard",
+   "value": 0.9773,
+   "raw_agreement": 0.9773,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 44}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:3.1",
+   "metric": "kappa",
+   "value": 0.5042,
+   "raw_agreement": 0.7273,
+   "top_share": 0.5455,
+   "marginals": "{\"not_stated\": 24, \"google_photos\": 17, \"other:google_allo_assistant\": 1, \"other:photobucket\": 1, \"other:apple_photos\": 1}",
+   "n": 44,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:3.2",
+   "metric": "jaccard",
+   "value": 0.875,
+   "raw_agreement": 0.87,
+   "top_share": 0.68,
+   "marginals": "{\"not_stated\": 68, \"search_bar_keywords\": 17, \"timeline_scroll\": 9, \"people_places_things_chips\": 2, \"ask_photos\": 2, \"ask_photos|search_bar_keywords\": 1, \"search_bar_keywords|timeline_scroll\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:3.3",
+   "metric": "jaccard",
+   "value": 0.7283,
+   "raw_agreement": 0.7283,
+   "top_share": 0.8913,
+   "marginals": "{\"not_stated\": 82, \"matches_cue_type\": 6, \"habit\": 2, \"habit|past_success_or_failure\": 1, \"habit|matches_cue_type\": 1}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:3.4",
+   "metric": "jaccard",
+   "value": 0.9773,
+   "raw_agreement": 0.9773,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 44}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:3.5",
+   "metric": "kappa",
+   "value": 0.6367,
+   "raw_agreement": 0.8587,
+   "top_share": 0.7609,
+   "marginals": "{\"not_stated\": 70, \"single_mode\": 20, \"sequential_modes\": 2}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:4.1",
+   "metric": "kappa",
+   "value": 0.6691,
+   "raw_agreement": 0.88,
+   "top_share": 0.78,
+   "marginals": "{\"not_stated\": 78, \"single_noun\": 11, \"full_natural_description\": 5, \"several_keywords\": 4, \"named_entity\": 2}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:4.2",
+   "metric": "jaccard",
+   "value": 0.9773,
+   "raw_agreement": 0.9773,
+   "top_share": 0.8409,
+   "marginals": "{\"not_stated\": 37, \"most_salient_only\": 7}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:4.3",
+   "metric": "jaccard",
+   "value": 0.9773,
+   "raw_agreement": 0.9773,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 44}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:4.4",
+   "metric": "jaccard",
+   "value": 0.8587,
+   "raw_agreement": 0.8587,
+   "top_share": 0.7609,
+   "marginals": "{\"not_stated\": 70, \"keyword_mode\": 16, \"conversational_mode\": 6}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:4.5",
+   "metric": "jaccard",
+   "value": 0.7065,
+   "raw_agreement": 0.7065,
+   "top_share": 0.5978,
+   "marginals": "{\"not_stated\": 55, \"none\": 35, \"people_or_place_chips\": 1, \"voice_input\": 1}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:5.1",
+   "metric": "jaccard",
+   "value": 0.8913,
+   "raw_agreement": 0.8804,
+   "top_share": 0.8043,
+   "marginals": "{\"not_stated\": 74, \"parsed_ok\": 16, \"parsed_ok|personal_reference_unresolved\": 1, \"entities_misparsed|parsed_ok\": 1}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:5.2",
+   "metric": "jaccard",
+   "value": 0.9094,
+   "raw_agreement": 0.9022,
+   "top_share": 0.9022,
+   "marginals": "{\"not_stated\": 83, \"wrong_date\": 3, \"concept_not_modelled|object_unrecognised\": 2, \"unnamed_face\": 1, \"concept_not_modelled|missing_location\": 1, \"concept_not_modelled|text_not_ocrd\": 1, \"text_not_ocrd\": 1}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:5.3",
+   "metric": "jaccard",
+   "value": 0.9239,
+   "raw_agreement": 0.9239,
+   "top_share": 0.9565,
+   "marginals": "{\"not_stated\": 88, \"soft_ok\": 4}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:5.4",
+   "metric": "jaccard",
+   "value": 0.9674,
+   "raw_agreement": 0.9674,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 92}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:5.5",
+   "metric": "kappa",
+   "value": 0.0,
+   "raw_agreement": 0.9891,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 92}",
+   "n": 92,
+   "verdict": "degenerate"
+  },
+  {
+   "field": "q:5.6",
+   "metric": "kappa",
+   "value": 0.7171,
+   "raw_agreement": 0.94,
+   "top_share": 0.86,
+   "marginals": "{\"not_stated\": 86, \"irrelevant_results\": 9, \"zero_results\": 3, \"far_too_many\": 1, \"cant_find_it_message\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:6.1",
+   "metric": "kappa",
+   "value": 0.4604,
+   "raw_agreement": 0.8043,
+   "top_share": 0.837,
+   "marginals": "{\"not_stated\": 77, \"a_handful\": 8, \"zero_results\": 3, \"hundreds\": 2, \"nothing_resembling_target\": 2}",
+   "n": 92,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:6.2",
+   "metric": "jaccard",
+   "value": 0.7273,
+   "raw_agreement": 0.7273,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 44}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:6.3",
+   "metric": "kappa",
+   "value": 0.1674,
+   "raw_agreement": 0.8043,
+   "top_share": 0.9565,
+   "marginals": "{\"not_stated\": 88, \"instant_recognition\": 3, \"recognise_event_not_photo\": 1}",
+   "n": 92,
+   "verdict": "degenerate"
+  },
+  {
+   "field": "q:6.4",
+   "metric": "jaccard",
+   "value": 0.9239,
+   "raw_agreement": 0.9239,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 92}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:6.5",
+   "metric": "jaccard",
+   "value": 0.6467,
+   "raw_agreement": 0.6413,
+   "top_share": 0.6957,
+   "marginals": "{\"not_stated\": 64, \"nothing\": 28}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:6.6",
+   "metric": "kappa",
+   "value": 0.0571,
+   "raw_agreement": 0.7273,
+   "top_share": 0.9773,
+   "marginals": "{\"not_stated\": 43, \"exhaustive\": 1}",
+   "n": 44,
+   "verdict": "degenerate"
+  },
+  {
+   "field": "q:6.7",
+   "metric": "jaccard",
+   "value": 0.8261,
+   "raw_agreement": 0.8261,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 92}",
+   "n": 92,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:7.1",
+   "metric": "kappa",
+   "value": 0.503,
+   "raw_agreement": 0.759,
+   "top_share": 0.6747,
+   "marginals": "{\"not_stated\": 56, \"deleted_or_doesnt_exist\": 18, \"search_is_useless\": 5, \"in_another_app_or_account\": 3, \"wrong_words\": 1}",
+   "n": 83,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:7.2",
+   "metric": "jaccard",
+   "value": 0.8082,
+   "raw_agreement": 0.7952,
+   "top_share": 0.8554,
+   "marginals": "{\"not_stated\": 71, \"switch_mode\": 5, \"quit\": 2, \"rephrase_synonyms\": 1, \"quit|repeat_same_query|rephrase_synonyms\": 1, \"leave_app_fetch_cue|quit\": 1, \"anchor_and_pivot|switch_mode\": 1, \"rephrase_synonyms|switch_mode\": 1}",
+   "n": 83,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:7.3",
+   "metric": "jaccard",
+   "value": 0.6145,
+   "raw_agreement": 0.6145,
+   "top_share": 0.5542,
+   "marginals": "{\"not_stated\": 46, \"nothing_new\": 36, \"outside_confirmation\": 1}",
+   "n": 83,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:7.4",
+   "metric": "jaccard",
+   "value": 0.7048,
+   "raw_agreement": 0.6867,
+   "top_share": 0.6386,
+   "marginals": "{\"not_stated\": 53, \"frustration\": 25, \"frustration|resignation\": 3, \"anxiety_someone_waiting|frustration\": 1, \"resignation\": 1}",
+   "n": 83,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:7.5",
+   "metric": "kappa",
+   "value": 0.1048,
+   "raw_agreement": 0.6988,
+   "top_share": 0.6867,
+   "marginals": "{\"not_stated\": 57, \"nothing\": 25, \"suggestions\": 1}",
+   "n": 83,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:8.1",
+   "metric": "kappa",
+   "value": 0.3342,
+   "raw_agreement": 0.7273,
+   "top_share": 0.7727,
+   "marginals": "{\"not_stated\": 34, \"one_attempt\": 7, \"hour_or_more\": 2, \"few_attempts_minutes\": 1}",
+   "n": 44,
+   "verdict": "low_reliability"
+  },
+  {
+   "field": "q:8.2",
+   "metric": "jaccard",
+   "value": 0.739,
+   "raw_agreement": 0.7108,
+   "top_share": 0.7349,
+   "marginals": "{\"not_stated\": 61, \"fatigue\": 5, \"stakes\": 5, \"sense_of_progress\": 3, \"fatigue|stakes\": 2, \"confidence_photo_exists\": 2, \"easier_alternative_source\": 2, \"confidence_photo_exists|stakes\": 2, \"sense_of_progress|stakes\": 1}",
+   "n": 83,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:8.3",
+   "metric": "kappa",
+   "value": 0.2932,
+   "raw_agreement": 0.8182,
+   "top_share": 0.9545,
+   "marginals": "{\"not_stated\": 42, \"steady_narrowing\": 2}",
+   "n": 44,
+   "verdict": "degenerate"
+  },
+  {
+   "field": "q:8.4",
+   "metric": "kappa",
+   "value": 0.3125,
+   "raw_agreement": 0.9091,
+   "top_share": 0.9773,
+   "marginals": "{\"not_stated\": 43, \"results_drifting_toward_event\": 1}",
+   "n": 44,
+   "verdict": "degenerate"
+  },
+  {
+   "field": "q:9.1",
+   "metric": "jaccard",
+   "value": 0.77,
+   "raw_agreement": 0.73,
+   "top_share": 0.83,
+   "marginals": "{\"not_stated\": 83, \"decisive_cue:what|path:first_query\": 5, \"path:specific_mode\": 3, \"path:pure_scrolling\": 3, \"path:outside_help\": 2, \"decisive_cue:source|decisive_cue:what|decisive_cue:when|path:first_query\": 1, \"decisive_cue:when|path:pure_scrolling\": 1, \"path:outside_help|path:specific_mode\": 1, \"decisive_cue:when|path:refined_query\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:9.2",
+   "metric": "jaccard",
+   "value": 0.8072,
+   "raw_agreement": 0.8072,
+   "top_share": 0.9277,
+   "marginals": "{\"not_stated\": 77, \"screenshot\": 3, \"share\": 3}",
+   "n": 83,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:9.3",
+   "metric": "kappa",
+   "value": 0.0,
+   "raw_agreement": 0.9759,
+   "top_share": 0.9759,
+   "marginals": "{\"not_stated\": 81, \"similar_photo_same_event\": 2}",
+   "n": 83,
+   "verdict": "degenerate"
+  },
+  {
+   "field": "q:9.4",
+   "metric": "jaccard",
+   "value": 0.83,
+   "raw_agreement": 0.83,
+   "top_share": 0.85,
+   "marginals": "{\"not_stated\": 85, \"aftermath:loss_or_annoyance\": 9, \"why:belief_doesnt_exist\": 2, \"aftermath:loss_or_annoyance|fallback:describe_verbally|why:frustration\": 1, \"why:frustration\": 1, \"fallback:search_google\": 1, \"aftermath:loss_or_annoyance|why:belief_doesnt_exist\": 1}",
+   "n": 100,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:9.5",
+   "metric": "kappa",
+   "value": 1.0,
+   "raw_agreement": 1.0,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 44}",
+   "n": 44,
+   "verdict": "ok"
+  },
+  {
+   "field": "q:9.6",
+   "metric": "kappa",
+   "value": 0.497,
+   "raw_agreement": 0.988,
+   "top_share": 0.988,
+   "marginals": "{\"not_stated\": 82, \"while_scrolling_for_else\": 1}",
+   "n": 83,
+   "verdict": "degenerate"
+  },
+  {
+   "field": "q:10.1",
+   "metric": "kappa",
+   "value": 0.544,
+   "raw_agreement": 0.9277,
+   "top_share": 0.9157,
+   "marginals": "{\"not_stated\": 76, \"more_search_use\": 4, \"less_search_use\": 3}",
+   "n": 83,
+   "verdict": "degenerate"
+  },
+  {
+   "field": "q:10.2",
+   "metric": "jaccard",
+   "value": 1.0,
+   "raw_agreement": 1.0,
+   "top_share": 1.0,
+   "marginals": "{\"not_stated\": 83}",
+   "n": 83,
+   "verdict": "ok"
+  }
+ ],
+ "not_stated_gap": {
+  "0.1": {
+   "primary": 0.61,
+   "secondary": 0.61,
+   "gap_pp": 0.0,
+   "flag": false
+  },
+  "0.2": {
+   "primary": 0.955,
+   "secondary": 0.955,
+   "gap_pp": 0.0,
+   "flag": false
+  },
+  "0.3": {
+   "primary": 0.86,
+   "secondary": 0.83,
+   "gap_pp": 3.0,
+   "flag": false
+  },
+  "0.4": {
+   "primary": 0.957,
+   "secondary": 0.924,
+   "gap_pp": 3.3,
+   "flag": false
+  },
+  "0.5": {
+   "primary": 0.935,
+   "secondary": 0.935,
+   "gap_pp": 0.0,
+   "flag": false
+  },
+  "1.1": {
+   "primary": 0.68,
+   "secondary": 0.59,
+   "gap_pp": 9.0,
+   "flag": false
+  },
+  "1.2": {
+   "primary": 0.705,
+   "secondary": 0.705,
+   "gap_pp": 0.0,
+   "flag": false
+  },
+  "1.3": {
+   "primary": 0.5,
+   "secondary": 0.659,
+   "gap_pp": 15.9,
+   "flag": false
+  },
+  "1.4": {
+   "primary": 0.977,
+   "secondary": 0.909,
+   "gap_pp": 6.8,
+   "flag": false
+  },
+  "1.5": {
+   "primary": 0.83,
+   "secondary": 0.6,
+   "gap_pp": 23.0,
+   "flag": true
+  },
+  "1.6": {
+   "primary": 0.25,
+   "secondary": 0.614,
+   "gap_pp": 36.4,
+   "flag": true
+  },
+  "2.1": {
+   "primary": 0.42,
+   "secondary": 0.6,
+   "gap_pp": 18.0,
+   "flag": false
+  },
+  "2.2": {
+   "primary": 0.864,
+   "secondary": 0.977,
+   "gap_pp": 11.4,
+   "flag": false
+  },
+  "2.3": {
+   "primary": 0.636,
+   "secondary": 0.795,
+   "gap_pp": 15.9,
+   "flag": false
+  },
+  "2.4": {
+   "primary": 0.76,
+   "secondary": 0.81,
+   "gap_pp": 5.0,
+   "flag": false
+  },
+  "2.5": {
+   "primary": 1.0,
+   "secondary": 0.955,
+   "gap_pp": 4.5,
+   "flag": false
+  },
+  "2.6": {
+   "primary": 0.773,
+   "secondary": 0.795,
+   "gap_pp": 2.3,
+   "flag": false
+  },
+  "2.7": {
+   "primary": 0.818,
+   "secondary": 0.818,
+   "gap_pp": 0.0,
+   "flag": false
+  },
+  "2.8": {
+   "primary": 1.0,
+   "secondary": 0.977,
+   "gap_pp": 2.3,
+   "flag": false
+  },
+  "3.1": {
+   "primary": 0.545,
+   "secondary": 0.455,
+   "gap_pp": 9.1,
+   "flag": false
+  },
+  "3.2": {
+   "primary": 0.68,
+   "secondary": 0.7,
+   "gap_pp": 2.0,
+   "flag": false
+  },
+  "3.3": {
+   "primary": 0.891,
+   "secondary": 0.761,
+   "gap_pp": 13.0,
+   "flag": false
+  },
+  "3.4": {
+   "primary": 1.0,
+   "secondary": 0.977,
+   "gap_pp": 2.3,
+   "flag": false
+  },
+  "3.5": {
+   "primary": 0.761,
+   "secondary": 0.728,
+   "gap_pp": 3.3,
+   "flag": false
+  },
+  "4.1": {
+   "primary": 0.78,
+   "secondary": 0.8,
+   "gap_pp": 2.0,
+   "flag": false
+  },
+  "4.2": {
+   "primary": 0.841,
+   "secondary": 0.864,
+   "gap_pp": 2.3,
+   "flag": false
+  },
+  "4.3": {
+   "primary": 1.0,
+   "secondary": 0.977,
+   "gap_pp": 2.3,
+   "flag": false
+  },
+  "4.4": {
+   "primary": 0.761,
+   "secondary": 0.815,
+   "gap_pp": 5.4,
+   "flag": false
+  },
+  "4.5": {
+   "primary": 0.598,
+   "secondary": 0.739,
+   "gap_pp": 14.1,
+   "flag": false
+  },
+  "5.1": {
+   "primary": 0.804,
+   "secondary": 0.859,
+   "gap_pp": 5.4,
+   "flag": false
+  },
+  "5.2": {
+   "primary": 0.902,
+   "secondary": 0.935,
+   "gap_pp": 3.3,
+   "flag": false
+  },
+  "5.3": {
+   "primary": 0.957,
+   "secondary": 0.924,
+   "gap_pp": 3.3,
+   "flag": false
+  },
+  "5.4": {
+   "primary": 1.0,
+   "secondary": 0.967,
+   "gap_pp": 3.3,
+   "flag": false
+  },
+  "5.5": {
+   "primary": 1.0,
+   "secondary": 0.989,
+   "gap_pp": 1.1,
+   "flag": false
+  },
+  "5.6": {
+   "primary": 0.86,
+   "secondary": 0.91,
+   "gap_pp": 5.0,
+   "flag": false
+  },
+  "6.1": {
+   "primary": 0.837,
+   "secondary": 0.739,
+   "gap_pp": 9.8,
+   "flag": false
+  },
+  "6.2": {
+   "primary": 1.0,
+   "secondary": 0.727,
+   "gap_pp": 27.3,
+   "flag": true
+  },
+  "6.3": {
+   "primary": 0.957,
+   "secondary": 0.793,
+   "gap_pp": 16.3,
+   "flag": false
+  },
+  "6.4": {
+   "primary": 1.0,
+   "secondary": 0.924,
+   "gap_pp": 7.6,
+   "flag": false
+  },
+  "6.5": {
+   "primary": 0.696,
+   "secondary": 0.761,
+   "gap_pp": 6.5,
+   "flag": false
+  },
+  "6.6": {
+   "primary": 0.977,
+   "secondary": 0.727,
+   "gap_pp": 25.0,
+   "flag": true
+  },
+  "6.7": {
+   "primary": 1.0,
+   "secondary": 0.826,
+   "gap_pp": 17.4,
+   "flag": false
+  },
+  "7.1": {
+   "primary": 0.675,
+   "secondary": 0.723,
+   "gap_pp": 4.8,
+   "flag": false
+  },
+  "7.2": {
+   "primary": 0.855,
+   "secondary": 0.892,
+   "gap_pp": 3.6,
+   "flag": false
+  },
+  "7.3": {
+   "primary": 0.554,
+   "secondary": 0.855,
+   "gap_pp": 30.1,
+   "flag": true
+  },
+  "7.4": {
+   "primary": 0.639,
+   "secondary": 0.554,
+   "gap_pp": 8.4,
+   "flag": false
+  },
+  "7.5": {
+   "primary": 0.687,
+   "secondary": 0.94,
+   "gap_pp": 25.3,
+   "flag": true
+  },
+  "8.1": {
+   "primary": 0.773,
+   "secondary": 0.727,
+   "gap_pp": 4.5,
+   "flag": false
+  },
+  "8.2": {
+   "primary": 0.735,
+   "secondary": 0.795,
+   "gap_pp": 6.0,
+   "flag": false
+  },
+  "8.3": {
+   "primary": 0.955,
+   "secondary": 0.773,
+   "gap_pp": 18.2,
+   "flag": false
+  },
+  "8.4": {
+   "primary": 0.977,
+   "secondary": 0.886,
+   "gap_pp": 9.1,
+   "flag": false
+  },
+  "9.1": {
+   "primary": 0.83,
+   "secondary": 0.73,
+   "gap_pp": 10.0,
+   "flag": false
+  },
+  "9.2": {
+   "primary": 0.928,
+   "secondary": 0.88,
+   "gap_pp": 4.8,
+   "flag": false
+  },
+  "9.3": {
+   "primary": 0.976,
+   "secondary": 1.0,
+   "gap_pp": 2.4,
+   "flag": false
+  },
+  "9.4": {
+   "primary": 0.85,
+   "secondary": 0.95,
+   "gap_pp": 10.0,
+   "flag": false
+  },
+  "9.5": {
+   "primary": 1.0,
+   "secondary": 1.0,
+   "gap_pp": 0.0,
+   "flag": false
+  },
+  "9.6": {
+   "primary": 0.988,
+   "secondary": 0.988,
+   "gap_pp": 0.0,
+   "flag": false
+  },
+  "10.1": {
+   "primary": 0.916,
+   "secondary": 0.916,
+   "gap_pp": 0.0,
+   "flag": false
+  },
+  "10.2": {
+   "primary": 1.0,
+   "secondary": 1.0,
+   "gap_pp": 0.0,
+   "flag": false
+  }
+ },
+ "strata": {
+  "gp_help|unclear|9": 2,
+  "x|utility|2": 1,
+  "youtube|unclear|0": 5,
+  "x|unclear|3": 1,
+  "youtube|sentimental|9": 4,
+  "x|sentimental|0": 2,
+  "gp_help|unclear|5": 2,
+  "youtube|unclear|1": 2,
+  "x|utility|5": 1,
+  "youtube|utility|0": 3,
+  "play|utility|5": 1,
+  "reddit|unclear|5": 1,
+  "reddit|utility|0": 1,
+  "hackernews|sentimental|2": 1,
+  "youtube|sentimental|0": 5,
+  "gp_help|unclear|0": 2,
+  "x|unclear|6": 1,
+  "x|sentimental|2": 2,
+  "reddit|sentimental|4": 1,
+  "x|utility|0": 1,
+  "gp_help|sentimental|0": 2,
+  "hackernews|unclear|3": 1,
+  "x|unclear|5": 1,
+  "x|sentimental|1": 2,
+  "youtube|unclear|5": 5,
+  "hackernews|sentimental|3": 1,
+  "stackexchange|sentimental|3": 1,
+  "x|sentimental|9": 1,
+  "gp_help|sentimental|3": 2,
+  "reddit|unclear|0": 2,
+  "youtube|unclear|9": 4,
+  "stackexchange|sentimental|0": 1,
+  "hackernews|sentimental|9": 1,
+  "hackernews|both|5": 1,
+  "hackernews|utility|2": 1,
+  "youtube|unclear|6": 2,
+  "x|utility|9": 1,
+  "reddit|sentimental|3": 1,
+  "reddit|utility|5": 1,
+  "x|unclear|0": 1,
+  "youtube|sentimental|5": 1,
+  "appstore|sentimental|0": 1,
+  "hackernews|sentimental|5": 1,
+  "x|sentimental|6": 1,
+  "appstore|unclear|5": 1,
+  "youtube|unclear|3": 2,
+  "reddit|sentimental|6": 1,
+  "gp_help|utility|0": 2,
+  "quora|sentimental|5": 1,
+  "hackernews|utility|5": 1,
+  "hackernews|sentimental|0": 1,
+  "appstore|utility|5": 1,
+  "quora|utility|2": 1,
+  "gp_help|sentimental|5": 1,
+  "quora|sentimental|9": 1,
+  "x|sentimental|3": 2,
+  "reddit|sentimental|5": 2,
+  "hackernews|unclear|0": 1,
+  "stackexchange|unclear|0": 1,
+  "reddit|sentimental|0": 2,
+  "appstore|sentimental|5": 1,
+  "stackexchange|sentimental|5": 1,
+  "reddit|unclear|9": 1,
+  "x|sentimental|5": 1
+ }
+}

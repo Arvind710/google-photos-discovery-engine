@@ -405,13 +405,17 @@ def test_T20_core_story_count(con):
 
 
 def test_stage0_needs_library_evidence():
-    """D-9: a quiet success or a bare "can't find it" is not a library-state
-    failure. Stage 0 needs 0.1 or 0.2 to say the photo was unreachable."""
-    assert B.stage0_without_evidence("0", {"0.1": ["yes_backed_up"]})
-    assert B.stage0_without_evidence("0", {"0.1": ["not_stated"], "0.2": ["not_stated"]})
-    assert not B.stage0_without_evidence("0", {"0.1": ["deleted"]})
-    assert not B.stage0_without_evidence("0", {"0.1": ["not_stated"],
-                                               "0.2": ["date:received_date_not_capture"]})
+    """D-9: a quiet success is not a library-state failure. A story saying the
+    photo vanished is, even when it cannot say where it went (0.1 not_stated) or
+    it had been backed up first."""
+    assert B.stage0_without_evidence("0", {"0.1": ["yes_backed_up"]}, "found")
+    assert B.stage0_without_evidence("0", {"0.1": ["not_stated"]}, "found_after_struggle")
+    assert not B.stage0_without_evidence("0", {"0.1": ["yes_backed_up"]}, "not_stated")
+    assert not B.stage0_without_evidence("0", {"0.1": ["not_stated"]}, "not_stated")
+    assert not B.stage0_without_evidence("0", {"0.1": ["deleted"]}, "found")
+    assert not B.stage0_without_evidence("0", {"0.1": ["yes_backed_up"],
+                                               "0.2": ["date:received_date_not_capture"]},
+                                         "found")
     assert not B.stage0_without_evidence("5", {"0.1": ["yes_backed_up"]})
 
 

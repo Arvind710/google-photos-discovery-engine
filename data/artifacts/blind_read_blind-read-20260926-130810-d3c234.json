@@ -1,0 +1,562 @@
+{
+ "run_id": "blind-read-20260926-130810-d3c234",
+ "n": 36,
+ "stage_agreement": 0.8333333333333334,
+ "note": "Disagreement candidates are for inspection, not a score (EC-VAL-7).",
+ "confusion": {
+  "5->0": 1,
+  "5->9": 1,
+  "9->3": 1,
+  "9->4": 1,
+  "9->0": 1,
+  "0->1": 1
+ },
+ "coded_stage5_share": 0.08333333333333333,
+ "reader_stage5_share": 0.027777777777777776,
+ "themes": [
+  [
+   "deleted from private folder",
+   1
+  ],
+  [
+   "ocr-powered photo search",
+   1
+  ],
+  [
+   "keyword search mismatch",
+   1
+  ],
+  [
+   "voice photo search",
+   1
+  ],
+  [
+   "permanent deletion in photos",
+   1
+  ],
+  [
+   "photo search object recognition",
+   1
+  ],
+  [
+   "automated tagging gone wrong",
+   1
+  ],
+  [
+   "search beats sorting",
+   1
+  ],
+  [
+   "permanent deletion, no backup",
+   1
+  ],
+  [
+   "ai photo search",
+   1
+  ],
+  [
+   "ocr text search success",
+   1
+  ],
+  [
+   "cloud backup rediscovery",
+   1
+  ],
+  [
+   "removed without backup",
+   1
+  ],
+  [
+   "successful rediscovery",
+   1
+  ],
+  [
+   "icloud storage exhaustion",
+   1
+  ],
+  [
+   "typo-tolerant search",
+   1
+  ],
+  [
+   "wrong date metadata",
+   1
+  ],
+  [
+   "recovering deleted photos",
+   1
+  ],
+  [
+   "accidental factory reset",
+   1
+  ],
+  [
+   "automatic photo recognition",
+   1
+  ],
+  [
+   "permanent deletion recovery",
+   1
+  ],
+  [
+   "place-name search success",
+   1
+  ],
+  [
+   "deleted screenshot recovery",
+   1
+  ],
+  [
+   "search works perfectly",
+   1
+  ],
+  [
+   "nostalgic photo recovery",
+   1
+  ],
+  [
+   "automatic recognition convenience",
+   1
+  ],
+  [
+   "accidental permanent deletion",
+   1
+  ],
+  [
+   "effortless ai photo retrieval",
+   1
+  ],
+  [
+   "missed cloud backup",
+   1
+  ],
+  [
+   "google photos search success",
+   1
+  ],
+  [
+   "permanently deleted screenshot",
+   1
+  ],
+  [
+   "search that just works",
+   1
+  ],
+  [
+   "backup assumption failure",
+   1
+  ],
+  [
+   "search working as intended",
+   1
+  ],
+  [
+   "panic-driven deletion",
+   1
+  ],
+  [
+   "bad transfer then deletion",
+   1
+  ]
+ ],
+ "disagreement_candidates": [
+  {
+   "story_id": "3581be8104f7fedda6cc5f2c4dae079504c6446d:0",
+   "coded_stage": "5",
+   "coded_why": "Search returned many irrelevant results misclassifying an adult as a child",
+   "reader_stage": "0",
+   "agree": false,
+   "target": "Their baby pictures",
+   "what_went_wrong": "Google Photos tagged their ex as a child, polluting results.",
+   "stage": "0",
+   "theme": "Automated tagging gone wrong"
+  },
+  {
+   "story_id": "e3c5e27b3bd410751b123c3df4555fb399f32830:0",
+   "coded_stage": "5",
+   "coded_why": "They rely on text search and it returns the right documents.",
+   "reader_stage": "9",
+   "agree": false,
+   "target": "a photo of their driving license",
+   "what_went_wrong": "Nothing went wrong; search found it via text/OCR.",
+   "stage": "9",
+   "theme": "OCR text search success"
+  },
+  {
+   "story_id": "33066815ea92be7b3a4cea9ebed1925587632315:0",
+   "coded_stage": "9",
+   "coded_why": "No failure described; they simply found it",
+   "reader_stage": "3",
+   "agree": false,
+   "target": "Photo of Jonghyun from 2014 Sepang F1 concert",
+   "what_went_wrong": "Assumed it was lost and didn\u2019t check Google Photos backup",
+   "stage": "3",
+   "theme": "Cloud backup rediscovery"
+  },
+  {
+   "story_id": "aa1520f4fbb8f25b2e1435cc95c2f9fd8d6616fe:0",
+   "coded_stage": "9",
+   "coded_why": "No difficulty; first query found it.",
+   "reader_stage": "4",
+   "agree": false,
+   "target": "photo of a tattoo from six years ago",
+   "what_went_wrong": "They misspelled \u201ctattoo\u201d as \u201ctatoo.\u201d",
+   "stage": "4",
+   "theme": "typo-tolerant search"
+  },
+  {
+   "story_id": "9fa0ece8f28355ed6ca9cc877b6576d463a5bcac:0",
+   "coded_stage": "9",
+   "coded_why": "Only states that the pic was found.",
+   "reader_stage": "0",
+   "agree": false,
+   "target": "a deleted photo on an Android phone",
+   "what_went_wrong": "The photo was deleted from their phone.",
+   "stage": "0",
+   "theme": "Recovering deleted photos"
+  },
+  {
+   "story_id": "c49878f3a719ad0cc124817eef46e1a5ee5068c4:0",
+   "coded_stage": "0",
+   "coded_why": "Photos sought are in another app/account, not this library.",
+   "reader_stage": "1",
+   "agree": false,
+   "target": "childhood screenshots from my old Photobucket account",
+   "what_went_wrong": "No problem stated; just decided to look.",
+   "stage": "1",
+   "theme": "nostalgic photo recovery"
+  }
+ ],
+ "agreements": [
+  {
+   "story_id": "b12eb55c15c1a11c7a7111945405a6c476acee96:0",
+   "coded_stage": "0",
+   "coded_why": "They say the photo was deleted and now missing everywhere",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Photo from Oct 17\u201318, 2023 deleted from private folder",
+   "what_went_wrong": "They deleted it from the phone\u2019s private/locked folder in late November.",
+   "stage": "0",
+   "theme": "deleted from private folder"
+  },
+  {
+   "story_id": "90c8b5f8d8913d764335d981d06c5dc02200c937:0",
+   "coded_stage": "2",
+   "coded_why": "They couldn\u2019t recall when the photo was taken",
+   "reader_stage": "2",
+   "agree": true,
+   "target": "Photo of posters taken earlier this year",
+   "what_went_wrong": "They couldn\u2019t remember when the photo was taken.",
+   "stage": "2",
+   "theme": "OCR-powered photo search"
+  },
+  {
+   "story_id": "88a83897e2c872e72ac85967d7fc5c158d43bbb0:0",
+   "coded_stage": "5",
+   "coded_why": "They searched with a usable cue and got zero results",
+   "reader_stage": "5",
+   "agree": true,
+   "target": "photos of son vomiting cutely",
+   "what_went_wrong": "Searching \u201cvomit\u201d returned no results.",
+   "stage": "5",
+   "theme": "keyword search mismatch"
+  },
+  {
+   "story_id": "14ed655bd0a022582467843de12eb960c2bf90a8:0",
+   "coded_stage": "9",
+   "coded_why": "No failure; first query found photos.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "photos of my bike from last year",
+   "what_went_wrong": "Nothing went wrong.",
+   "stage": "9",
+   "theme": "voice photo search"
+  },
+  {
+   "story_id": "fde92544587b4047801d2c8a2d19396ec13cbc4b:0",
+   "coded_stage": "0",
+   "coded_why": "They say it was permanently deleted from Trash",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Screenshot taken yesterday around 2:30\u20133:20 pm",
+   "what_went_wrong": "It was permanently deleted from Google Photos trash.",
+   "stage": "0",
+   "theme": "permanent deletion in Photos"
+  },
+  {
+   "story_id": "112f493208a69edd002fcc3b5194ae1643a18c55:0",
+   "coded_stage": "2",
+   "coded_why": "They lacked place memory despite recalling the subject.",
+   "reader_stage": "2",
+   "agree": true,
+   "target": "Medlar photos they'd taken",
+   "what_went_wrong": "They couldn\u2019t remember where they\u2019d seen it.",
+   "stage": "2",
+   "theme": "Photo search object recognition"
+  },
+  {
+   "story_id": "302f3f58333fa007cec6f83c7aacce323701f6bd:0",
+   "coded_stage": "9",
+   "coded_why": "They searched and immediately found relevant photos without difficulty.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "photos of their driveway",
+   "what_went_wrong": "Nothing; search found them immediately.",
+   "stage": "9",
+   "theme": "Search beats sorting"
+  },
+  {
+   "story_id": "083d58c2b1383189072a26fdcf9c5f0dad411ae7:0",
+   "coded_stage": "0",
+   "coded_why": "They state the photos were deleted from the gallery bin.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "phone camera photos deleted from gallery bin",
+   "what_went_wrong": "They emptied the gallery recycle bin, permanently deleting the photos.",
+   "stage": "0",
+   "theme": "permanent deletion, no backup"
+  },
+  {
+   "story_id": "790de55c9d650cb50647f97841544a0c5b1b7275:0",
+   "coded_stage": "2",
+   "coded_why": "They lacked the date memory but searched by subject.",
+   "reader_stage": "2",
+   "agree": true,
+   "target": "the photo I took of a bicycle",
+   "what_went_wrong": "They couldn\u2019t remember when they took it.",
+   "stage": "2",
+   "theme": "AI photo search"
+  },
+  {
+   "story_id": "e16f094c0c626bf345e6cd36675c11f640631123:0",
+   "coded_stage": "0",
+   "coded_why": "They state it wasn\u2019t backed up and was removed from device.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "a locally deleted, unbacked-up video",
+   "what_went_wrong": "It wasn\u2019t backed up before using \u201cremove from device.\u201d",
+   "stage": "0",
+   "theme": "Removed without backup"
+  },
+  {
+   "story_id": "e7e4eb6a20b124405577ba1cd0fa0775014739c9:0",
+   "coded_stage": "9",
+   "coded_why": "Only outcome stated; no failure described.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "old baby photos",
+   "what_went_wrong": "Nothing went wrong; they found the photos.",
+   "stage": "9",
+   "theme": "successful rediscovery"
+  },
+  {
+   "story_id": "bb3ae8ef74ae6eae4b8c0d68d039586faeb9b82c:0",
+   "coded_stage": "0",
+   "coded_why": "Photos not present/available due to iCloud optimize and unrecoverable flags",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "The seven photos missing full\u2011resolution originals",
+   "what_went_wrong": "iCloud storage filled and Optimize Storage left only low\u2011res device copies",
+   "stage": "0",
+   "theme": "iCloud storage exhaustion"
+  },
+  {
+   "story_id": "3d2e030d2908bd556a15e25388c49e701cd7da23:0",
+   "coded_stage": "0",
+   "coded_why": "Wrong date metadata in the library",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "the last 2013 photo of her dog",
+   "what_went_wrong": "The photo\u2019s date metadata was wrong, showing December 1969.",
+   "stage": "0",
+   "theme": "wrong date metadata"
+  },
+  {
+   "story_id": "3f9ac029753bc1cd2384f5f07f3c1a8740c28fb5:0",
+   "coded_stage": "0",
+   "coded_why": "Factory reset removed photos from device before any search.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Birthday party photos from the S9+",
+   "what_went_wrong": "They factory-reset the new phone, wiping the photos.",
+   "stage": "0",
+   "theme": "accidental factory reset"
+  },
+  {
+   "story_id": "765749899f7fa8a7f4c8527cc2337029e134b9ce:0",
+   "coded_stage": "9",
+   "coded_why": "Found immediately with first search query",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "photo of my driver\u2019s license",
+   "what_went_wrong": "Nothing went wrong; the search worked.",
+   "stage": "9",
+   "theme": "automatic photo recognition"
+  },
+  {
+   "story_id": "d9f11522e8daa57f902e6d7b6bd64c81e54c0221:0",
+   "coded_stage": "0",
+   "coded_why": "They say the photos are deleted from bin, not in library",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "deleted photos of important documents",
+   "what_went_wrong": "They permanently deleted the photos, even from the bin.",
+   "stage": "0",
+   "theme": "permanent deletion recovery"
+  },
+  {
+   "story_id": "60e4d41e4a9ee0a0bd8fe9b5e1d9f2a9329fd3fa:0",
+   "coded_stage": "9",
+   "coded_why": "They found it immediately via place search.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "a 2013 trip photo from that place",
+   "what_went_wrong": "Nothing; place-name search found it in seconds.",
+   "stage": "9",
+   "theme": "place-name search success"
+  },
+  {
+   "story_id": "4e12b3ea738a18380849dd05fc742983a4e4f78a:0",
+   "coded_stage": "0",
+   "coded_why": "They say the needed screenshot was deleted",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "A deleted screenshot of a phone number",
+   "what_went_wrong": "The screenshot of the number had been deleted from their device",
+   "stage": "0",
+   "theme": "Deleted screenshot recovery"
+  },
+  {
+   "story_id": "f5070c83a77ef22125ec9701b9a7b16b906a4e41:4",
+   "coded_stage": "9",
+   "coded_why": "Found immediately with a simple search.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "Photos of family passports",
+   "what_went_wrong": "Nothing went wrong; search worked immediately.",
+   "stage": "9",
+   "theme": "Search works perfectly"
+  },
+  {
+   "story_id": "4bc6fae93ac441d7708072e0871976ae3562b9a6:0",
+   "coded_stage": "9",
+   "coded_why": "Found instantly with a simple keyword search",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "a copy of their passport",
+   "what_went_wrong": "Nothing; search found it immediately.",
+   "stage": "9",
+   "theme": "automatic recognition convenience"
+  },
+  {
+   "story_id": "42529531479d94c63703412b94c9139531d45bf9:0",
+   "coded_stage": "0",
+   "coded_why": "Photo permanently deleted from trash",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "A deleted photo of a college paper.",
+   "what_went_wrong": "They deleted the photo.",
+   "stage": "0",
+   "theme": "accidental permanent deletion"
+  },
+  {
+   "story_id": "a2d48f97439d430f6d2399321a058252025a6085:0",
+   "coded_stage": "9",
+   "coded_why": "Found immediately with Ask Photos, no earlier failure.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "specific camping trip photo",
+   "what_went_wrong": "Nothing; the search worked instantly.",
+   "stage": "9",
+   "theme": "Effortless AI photo retrieval"
+  },
+  {
+   "story_id": "1db94bd980098a185336b7e5a39feef37c8eded5:0",
+   "coded_stage": "0",
+   "coded_why": "Photo wasn\u2019t backed up to the Google Photos account",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "screenshot of my seed phrase",
+   "what_went_wrong": "The screenshot wasn\u2019t backed up to Google Photos.",
+   "stage": "0",
+   "theme": "missed cloud backup"
+  },
+  {
+   "story_id": "f0321bae7ddf531255f45656bb028e9865f592df:0",
+   "coded_stage": "9",
+   "coded_why": "No failure described; first query succeeded.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "a Drake screenshot from a Snap",
+   "what_went_wrong": "nothing went wrong",
+   "stage": "9",
+   "theme": "Google Photos search success"
+  },
+  {
+   "story_id": "a8961b273cd067ed02b0cc5d369a85d20b572540:0",
+   "coded_stage": "0",
+   "coded_why": "They say the screenshot was deleted from trash, so not in library.",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Screenshot of a tracking number",
+   "what_went_wrong": "They permanently deleted the screenshot from the trash.",
+   "stage": "0",
+   "theme": "Permanently deleted screenshot"
+  },
+  {
+   "story_id": "f5070c83a77ef22125ec9701b9a7b16b906a4e41:1",
+   "coded_stage": "9",
+   "coded_why": "They searched once and immediately found the photo.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "A photo of their chicken coop",
+   "what_went_wrong": "Nothing went wrong.",
+   "stage": "9",
+   "theme": "Search that just works"
+  },
+  {
+   "story_id": "d9be4ec964e6c6198f810b5b77eb4cfb31bb9c63:1",
+   "coded_stage": "0",
+   "coded_why": "Files not present in account or trash after deletion",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Niece\u2019s sweet 16 photos and videos",
+   "what_went_wrong": "They were never backed up to Google Photos.",
+   "stage": "0",
+   "theme": "Backup assumption failure"
+  },
+  {
+   "story_id": "f5070c83a77ef22125ec9701b9a7b16b906a4e41:0",
+   "coded_stage": "9",
+   "coded_why": "They searched once and immediately found it.",
+   "reader_stage": "9",
+   "agree": true,
+   "target": "a photo of a ramp",
+   "what_went_wrong": "Nothing; search found it immediately.",
+   "stage": "9",
+   "theme": "Search working as intended"
+  },
+  {
+   "story_id": "a05782ee9d2d5e96c1be61610034c0b3fe1b2e82:0",
+   "coded_stage": "0",
+   "coded_why": "They permanently deleted the photos from trash",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "deleted Google Photos pictures",
+   "what_went_wrong": "Panicked and permanently deleted them from Google Photos and Trash.",
+   "stage": "0",
+   "theme": "panic-driven deletion"
+  },
+  {
+   "story_id": "3576a79e9b9eacf169e8455c2043d677d2eb0265:0",
+   "coded_stage": "0",
+   "coded_why": "Photos were deleted from Google Photos and trash emptied",
+   "reader_stage": "0",
+   "agree": true,
+   "target": "Old friends photos moved to a pendrive",
+   "what_went_wrong": "They emptied Google Photos trash, permanently deleting the photos.",
+   "stage": "0",
+   "theme": "Bad transfer then deletion"
+  }
+ ]
+}
