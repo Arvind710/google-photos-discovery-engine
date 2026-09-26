@@ -1,0 +1,892 @@
+{
+ "note": "records first surfaced by each lexicon term; source terms other than the lexicon (store feeds, the GP Help listing screen) are not lexicon hits",
+ "terms": {
+  "can't find photo": {
+   "hits": 1334,
+   "kept": 716,
+   "core_stories": 13,
+   "by_source": {
+    "hackernews": {
+     "records": 127,
+     "kept": 127,
+     "core_stories": 1
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 2
+    },
+    "reddit": {
+     "records": 29,
+     "kept": 29,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 71,
+     "kept": 71,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 245,
+     "kept": 177,
+     "core_stories": 8
+    },
+    "youtube": {
+     "records": 847,
+     "kept": 297,
+     "core_stories": 2
+    }
+   }
+  },
+  "cannot find a picture": {
+   "hits": 553,
+   "kept": 252,
+   "core_stories": 2,
+   "by_source": {
+    "hackernews": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 1
+    },
+    "reddit": {
+     "records": 11,
+     "kept": 10,
+     "core_stories": 1
+    },
+    "stackexchange": {
+     "records": 3,
+     "kept": 3,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 250,
+     "kept": 126,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 259,
+     "kept": 83,
+     "core_stories": 0
+    }
+   }
+  },
+  "lost photo in google photos": {
+   "hits": 1464,
+   "kept": 819,
+   "core_stories": 7,
+   "by_source": {
+    "hackernews": {
+     "records": 114,
+     "kept": 113,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 14,
+     "kept": 14,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 22,
+     "kept": 22,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 32,
+     "kept": 32,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 229,
+     "kept": 189,
+     "core_stories": 4
+    },
+    "youtube": {
+     "records": 1053,
+     "kept": 449,
+     "core_stories": 3
+    }
+   }
+  },
+  "find old photo": {
+   "hits": 1964,
+   "kept": 709,
+   "core_stories": 22,
+   "by_source": {
+    "hackernews": {
+     "records": 61,
+     "kept": 60,
+     "core_stories": 4
+    },
+    "quora": {
+     "records": 9,
+     "kept": 9,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 8,
+     "kept": 8,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 21,
+     "kept": 21,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 180,
+     "kept": 132,
+     "core_stories": 8
+    },
+    "youtube": {
+     "records": 1685,
+     "kept": 479,
+     "core_stories": 10
+    }
+   }
+  },
+  "search not working": {
+   "hits": 922,
+   "kept": 248,
+   "core_stories": 3,
+   "by_source": {
+    "hackernews": {
+     "records": 70,
+     "kept": 69,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 13,
+     "kept": 13,
+     "core_stories": 3
+    },
+    "reddit": {
+     "records": 29,
+     "kept": 22,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 19,
+     "kept": 19,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 226,
+     "kept": 99,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 565,
+     "kept": 26,
+     "core_stories": 0
+    }
+   }
+  },
+  "search doesn't find": {
+   "hits": 762,
+   "kept": 273,
+   "core_stories": 3,
+   "by_source": {
+    "hackernews": {
+     "records": 110,
+     "kept": 110,
+     "core_stories": 1
+    },
+    "quora": {
+     "records": 10,
+     "kept": 10,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 11,
+     "kept": 8,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 3,
+     "kept": 3,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 204,
+     "kept": 89,
+     "core_stories": 2
+    },
+    "youtube": {
+     "records": 424,
+     "kept": 53,
+     "core_stories": 0
+    }
+   }
+  },
+  "ask photos": {
+   "hits": 1078,
+   "kept": 793,
+   "core_stories": 0,
+   "by_source": {
+    "hackernews": {
+     "records": 149,
+     "kept": 140,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 33,
+     "kept": 33,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 207,
+     "kept": 207,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 263,
+     "kept": 236,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 411,
+     "kept": 162,
+     "core_stories": 0
+    }
+   }
+  },
+  "photos search useless": {
+   "hits": 1332,
+   "kept": 590,
+   "core_stories": 4,
+   "by_source": {
+    "hackernews": {
+     "records": 37,
+     "kept": 37,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 1
+    },
+    "reddit": {
+     "records": 14,
+     "kept": 14,
+     "core_stories": 2
+    },
+    "stackexchange": {
+     "records": 1,
+     "kept": 1,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 155,
+     "kept": 116,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 1110,
+     "kept": 407,
+     "core_stories": 1
+    }
+   }
+  },
+  "how to find a photo I don't remember when": {
+   "hits": 1042,
+   "kept": 335,
+   "core_stories": 1,
+   "by_source": {
+    "hackernews": {
+     "records": 13,
+     "kept": 13,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 13,
+     "kept": 13,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 9,
+     "kept": 9,
+     "core_stories": 1
+    },
+    "x": {
+     "records": 256,
+     "kept": 53,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 751,
+     "kept": 247,
+     "core_stories": 0
+    }
+   }
+  },
+  "find photo without date": {
+   "hits": 930,
+   "kept": 397,
+   "core_stories": 2,
+   "by_source": {
+    "hackernews": {
+     "records": 41,
+     "kept": 41,
+     "core_stories": 1
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 21,
+     "kept": 21,
+     "core_stories": 1
+    },
+    "stackexchange": {
+     "records": 6,
+     "kept": 6,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 214,
+     "kept": 63,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 633,
+     "kept": 251,
+     "core_stories": 0
+    }
+   }
+  },
+  "photo from years ago": {
+   "hits": 994,
+   "kept": 519,
+   "core_stories": 10,
+   "by_source": {
+    "hackernews": {
+     "records": 120,
+     "kept": 119,
+     "core_stories": 2
+    },
+    "quora": {
+     "records": 13,
+     "kept": 12,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 26,
+     "kept": 26,
+     "core_stories": 1
+    },
+    "stackexchange": {
+     "records": 10,
+     "kept": 10,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 262,
+     "kept": 166,
+     "core_stories": 2
+    },
+    "youtube": {
+     "records": 563,
+     "kept": 186,
+     "core_stories": 5
+    }
+   }
+  },
+  "picture of a receipt": {
+   "hits": 713,
+   "kept": 260,
+   "core_stories": 0,
+   "by_source": {
+    "hackernews": {
+     "records": 9,
+     "kept": 9,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 14,
+     "kept": 14,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 25,
+     "kept": 24,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 1,
+     "kept": 1,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 232,
+     "kept": 183,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 432,
+     "kept": 29,
+     "core_stories": 0
+    }
+   }
+  },
+  "medicine photo": {
+   "hits": 575,
+   "kept": 231,
+   "core_stories": 0,
+   "by_source": {
+    "hackernews": {
+     "records": 4,
+     "kept": 4,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 23,
+     "kept": 21,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 149,
+     "kept": 131,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 384,
+     "kept": 60,
+     "core_stories": 0
+    }
+   }
+  },
+  "screenshot I took": {
+   "hits": 863,
+   "kept": 261,
+   "core_stories": 7,
+   "by_source": {
+    "hackernews": {
+     "records": 19,
+     "kept": 18,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 15,
+     "kept": 14,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 27,
+     "kept": 27,
+     "core_stories": 2
+    },
+    "stackexchange": {
+     "records": 9,
+     "kept": 9,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 155,
+     "kept": 108,
+     "core_stories": 5
+    },
+    "youtube": {
+     "records": 638,
+     "kept": 85,
+     "core_stories": 0
+    }
+   }
+  },
+  "photo someone sent me on whatsapp": {
+   "hits": 759,
+   "kept": 184,
+   "core_stories": 1,
+   "by_source": {
+    "hackernews": {
+     "records": 1,
+     "kept": 1,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 1
+    },
+    "reddit": {
+     "records": 26,
+     "kept": 25,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 239,
+     "kept": 74,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 478,
+     "kept": 69,
+     "core_stories": 0
+    }
+   }
+  },
+  "photo of a document": {
+   "hits": 672,
+   "kept": 294,
+   "core_stories": 1,
+   "by_source": {
+    "hackernews": {
+     "records": 116,
+     "kept": 116,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 24,
+     "kept": 24,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 24,
+     "kept": 24,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 230,
+     "kept": 67,
+     "core_stories": 1
+    },
+    "youtube": {
+     "records": 263,
+     "kept": 48,
+     "core_stories": 0
+    }
+   }
+  },
+  "that photo of": {
+   "hits": 571,
+   "kept": 526,
+   "core_stories": 6,
+   "by_source": {
+    "hackernews": {
+     "records": 121,
+     "kept": 120,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 14,
+     "kept": 13,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 188,
+     "kept": 188,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 229,
+     "kept": 194,
+     "core_stories": 6
+    },
+    "youtube": {
+     "records": 19,
+     "kept": 11,
+     "core_stories": 0
+    }
+   }
+  },
+  "remember taking a photo": {
+   "hits": 907,
+   "kept": 294,
+   "core_stories": 2,
+   "by_source": {
+    "hackernews": {
+     "records": 31,
+     "kept": 31,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 9,
+     "kept": 9,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 21,
+     "kept": 21,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 2,
+     "kept": 2,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 212,
+     "kept": 62,
+     "core_stories": 1
+    },
+    "youtube": {
+     "records": 632,
+     "kept": 169,
+     "core_stories": 1
+    }
+   }
+  },
+  "scrolled for hours": {
+   "hits": 1429,
+   "kept": 181,
+   "core_stories": 0,
+   "by_source": {
+    "hackernews": {
+     "records": 4,
+     "kept": 4,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 14,
+     "kept": 12,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 23,
+     "kept": 17,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 58,
+     "kept": 30,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 1330,
+     "kept": 118,
+     "core_stories": 0
+    }
+   }
+  },
+  "had to scroll": {
+   "hits": 1023,
+   "kept": 341,
+   "core_stories": 8,
+   "by_source": {
+    "hackernews": {
+     "records": 38,
+     "kept": 38,
+     "core_stories": 1
+    },
+    "quora": {
+     "records": 13,
+     "kept": 13,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 16,
+     "kept": 13,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 2,
+     "kept": 2,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 162,
+     "kept": 104,
+     "core_stories": 7
+    },
+    "youtube": {
+     "records": 792,
+     "kept": 171,
+     "core_stories": 0
+    }
+   }
+  },
+  "asked my friend to send again": {
+   "hits": 1224,
+   "kept": 197,
+   "core_stories": 0,
+   "by_source": {
+    "hackernews": {
+     "records": 1,
+     "kept": 1,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 14,
+     "kept": 14,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 243,
+     "kept": 58,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 966,
+     "kept": 124,
+     "core_stories": 0
+    }
+   }
+  },
+  "searched whatsapp instead": {
+   "hits": 62,
+   "kept": 32,
+   "core_stories": 0,
+   "by_source": {
+    "hackernews": {
+     "records": 4,
+     "kept": 4,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 17,
+     "kept": 10,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 26,
+     "kept": 3,
+     "core_stories": 0
+    }
+   }
+  },
+  "found it by accident": {
+   "hits": 2684,
+   "kept": 369,
+   "core_stories": 1,
+   "by_source": {
+    "hackernews": {
+     "records": 13,
+     "kept": 13,
+     "core_stories": 0
+    },
+    "quora": {
+     "records": 13,
+     "kept": 12,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 24,
+     "kept": 15,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 2,
+     "kept": 2,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 215,
+     "kept": 53,
+     "core_stories": 1
+    },
+    "youtube": {
+     "records": 2417,
+     "kept": 274,
+     "core_stories": 0
+    }
+   }
+  },
+  "photo nahi mil rahi": {
+   "hits": 731,
+   "kept": 160,
+   "core_stories": 1,
+   "by_source": {
+    "quora": {
+     "records": 2,
+     "kept": 2,
+     "core_stories": 0
+    },
+    "reddit": {
+     "records": 15,
+     "kept": 15,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 173,
+     "kept": 66,
+     "core_stories": 1
+    },
+    "youtube": {
+     "records": 541,
+     "kept": 77,
+     "core_stories": 0
+    }
+   }
+  },
+  "purani photo kaise dhoondhe": {
+   "hits": 1368,
+   "kept": 569,
+   "core_stories": 8,
+   "by_source": {
+    "reddit": {
+     "records": 11,
+     "kept": 11,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 64,
+     "kept": 53,
+     "core_stories": 0
+    },
+    "youtube": {
+     "records": 1293,
+     "kept": 505,
+     "core_stories": 8
+    }
+   }
+  },
+  "google photos me photo search": {
+   "hits": 451,
+   "kept": 271,
+   "core_stories": 4,
+   "by_source": {
+    "hackernews": {
+     "records": 99,
+     "kept": 99,
+     "core_stories": 1
+    },
+    "quora": {
+     "records": 5,
+     "kept": 5,
+     "core_stories": 0
+    },
+    "stackexchange": {
+     "records": 17,
+     "kept": 17,
+     "core_stories": 0
+    },
+    "x": {
+     "records": 180,
+     "kept": 127,
+     "core_stories": 3
+    },
+    "youtube": {
+     "records": 150,
+     "kept": 23,
+     "core_stories": 0
+    }
+   }
+  }
+ }
+}

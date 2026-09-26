@@ -259,7 +259,7 @@ def submit(con, client) -> None:
     print(f"submitted · batch {b.id} · run {run.run_id}")
 
 
-def collect(con, client) -> None:
+def collect(con, client, *, accept_overrun: bool = False) -> None:
     man = json.loads(MANIFEST.read_text())
     b = client.batches.retrieve(man["batch_id"])
     print(f"batch {b.id}: {b.status} · {b.request_counts}")
@@ -286,14 +286,18 @@ def collect(con, client) -> None:
     usd = rmod.cost(MODEL, input_tokens=tokens[0], output_tokens=tokens[1],
                     cached_tokens=tokens[2], batch=True)
     est = con.execute("SELECT estimate_usd FROM runs WHERE run_id=?", (run_id,)).fetchone()[0]
-    status = "halted_budget" if usd > rmod.HALT_MULTIPLE * est else "ok"
+    over = usd > rmod.HALT_MULTIPLE * est
+    status = "halted_budget" if over and not accept_overrun else "ok"
     con.execute("UPDATE runs SET finished_at=?, status=?, input_tokens=?, output_tokens=?,"
                 " cached_tokens=?, cost_usd=? WHERE run_id=?",
                 (rmod._now(), status, *tokens[:2], tokens[2], round(usd, 6), run_id))
     con.commit()
     print(f"cost ${usd:.4f} against ${est:.2f} · {len(bad)} unparseable · {len(missing)} missing")
-    if status != "ok" or bad or missing:
-        raise SystemExit("not applied — see above")
+    if status != "ok":
+        raise SystemExit(f"T-19: ${usd:.3f} > 1.5 × ${est:.2f}. Output saved; decide, then re-run"
+                         " collect with --accept-overrun to apply it.")
+    if bad or missing:
+        raise SystemExit("not applied — some requests failed; see above")
     res = apply(con, cands, verdicts, run_id)
     con.execute("UPDATE runs SET n_input=?, n_output=?, params_json=json_set(params_json,"
                 "'$.result',json(?)) WHERE run_id=?",
@@ -308,6 +312,7 @@ def collect(con, client) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["fixtures", "submit", "collect"])
+    ap.add_argument("--accept-overrun", action="store_true")
     args = ap.parse_args()
     vals = envm.load()
     if not vals.get("OPENAI_API_KEY"):
@@ -316,7 +321,10 @@ def main() -> int:
     from openai import OpenAI
     client = OpenAI(api_key=vals["OPENAI_API_KEY"])
     con = dbm.init()
-    {"fixtures": fixtures, "submit": submit, "collect": collect}[args.cmd](con, client)
+    if args.cmd == "collect":
+        collect(con, client, accept_overrun=args.accept_overrun)
+    else:
+        {"fixtures": fixtures, "submit": submit}[args.cmd](con, client)
     return 0
 
 

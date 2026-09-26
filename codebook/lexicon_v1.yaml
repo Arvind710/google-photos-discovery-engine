@@ -10,32 +10,32 @@
 version: v1
 terms:
   direct:
-    - {term: "can't find photo", hits: null}
-    - {term: "cannot find a picture", hits: null}
-    - {term: "lost photo in google photos", hits: null}
-    - {term: "find old photo", hits: null}
-    - {term: "search not working", hits: null}
-    - {term: "search doesn't find", hits: null}
-    - {term: "ask photos", hits: null}
-    - {term: "photos search useless", hits: null}
-    - {term: "how to find a photo I don't remember when", hits: null}
-    - {term: "find photo without date", hits: null}
+    - {term: "can't find photo", hits: 1334}
+    - {term: "cannot find a picture", hits: 553}
+    - {term: "lost photo in google photos", hits: 1464}
+    - {term: "find old photo", hits: 1964}
+    - {term: "search not working", hits: 922}
+    - {term: "search doesn't find", hits: 762}
+    - {term: "ask photos", hits: 1078}
+    - {term: "photos search useless", hits: 1332}
+    - {term: "how to find a photo I don't remember when", hits: 1042}
+    - {term: "find photo without date", hits: 930}
   cue_shaped:
-    - {term: "photo from years ago", hits: null}
-    - {term: "picture of a receipt", hits: null}
-    - {term: "medicine photo", hits: null}
-    - {term: "screenshot I took", hits: null}
-    - {term: "photo someone sent me on whatsapp", hits: null}
-    - {term: "photo of a document", hits: null}
-    - {term: "that photo of", hits: null}
-    - {term: "remember taking a photo", hits: null}
+    - {term: "photo from years ago", hits: 994}
+    - {term: "picture of a receipt", hits: 713}
+    - {term: "medicine photo", hits: 575}
+    - {term: "screenshot I took", hits: 863}
+    - {term: "photo someone sent me on whatsapp", hits: 759}
+    - {term: "photo of a document", hits: 672}
+    - {term: "that photo of", hits: 571}
+    - {term: "remember taking a photo", hits: 907}
   workaround_shaped:
-    - {term: "scrolled for hours", hits: null}
-    - {term: "had to scroll", hits: null}
-    - {term: "asked my friend to send again", hits: null}
-    - {term: "searched whatsapp instead", hits: null}
-    - {term: "found it by accident", hits: null}
+    - {term: "scrolled for hours", hits: 1429}
+    - {term: "had to scroll", hits: 1023}
+    - {term: "asked my friend to send again", hits: 1224}
+    - {term: "searched whatsapp instead", hits: 62}
+    - {term: "found it by accident", hits: 2684}
   hinglish_hindi:
-    - {term: "photo nahi mil rahi", hits: null}
-    - {term: "purani photo kaise dhoondhe", hits: null}
-    - {term: "google photos me photo search", hits: null}
+    - {term: "photo nahi mil rahi", hits: 731}
+    - {term: "purani photo kaise dhoondhe", hits: 1368}
+    - {term: "google photos me photo search", hits: 451}
