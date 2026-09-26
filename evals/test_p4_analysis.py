@@ -338,3 +338,23 @@ def test_pages_render_without_exception(corpus, page, title):
     at = AppTest.from_file(str(VIEWS / page), default_timeout=60).run()
     assert not at.exception, at.exception
     assert at.title and at.title[0].value == title
+
+
+@pytest.mark.needs_corpus
+def test_analysis_headline_names_a_failure_stage_not_stage_9(corpus):
+    """Found live 2026-09-26: after the D-11 re-code Stage 9 ("nothing went wrong")
+    is the largest bar, and PART 1 named it as where stories go wrong."""
+    from streamlit.testing.v1 import AppTest
+    at = AppTest.from_file(str(VIEWS / "analysis.py"), default_timeout=60).run()
+    src = (VIEWS / "analysis.py").read_text()
+    assert not at.exception and 'NOT_FAILURE = ("1", "9", "10")' in src
+    assert '~stage["val_a"].isin(NOT_FAILURE)' in src
+
+
+def test_recommendation_checker_refuses_a_percentage_without_its_denominator(codebook):
+    from pipeline.synthesise import recommendation as R
+    ok = _rec(caveats=[{"text": "Stage 5 is 36 of 115 (31%).", "cites": ["F01"]}])
+    bad = _rec(caveats=[{"text": "Stage 5 is 31% of core.", "cites": ["F01"]}])
+    kw = dict(top_id="stage5", candidates={"stage5", "stage2"})
+    assert R.check(ok, _pack(), codebook, **kw) == []
+    assert any("no 'n of N'" in p for p in R.check(bad, _pack(), codebook, **kw))

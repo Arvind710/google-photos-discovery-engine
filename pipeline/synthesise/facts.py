@@ -113,8 +113,9 @@ def build(con, cb: cbm.Codebook) -> Pack:
     # --- reliability and coverage
     rel = {r["field"]: r for r in con.execute("SELECT * FROM analysis_reliability")}
     ps = rel["primary_stage"]
-    p.add(f"A second model re-coded {ps['n']} stories: primary stage agreement "
-          f"{round(ps['raw_agreement'] * 100)}%, kappa {ps['value']:.2f} (ok). Low-reliability "
+    p.add(f"A second model re-coded {ps['n']} stories: on the primary stage the two agree in "
+          f"{share_words(round(ps['raw_agreement'] * ps['n']), ps['n'])} stories, kappa "
+          f"{ps['value']:.2f} (ok). Low-reliability "
           "fields, barred from headlines and scores: " + ", ".join(sorted(
               f for f, r in rel.items() if r["verdict"] == "low_reliability")) + ". Agreement is "
           "consistency, not correctness.", "analysis_reliability", {"field": "primary_stage"})
@@ -159,7 +160,7 @@ def build(con, cb: cbm.Codebook) -> Pack:
     for r in con.execute("SELECT * FROM analysis_weight_sensitivity WHERE variant='headline'"
                          " AND pool='gates_passed' ORDER BY top_share DESC LIMIT 1"):
         p.add(f"Weight sensitivity: over {r['draws']} draws moving each pre-registered weight by up"
-              f" to 10 points, {r['candidate_id']} ranks first in {round(r['top_share'] * 100)}% "
+              f" to 10 points, {r['candidate_id']} ranks first in {share_words(round(r['top_share'] * r['draws']), r['draws'])} "
               "of draws, even counting candidates below the evidence floor; with severity "
               "(low reliability) added back it is unchanged.", "analysis_weight_sensitivity",
               {"variant": "headline", "candidate_id": r["candidate_id"], "pool": "gates_passed"})

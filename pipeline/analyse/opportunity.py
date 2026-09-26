@@ -69,7 +69,7 @@ DRAWS, SEED = 1000, 31
 def frequency_score(n: int, denom: int) -> tuple[int, str]:
     share = n / denom
     s = 1 if share < .05 else 2 if share < .10 else 3 if share < .15 else 4 if share < .25 else 5
-    return s, f"{n} of {denom} core stories (bands <5% · 5–10 · 10–15 · 15–25 · ≥25%)"
+    return s, f"{n} of {denom} core stories (score bands break at 5, 10, 15 and 25 per 100)"
 
 
 def evidence_score(n_sources: int, conf: float) -> tuple[int, str]:

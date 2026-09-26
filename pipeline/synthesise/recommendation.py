@@ -36,7 +36,7 @@ from pipeline.common import runs as rmod
 from pipeline.segment import stories as seg
 from pipeline.synthesise import facts as F
 
-PROMPT_VERSION = "recommendation_v1.1"   # v1.1: named factor, gate-passing runner-up
+PROMPT_VERSION = "recommendation_v1.2"   # v1.1: named factor, gate-passing runner-up; v1.2: % needs n of N
 EFFORT = "medium"
 LABEL = "A hypothesis to be validated in the Part 3 interviews — not a finding."
 
@@ -47,7 +47,8 @@ describe. The recommendation is a HYPOTHESIS for user interviews, not a conclusi
 
 You may use ONLY the facts inside <facts>. Every statement you write cites the ids of the
 facts that support it (e.g. ["F02", "F23"]). A number you write must appear in a fact you
-cite; do not compute new percentages. Write counts as "36 of 115 core stories".
+cite; do not compute new percentages. Write counts as "31 of 115 core stories", and a
+percentage only right after its count: "31 of 115 (27%)".
 
 Rules that are checked in code:
 - Every share is a share of coded PUBLIC STORIES. Never write it as a share of users, of
@@ -93,6 +94,9 @@ SCHEMA = B._obj({
 _NUM = re.compile(r"(?<![\w.])\d+(?:[.,]\d+)?(?![\w])")
 _MOVE_SHARE = re.compile(r"\b(rais|increas|improv|reduc|lower|boost)\w*\b[^.;]{0,60}\bshare of"
                          r"\b[^.;]{0,30}\bstories", re.I)
+# A percentage needs its denominator in the same clause ([CTX] §15.5): "31 of 115 (27%)".
+_PCT = re.compile(r"\d+(?:\.\d+)?%")
+_DENOM = re.compile(r"\bof \d[\d,]*\b")
 _PROXY = re.compile(r"(\d+%|\d+ of \d+|\bmost|\bmajority)[^.;]{0,50}\b(users|searches|attempts|"
                     r"people who search)\b", re.I)
 
@@ -134,6 +138,9 @@ def check(out: dict, pack: F.Pack, cb: cbm.Codebook, *, top_id: str | None,
                 problems.append(f"{path}: number {n} is not in the facts it cites")
         if _PROXY.search(s["text"]):
             problems.append(f"{path}: a count or share attached to users/searches/attempts")
+        for m in _PCT.finditer(s["text"]):
+            if not _DENOM.search(s["text"][max(0, m.start() - 60):m.start()]):
+                problems.append(f"{path}: {m.group(0)} has no 'n of N' before it")
         if _MOVE_SHARE.search(s["text"]):
             problems.append(f"{path}: treats a share of public stories as an outcome to move")
     if "top" in out:

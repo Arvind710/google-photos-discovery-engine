@@ -56,7 +56,9 @@ ui.note(f"<b>{n_core} core stories from {p_core} people</b> — a known photo, r
 
 # ================================================================= PART 1
 stage = rows("core.primary_stage")
-top = stage.iloc[0]
+NOT_FAILURE = ("1", "9", "10")            # context, and "nothing went wrong"
+top = stage[~stage["val_a"].isin(NOT_FAILURE)].iloc[0]
+fine = stage[stage["val_a"] == "9"]
 ui.section(1, f"Stage {top['val_a']} is where most core stories first go wrong",
            "Each story is placed at the FIRST point it went wrong, reading the journey in order — "
            "not the most dramatic point. Stage 9 means nothing went wrong: people post successes "
@@ -67,9 +69,11 @@ ui.hbar([f"{s} · {words.stage_title(s)}" for s in stage["val_a"]], stage["n"].a
         [ui.BLUE if s not in ("9", "1") else ui.GREY for s in stage["val_a"]])
 ps = rel.loc["primary_stage"] if "primary_stage" in rel.index else None
 ui.verdict(f"<b>{words.stage_title(top['val_a'])}</b> — {share(int(top['n']), int(top['denom'])).text}"
-           f" of core stories first break where search should understand what they typed. "
-           f"This is <i>inferred from what users say</i>: nobody outside Google can see why a "
-           f"search missed.", ui.BLUE)
+           f" of core stories first go wrong here, more than at any other stage. "
+           + ("That is <i>inferred from what users say</i>: nobody outside Google can see why a "
+              "search missed. " if top["val_a"] == "5" else "")
+           + (f"Another {share(int(fine['n'].iloc[0]), int(fine['denom'].iloc[0])).text} say "
+              f"nothing went wrong at all." if len(fine) else ""), ui.BLUE)
 if ps is not None:
     ui.note(f"A second AI model re-coded 100 stories; on this field the two agree with κ "
             f"{ps['value']:.2f} (just above the 0.60 bar). " + words.metric("kappa"))

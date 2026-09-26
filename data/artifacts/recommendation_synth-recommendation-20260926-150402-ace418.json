@@ -1,0 +1,555 @@
+{
+ "run_id": "synth-recommendation-20260926-150402-ace418",
+ "content": {
+  "top": {
+   "candidate_id": "stage5",
+   "problem_statement": {
+    "text": "Retrieval fails despite partial memory when people type a simple remembered cue and Google Photos does not interpret or match it, yielding irrelevant, overbroad, or empty results.",
+    "cites": [
+     "F03",
+     "F11",
+     "F13",
+     "F24"
+    ]
+   },
+   "chain": [
+    {
+     "text": "Metric node: query_captures_usable_cue \u2014 [Stage 5] drags this factor down because 31 of 115 (27%) core stories\u2019 first failure is that search did not understand or match the cue; improving this factor increases the chance that a first or refined query \u2018finds\u2019 the target in the goal\u2011metric decomposition.",
+     "cites": [
+      "F23",
+      "F03",
+      "F24"
+     ],
+     "step": "metric_node"
+    },
+    {
+     "text": "Evidence: 31 of 115 (27%) core stories first fail at [Stage 5]; when people described results they reported irrelevant_results (6), far_too_many (3), and zero_results (2); many first queries were single_noun (19) or a named_entity (1); examples include \u201ctoday just did \u2018Kids\u2019 and after scrolling enough it was right there\u201d and \u201ctext search \u2026 and be disappointed.\u201d",
+     "cites": [
+      "F03",
+      "F11",
+      "F13",
+      "F27",
+      "F26"
+     ],
+     "step": "evidence"
+    },
+    {
+     "text": "Stage: Search did not understand or match what they typed ([Stage 5]).",
+     "cites": [
+      "F24",
+      "F03"
+     ],
+     "step": "stage"
+    },
+    {
+     "text": "Root cause signaled in stories: gaps in parsing/indexing and query logic such as concept_not_modelled, entities_misparsed, object_unrecognised, and_logic_shrinks_recall, wrong_date, and relevant results buried_below_fold.",
+     "cites": [
+      "F24"
+     ],
+     "step": "root_cause"
+    }
+   ]
+  },
+  "runner_up": {
+   "candidate_id": "stage6",
+   "why_not_top": {
+    "text": "[Stage 6] is below the evidence floor with 9 of 115 (8%) core stories and status below_floor, while sensitivity tests rank [Stage 5] first in 1000 of 1000 draws.",
+    "cites": [
+     "F06",
+     "F36",
+     "F43"
+    ]
+   }
+  },
+  "target_segment": {
+   "direction": "Sentimental and \u201cunclear\u201d everyday photos first (not utility).",
+   "why": {
+    "text": "Within [Stage 5], \u201cunclear\u201d (15) and sentimental (13) core stories outnumber utility (3); the core pool overall also skews sentimental 48 of 115 (42%) and unclear 46 of 115 (40%) vs utility 21 of 115 (18%), so interviews should emphasize sentimental and unclear contexts to learn which cues people actually try.",
+    "cites": [
+     "F24",
+     "F09"
+    ]
+   }
+  },
+  "root_cause_hypothesis": {
+   "text": "When people remember only a high\u2011level concept or simple noun, Photos\u2019 current models and query logic fail to map that cue to the right visual/person/time signals, producing irrelevant, overbroad, or empty results or burying the target; public stories name concept_not_modelled, entities_misparsed, object_unrecognised, strict AND logic, wrong_date, and buried_below_fold, and first queries are often single\u2011word or a named entity.",
+   "cites": [
+    "F24",
+    "F11",
+    "F13"
+   ]
+  },
+  "intelligence_needed": {
+   "text": "Apply AI at [Stage 5] (initial and refined queries) to interpret underspecified text cues, expand/disambiguate them via associations to people/places/time, make boolean logic tolerant, and strengthen concept/entity/object indexing so the query captures a usable cue in the goal\u2011metric decomposition.",
+   "cites": [
+    "F23",
+    "F24",
+    "F13",
+    "F11"
+   ]
+  },
+  "falsifiers": [
+   {
+    "text": "In interviews, search usually matches the typed cue, but participants fail because they cannot spot the target among many look\u2011alikes\u2014pointing to recognition ([Stage 6]) rather than query understanding as the primary drag on success.",
+    "cites": [
+     "F06",
+     "F23",
+     "F03"
+    ]
+   },
+   {
+    "text": "Participants frequently discover that a cue they felt certain about was actually wrong, shifting failures toward memory ([Stage 2]) rather than search matching.",
+    "cites": [
+     "F17",
+     "F40"
+    ]
+   },
+   {
+    "text": "Participants typically start with detailed multi\u2011keyword descriptions rather than single\u2011word or named\u2011entity cues, contradicting observed first\u2011query shapes in public stories.",
+    "cites": [
+     "F13"
+    ]
+   },
+   {
+    "text": "After an initial mismatch, simple refinements reliably surface the target, implying leverage lies mainly in found_after_refinement rather than improving first\u2011pass cue capture.",
+    "cites": [
+     "F23"
+    ]
+   }
+  ],
+  "caveats": [
+   {
+    "text": "Thin corpus for this purpose: 115 core stories (below the 300 the engine was designed for), and only one candidate clears the evidence floor; others are below_floor.",
+    "cites": [
+     "F01",
+     "F24",
+     "F32",
+     "F36",
+     "F40"
+    ]
+   },
+   {
+    "text": "Many codebook questions are under\u2011answered and deferred to interviews, so important journey details are missing from public stories.",
+    "cites": [
+     "F22"
+    ]
+   },
+   {
+    "text": "Inter\u2011coder agreement on primary stage is moderate\u201469 of 100 (69%), kappa 0.60\u2014reflecting consistency, not correctness.",
+    "cites": [
+     "F21"
+    ]
+   },
+   {
+    "text": "Public talk about not finding a photo often centers on photos that are gone (adjacent stories: 130 of 216 (60%) first fail at [Stage 0]), which may bias expectations about failure modes in core stories.",
+    "cites": [
+     "F10"
+    ]
+   }
+  ],
+  "label": "A hypothesis to be validated in the Part 3 interviews \u2014 not a finding."
+ },
+ "facts": [
+  {
+   "id": "F01",
+   "text": "31235 public records were read; 331 are retrieval stories from 316 people; 115 are core (a known photo, vaguely remembered) from 109 people, and 216 adjacent. The engine was designed for at least 300 core stories; every share is of coded public stories, never a retrieval success rate, a share of users or a share of searches.",
+   "table": "analysis_funnel",
+   "where": {
+    "step": "stories:core",
+    "source": "_all"
+   }
+  },
+  {
+   "id": "F02",
+   "text": "Core stories whose FIRST failure is Stage 9 (outcome \u2014 nothing went wrong): 38 of 115 (33%), from 33 people. By photo type: sentimental 17, unclear 15, utility 6.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.primary_stage",
+    "val_a": "9",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F03",
+   "text": "Core stories whose FIRST failure is Stage 5 (search did not understand or match the cue): 31 of 115 (27%), from 30 people. By photo type: unclear 15, sentimental 13, utility 3.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.primary_stage",
+    "val_a": "5",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F04",
+   "text": "Core stories whose FIRST failure is Stage 0 (library state (the photo was never there or was gone)): 20 of 115 (17%), from 20 people. By photo type: utility 8, sentimental 6, unclear 6.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.primary_stage",
+    "val_a": "0",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F05",
+   "text": "Core stories whose FIRST failure is Stage 3 (strategy \u2014 where and how they looked): 9 of 115 (8%), from 9 people. By photo type: sentimental 6, unclear 3.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.primary_stage",
+    "val_a": "3",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F06",
+   "text": "Core stories whose FIRST failure is Stage 6 (recognition \u2014 hard to spot in the results): 9 of 115 (8%), from 9 people. By photo type: unclear 6, sentimental 3.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.primary_stage",
+    "val_a": "6",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F07",
+   "text": "Core stories whose FIRST failure is Stage 2 (memory \u2014 could not remember enough): 6 of 115 (5%), from 6 people. By photo type: utility 4, sentimental 1, unclear 1.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.primary_stage",
+    "val_a": "2",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F08",
+   "text": "Core stories whose FIRST failure is Stage 1 (trigger and intent): 2 of 115 (2%), from 2 people. By photo type: sentimental 2.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.primary_stage",
+    "val_a": "1",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F09",
+   "text": "Core stories by photo type: sentimental 48 of 115 (42%), unclear 46 of 115 (40%), utility 21 of 115 (18%). 'unclear' means the story does not say why the photo was kept.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F10",
+   "text": "Among adjacent stories, 130 of 216 (60%) first fail at Stage 0: the photo was deleted, never backed up or elsewhere. Most public talk about not finding a photo is about photos that are gone, not vaguely remembered.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "adjacent.primary_stage",
+    "val_a": "0",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F11",
+   "text": "Question 5.6 (what search showed them), core stories that answered it, of 115 asked: irrelevant_results 6, far_too_many 3, zero_results 2.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.q:5.6",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F12",
+   "text": "Question 3.2 (how they looked inside Google Photos), core stories that answered it, of 115 asked: search_bar_keywords 23, timeline_scroll 14, combined_search_then_scroll 3, ask_photos 1.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.q:3.2",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F13",
+   "text": "Question 4.1 (first query shape), core stories that answered it, of 115 asked: single_noun 19, several_keywords 4, full_natural_description 1, named_entity 1.",
+   "table": "analysis_crosstab",
+   "where": {
+    "dim_a": "core.q:4.1",
+    "dim_b": "photo_class",
+    "val_b": "_all"
+   }
+  },
+  {
+   "id": "F14",
+   "text": "Core stories that remember WHAT was in the photo: 47 of 115 (41%). [rests on 2.1, low_reliability]",
+   "table": "analysis_derived",
+   "where": {
+    "metric": "cue_remembered",
+    "key": "what",
+    "population": "core"
+   }
+  },
+  {
+   "id": "F15",
+   "text": "Core stories that remember WHEN it was taken: 24 of 115 (21%). [rests on 2.1, low_reliability]",
+   "table": "analysis_derived",
+   "where": {
+    "metric": "cue_remembered",
+    "key": "when",
+    "population": "core"
+   }
+  },
+  {
+   "id": "F16",
+   "text": "Core stories that say they forgot the date or year: 13 of 115 (11%).",
+   "table": "analysis_derived",
+   "where": {
+    "metric": "cue_forgotten",
+    "key": "when",
+    "population": "core"
+   }
+  },
+  {
+   "id": "F17",
+   "text": "Core stories that reveal a cue they were certain of and later found WRONG (2.2): 0 of 115 (0%).",
+   "table": "analysis_derived",
+   "where": {
+    "metric": "certain_wrong",
+    "key": "_all",
+    "population": "core"
+   }
+  },
+  {
+   "id": "F18",
+   "text": "Core stories that say the results reminded them of something new (6.5): 1 of 115 (1%).",
+   "table": "analysis_derived",
+   "where": {
+    "metric": "results_as_cues",
+    "key": "_all",
+    "population": "core"
+   }
+  },
+  {
+   "id": "F19",
+   "text": "Core stories that used a near-hit to reach the target (anchor and pivot): 1 of 115 (1%).",
+   "table": "analysis_derived",
+   "where": {
+    "metric": "anchor_and_pivot",
+    "key": "_all",
+    "population": "core"
+   }
+  },
+  {
+   "id": "F20",
+   "text": "Core stories that used a workaround outside search: 9 of 115 (8%).",
+   "table": "analysis_derived",
+   "where": {
+    "metric": "workaround",
+    "key": "_all",
+    "population": "core"
+   }
+  },
+  {
+   "id": "F21",
+   "text": "A second model re-coded 100 stories: on the primary stage the two agree in 69 of 100 (69%) stories, kappa 0.60 (ok). Low-reliability fields, barred from headlines and scores: metric_node, outcome, q:1.1, q:1.3, q:1.5, q:1.6, q:2.1, q:2.3, q:2.6, q:3.1, q:6.1, q:7.1, q:7.5, q:8.1, severity. Agreement is consistency, not correctness.",
+   "table": "analysis_reliability",
+   "where": {
+    "field": "primary_stage"
+   }
+  },
+  {
+   "id": "F22",
+   "text": "28 of 60 codebook questions are answered by too few public stories (over 85% not stated) and go to the interviews: 0.2, 0.3, 0.4, 0.5, 1.4, 2.5, 2.8, 3.3, 3.4, 4.3, 5.2, 5.3, 5.4, 5.5, 5.6, 6.2, 6.3, 6.4, 6.6, 6.7, 8.3, 8.4, 9.2, 9.3, 9.5, 9.6, 10.1, 10.2.",
+   "table": "analysis_coverage",
+   "where": {
+    "source": "_all",
+    "disposition": "register"
+   }
+  },
+  {
+   "id": "F23",
+   "text": "The goal metric decomposes as: success = enters_gp_retrieval_path \u00d7 [found_first + (1 \u2212 found_first) \u00d7 refines_instead_of_quitting \u00d7 found_after_refinement], where each \"found\" = query_captures_usable_cue \u00d7 target_ranked_visible \u00d7 user_recognises_target, all conditional on target_retrievable. Each candidate is a stage, and each stage drags down one factor: Stage 0 \u2192 target_retrievable (The photo is in Google Photos and can be indexed); Stage 2 \u2192 query_captures_usable_cue (What they search with carries a cue that can find it); Stage 3 \u2192 enters_gp_retrieval_path (They look for it in Google Photos at all); Stage 5 \u2192 query_captures_usable_cue (What they search with carries a cue that can find it); Stage 6 \u2192 user_recognises_target (They recognise it when they see it). Improving a factor raises retrieval success for users; it does not change any share of public stories, which only describes what people wrote.",
+   "table": "analysis_opportunity",
+   "where": {}
+  },
+  {
+   "id": "F24",
+   "text": "Opportunity candidate stage5 \u2014 Search did not understand or match what they typed: 31 core stories from 30 people (54 adjacent at the same stage); status ranked (passes both gates, at or above the floor). Gates: addressable_by_gp 5; ai_necessity 5. Scores: frequency 5; metric_leverage 5; evidence_strength 3; reach 4; severity 1. Headline score 4.467, rank 1. Photo types: unclear 15, sentimental 13, utility 3. Stated failure modes: 5.6 irrelevant_results (6), 5.6 far_too_many (3), 5.2 concept_not_modelled (3), 5.4 buried_below_fold (2), 5.6 zero_results (2), 5.1 entities_misparsed (2), 5.2 object_unrecognised (1), 5.1 parsed_ok (1), 5.3 and_logic_shrinks_recall (1), 5.2 wrong_date (1). Sources: x 14, youtube 8, reddit 5, gp_help 2, hackernews 2.",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage5"
+   }
+  },
+  {
+   "id": "F25",
+   "text": "Quote from a stage5 story (x, 3581be8104f7fedda6cc5f2c4dae079504c6446d:0): \"I searched \u201cchild\u201d in google photo so my friend and I could show eachother baby pics and like 50% of the photos that came up were of my ex\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage5"
+   }
+  },
+  {
+   "id": "F26",
+   "text": "Quote from a stage5 story (hackernews, b7113e3689e0674b9cd8b089fb3bcd093e40d3eb:0): \"1. text search Apple photos in the upload widget and be disappointed\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage5"
+   }
+  },
+  {
+   "id": "F27",
+   "text": "Quote from a stage5 story (reddit, 1e8838fe6fe7c3028b1b5caf63177262024a2878:0): \"today just did \u201cKids\u201d and after scrolling enough it was right there\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage5"
+   }
+  },
+  {
+   "id": "F28",
+   "text": "Opportunity candidate stage0 \u2014 The photo was gone before anyone searched \u2014 deleted, never backed up, elsewhere: 20 core stories from 20 people (130 adjacent at the same stage); status gated_out (addressable_by_gp 2 < 3: GP can make trash, archive and backup state visible, but a photo deleted or never uploaded cannot be retrieved by any search.; ai_necessity 1 < 3: Surfacing library state is a UI and policy fix; no inference about a vague memory is needed.). Gates: addressable_by_gp 2; ai_necessity 1. Scores: frequency 4; metric_leverage 2; evidence_strength 5; reach 3; severity 1. Headline score 3.267. Photo types: utility 8, unclear 6, sentimental 6. Stated failure modes: 0.1 deleted (12), 0.1 device_only_backup_off_or_folder_excluded (1), 0.1 yes_backed_up (1), 0.2 date:wrong_clock_or_timezone (1), 0.1 old_device_or_sd_or_other_cloud (1), 0.1 only_in_other_app (1), 0.2 organisation:favourited (1). Sources: youtube 12, gp_help 2, x 2, quora 1, appstore 1, hackernews 1, reddit 1.",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage0"
+   }
+  },
+  {
+   "id": "F29",
+   "text": "Quote from a stage0 story (youtube, 42529531479d94c63703412b94c9139531d45bf9:0): \"Delete fail me se bhi delete ho gaya hai \ud83d\ude22\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage0"
+   }
+  },
+  {
+   "id": "F30",
+   "text": "Quote from a stage0 story (hackernews, c49878f3a719ad0cc124817eef46e1a5ee5068c4:0): \"On that old Photobucket account I was hoping to find screenshots I made as a kid\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage0"
+   }
+  },
+  {
+   "id": "F31",
+   "text": "Quote from a stage0 story (gp_help, 4e12b3ea738a18380849dd05fc742983a4e4f78a:0): \"mujhe ek number ka screenshot chahiye jo delete ho gya tha\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage0"
+   }
+  },
+  {
+   "id": "F32",
+   "text": "Opportunity candidate stage3 \u2014 They never searched \u2014 scrolled the timeline or didn't know search could help: 9 core stories from 9 people (8 adjacent at the same stage); status below_floor (9 core stories, under the 30 below which no comparison is drawn ([CTX] \u00a715.5) \u2014 shown, not ranked). Gates: addressable_by_gp 4; ai_necessity 3. Scores: frequency 2; metric_leverage 4; evidence_strength 2; reach 4; severity 2. Headline score 3.067. Photo types: sentimental 6, unclear 3. Stated failure modes: 3.2 timeline_scroll (4). Sources: x 5, hackernews 2, gp_help 1, youtube 1.",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage3"
+   }
+  },
+  {
+   "id": "F33",
+   "text": "Quote from a stage3 story (x, 41c55163a31c64731392140386c6b69ed837a0cd:0): \"i legit had to go thru my google photos scroll to 2012\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage3"
+   }
+  },
+  {
+   "id": "F34",
+   "text": "Quote from a stage3 story (hackernews, e88cbdc51c29ce8b06700cf2a7a1dfac3b849c69:0): \"all I had to do was suggest that she go to google photos and search based on description\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage3"
+   }
+  },
+  {
+   "id": "F35",
+   "text": "Quote from a stage3 story (gp_help, 57629bc55c2fa959e6abb86749872ac49e971a95:0): \"fir bhi vo kisi bhi folders na\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage3"
+   }
+  },
+  {
+   "id": "F36",
+   "text": "Opportunity candidate stage6 \u2014 The photo was in front of them but hard to spot among many look-alikes: 9 core stories from 9 people (1 adjacent at the same stage); status below_floor (9 core stories, under the 30 below which no comparison is drawn ([CTX] \u00a715.5) \u2014 shown, not ranked). Gates: addressable_by_gp 4; ai_necessity 3. Scores: frequency 2; metric_leverage 5; evidence_strength 2; reach 3; severity 1. Headline score 3.333. Photo types: unclear 6, sentimental 3. Stated failure modes: 3.2 timeline_scroll (5), 6.4 screenshots_memes_mixed_in (1). Sources: x 7, reddit 1, youtube 1.",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage6"
+   }
+  },
+  {
+   "id": "F37",
+   "text": "Quote from a stage6 story (x, 1233de10dc517a78f662c1618c4d4f5e5ccbc658:0): \"y\u2019all have no idea how many bill hader pictures i had to scroll through\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage6"
+   }
+  },
+  {
+   "id": "F38",
+   "text": "Quote from a stage6 story (reddit, 1625d412f06e54cabb4ed7cfb4b0a62d05db2af1:0): \"My eyes hurt from scrolling the thousands of photos for \"flesh\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage6"
+   }
+  },
+  {
+   "id": "F39",
+   "text": "Quote from a stage6 story (youtube, 2f5da5d28f8d5041f30c4bd6bab8decffb838c34:0): \"I could not find some photos in Google Photos on my phone\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage6"
+   }
+  },
+  {
+   "id": "F40",
+   "text": "Opportunity candidate stage2 \u2014 They could not remember enough about the photo to form any search: 6 core stories from 6 people (2 adjacent at the same stage); status below_floor (6 core stories, under the 30 below which no comparison is drawn ([CTX] \u00a715.5) \u2014 shown, not ranked). Gates: addressable_by_gp 3; ai_necessity 5. Scores: frequency 2; metric_leverage 5; evidence_strength 1; reach 3; severity 1. Headline score 3.133. Photo types: utility 4, sentimental 1, unclear 1. Stated failure modes: 2.4 date_or_year (2), 2.4 photo_video_or_screenshot (1), 2.4 which_app_or_account (1). Sources: x 5, quora 1.",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage2"
+   }
+  },
+  {
+   "id": "F41",
+   "text": "Quote from a stage2 story (quora, 13c83c4d63cabfee54ac7ee7f9faf8fe91157833:0): \"I thought I had a photo of the tick in the bottle, but I can\u2019t find it\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage2"
+   }
+  },
+  {
+   "id": "F42",
+   "text": "Quote from a stage2 story (x, 0440ba39731decfcaa2b3211d22c949528ab0cdb:0): \"plan to check my iCloud or google photos if i took a screenshot at some point\"",
+   "table": "analysis_opportunity",
+   "where": {
+    "candidate_id": "stage2"
+   }
+  },
+  {
+   "id": "F43",
+   "text": "Weight sensitivity: over 1000 draws moving each pre-registered weight by up to 10 points, stage5 ranks first in 1000 of 1000 (100%) of draws, even counting candidates below the evidence floor; with severity (low reliability) added back it is unchanged.",
+   "table": "analysis_weight_sensitivity",
+   "where": {
+    "variant": "headline",
+    "candidate_id": "stage5",
+    "pool": "gates_passed"
+   }
+  },
+  {
+   "id": "F44",
+   "text": "Emerging themes found after the codebook (counts only, not ranked): Search refuses a word as sensitive 5; A Spotlight, collage or Memory can't be found again 3; Can't search within one album 2; Looked in another photo app or service 8.",
+   "table": "story_themes",
+   "where": {}
+  }
+ ],
+ "checks": {
+  "problems": [],
+  "repaired": true
+ }
+}
