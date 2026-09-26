@@ -30,12 +30,13 @@ pipeline/       offline, laptop-only: collect → clean → segment → classify
   analyse/      funnel.py · coverage.py (60-question register) · blind_read.py · lexicon_hits.py
                 crosstabs.py · derived.py · opportunity.py (gates, scores, sensitivity)
                 method_flags.py (the registered caveats Ask AI cites)
+                publish.py (pins the served corpus; the Methodology figures)
   synthesise/   residual.py (emergent themes) · themes.py (tags the approved ones)
                 facts.py · recommendation.py · handoff.py (gpt-5, checked against the facts)
 prompts/        segment_v1 · confirm_v1 · code_v1 · relevance_probe_v1
 codebook/       journey_v1.yaml (THE codebook, frozen) + severity, metric nodes, scoring, lexicon,
                 emergent_themes_v1.yaml (approved after the freeze, not in its hash)
-evals/          pytest gates p0…p6, fixtures, gate reports, browser checklist
+evals/          pytest gates p0…p6 (p6: release, X-1…X-5), fixtures, gate and browser reports
                 golden_sweep.py + fixtures/golden_questions.yaml (the Ask AI golden set, paid)
 data/corpus.db  the frozen corpus the app serves
 ```

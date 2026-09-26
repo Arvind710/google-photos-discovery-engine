@@ -693,3 +693,29 @@ left to the PM.
 
 **Spend: $16.34 recorded of $17** (sweeps $2.97 in all; Try it $0.07), plus ≈ $0.09 of live
 page checks that the read-only app does not record.
+
+## D-13 — Release: a published pin, Methodology in the app, and one gate item left open (2026-09-26, Claude, disclosed)
+
+**Publishing.** `pipeline/analyse/publish.py` pins the corpus the app serves (schema A.8)
+with a manifest of every analysis table's run ids, so a table rebuilt without
+re-publishing fails X-3 — the footer's stamp cannot describe a corpus the pages are not
+showing. It also materialises the Methodology figures that lived only in artifact files
+(lexicon hits, blind read, adjudication, fixture scores, the sanity strip's ten story ids,
+the stated limitations) into `analysis_methodology` (schema A.15), keeping the rule that
+every figure on a page is a SELECT.
+
+**How it works** is the P6 page the plan names, in the design language: nine parts, and
+the no-gold-standard disclosure first in its part and unhedged (P6-BR-12). The sanity
+strip's ten stories are seeded-random core stories ([CTX] §15.7, "10 randomly chosen").
+The gate reports render from `evals/reports/`, including P6's own.
+
+**The browser sweep is a `manual` gate item** (`test_P6_browser_sweep_recorded_every_check_passing`):
+it reads the committed sweep report and requires every P6-BR row to be ✅. It is excluded
+from CI (it records a step done outside the code) and included in the gate report, as
+P0-OPS-2 is. **P6-BR-10 (cold start after sleep) is not measured** — the app never slept
+during the session — and a warm load is not accepted in its place. The P6 gate report
+therefore reads 14/15, "GATE FAILED", until it is measured.
+
+**Also from the sweep:** a withheld refusal now states the gate's reason instead of "I
+could not write an answer…"; the secret-scan OpenAI pattern gained a left boundary (run ids
+"ask-golden-…" matched it once golden artifacts were committed; no key was ever present).

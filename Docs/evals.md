@@ -354,6 +354,8 @@ Run against the **live URL** after every deploy, per `architecture.md` §10. A g
 
 **Gate:** all green → the deploy is done. Not before.
 
+**Measured 2026-09-26 (D-13).** `evals/test_p6_release.py`: the page's parts, the unhedged disclosure (no hedge words inside it), escaping, the pinned run and its manifest (X-3), X-1, X-2, X-4, X-5, and the browser sweep read from `evals/reports/browser_P6_*.md` (`manual`: every P6-BR row must be ✅). 14 of 15: **P6-BR-10 is not yet measured** — the app never slept during the session.
+
 ---
 
 ## 12. Cross-cutting
