@@ -202,7 +202,6 @@ def test_video_only_stories_are_adjacent(con):
     assert bad == 0
 
 
-@pytest.mark.needs_corpus
 def met_or_limitation(met_id: str, value: float, threshold: float, *, higher_is_better=True):
     """implementationplan.md §0.3: a measured metric below threshold after its
     remediation loop passes ONLY as a stated limitation — recorded in
@@ -219,6 +218,7 @@ def met_or_limitation(met_id: str, value: float, threshold: float, *, higher_is_
     assert lim["mitigation"] and lim["disclosed_in"], met_id
 
 
+@pytest.mark.needs_corpus
 def test_P2_MET_3_fixture_story_counts_and_P2_PROBE_1_bucket_boundary():
     """Scored on the pipeline as run on the corpus: gpt-5-mini finds, gpt-5 confirms."""
     fx = _latest("segment_fixtures", pipeline="find+confirm")["summary"]
