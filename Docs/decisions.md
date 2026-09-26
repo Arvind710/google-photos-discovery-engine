@@ -605,7 +605,7 @@ is a `st.link_button`. Pinned by
 `test_data_bank_escapes_user_text_inside_markdown_widgets`, which fails on the
 old code.
 
-## D-12 — How Ask AI and Try it are built; text-only Try it; an empty API balance (2026-09-26/27, the PM decided the scope questions)
+## D-12 — How Ask AI and Try it are built; text-only Try it; an empty API balance (2026-09-26, the PM decided the scope questions)
 
 **The design as built** (architecture.md §7 "As built"). Two model calls: a planner
 (gpt-5-mini, `low`) that picks named queries from a registry and never writes SQL, and
@@ -653,7 +653,7 @@ Streamlit prints as text; they are Unicode superscripts now. An empty API balanc
 
 **Golden set 40 → 24** (Appendix B's reduced form), every category kept.
 
-**Try it takes pasted text, not URLs** — the PM agreed (2026-09-27). Most of the
+**Try it takes pasted text, not URLs** — the PM agreed (2026-09-26). Most of the
 platforms disallow automated access (Data Bank Part 2), and fetching arbitrary links from
 a public app is a server-side-request risk. A narrowing of [CTX] §15.6 ("text or URL").
 First live runs (`tryit-live-20260926-162721-0c4059`): the sample was found, confirmed
@@ -673,4 +673,13 @@ T-13 and the absolute checks read the latest full sweep at the current prompt
 (`ask_v1.7`), which needs credits. The history of sweeps 0–7 (13/24 → 24/24 routes) is in
 `Docs/5.md` §9.3.
 
-**Spend: $15.68 recorded of $17** (sweeps $1.82 + $0.33 + $0.16 partial; Try it $0.07).
+**Then (same day):** the PM added credit; sweep 9 (`ask_v1.7`,
+`ask-golden-synth-20260926-170921-1deede`, $0.34): **T-13 24/24, every served answer
+verified, 0 absolute problems; the P5 gate passed 64/64** (`evals/reports/gate_P5_20260926.md`).
+Ask AI and Try it were browser-checked live end to end. Reading the answers still found
+reasoning errors no check catches (an unsupported sentimental-vs-utility comparison and a
+dropped "directional" label on the first starter, among others); listed in the gate
+report's appendix, with one more iteration proposed to the PM.
+
+**Spend: $16.02 recorded of $17** (sweeps $2.65 in all; Try it $0.07), plus ≈ $0.09 of live
+page checks that the read-only app does not record.

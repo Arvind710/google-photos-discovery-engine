@@ -74,8 +74,10 @@ def _render(answer: dict) -> None:
             lines.append(f"<div style='font-size:.78rem;color:{ui.MUTED};margin:.15rem 0'>"
                          f"[{i}] {ui.esc(desc)}</div>")
         st.html("".join(lines))
+    route = {"FULL": "full answer", "PARTIAL": "partial answer — see the gap it names",
+             "NONE": "outside what these stories hold"}.get(answer["route"], answer["route"])
     meta = (f"{'✓ checked' if answer['verified'] else '⚠ not fully verified'} · "
-            f"{answer['route'].lower()} answer · {answer['seconds']:.0f}s")
+            f"{route} · {answer['seconds']:.0f}s")
     st.html(f"<div style='font-size:.72rem;color:{ui.MUTED};margin-top:.3rem'>{meta}</div>")
     if not answer["verified"]:
         st.warning("The checker could not confirm everything in this answer: "

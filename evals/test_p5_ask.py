@@ -342,7 +342,7 @@ def test_planner_context_classes_do_not_trigger_the_missing_group_rule(con):
     assert R.gate(p, R.retrieve(con, p), "q").route == "FULL"
 
 
-# ============================== 2026-09-27: the three problems found reading sweep 7
+# ============================== 2026-09-26: the three problems found reading sweep 7
 def test_code_names_in_the_answers_own_words_are_caught_quotes_and_citations_are_not():
     assert V.check_codes("Stories report irrelevant_results and far_too_many.") == [
         "far_too_many", "irrelevant_results"]

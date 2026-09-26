@@ -84,7 +84,7 @@ if tr:
             f"Stage {sp['primary_stage']} — {ui.esc(words.stage_title(sp['primary_stage']))}</div>"
             f"<div style='font-size:.85rem'>{ui.esc(words.owner(sp['failure_owner']))} · photo: "
             f"{ui.esc(sp['photo_class'])}, {ui.esc(sp['media_type'])} · outcome: "
-            f"{ui.esc(sp['outcome'])} · severity {sp['severity']}</div>"
+            f"{ui.esc(plain(sp['outcome']))} · severity {sp['severity']}</div>"
             f"<div style='font-size:.82rem;color:{ui.MUTED};margin-top:.2rem'>Why: "
             f"{ui.esc(sp['why'])}</div>"
             + "".join(ui.quote(v, f"evidence for {plain(k)}") for k, v in c["evidence"].items()),
@@ -128,7 +128,7 @@ if not pick.empty:
         f"</div><div style='font-size:.95rem;font-weight:700;margin:.4rem 0 .2rem'>Stage "
         f"{s['primary_stage']} — {ui.esc(words.stage_title(s['primary_stage']))}</div>"
         f"<div style='font-size:.84rem'>{ui.esc(words.owner(s['failure_owner']))} · "
-        f"{ui.esc(s['photo_class'])} · outcome {ui.esc(s['outcome'])} · coding confidence "
+        f"{ui.esc(s['photo_class'])} · outcome {ui.esc(plain(s['outcome']))} · coding confidence "
         f"{s['coding_conf']:.1f}</div><div style='font-size:.8rem;color:{ui.MUTED}'>Why: "
         f"{ui.esc(s['why'])}</div>"
         + "".join(ui.quote(sp_, f"evidence for {plain(f)}") for f, sp_ in zip(ev["field"], ev["span"],

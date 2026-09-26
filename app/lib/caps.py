@@ -71,7 +71,7 @@ def api_key() -> str | None:
 
 def explain(error: str) -> str:
     """What a reader sees when a call fails. An empty API balance (a 429
-    `insufficient_quota`, seen 2026-09-27) is the budget, not a bug, and the
+    `insufficient_quota`, seen 2026-09-26) is the budget, not a bug, and the
     raw error names a billing URL — say it plainly instead."""
     e = (error or "").lower()
     if "insufficient_quota" in e or "no credits" in e or "billing" in e:
