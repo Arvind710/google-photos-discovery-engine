@@ -1,0 +1,1260 @@
+{
+ "run_id": "probe-lexicon-recall-20260926-000320-2a5de1",
+ "n": 199,
+ "core": 13,
+ "adjacent": 51,
+ "t4_core_share": 0.06532663316582915,
+ "core_or_adjacent_share": 0.32160804020100503,
+ "t4_threshold": 0.05,
+ "passed": false,
+ "by_source": {
+  "appstore": {
+   "n": 71,
+   "core": 0,
+   "adjacent": 13,
+   "irrelevant": 58
+  },
+  "gp_help": {
+   "n": 1,
+   "core": 0,
+   "adjacent": 1
+  },
+  "hackernews": {
+   "n": 3,
+   "core": 0,
+   "adjacent": 1,
+   "irrelevant": 2
+  },
+  "play": {
+   "n": 17,
+   "core": 2,
+   "adjacent": 8,
+   "irrelevant": 7
+  },
+  "quora": {
+   "n": 2,
+   "core": 0,
+   "adjacent": 0,
+   "irrelevant": 2
+  },
+  "reddit": {
+   "n": 2,
+   "core": 0,
+   "adjacent": 1,
+   "irrelevant": 1
+  },
+  "stackexchange": {
+   "n": 2,
+   "core": 0,
+   "adjacent": 2
+  },
+  "x": {
+   "n": 20,
+   "core": 3,
+   "adjacent": 1,
+   "irrelevant": 16
+  },
+  "youtube": {
+   "n": 81,
+   "core": 8,
+   "adjacent": 24,
+   "irrelevant": 49
+  }
+ },
+ "verdicts": [
+  {
+   "record_id": "4a9ecd275a71d227e14b82972e179d7997a013c6",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No attempt to locate a specific photo or retrieval details\u2014just general comment about memories."
+  },
+  {
+   "record_id": "ec74c17ae809d1d2e7b01cf1b604f7d05e067c19",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval cues\u2014just enjoying memories."
+  },
+  {
+   "record_id": "f352a24d36c5c1ba069cc67b1cda40a7bb75911c",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Crashes report about app closing, not about finding a specific photo."
+  },
+  {
+   "record_id": "9f2e1352f7d1e2df2092daaab74705d027197d7a",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo or retrieval cues."
+  },
+  {
+   "record_id": "e85e11c094d102a3234317389ff3f429afd77ede",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Vague celebratory text, no attempt to retrieve a specific known photo."
+  },
+  {
+   "record_id": "a191f9c82550a1a33dcc3a14f6e73ae867decf90",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Precise issue about app permissions affecting access to specific photos (retrieval problem)."
+  },
+  {
+   "record_id": "bc2332b81022c99cfb59d1c5eac00a124706f33f",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Precise issue: selecting keyframe for Live Photos affects retrieval/management (backup/state)."
+  },
+  {
+   "record_id": "74a2b7534118577219f100cdde893ca5235e359e",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval attempts."
+  },
+  {
+   "record_id": "64e823e279c8ed95da8f9cc821d271ce8e8b607b",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Complaint about app privacy/permissions, not searching for a specific photo."
+  },
+  {
+   "record_id": "4a0196ce5aacca790c8df570eb37a50922ee4cfa",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Stage 0 backup/account issue preventing retrieval of user's photos."
+  },
+  {
+   "record_id": "12f609cf9b78ab1bad53cb42442f67c762687390",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "d43274121baa4ea77a8769cdbeee4918ffc93295",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General enjoyment of memory photos; no attempt to find a specific photo in a library."
+  },
+  {
+   "record_id": "6f6e21ee475923dc20b3911d673474773ecc7dde",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "39c0f7ba36425ec0eb4f0f002a9c67242bf31ac0",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "About a feature creating videos of memories, not searching for a specific photo."
+  },
+  {
+   "record_id": "474d553eb884c9ee187664a6a9998a2fa525de9a",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Precise cue about album ordering affecting retrieval of photos in library."
+  },
+  {
+   "record_id": "aa52e15c29766409862316fb44b7425b1b16732d",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise, no attempt to locate a specific photo or retrieval details."
+  },
+  {
+   "record_id": "b71871f92ff0e962b095d8a130ff910e3b530933",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise about app/storage and browsing, no specific known-item retrieval attempt."
+  },
+  {
+   "record_id": "c287e56d716b1506170e828b27f188cff3475074",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Not about retrieving a specific photo; just a short comment about videos."
+  },
+  {
+   "record_id": "46f261861f4069f01914a077013b94d4327de448",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Celebratory comment about a video montage, not searching for a specific photo."
+  },
+  {
+   "record_id": "0bd460843100aa7c25315be3b20dd9713b334f63",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Reports photo sync/back-up failure affecting retrieval (Stage 0 issue), precise system failure."
+  },
+  {
+   "record_id": "b27a08eabe1f984a86f2d51e14d1b66c96da297c",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Vague praise about memories/photographers, not about finding a specific photo."
+  },
+  {
+   "record_id": "a42eee98e8b2bd2535d6de1b300708d706ffb41e",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praise about selecting memories, no request or search for a specific photo."
+  },
+  {
+   "record_id": "8535e7be604cd5189bfa156ae627a98c8ddd55ca",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Layout preference complaint, not about finding a specific photo or retrieval cues."
+  },
+  {
+   "record_id": "13052d08cff357b675212fc0f93c2b8366ce48e1",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise of Google Photos and memories, not searching for a specific photo."
+  },
+  {
+   "record_id": "a690c3bde0f2342473a56ff7c74ee40a58810ee9",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praise of app functionality with no mention of searching for a specific photo."
+  },
+  {
+   "record_id": "b0b4daa7be5faea26daffd43ecb5dbc0498f35cc",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise about photos being saved, not searching for a specific photo."
+  },
+  {
+   "record_id": "f031637e0eb885f92e4ab1ec028084ab28c5d50e",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Precise issue about limited photo-access permissions affecting retrieval/upload."
+  },
+  {
+   "record_id": "89c1288ad1f17332cdf7044c63d1b1ca99947c97",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Issue about downloading raw vs JPEG, not searching for a specific photo."
+  },
+  {
+   "record_id": "c9201443f6d7f467056b71645ed35082ea057e0a",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praise/ratings about Google Photos, no attempt to find a specific photo described."
+  },
+  {
+   "record_id": "14361e5f79aaed31743a57dabf83bc0db948cfe2",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Just a short praise and mention of family photos, no retrieval/search intent."
+  },
+  {
+   "record_id": "9a7d34268a47b04fa629714eb2f68f87d5a5dfbf",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Political complaint about a company, not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "605c4f30d424f10003688bd4141e134fa9f630b3",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Feedback about duplicate removal, not searching for a specific photo or retrieval cues."
+  },
+  {
+   "record_id": "07aa99f469e2ca718e2d4de525b336526e314f5e",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Complaint about downloading images/ecosystem, not searching for a specific photo."
+  },
+  {
+   "record_id": "72970de22c598cf2eac1ec7c89a3ca9c81566128",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "UI layout suggestion about thumbnail sizing, not searching for a specific photo."
+  },
+  {
+   "record_id": "1b80039d458d847451ebe9668993833043b96d62",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Discusses video buffering/playback, not searching for a specific photo in a library."
+  },
+  {
+   "record_id": "51f9d29dbee1b2e1d9906b8146edf44760addea6",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Greeting/celebration text, no mention of searching for a specific photo."
+  },
+  {
+   "record_id": "6c309d58f757081eb99cb44c018c93aead7980bd",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Retrieval affected by backup/upload/account storage issue (Stage 0 account/data problem)."
+  },
+  {
+   "record_id": "0dc9f1844583da3d22c62649af666ff774c567ef",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise about app memories, no attempt to locate a specific photo."
+  },
+  {
+   "record_id": "8b0f871588ba304d8d53570a1c099505fa37785c",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise about app, no attempt to find a specific photo or retrieval issue."
+  },
+  {
+   "record_id": "b5550def6f0f754485ffda174f65d24233fbe7d0",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praising auto-selected photos for videos, no known-item retrieval or search involved."
+  },
+  {
+   "record_id": "85bb03fa3da7b001f1bf0e090ca217d49c210165",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "ba9fc8b98b3813e4661528806a26acb731263561",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "General retrieval failures and account/storage performance impacting finding photos."
+  },
+  {
+   "record_id": "6f9a53c7bd5f9fd75125fc169dcd8bb74ac61888",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Complaint about app performance and refresh rate, not searching for a specific photo."
+  },
+  {
+   "record_id": "b4ec7a4b506c055bd9ec9bff6808001c8a617759",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No attempt to find a specific photo; just commenting on memories."
+  },
+  {
+   "record_id": "c560d61d8711b9aaa38c4eba3466d7ad7252025f",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praising app editing/saving features, not trying to find a specific photo."
+  },
+  {
+   "record_id": "5e7f401ca057d818a648fea5139005ec8dbe6b09",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Not about retrieving a specific photo; it's about reinstalling an app to fix a problem."
+  },
+  {
+   "record_id": "b014612acfb4deb18beeda9d62f8b074d01ff47f",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "9e2aee92b60b2a596ed8781b6b40a66cdef15c5d",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General complaint about search quality, no mention of finding a specific personal photo."
+  },
+  {
+   "record_id": "c2b1a7b3e76a7024bb7b2d21157eac9f729ea164",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Not describing searching for a specific photo or retrieval cues; personal message only."
+  },
+  {
+   "record_id": "0a3802aa343512b35be93d7a48a3569dfadf5e55",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Generic praise about random memories without describing a known-item search or retrieval issue."
+  },
+  {
+   "record_id": "473caa77d64bc8136b4b386335ba09eba42d9193",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Complaint about storage limits/payment, not searching for a specific photo."
+  },
+  {
+   "record_id": "26748d6de1e5aa52d8024a3f76d40bd707495239",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Discusses cloud syncing and storage/monetization, not finding a specific photo."
+  },
+  {
+   "record_id": "64634fa6f5d6b83895da8ae4389196d9d368340d",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for or retrieving a specific photo; casual praise."
+  },
+  {
+   "record_id": "b693842637d3a6ae44d931a5794756e6ab9fc6d6",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Generic praise of Google Photos, no evidence of searching for a specific photo."
+  },
+  {
+   "record_id": "64adda82c7987ec4ccf0631c74c952c6a9bd67bb",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise of photo service, not about finding a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "5394c614c60b1f19536d497d039f4492d5884110",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Complaint about upload/backup failure and subscription cancellation, not searching for a specific photo."
+  },
+  {
+   "record_id": "7e075a596c2963896367779ae37262d5b0d2be71",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise about photo backup and slideshows, not searching for a specific photo."
+  },
+  {
+   "record_id": "30de68471e06b66881e1521a6ac1f7bb04f5da03",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Upload/sync failure (library state) affecting retrieval, a Stage 0 issue rather than vague known-item search."
+  },
+  {
+   "record_id": "33922f7412ed8f05e445f3e1ca321f7c9b3b2009",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; brief praise in French, no retrieval context."
+  },
+  {
+   "record_id": "9f26debcb15d4c3644943b3562abcc37ffdffd17",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Complaint about app permissions/data access, not trying to locate a specific photo."
+  },
+  {
+   "record_id": "ca5b296869b29fd86ac77627ab7ef69a259c202c",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching or finding a specific photo; just a comment about music."
+  },
+  {
+   "record_id": "ca85b89a9fa69032a3e28214039a50faa2704c34",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No attempt to retrieve a specific photo; general praise of the app."
+  },
+  {
+   "record_id": "1ca322e4a8cb35e9ed7b2eebbcb2c91c6a923621",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praising app and features, no attempt to find a specific photo."
+  },
+  {
+   "record_id": "84a8a6629adfa496881eaa9d7002af08d0ff5628",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Describes a backup/account storage issue affecting photo access, not a vague known-item search."
+  },
+  {
+   "record_id": "6b711beaa7e608b575004e041884b29c9403b574",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praise/thank-you, no mention of searching or retrieving a specific photo."
+  },
+  {
+   "record_id": "5bb27ebcc9a61a6ce56b67c45d8ba2b318c4973d",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Precise issue about app feature failure affecting ability to share/load photos (library state)."
+  },
+  {
+   "record_id": "075ddd30279e111f7a1ee633c1322a3e658e4f7e",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Specific retrieval issue about UI grouping affecting ability to find photos (Stage 1)."
+  },
+  {
+   "record_id": "c3028c197058e8ed37d0c4a0423053672ff7b86c",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific known photo or retrieval cues."
+  },
+  {
+   "record_id": "0bf8c26cfb4d131f748b85552a71823dbc3cd7b3",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval attempts; vague marketing text."
+  },
+  {
+   "record_id": "b2f5c83d0e6fc813561639c0902821897d2d7e57",
+   "source": "appstore",
+   "bucket": "adjacent",
+   "reason": "Precise account-level sync/backup behavior affecting retrieval and privacy (Stage 0)."
+  },
+  {
+   "record_id": "32fcd615b443c99f1ece6b0414844b82380c2651",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No attempt to locate a specific known photo; just enjoying surfaced memories."
+  },
+  {
+   "record_id": "34814f96bf3642a0c29252a04415c311d6fa3a12",
+   "source": "gp_help",
+   "bucket": "adjacent",
+   "reason": "Precise app behavior and folder/collection troubleshooting affecting retrieval."
+  },
+  {
+   "record_id": "c244740938c237515b3284a4908d10555aebe6c1",
+   "source": "hackernews",
+   "bucket": "irrelevant",
+   "reason": "Complaint about backup prompts/subscription, not searching for a specific photo."
+  },
+  {
+   "record_id": "abd30d1c290a8a96019628ada0122ef3a4928fae",
+   "source": "hackernews",
+   "bucket": "irrelevant",
+   "reason": "Discussion about PayPal VPN and fraud, not searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "95507ebf4377a497137f55e48a38780a9d7aad4c",
+   "source": "hackernews",
+   "bucket": "adjacent",
+   "reason": "Discusses photo deduplication and backup affecting retrieval (library state/management)."
+  },
+  {
+   "record_id": "7a7394227809bbaa7acd66625b1b63452cb58172",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "Refers to editing tool malfunction, not searching for a known photo."
+  },
+  {
+   "record_id": "4a91d156576ceaafb1de2a95d87162a88b6e1cf9",
+   "source": "play",
+   "bucket": "core",
+   "reason": "User reports an old photo disappearing and not returning\u2014known-item retrieval issue."
+  },
+  {
+   "record_id": "6139f219c8a093b8dae67bf2bd560703fcec1530",
+   "source": "play",
+   "bucket": "adjacent",
+   "reason": "Mentions backup/restore affecting access to photos (Stage 0 issue), precise about backup availability."
+  },
+  {
+   "record_id": "aa2c9bef5a6de0bdefe02784bb7492079cbe04ca",
+   "source": "play",
+   "bucket": "core",
+   "reason": "User describes locating a 7\u20138 year old post/photo \u2014 known-item retrieval with vague cue."
+  },
+  {
+   "record_id": "96d97d1bb4fd0d0864566cd1d40891c8f5b98762",
+   "source": "play",
+   "bucket": "adjacent",
+   "reason": "Mentions deleted photos affecting retrieval (Stage 0 issue) rather than vague known-item search."
+  },
+  {
+   "record_id": "e086c11c1ca837473e7c0776395082f58b1a4f94",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "No evidence of attempting to find a specific photo in a personal library."
+  },
+  {
+   "record_id": "14ebffed1e651ba795499c4c32dbda77b14e76b9",
+   "source": "play",
+   "bucket": "adjacent",
+   "reason": "Precise issue: edited photos break cloud-device linkage preventing retrieval/sharing (Stage 0-like)."
+  },
+  {
+   "record_id": "3f4e6c619a58d94d90fd965915d9e3e5917661f4",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "156f02922f6f8f47eaf1356ea79f4cf63797bef8",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "General praise about an app, no attempt to find a specific photo or retrieval issue."
+  },
+  {
+   "record_id": "fd6771a883cc991b96c00c462654dd913783c680",
+   "source": "play",
+   "bucket": "adjacent",
+   "reason": "Precise cue about face recognition and backup/account state affecting retrieval."
+  },
+  {
+   "record_id": "ce3e307576e465154218917b0d5b4a5dc2f63298",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "General praise about an app, no attempt to find a specific photo."
+  },
+  {
+   "record_id": "273f87b3223bfacc6f51a75e9897be4d4104bb1c",
+   "source": "play",
+   "bucket": "adjacent",
+   "reason": "Describes backup/account issue affecting retrieval (Stage 0), precise failure with backups deleted."
+  },
+  {
+   "record_id": "26dbfe44f7d3e0b5c064b85c00ba4aec5e98343f",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific known photo; unclear/fragmentary praise."
+  },
+  {
+   "record_id": "2b2698036c9b4146346bbc970a4b2979f5dd8a87",
+   "source": "play",
+   "bucket": "adjacent",
+   "reason": "Describes missing/deleted photos (backup/account/restore issue), precise library state problem."
+  },
+  {
+   "record_id": "86b1ce390d9b1dd7f6ded04b2b5edbb8a63959e0",
+   "source": "play",
+   "bucket": "adjacent",
+   "reason": "Service outage affecting photo retrieval (Stage 0/library access) \u2014 precise system issue."
+  },
+  {
+   "record_id": "1255b70fbbbdcb22ecadbc465dc1ca756a815ef0",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "General complaint about app search/AI, no specific known-item photo retrieval described."
+  },
+  {
+   "record_id": "a4f32f16c4ef302f1a468b9c6421d6fcf5363eba",
+   "source": "play",
+   "bucket": "adjacent",
+   "reason": "Precise cue about face-based retrieval failing\u2014system/data feature malfunction."
+  },
+  {
+   "record_id": "6f3c6212126b00f65aec18f4e22e75314c67177f",
+   "source": "quora",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; it's a remark about camera invention timeline."
+  },
+  {
+   "record_id": "79874cd492b9c67e13c4c5c4627e276857b9d5e7",
+   "source": "quora",
+   "bucket": "irrelevant",
+   "reason": "Political/organizational description, not about finding a specific photo in a personal library."
+  },
+  {
+   "record_id": "955fbe61191ac4885713b25c5e671d38857ba0e8",
+   "source": "reddit",
+   "bucket": "adjacent",
+   "reason": "Precise issue about screenshots auto-including webpage links affecting retrieval/sharing settings."
+  },
+  {
+   "record_id": "83549f5c9070af407964095ea1392de97cbbd08a",
+   "source": "reddit",
+   "bucket": "irrelevant",
+   "reason": "News/celebrity trolling about book photos, not a user seeking a known photo in their library."
+  },
+  {
+   "record_id": "41a4af9fa1386406c86235fb61a46ece164ecf7b",
+   "source": "stackexchange",
+   "bucket": "adjacent",
+   "reason": "Precise technical failure about retrieval? Actually it's video playback issue, not finding a photo."
+  },
+  {
+   "record_id": "5a7a4c463dc5c6808a3ff011c433a35e41c88b6f",
+   "source": "stackexchange",
+   "bucket": "adjacent",
+   "reason": "Precise retrieval of a specific shared photo URL from mobile (stage 0/UX issue)."
+  },
+  {
+   "record_id": "06df9c26aa3347d1d4909653c7ca996e28563905",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discusses dog-owner cortisol synchrony, not searching for a specific photo."
+  },
+  {
+   "record_id": "4dfdb193f547b2f8a8e18339647ba233ce69e796",
+   "source": "x",
+   "bucket": "core",
+   "reason": "Describes a known single photo with vague cues seeking identification/retrieval."
+  },
+  {
+   "record_id": "74e13b40d40ba9f2095d9e43957723b9d2f83b3a",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Complaint about reminders, not searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "b2f0e76af374328a9f77d98f4486fcb306173df3",
+   "source": "x",
+   "bucket": "core",
+   "reason": "User recalls a specific recurring photo from past holidays but has vague cues about it."
+  },
+  {
+   "record_id": "2f24756ba31aa66e75f84727ffc3b3da4dbdadd9",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Human-interest story, not about searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "3d4f74635b208cf1993154392c2b75761af5a50f",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Article about inmate death and abuse, not about finding a photo in a personal library."
+  },
+  {
+   "record_id": "fcf3b15991e6a8c7e97b786d20a9cc112d4c0459",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Insulting group chat message, not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "ae50b8885e6b594be914ffb7b30cfdc161cd547f",
+   "source": "x",
+   "bucket": "core",
+   "reason": "User recalls a specific past photo with vague memory/story about finding it."
+  },
+  {
+   "record_id": "0ea713f1f84f8c0b8afd983f231beebb43a066dc",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "No attempt to find a specific photo; it's commentary about shared photos, not retrieval."
+  },
+  {
+   "record_id": "5b49bc686b5ddb5b27ee26054e0efc68f76dd263",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Promotional course announcement, not about finding a specific photo in a personal library."
+  },
+  {
+   "record_id": "5b5192e7b32f8e540ed1fb7c6aa7c3727f8a1bfc",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Product announcement/advertisement, not about finding a specific photo in a personal library."
+  },
+  {
+   "record_id": "93475a7520244a419b12f8b93cf785ffc10ab01e",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discusses AI prompting and loops, not searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "5176d39cfef8afd296f671824f562f1d2c76d8fc",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a photo in a personal library; discusses social media/search analytics."
+  },
+  {
+   "record_id": "f4c203fc796a8b5b3c59705ac5246a81e161cd21",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Announcement about a feature to blur sensitive data, not about finding a specific personal photo."
+  },
+  {
+   "record_id": "db5a52ac0b7e87cf177fc32fe5643d3983d979b4",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Announcement about F\u2011Droid app update; not about retrieving a specific photo."
+  },
+  {
+   "record_id": "bb4b3da318708516f9ac3224b6918740589b90ad",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Eulogy/news about a person; not about finding a photo in a personal library."
+  },
+  {
+   "record_id": "c49ff21254a23fe94e68a74f428ee5338f91ea64",
+   "source": "x",
+   "bucket": "adjacent",
+   "reason": "System-created animation surfaced a specific known-item (memorial) causing retrieval/emotional issue."
+  },
+  {
+   "record_id": "fcdc60297153d5ac1528eed4a1841a4b6e599a76",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Asks about cashback on Google Pay, not about finding a photo in a library."
+  },
+  {
+   "record_id": "5708192f717001ab3d98a2c7af4d1e50547a6cd2",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Political comment, not about searching for a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "bdda1db4c4276b620f34ea6ce7335df0aa854dec",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Not a search or retrieval attempt; sharing memories comparison, no retrieval problem or cues."
+  },
+  {
+   "record_id": "191e8c268e82837b90c68507027a249265200c5f",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No attempt to locate a specific photo; casual chat/insulting comments unrelated to retrieval."
+  },
+  {
+   "record_id": "f94893e5255928a12f695ea1c2be632806816baa",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "User asks about deleting a device from Chrome/accounts affecting access (precise account/device retrieval issue)."
+  },
+  {
+   "record_id": "e609efbe463450a2ddbb7908c8ebbd4d016cab71",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discusses availability/region, not searching for a specific photo or retrieval cues."
+  },
+  {
+   "record_id": "d5249b89ca691bae3143517793e086319707dc84",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval issues; just courtesy text."
+  },
+  {
+   "record_id": "951b9c499fc1cc0d35792dd53def5f9f02ce2568",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User describes trying to find a photo by date but date showing as today \u2014 known-item retrieval issue."
+  },
+  {
+   "record_id": "c14b87a50931e4f820a7ccf33bb8e206e6ffece4",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Discusses backup/account state affecting ability to retrieve photos (Stage 0)."
+  },
+  {
+   "record_id": "822d3ed31c456573d0686051ace82c8298624242",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a specific photo; just gratitude."
+  },
+  {
+   "record_id": "ad6f290edc7f8d8394277dd54ec944a500c928fa",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User seeks an old photo/video in their library with vague timing cues (known-item retrieval)."
+  },
+  {
+   "record_id": "0eb8fd4162b943f8284bf93d79ba9cbcf99fafb5",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Precise account-level feature question about removing photos from a locked folder (Stage 0/config)."
+  },
+  {
+   "record_id": "5e695f416eb245471698fda02926618c8dde6f21",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval issues; irrelevant comment about a video."
+  },
+  {
+   "record_id": "f88ba20ab31870d532a5eb183077183357364b21",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User describes recovering deleted photos\u2014known-item retrieval with vague timing cues."
+  },
+  {
+   "record_id": "c1489e7cd4705e41bc427b2a96abf679f22cb8ea",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discusses UI gesture issue on iPhone, not searching for a specific photo."
+  },
+  {
+   "record_id": "3ecb423d5dc6c7d8db4b524a6806333cc4a078e1",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "6da9eb8b2177e507be430feffa43c6a3f3e45838",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Personal thanks message unrelated to searching or retrieving photos."
+  },
+  {
+   "record_id": "63a6b16da7e7a87b8b2ad942dce89e697167cf4f",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Mentions data being gone (backup/account issue) affecting retrieval (Stage 0)."
+  },
+  {
+   "record_id": "2a2e54118bf519024b584b181503335ec4a02159",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Precise action sequence about sharing a specific photo to Chrome; retrieval not vague."
+  },
+  {
+   "record_id": "001ba8a3fcfdf315db4d9a56ec238eaa4672d113",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "User asks about removing/deleting a photo and privacy (precise account/sync issue)."
+  },
+  {
+   "record_id": "42a2d801e74d4cefd61cce2733ecff0ca32d5ae2",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Casual thank-you message; no mention of searching for a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "06773c984c77a471d82535cbc4730c2fd148122f",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of trying to locate a specific photo; just says none arrived."
+  },
+  {
+   "record_id": "daf26dadea1fca2f3c0738e3eb2fe5e99a8e3917",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Issue concerns app missing/backup/account affecting retrieval (Stage 0)."
+  },
+  {
+   "record_id": "37124c0beab87597ede15999190913f54068252b",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Generic technical issue about clicking/opening, not about finding a specific photo."
+  },
+  {
+   "record_id": "07a83d8803456982a2ff9478bdf5ca01b0b21219",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discussion about disappearance and discord, not searching for a specific photo."
+  },
+  {
+   "record_id": "8a44f7d2eea623de92e846e5751de552bf5777a7",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User asking how to retrieve hidden photos \u2014 known-item retrieval with vague cue."
+  },
+  {
+   "record_id": "e149deaf9e2f69d6454860f436eb60de24c70a08",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Describes backup/account configuration affecting retrieval (Stage 0 issue)."
+  },
+  {
+   "record_id": "1dc78faefc509508682c4db08bcb52a98fe79ff8",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; it's congratulatory/encouraging message about subscribers."
+  },
+  {
+   "record_id": "1f09a6d5d047b89275de18302c96ca1d1273953c",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Describes search option missing in Google\u2014precise issue affecting retrieval stage."
+  },
+  {
+   "record_id": "1f73aaa96c95d2680570e7c6d478a77973e5d753",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "General complaint about Google Photos, no evidence of searching for a specific photo."
+  },
+  {
+   "record_id": "bfd2954472f408e963b35a1c8f20296186bd87e7",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User seeks a specific photo in their library with vague/partial cues (shayar\u012b/her)."
+  },
+  {
+   "record_id": "0b0799c2c90ee6c94bc7ff56fe5330f87a31e52d",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching or retrieving photos; casual thank-you exchange."
+  },
+  {
+   "record_id": "69ac259a00ea858d917bfea4daa5dd77c216c590",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching or retrieving photos; just a thank-you exchange."
+  },
+  {
+   "record_id": "d11d73613e82ca60b12a8204cf4633ffa4163c2a",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Refers to recovery/backup option missing\u2014Stage 0 account/library issue affecting retrieval."
+  },
+  {
+   "record_id": "5ab498a8b28e7225bd2327a18f6997476bf09629",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo or photo-library retrieval."
+  },
+  {
+   "record_id": "948e437e1ca44614664188559ec77f1dcda6f081",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo; appears to ask who is watching in 2026."
+  },
+  {
+   "record_id": "a77be0c574d1856ca66f58313263e81b4200e8ec",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Vague complaint about UI/button, not describing searching for a specific photo."
+  },
+  {
+   "record_id": "111860a432339f58d5934ae1664cc6fcab54c353",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asks about Google Photos option and backup/storage affecting retrieval (Stage 0/library issue)."
+  },
+  {
+   "record_id": "bd31e4db77bd584a2196d542598e66ed7898c082",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asks about settings effect, no mention of searching for a specific photo or retrieval."
+  },
+  {
+   "record_id": "97a6d4b8aac895e0d53f3d0d8ec291f76c8b44e1",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval attempt; too vague."
+  },
+  {
+   "record_id": "5f1dc10a2b74ca7d1c6130d17f58b77042611920",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo or retrieval-related cue."
+  },
+  {
+   "record_id": "4c5464db764509b9b74450d8e3a84869c18976b9",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Concerns about which device/account shows shared photos (precise account/backups issue)."
+  },
+  {
+   "record_id": "82ec89bb9faf5587ba8d0148876d965a063614a7",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a photo; just a thank-you message."
+  },
+  {
+   "record_id": "24eabf44be4478ca74e7899fa2123b86fb8807be",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User reporting inability to find deleted pictures\u2014known-item retrieval with missing/partial cues."
+  },
+  {
+   "record_id": "47506da79ac0a07c9c10a249f5799861fab5f343",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo in a personal library; seems unrelated extraction issue."
+  },
+  {
+   "record_id": "bd6e5d7c67b47a36447f697d6758c1443fabdad4",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo or retrieval-related cues."
+  },
+  {
+   "record_id": "5c75df28ecce702ead908ce3bf1f074bbaae374c",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "About waitlist/access to a feature, not searching for a specific photo in a library."
+  },
+  {
+   "record_id": "50d506f9f10e1972349e1c3cbcc521fd8a33fced",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a photo; just a thank-you message."
+  },
+  {
+   "record_id": "53df21cc1f9a20c85672f8ccaa1012c9f3fbcd8e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; it's about work/Chrome not working."
+  },
+  {
+   "record_id": "1f33f1e3577d028447434d82e16a8d6be139a8b6",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking how to download photos, not about finding a specific photo in library."
+  },
+  {
+   "record_id": "33e1b1d7640fff5d64e671e044f33426e3923104",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Praise/compliment with no mention of searching or finding photos."
+  },
+  {
+   "record_id": "384991b4a48234250495cff40a094f0270fc6ca6",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing a search for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "f72caa04534a09823e40154c4ee539aa68f6956f",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of seeking a specific photo or retrieval attempt\u2014just UI issue statement."
+  },
+  {
+   "record_id": "575f6e795c05adf68ea735e6b23bf5ec68028fbb",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No attempt to find a specific photo or describe retrieval; just praise for a video."
+  },
+  {
+   "record_id": "0e552bff3bb5b7ab66bef35962413f1d15ff6b0c",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Mentions cloud backup/account issue affecting retrieval (Stage 0), precise complaint about backups."
+  },
+  {
+   "record_id": "97f352aedf6e957ec13b35cd1f6b75932069a9da",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Doesn't describe searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "a0e6a1ea220a1a9e4ca3c1ea1df3d43fa91b5565",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discusses a person posting repo and updates, not searching for a photo in a library."
+  },
+  {
+   "record_id": "e46bb566ea35236571d2325e2869229d7539be75",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User describes seeking a specific blurred Halloween skull photo in their library (known-item retrieval)."
+  },
+  {
+   "record_id": "d46ec4d1317178310c9388727c6d80924abd4935",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "User reports Google Photos option missing\u2014an account/library state issue affecting retrieval."
+  },
+  {
+   "record_id": "e8afa9cf66387ce6f1129531f3da723f5c1f109b",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a specific photo; unrelated comment."
+  },
+  {
+   "record_id": "3f0311cbba18dc46d629d11f2cb2595940eb425b",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asking about backing up deleted photos to another email \u2014 retrieval/backup (Stage 0) issue."
+  },
+  {
+   "record_id": "0b4caba57efa7a1184b9aa876e5061a4b8f9c152",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking why a phone feature is missing\u2014not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "31328bd7cc5de0bf408ab9c8d58ab2c6e74523fd",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User seeks a specific deleted/missing photo in their gallery\u2014known-item retrieval with vague cues."
+  },
+  {
+   "record_id": "326e734e3d1b359fa8668e55cfa0795db18239a0",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Describing precise retrieval/backup issue: photos not appearing on phone from process/WhatsApp."
+  },
+  {
+   "record_id": "4811b9cc2775ea4a8846d2bb674c65486ce3169f",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo or retrieval; it's an insult/command unrelated to photo search."
+  },
+  {
+   "record_id": "9b3c5ff97c455b5c8ff1ee741bca5dc9ea15cb12",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Precise interface/feature issue preventing accessing Google Photos (Stage 0/library access problem)."
+  },
+  {
+   "record_id": "8a29c5625efa0a7c594b8ba73f08b1ea22449f37",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a photo or retrieval; it's a general saying/joke."
+  },
+  {
+   "record_id": "420cfe1a9a031d3458c5d10693e2c2342f928768",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a photo; just a greeting/introduction from a student."
+  },
+  {
+   "record_id": "ad16c5508670bf9ea359c5a6fdd5585fbb384b47",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "2fd530ab1e0f2e9ef4917e4889dd3cef2ba553e8",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a specific photo; just general complaints/emojis."
+  },
+  {
+   "record_id": "e90271459cc22f8fee12a292c3a4e08e06f3c7ea",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Retrieval failure due to account/state issue (deleted photos, no backup available)."
+  },
+  {
+   "record_id": "2af78e560397f16418f10a1076fc9d07be6db525",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a specific photo; just thanks."
+  },
+  {
+   "record_id": "0170a1e9d434721aa39e574cc893bd5649228f91",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Precise issue about deleted photos not visible\u2014system/data failure affecting retrieval."
+  },
+  {
+   "record_id": "cf38f5c5ae8e3028882ce455af7a4d6481ec9897",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "ed3457e82c8c66b78d849b57dfa6cf54d6b58dbe",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Explains backup/account issue preventing finding recent photos (Stage 0 retrieval problem)."
+  },
+  {
+   "record_id": "8b759d08c8be30bbb9cd55063e6fb3b698351c57",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval activity."
+  },
+  {
+   "record_id": "8907a2b8e215ec379041b0771e853d18712b171d",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asking how to recover deleted photos from Drive\u2014retrieval issue about backup/state (Stage 0)."
+  },
+  {
+   "record_id": "529c6e5512da4fd5450b6bbce956f9e5dcb3af3f",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking where to mark/tick something; not about finding a photo in a library."
+  },
+  {
+   "record_id": "de7ef641f258c09e6be106b80c8f657fc9832c8b",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of finding a specific photo or photo retrieval; it's about search engines/privacy."
+  },
+  {
+   "record_id": "87d79c216381c22f3368676e2ff552404d3c32c3",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for or retrieving a specific photo; just gratitude."
+  },
+  {
+   "record_id": "93fed74ca39bce22324d7001a67cc56f92c7de8e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Complaint about audio/enlargement, not about finding a specific photo."
+  },
+  {
+   "record_id": "4e1a9fea069bc4b9e346bfd1a4896b38adba4b7d",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Precise backup/account issue: deleting from gallery also removes from Google Photos (syncing)."
+  },
+  {
+   "record_id": "7dcb3e5f0cc4478356763f81d41542f49decabec",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Retrieval of known photo from cloud to device (backup/account/restore issue)."
+  },
+  {
+   "record_id": "2f7359dbb245f9c00032368191a5c21e462f01a5",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asking about restoring a deleted photo (precise issue: recovery/backup stage)."
+  }
+ ]
+}

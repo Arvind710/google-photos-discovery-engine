@@ -130,3 +130,38 @@ a test.
 **$6.70 per 1,000 threads** — Myntra's $0.38 per 1,000 counted each comment as a
 record. The full Reddit collect is sized to that figure, inside the $10 Apify
 limit.
+
+## D-5 — The full collect (P1E), the lexicon gate's two rounds, and a Reddit budget stop (2026-09-26, Claude)
+
+**Collected.** 11,366 records from 10,956 people, all nine sources: YouTube 3,845 ·
+App Store 2,500 · Play 2,000 · X 1,139 · Hacker News 577 · Stack Exchange 351 ·
+GP Help 328 · Quora 320 · Reddit 306 (threads, each with its comments). After
+cleaning and the gate, **5,291 are kept for segmentation** — close to the ~5,500
+`architecture.md` §8 costs Pass 1 at, so the $1.20 estimate stands.
+
+**The lexicon gate failed its first recall probe, and was widened.** Round 1
+passed a record only if it named a photo-like thing AND a retrieval act; the
+probe found 13 of 199 rejected records were core (6.5% > T-4's 5%) — Hinglish
+("kaise ayenge", "dikh rahe"), Devanagari ("मेरी पुरानी फोटो…"), deleted and
+hidden photos. Round 2 passes any record that mentions a photo-like thing in any
+script; it rejects 2,468 records that never mention one (YouTube 1,237, App
+Store 672, X 284, Play 249) and **passed at 2.5% (5 of 200)**. The round-1 judge
+also called some plainly non-retrieval text "core" at minimal reasoning effort;
+its prompt was NOT changed to pass the test — a generous judge overstates
+misses, which is the safe direction. Two probes, $0.088.
+
+**Reddit was stopped at 1.5× its estimate.** Whole threads cost ~$0.27 per
+search term (27 threads × comments), against the $0.18 planned from the pilot.
+Continuing all 26 terms would have run into the $10 Apify limit mid-run, so the
+run was interrupted after three terms (recorded `failed`, its 44 threads kept;
+the in-flight Apify run was aborted on Apify's side too), and re-run on ten
+chosen terms. **Reddit ends at 306 threads, not the ~4,500 records
+`architecture.md` §5.1 planned** — that figure assumed Myntra's comment-level
+records and PRAW's zero cost. Each thread carries its full comment tree
+(264 hold more than one post), so this is fewer, richer records, and it is the
+first place to add volume if Phase 3's pilot projects fewer than 300 core
+stories (the §0.4 loop-back). Apify this cycle: $6.06 of $10.
+
+**YouTube over-delivered.** 3,845 comment threads against ~800 planned: the same
+popular videos answer many terms. 91% of YouTube text never mentions a photo and
+is set aside by the gate; 1,086 YouTube records go forward.

@@ -31,7 +31,8 @@ from pipeline.common import env as envm
 from pipeline.common import runs as rmod
 
 PLAY_APP = "com.google.android.apps.photos"
-PLAY_LANES = [("en", "in"), ("hi", "in"), ("en", "us")]
+# en-US returned the same reviews as en-IN in the pilot (D-4), so it is not a lane.
+PLAY_LANES = [("en", "in"), ("hi", "in")]
 IOS_APP = "962194608"
 IOS_COUNTRIES = ["us", "in", "gb", "ca", "au"]
 FEED = "https://itunes.apple.com/{c}/rss/customerreviews/page={p}/id={a}/sortby=mostrecent/json"

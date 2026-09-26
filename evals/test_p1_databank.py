@@ -312,16 +312,35 @@ def test_P1_INV_6_no_silent_truncation(con):
     """Collectors store full text. A text ending in an ellipsis or a 'read
     more' marker, or sitting exactly on a round API cap, is a truncation."""
     caps = {280, 500, 1000, 2000, 4000, 5000, 10000}
-    bad = [r["native_id"] for r in con.execute("SELECT native_id, text_raw FROM records")
+    bad = [r["native_id"] for r in con.execute("SELECT source, native_id, text_raw FROM records")
            if (r["text_raw"].rstrip().endswith(("… (more)", "...more", "Read more"))
-               or len(r["text_raw"]) in caps) and r["native_id"] not in VERIFIED_FULL_LENGTH]
+               or len(r["text_raw"]) in caps)
+           and r["native_id"] not in VERIFIED_FULL_LENGTH
+           and len(r["text_raw"]) != PLATFORM_MAX.get(r["source"])]
     assert not bad, bad[:5]
+    # A platform maximum is only an excuse if the collector is not ALSO capping:
+    # X allows long posts to some users, so longer X text must exist.
+    assert con.execute("SELECT count(*) FROM records WHERE source='x' AND"
+                       " length(text_raw) > 280").fetchone()[0] > 0, "X text capped at 280"
+    assert con.execute("SELECT max(length(text_raw)) FROM records WHERE source='play'"
+                       ).fetchone()[0] <= 500, "Play text longer than Play allows?"
+
+
+# The platform's OWN maximum, not a collector cap: Google Play reviews stop at
+# 500 characters; a standard X post at 280.
+PLATFORM_MAX = {"play": 500, "x": 280}
 
 
 # Records that sit exactly on a cap and were CHECKED to be whole, with how.
 VERIFIED_FULL_LENGTH = {
     "1466829442806947842": "X post from Dec 2021 — before X allowed posts over 280 characters",
     "49797968": "HN comment; the item API returns the same 280-character text",
+    # GP Help: the 'Read more' closes a Help Center ARTICLE PREVIEW a Product
+    # Expert embedded in a reply — Google truncates those by design and links
+    # the article. Clicking it does not expand in place (checked). Every
+    # user-written post in the thread is whole.
+    "463935872": "GP Help thread; 'Read more' ends an embedded Help Center article preview",
+    "469005917": "GP Help thread; 'Read more' ends embedded Help Center article previews",
 }
 
 
@@ -504,3 +523,37 @@ def test_store_and_official_api_mappings():
                          "dates</p>", "created_at": "2024-01-01T00:00:00Z"}, query="q", run_id="r")
     assert hn["text_clean"] == "Photos search & dates"
     assert o.html_to_text("<p>a</p><p>b &lt;3</p>") == "a\n\nb <3"
+
+
+# ========================================================= UNIT — prefilter (EC-PRE)
+def test_prefilter_passes_every_authored_core_story():
+    """A gate that rejects the project's own hand-written retrieval stories —
+    English, utility, sentimental, Hinglish — would certainly reject real ones.
+    Free, deterministic; the paid measurement is P1-MET-3."""
+    from pipeline.clean import prefilter
+    lex = prefilter._lexicon()
+    rows = [json.loads(line) for line in (FIX / "stories_authored.jsonl").read_text().splitlines()
+            if line.strip()]
+    rows += [{"id": r["id"], "text": r["text"], "expected": {"bucket": r["expected_bucket"]}}
+             for r in map(json.loads, (FIX / "bucket_boundary.jsonl").read_text().splitlines())]
+    missed = [r["id"] for r in rows
+              if r["expected"]["bucket"] == "core" and not prefilter.passes(r["text"], lex)[0]]
+    assert not missed, f"core stories the gate would reject: {missed}"
+
+
+@pytest.mark.parametrize("text", ["Storage is full, stop asking me to pay.",
+                                  "The new editor keeps crashing when I try to crop.",
+                                  "Love this app, five stars"])
+def test_prefilter_rejects_plainly_off_topic_text(text):
+    from pipeline.clean import prefilter
+    assert not prefilter.passes(text)[0]
+
+
+@pytest.mark.needs_corpus
+def test_P1_MET_3_lexicon_recall_probe_recorded_and_passed(con):
+    """T-4 ≤ 5%: the probe must have run on the committed corpus and passed."""
+    row = con.execute("SELECT params_json FROM runs WHERE stage='probe-lexicon-recall'"
+                      " AND status='ok' ORDER BY started_at DESC LIMIT 1").fetchone()
+    assert row, "P1-MET-3 has not run — python -m pipeline.validate.lexicon_probe"
+    res = json.loads(row[0])["result"]
+    assert res["n"] >= 150 and res["t4_core_share"] <= 0.05, res
