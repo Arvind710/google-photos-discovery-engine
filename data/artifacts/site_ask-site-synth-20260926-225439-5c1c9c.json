@@ -1,0 +1,290 @@
+{
+ "run_id": "ask-site-synth-20260926-225439-5c1c9c",
+ "plan_run": "ask-site-plan-20260926-225439-73233e",
+ "prompt_version": "ask_v3.20",
+ "subset": false,
+ "summary": {
+  "n": 6,
+  "T13_route": 1.0,
+  "verified": 5,
+  "repaired": 4,
+  "withheld": 0,
+  "withheld_late": 0,
+  "planned_by_rules": 2,
+  "late_served_whole_paragraphs": 0,
+  "repaired_by_dropping": 4,
+  "cost_estimated_rows": 2,
+  "assertion_fails": 0,
+  "problems_by_type": {
+   "unsupported number": 0,
+   "percentage without its count": 0,
+   "unverifiable quote": 0,
+   "citation not retrieved": 0,
+   "uncited claim": 0,
+   "share stated as": 0,
+   "label-and-colon": 0,
+   "closing": 1,
+   "refusal": 0,
+   "evidence": 0,
+   "length": 0,
+   "code name": 0,
+   "directional share": 0,
+   "directional label": 0,
+   "comparison between": 0,
+   "internal word": 0
+  },
+  "max_seconds": 8.6,
+  "cost_usd": 0.0136,
+  "mean_seconds": 8.2
+ },
+ "rows": [
+  {
+   "id": "D1",
+   "category": "data_bank",
+   "question": "Where did the data come from, and how was each source collected?",
+   "restated": "Which sources contributed stories to the dataset, and how each source's stories were collected?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [],
+   "text": "**The evidence is 31,235 public posts, reviews and comments drawn from ten platforms: YouTube comments (18,662), X/Twitter (5,042), App Store reviews (2,500), Google Play reviews (2,000), Hacker News (1,317), Stack Exchange (618), Reddit (448), Google Photos Help Community (328), Quora (320) and a small remainder — all read between 2007 and 2026.** [[analysis_funnel|collected]][[analysis_sources|youtube]][[analysis_sources|x]][[analysis_sources|appstore]][[analysis_sources|play]][[analysis_sources|hackernews]][[analysis_sources|stackexchange]][[analysis_sources|reddit]][[analysis_sources|gp_help]][[analysis_sources|quora]]\n\nEach source was collected in the way shown beside it. YouTube, Hacker News and Stack Exchange used the platforms’ official programmatic read APIs or feeds as the platforms document. App Store and Google Play reviews came from the public feeds/tools those stores publish. Reddit, Quora and X/Twitter records were collected with a paid service (Apify); those three sites’ published rules forbid automated collection and that choice is disclosed here. Google Photos Help Community pages were opened by an automated browser; the pages themselves are allowed but not the internal post-loading addresses. All records are public, names/emails/phones/handles were removed, and Apify-sourced records were marked. [[site|source:youtube]][[site|source:hackernews]][[site|source:stackexchange]][[site|source:appstore]][[site|source:play]][[analysis_sources|reddit]][[analysis_sources|quora]][[site|source:x]][[site|source:gp_help]][[site|collection:paid]]\n\nI'm happy to show the exact collection note for any platform or the time ranges for each source.\n\n*Want the raw timestamps and collection-method note for one platform?*",
+   "seconds": 7.7,
+   "cost_usd": 0.00216,
+   "usage": {
+    "plan": [
+     1994,
+     1920,
+     310
+    ],
+    "write": [
+     4753,
+     1792,
+     345
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "D2",
+   "category": "data_bank",
+   "question": "What was set aside, and why?",
+   "restated": "Which stories or data were set aside during analysis (excluded or gated out), and for what reasons were they excluded?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [],
+   "cost_estimated": [],
+   "text": "**Almost all of the material was set aside: 30,921 of the 31,235 records were excluded, each for a clear reason.** [[site|setaside:total]]\n\nThe largest single reason was posts about photos that never tried to find one — about 11,475 records from 10,792 people — so they couldn't show the searching process we study. [[site|setaside:no_story]] Many were simply too short to interpret — 9,863 records under 20 letters from 9,495 people — and a similar number never even mentioned a photo, picture or screenshot (9,382 records from 9,105 people). [[site|setaside:too_short]][[site|setaside:lexicon_rejected]] Smaller slices were duplicates, near-repeats, or where the quoted passage couldn't be located. [[site|setaside:exact_duplicate]][[site|setaside:near_duplicate_same_author]][[site|setaside:span_unverified]]\n\nThis trimming left 314 posts that actually described hunting for a photo; of those, 115 are the cases about a vaguely remembered photo that most of our answers use. [[analysis_funnel|kept]][[analysis_funnel|stories:core]] The exclusions matter because they ensure the retained cases actually trace the finding path; I'm afraid the posts can't settle anything about how often real users succeed in other contexts. [[analysis_method_flags|proxy_not_success_rate]][[analysis_method_flags|public_selection_bias]]\n\n*Want to see exactly which short or off‑topic phrases were common in the set‑aside posts?*",
+   "seconds": 7.8,
+   "cost_usd": 0.00208,
+   "usage": {
+    "plan": [
+     1988,
+     1920,
+     370
+    ],
+    "write": [
+     4459,
+     1792,
+     282
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "M1",
+   "category": "method",
+   "question": "How was each case read, and how reliable is that reading?",
+   "restated": "Which sources contributed the stories, how each story was read/coded, and how reliable are those readings (inter-coder agreement)?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "Limits to bear in mind — many questions had too few posts to answer; on some details the two readers agreed too rarely to trust them; and public posts over‑represent problems, so these cases are not a population sample."
+   ],
+   "cost_estimated": [],
+   "text": "**Each case was read against the same 60 fixed questions by two AI readers, with a second, stronger model checking the selected post and marking where the search path first went wrong.** [[site|method:questions]][[site|method:readers]][[site|limits:P2-MET-1]]\n\nConcretely — one model first locates the quoted passage in a post and the stronger model then reads the case end‑to‑end along the study's path (was the photo there → why sought → what was remembered → where they looked → words used → whether search matched → spotting → retries → outcome), and it records the first step that failed. [[site|method:readers]]\n\nHow reliable is that reading? The two AI readers agreed on the first point of failure in 69 of 100 checked cases, meeting the study's preset minimum agreement. A blind human re‑read named the same first point in 46 of 60 rechecked cases, and on 40 hand‑written test cases the reading was correct in 36. These checks point to reasonable consistency, not perfection. [[site|method:agreement]][[site|method:blind]][[site|method:tests]]\n\nWhere agreement was low the study does not rest a finding on that detail. [[site|method:low]][[analysis_reliability|outcome]][[analysis_reliability|metric_node]][[analysis_reliability|severity]][[site|limits:posts]][[analysis_method_flags|public_selection_bias]][[analysis_method_flags|low_reliability_fields]]\n\n*Want to see the 60 questions and a few example read cases so you can judge the coding yourself?*",
+   "seconds": 8.5,
+   "cost_usd": 0.0023,
+   "usage": {
+    "plan": [
+     1993,
+     1920,
+     420
+    ],
+    "write": [
+     4482,
+     1792,
+     339
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "M2",
+   "category": "method",
+   "question": "What are the main limits of this study?",
+   "restated": "What are the main limits of this study?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": false,
+   "problems": [
+    "closing: the answer does not end with one italic closing question"
+   ],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "rules",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "*Want to see which phrases people typed when search “did not understand” them?*"
+   ],
+   "cost_estimated": [
+    "gpt-5-mini"
+   ],
+   "text": "**The main limits are that these are noisy, partial public reports and a small, hand-picked set: they’re not a representative measure of how often people succeed or fail.** [[analysis_funnel|collected]][[analysis_funnel|kept]][[analysis_funnel|stories:core]][[analysis_method_flags|proxy_not_success_rate]][[analysis_method_flags|public_selection_bias]]\n\nFirst, most records read held no search case, so the 115 cases about half-remembered photos are a tiny slice of the material the team skimmed and a smaller slice of all photo hunts people do. [[site|limits:P2-MET-4]][[analysis_funnel|stories:core]][[analysis_funnel|collected]][[analysis_method_flags|proxy_not_success_rate]] My read is that this concentrates on the kinds of episodes people post about, not on everyday behaviour. [[analysis_method_flags|public_selection_bias]]\n\nSecond, the posts over‑represent problems and omit demographic or device details, so we cannot count users, compare apps, countries, ages, or treat these figures as rates. [[site|limits:posts]][[analysis_method_flags|missing_cuts]][[analysis_method_flags|proxy_not_success_rate]]\n\nThird, reading limits: two AI readers sometimes disagreed, and what the search actually did is inferred from people’s words, not from logs, so some cause‑of‑failure coding is uncertain. [[site|limits:P2-MET-1]][[analysis_reliability|primary_stage]][[analysis_method_flags|stage5_inferred]][[analysis_method_flags|no_gold_standard]][[analysis_method_flags|low_reliability_fields]]\n\nFinally, the sample ran short of the planned size (115 vs 300), so some counts are a small group and must be treated as rough. [[site|limits:T-20]][[analysis_method_flags|thin_core]]",
+   "seconds": 8.0,
+   "cost_usd": 0.00234,
+   "usage": {
+    "plan": [
+     1590,
+     0,
+     457
+    ],
+    "write": [
+     3302,
+     1792,
+     306
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "O1",
+   "category": "opportunities",
+   "question": "How were the problems scored, and does the ranking hold if the weights change?",
+   "restated": "How were the problems scored, and does the ranking hold if the weights change?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "rules",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "Re-running the ranking 1,000 times with the weights nudged at random left the single problem “Search did not understand or match what they typed” in first place every time ."
+   ],
+   "cost_estimated": [
+    "gpt-5-mini"
+   ],
+   "text": "**Problems were scored by five 1–5 ratings weighted into a 100‑point total, and the top problem stays top even when the weights are jiggled.** The study scored each problem on how much fixing it helps (weight 30), how serious it is (25), how often it happens (20), how solid the evidence is (15) and how many people it affects (10) and used two quick checks first: can Google Photos fix it, and does it need AI rather than a design change [[site|scoring:weights]].\n\nWhat the evidence shows is that the team combined those five weighted ratings into one score per problem and then tested stability by Monte Carlo–style perturbation; the first check filters out problems that aren’t actionable in Google Photos [[site|scoring:weights]][[site|scoring:robust]]. My read is that this makes the ranking robust: the top problem is not a narrow artifact of one exact weighting, so prioritising work on better query understanding or matching will reach the largest ranked group. This also aligns with the case counts: about a quarter of the vaguely remembered cases first failed because search misread or returned wrong photos [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n\nThe posts cannot show internal reasons why search missed matches, nor do they prove how fixes would change real success rates outside these public cases [[analysis_method_flags|stage5_inferred]][[analysis_method_flags|proxy_not_success_rate]].\n\n*Want to see what people actually typed when search failed?*",
+   "seconds": 8.3,
+   "cost_usd": 0.00242,
+   "usage": {
+    "plan": [
+     1600,
+     0,
+     457
+    ],
+    "write": [
+     3323,
+     1792,
+     341
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "A1",
+   "category": "analysis",
+   "question": "Does the pattern hold across the different sites the posts came from?",
+   "restated": "Do the patterns (where finding the photo breaks) hold across the different sites the posts came from?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "withheld": [],
+   "fails": [],
+   "gap": "",
+   "planned_by": "model",
+   "draft": "",
+   "cut": false,
+   "dropped": [
+    "This is shown in the core 115 cases where about a quarter first failed because search misunderstood or returned wrong photos, while about one in six first failed because the photo was already gone, and the rest failed for other first reasons ."
+   ],
+   "cost_estimated": [],
+   "text": "**Yes — the same pattern appears across the sites we read: the single biggest first failure for people with only a vague memory was that search did not understand their words, not that the photo was gone.**\n\nMy read is that this pattern shows up in posts from many platforms because the evidence pools 314 finding-posts written on YouTube, X, App Store, Play, Hacker News, Stack Exchange, Reddit, the Photos help forum and Quora [[analysis_funnel|collected]][[analysis_sources|youtube]][[analysis_sources|x]][[analysis_sources|appstore]][[analysis_sources|play]][[analysis_sources|hackernews]][[analysis_sources|stackexchange]][[analysis_sources|reddit]][[analysis_sources|gp_help]][[analysis_sources|quora]]. A likely reason is that people across venues report the moment the search “didn’t get it” more often than they report missing backups; that makes improving short-query understanding the change that would help the largest group.\n\nI'm afraid the posts can't settle whether the pattern’s exact strength differs by site, because public posts over-represent problems and we cannot treat these counts as rates or split reliably by platform. [[analysis_method_flags|proxy_not_success_rate]][[analysis_method_flags|public_selection_bias]][[analysis_method_flags|missing_cuts]]\n\n*Want to see which phrases people actually typed when search first failed?*",
+   "seconds": 8.6,
+   "cost_usd": 0.0023,
+   "usage": {
+    "plan": [
+     1993,
+     1920,
+     364
+    ],
+    "write": [
+     5128,
+     1792,
+     311
+    ]
+   },
+   "error": ""
+  }
+ ]
+}

@@ -230,12 +230,15 @@ _FRACTION_RE = re.compile(
     r"\b(?:(about|around|roughly|nearly|almost|over|more than|under|less than|just over|"
     r"just under|close to|some)\s+)?(" + "|".join(sorted(map(re.escape, _FRACTION), key=len,
                                                      reverse=True)) + r")\b", re.I)
+# "People mostly typed a single word — about a quarter" (2026-09-27): "mostly", "mainly",
+# "usually" and "typically" claim over half just as "most people" does.
 _MAJORITY = re.compile(r"\b(?:the majority|most (?:people|of them|of these|cases|posts|searchers|"
-                       r"of the (?:people|cases|posts)))\b", re.I)
+                       r"of the (?:people|cases|posts))|mostly|mainly|usually|typically)\b", re.I)
 _SENT_CITED = re.compile(r"[^.!?\n]+(?:[.!?]+|$)(?:\s*\[\[[a-z_]+\|[^\]]+\]\])*")
 
 
-_PAIRS = (("stories", "of"), ("core_stories", "of"), ("n_coded", "stories_asked"))
+_PAIRS = (("stories", "of"), ("core_stories", "of"), ("n_coded", "stories_asked"),
+          ("stories", "of_said"))              # a share among the cases that say (plain.build)
 
 
 def _shares(rows: list[dict]) -> list[float]:
@@ -249,6 +252,29 @@ def _shares(rows: list[dict]) -> list[float]:
             if isinstance(n, int) and isinstance(d, int) and d:
                 out.append(n / d)
     return out
+
+
+_LOOSE_MAJORITY = re.compile(r"\b(mostly|usually|typically|mainly)\b", re.I)
+
+
+def soften_majority(text: str, rows: list[dict]) -> str:
+    """Formatting of a claim, not its figure (2026-09-27): "People mostly typed a single
+    word — about a quarter" says the largest group, not over half. Where every share a
+    sentence cites is at most half, "mostly/usually/typically/mainly" becomes "most often";
+    over half, the word stands. A sentence citing no share is left to the checks."""
+    by_key = {(r["_cite"]["table"], str(r["_cite"]["key"])): r for r in rows or []
+              if r.get("_cite")}
+
+    def fix(m):
+        sent = m.group(0)
+        cited = [by_key[(c["table"], c["key"])] for c in citations(sent)
+                 if (c["table"], c["key"]) in by_key]
+        vals = _shares(cited)
+        if vals and all(v <= 0.5 for v in vals):
+            return _LOOSE_MAJORITY.sub(lambda w: "Most often" if w.group(0)[0].isupper()
+                                       else "most often", sent)
+        return sent
+    return _SENT_CITED.sub(fix, text or "")
 
 
 def check_proportions(text: str, rows: list[dict]) -> list[str]:
@@ -268,7 +294,8 @@ def check_proportions(text: str, rows: list[dict]) -> list[str]:
             cited = [by_key[(c["table"], c["key"])] for c in citations(sent)
                      if (c["table"], c["key"]) in by_key] or para_rows or list(by_key.values())
             bare = QUOTE.sub(" ", CITATION.sub(" ", sent))
-            floor_ok = [r for r in cited if max((v for v in (r.get("of"), r.get("stories_asked"))
+            floor_ok = [r for r in cited if max((v for v in (r.get("of"), r.get("stories_asked"),
+                                                            r.get("of_said"))
                                                  if isinstance(v, int)), default=0) >= FLOOR]
             vals = _shares(floor_ok)
             for f in _FRACTION_RE.finditer(bare):
@@ -313,7 +340,10 @@ def check_claims_have_evidence(text: str) -> list[str]:
         bare = sent.strip("*_ ")
         if bare.endswith("?") or not _VAGUE.search(bare) or _REASONING.search(bare):
             continue
-        near = sents[max(0, i - 1):i + 2]        # the figure may sit just before or after
+        # The figure may sit just before or after; the bold opening claim is argued in the
+        # paragraph under it, so its evidence may come up to three sentences later (v3.18:
+        # openers whose figure came two sentences on sent good answers to the fallback).
+        near = sents[0:4] if i == 0 else sents[max(0, i - 1):i + 2]
         if any(_SUPPORT.search(x) or _FRACTION_RE.search(x) for x in near):
             continue
         bad.append(bare[:90])
@@ -623,7 +653,7 @@ def check_uncited(text: str) -> list[str]:
 def check_closing(text: str) -> list[str]:
     lines = [ln.strip() for ln in (text or "").strip().splitlines() if ln.strip()]
     last = lines[-1] if lines else ""
-    ok = re.fullmatch(r"[*_][^*_]{3,120}\?[*_]", last) is not None
+    ok = re.fullmatch(r"[*_][^*_]{3,200}\?[*_]", last) is not None
     return [] if ok else ["the answer does not end with one italic closing question"]
 
 

@@ -67,8 +67,8 @@ SUGGESTED = [
     ("What do people remember?",
      "What do people remember about the photo they want — and what have they forgotten?"),
     ("How do people search?", "How do people search when their memory is incomplete?"),
-    ("Does search understand them?",
-     "Does Google Photos fail to understand the clues people give it?"),
+    ("Do their clues find the photo?",
+     "When people type a clue they remember, does Google Photos bring up the photo?"),
     ("What should be fixed first?", "Which opportunity does the engine recommend, and why?"),
     ("How big is the evidence?",
      "How many cases is this based on, and from how many different people?"),
@@ -80,7 +80,8 @@ STAGE = {"plan": "Reading your question…", "retrieve": "Finding the evidence�
          "check": "Checking every figure and quote…"}
 
 # The evidence panel's three groups, by where a citation points.
-GROUP = {"story": "What people wrote", "analysis_method_flags": "Limits to keep in mind"}
+GROUP = {"story": "What people wrote", "analysis_method_flags": "Limits to keep in mind",
+         "site": "About the study"}
 FIGURES = "What the figures say"
 # Only findings that bear on whether the answer can be TRUSTED reach the screen;
 # a missing closing question or a long answer is the writing, not the evidence.
@@ -157,9 +158,7 @@ fun = db.query("SELECT n, n_authors FROM analysis_funnel WHERE source='_all'"
                " AND step='stories:core'")
 CORE = int(fun.iloc[0]["n"]) if not fun.empty else 0
 PEOPLE = int(fun.iloc[0]["n_authors"]) if not fun.empty else 0
-# Short (the PM, 2026-09-27: "shorter, crispier").
-IDENTITY = (f"Answers draw on <b>{CORE} real cases</b> of people hunting for a half-remembered "
-            "photo. Every figure and quote is checked; the evidence sits under each answer.")
+# The intro line under the heading was removed (the PM, 2026-09-27).
 
 
 @st.cache_resource(show_spinner=False)
@@ -245,7 +244,7 @@ def _evidence(msg: dict) -> None:
         html = [f"<div style='color:{MUTED};font-size:.76rem;margin:0 0 .5rem'>A <i>case</i> is "
                 "one person's account, in a public post, of hunting for one photo. Figures "
                 "count cases — not users, not searches.</div>"]
-        for head in (FIGURES, GROUP["story"], GROUP["analysis_method_flags"]):
+        for head in (GROUP["site"], FIGURES, GROUP["story"], GROUP["analysis_method_flags"]):
             items = [r for r in refs if r.get("group", FIGURES) == head]
             if not items:
                 continue
@@ -310,7 +309,8 @@ def _scroll_guard() -> None:
     not go through that setter and is untouched. Leaving the page restores it."""
     components.html(r"""<script>
     const doc = window.parent.document, win = window.parent;
-    const onAsk = () => /\/ask\/?$/.test(win.location.pathname);
+    // Ask AI is the front door (2026-09-27): it is also served at the app's root.
+    const onAsk = () => /\/ask\/?$|^\/(?:~\/\+\/?)?$/.test(win.location.pathname);
     const guard = () => {
       const el = doc.querySelector('[data-testid="stAppScrollToBottomContainer"]');
       if (!el) { setTimeout(guard, 100); return; }
@@ -435,9 +435,7 @@ else:
                 f"<div style='font-size:.68rem;font-weight:800;letter-spacing:.18em;"
                 f"color:{MUTED}'>ASK AI</div>"
                 f"<div style='font-size:1.9rem;font-weight:750;line-height:1.25;"
-                f"margin-top:.3rem'>What can I help you with?</div>"
-                f"<div style='color:{MUTED};font-size:.9rem;line-height:1.55;margin:.5rem auto 0;"
-                f"max-width:56ch'>{IDENTITY}</div></div>")
+                f"margin-top:.3rem'>What can I help you with?</div></div>")
         with st.container():
             typed = st.chat_input("Ask anything about how people search for old photos…",
                                   key="ask_first")

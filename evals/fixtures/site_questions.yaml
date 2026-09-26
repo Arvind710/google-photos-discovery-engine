@@ -1,0 +1,9 @@
+# The PM, 2026-09-27: "The Ask AI should be able to answer anything on the other three tabs as
+# well … along with how it works". Read and graded by hand; not a gate.
+questions:
+  - {id: D1, category: data_bank, expect: [FULL, PARTIAL], q: "Where did the data come from, and how was each source collected?"}
+  - {id: D2, category: data_bank, expect: [FULL, PARTIAL], q: "What was set aside, and why?"}
+  - {id: M1, category: method, expect: [FULL, PARTIAL], q: "How was each case read, and how reliable is that reading?"}
+  - {id: M2, category: method, expect: [FULL, PARTIAL], q: "What are the main limits of this study?"}
+  - {id: O1, category: opportunities, expect: [FULL, PARTIAL], q: "How were the problems scored, and does the ranking hold if the weights change?"}
+  - {id: A1, category: analysis, expect: [FULL, PARTIAL], q: "Does the pattern hold across the different sites the posts came from?"}

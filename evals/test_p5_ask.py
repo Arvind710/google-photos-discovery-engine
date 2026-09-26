@@ -1264,3 +1264,61 @@ def test_the_other_cases_reach_the_writer_only_when_the_question_needs_them(con,
 def test_the_data_bank_has_no_summary_cards_above_part_1():
     """The PM, 2026-09-27: "remove the horizontal cards 1, 2, 3, 4"."""
     assert "CHAIN = [" not in (VIEWS / "data_bank.py").read_text()
+
+
+@pytest.mark.needs_corpus
+@pytest.mark.parametrize("q", ["layout the retrieval journey",
+                               "Walk me through where the hunt breaks, step by step"])
+def test_a_journey_question_gets_the_whole_path_and_a_polite_fallback(con, q):
+    """The PM, 2026-09-27: "Why does it not answer … 'layout the retrieval journey'?" and
+    "if can't answer then say it so, the reason … the closest answerable question and ask
+    to expand … make the language polite"."""
+    p = R.normalise_plan(A.rule_plan(q), q)
+    assert p["subject"] == "journey"
+    got = R.retrieve(con, p)
+    v = R.gate(p, got, q)
+    assert v.route == "FULL" and len(got.facts) >= 5
+    text = A.fallback(v, got, p, held=True)
+    assert text.startswith("I'm sorry") and "The closest thing the evidence does show:" in text
+    assert "\n- " not in text and "nothing went wrong" not in text.split("show:")[1][:160]
+    assert text.rstrip().endswith("?*") and "go deeper into" in text
+    assert V.check(text, v.route, got.rows(), got.records(), question=q).ok
+
+
+@pytest.mark.needs_corpus
+@pytest.mark.parametrize("q,group", [
+    ("Where did the data come from and how was it collected?", "collection"),
+    ("What was set aside and why?", "setaside"),
+    ("How were the problems scored and does the ranking hold?", "scoring"),
+    ("What are the limits of this study?", "limits")])
+def test_questions_about_the_other_pages_get_their_facts(con, q, group):
+    """The PM, 2026-09-27: "The Ask AI should be able to answer anything on the other three
+    tabs as well … along with how it works"."""
+    p = R.normalise_plan(A.rule_plan(q), q)
+    assert group in p["site_topics"]
+    got = R.retrieve(con, p)
+    assert got.method.get("site") and R.gate(p, got, q).route == "FULL"
+    from lib import plain as P
+    t = P.build(got)
+    assert any(line.startswith("[F") and "site" not in line for line in t.lines["F"])
+    assert all(("site", str(r["_cite"]["key"])) in {(r2["_cite"]["table"], str(r2["_cite"]["key"]))
+                                                   for r2 in got.rows()} for r in got.method["site"])
+
+
+def test_the_app_opens_on_ask_ai():
+    """The PM, 2026-09-27: "this app should always open at Ask AI tab by default"."""
+    home = (ROOT / "app" / "Home.py").read_text()
+    assert 'FRONT = "ask"' in home and "default=(u == FRONT)" in home
+
+
+def test_step_five_is_said_as_observed_not_as_an_inner_cause():
+    """The PM, 2026-09-27: "do you mean search is the problem or what people typed was
+    insufficient?" — the codebook: step 5 is a usable clue typed and the photo not coming
+    up, inferred from what people wrote; vague wording is steps 4 and 2."""
+    from lib import plain as P
+    assert "really was in the photo" in P.STAGE["5"] and "understand" not in P.STAGE["5"]
+    assert P.label_("Search did not understand or match what they typed").startswith(
+        "They searched for something really in the photo")
+    t = "People mostly typed a single word. [[analysis_crosstab|k5]]"
+    assert V.soften_majority(t, ROWS).startswith("People most often typed")
+    assert "never claim search \"misunderstood\" as an\ninner cause" in A.SYNTHESIS_SYSTEM

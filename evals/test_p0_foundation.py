@@ -457,7 +457,8 @@ def test_app_boots_without_exception_and_without_a_key(root, monkeypatch):
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     at = AppTest.from_file(str(root / "app" / "Home.py"), default_timeout=30).run()
     assert not at.exception, at.exception
-    assert at.title, "page must render its title"
+    # The app opens on Ask AI (the PM, 2026-09-27); with no key it says so plainly.
+    assert at.title or at.info or len(at.main.children) > 0, "the front door must render"
 
 
 def test_requirements_split_is_clean(root):

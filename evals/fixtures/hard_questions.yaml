@@ -30,3 +30,5 @@ questions:
      q: "Of the people who found the photo in the end, how did they find it — search, scrolling, or something else?"}
   - {id: H14, category: synthesis, expect: [FULL, PARTIAL],
      q: "Summarise the three most important things a researcher should take into user interviews from this study."}
+  - {id: H15, category: journey, expect: [FULL, PARTIAL],
+     q: "layout the retrieval journey"}

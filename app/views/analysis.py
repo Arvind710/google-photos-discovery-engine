@@ -52,9 +52,19 @@ KIND_HEAD = {"sentimental": "KEPT AS MEMORIES", "utility": "KEPT FOR INFORMATION
              "both": "BOTH", "unclear": "REASON NOT SAID"}
 
 
+# What went wrong first, as a statement — a row label reads "where it first went wrong",
+# so a question ("Does search understand it?") read oddly (the PM, 2026-09-27).
+FIRST_WRONG = {"0": "The photo was already gone", "1": "The post only says why they looked",
+               "2": "Couldn't remember enough to search", "3": "Never used search — scrolled "
+               "or looked elsewhere", "4": "Couldn't put the memory into words",
+               "5": "Searched for something really in it — search didn't bring it up",
+               "6": "Hard to spot among the results", "7": "Couldn't find another way in",
+               "8": "Gave up", "9": "Nothing went wrong — they found it",
+               "10": "Changed their habits afterwards"}
+
+
 def stage_label(s) -> str:
-    return {"9": "Nothing went wrong — they found it",
-            "1": "The post only says why they looked"}.get(str(s), words.stage_title(s))
+    return FIRST_WRONG.get(str(s), words.stage_title(s))
 
 
 n_core, p_core = int(fun.loc["stories:core", "n"]), int(fun.loc["stories:core", "n_authors"])
@@ -71,7 +81,8 @@ stage = rows("core.primary_stage")
 NOT_FAILURE = ("1", "9", "10")            # context, and "nothing went wrong"
 top = stage[~stage["val_a"].isin(NOT_FAILURE)].iloc[0]
 fine = stage[stage["val_a"] == "9"]
-ui.section(1, f"“{words.stage_title(top['val_a'])}” is where most cases first go wrong",
+ui.section(1, f"Most often, the first thing to go wrong: "
+              f"{stage_label(top['val_a'])[:1].lower() + stage_label(top['val_a'])[1:]}",
            "Each case is placed at the FIRST point it went wrong, reading the hunt in order — "
            "not the most dramatic point. Some posts are successes: nothing went wrong and the "
            "person found the photo.", slug="stages")
@@ -80,7 +91,7 @@ ui.hbar([stage_label(s) for s in stage["val_a"]], stage["n"].astype(int).tolist(
          zip(stage["n"], stage["denom"], stage["n_authors"], strict=True)],
         [ui.BLUE if s not in ("9", "1") else ui.GREY for s in stage["val_a"]])
 ps = rel.loc["primary_stage"] if "primary_stage" in rel.index else None
-ui.verdict(f"<b>{words.stage_title(top['val_a'])}</b> — {share(int(top['n']), int(top['denom'])).text}"
+ui.verdict(f"<b>{stage_label(top['val_a'])}</b> — {share(int(top['n']), int(top['denom'])).text}"
            f" of these cases first go wrong here, more than at any other point. "
            + ("That is <i>inferred from what users say</i>: nobody outside Google can see why a "
               "search missed. " if top["val_a"] == "5" else "")
@@ -92,14 +103,36 @@ if ps is not None:
             f"was 0.60. " + words.metric("kappa"))
 
 # ================================================================= PART 2
-ui.section(2, "The split by kind of photo is too small to call",
+ui.section(2, "Where the hunt first went wrong, by why the photo was kept",
            "Photos kept as memories (a moment, a person, a trip) and photos kept for the "
-           "information in them (a receipt, an ID, a note) were expected to fail differently. "
-           "Each column is the share of that kind's cases.", ui.PINK, slug="photo-type")
-pc = rows("core.photo_class").set_index("val_a")
+           "information in them (a receipt, an ID, a note) were expected to fail in different "
+           "places. The groups turned out too small to tell.", ui.PINK, slug="photo-type")
+# The totals per kind are stored ungrouped (dim_b "_all"); read with the default
+# grouping they came back empty, and the table had no columns (the PM, 2026-09-27).
+pc = rows("core.photo_class", "_all", "_all").set_index("val_a")
 classes = [c for c in ("sentimental", "utility", "both", "unclear") if c in pc.index]
-head = "".join(f"<th style='padding:.35rem .5rem;text-align:left'>{KIND_HEAD.get(c, c.upper())} · "
-               f"{int(pc.loc[c, 'n'])} cases</th>" for c in classes)
+# How to read it, in one line (the PM, 2026-09-27: "Would a user understand the table?").
+ui.note("<b>How to read this table:</b> each column is one kind of photo, with how many cases "
+        "it has. Each row is the point where the hunt first went wrong. A cell says how many of "
+        "that column's cases first went wrong at that point — for example “13 of 48” means 13 "
+        "of the 48 cases about photos kept as memories. <span style='opacity:.8'>~ marks a "
+        "group of 30–79 cases, so the percentage is only a rough guide; below 30 cases no "
+        "percentage is given.</span>")
+
+
+def _compact(n: int, d: int) -> str:
+    """A table cell: "13 of 48 · ~27%" — the count first, the percentage only when the
+    group allows one, and "~" when it is only a rough guide (see the note above)."""
+    sh = share(n, d)
+    if sh.tier == "insufficient":
+        return f"{n} of {d}"
+    pct = sh.text.split(" ", 1)[0]                    # share() prints the percentage
+    return f"{n} of {d} · {'~' if sh.tier == 'directional' else ''}{pct}"
+
+
+head = "".join(f"<th style='padding:.35rem .5rem;text-align:left;vertical-align:bottom'>"
+               f"{KIND_HEAD.get(c, c.upper())}<div style='font-weight:400;opacity:.8'>"
+               f"{int(pc.loc[c, 'n'])} cases</div></th>" for c in classes)
 body = []
 for s in stage["val_a"]:
     cells = []
@@ -107,15 +140,14 @@ for s in stage["val_a"]:
         r = xt[(xt["dim_a"] == "core.primary_stage") & (xt["dim_b"] == "photo_class")
                & (xt["val_b"] == c) & (xt["val_a"] == s)]
         n = int(r["n"].iloc[0]) if len(r) else 0
-        sh = share(n, int(pc.loc[c, "n"]))
-        cells.append(f"<td style='padding:.35rem .5rem;color:"
-                     f"{sh.colour if sh.tier == 'insufficient' else 'inherit'}'>{sh.text}</td>")
+        cells.append(f"<td style='padding:.35rem .5rem;white-space:nowrap;color:"
+                     f"{ui.MUTED if n == 0 else 'inherit'}'>{_compact(n, int(pc.loc[c, 'n']))}</td>")
     body.append(f"<tr style='border-top:1px solid {ui.HAIR}'><td style='padding:.35rem .5rem'>"
                 f"{stage_label(s)}</td>{''.join(cells)}</tr>")
 st.html("<div style='overflow-x:auto'><table style='border-collapse:collapse;font-size:.85rem;"
         f"width:100%;max-width:900px'><tr style='color:{ui.MUTED};font-size:.7rem'>"
-        f"<th style='padding:.35rem .5rem;text-align:left'>FIRST WENT WRONG</th>{head}</tr>"
-        + "".join(body) + "</table></div>")
+        f"<th style='padding:.35rem .5rem;text-align:left;vertical-align:bottom'>WHERE THE HUNT "
+        f"FIRST WENT WRONG</th>{head}</tr>" + "".join(body) + "</table></div>")
 
 
 def cell(s, c):
@@ -148,7 +180,8 @@ ui.hbar([words.owner(o) for o in own["val_a"]], own["n"].astype(int).tolist(),
          zip(own["n"], own["denom"], own["n_authors"], strict=True)],
         [ui.SKY if o != "none" else ui.GREY for o in own["val_a"]])
 sysrow = own[own["val_a"] == "system"]
-ui.verdict(f"Search itself — how it understood the words people typed — accounts for "
+ui.verdict(f"Search's side — people searched for something really in the photo and it did "
+           f"not come up — accounts for "
            f"{share(int(sysrow['n'].iloc[0]), n_core).text if len(sysrow) else '0'} of these "
            f"cases; the person's own memory accounts for far fewer. The problem people describe "
            f"is the product's, not their recall.", ui.SKY)

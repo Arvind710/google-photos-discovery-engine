@@ -431,7 +431,7 @@ class Retrieved:
         """Every citable analysis row, from any channel: what numbers are checked against."""
         return (list(self.facts) + self.counter.get("rivals", []) + self.method.get("flags", [])
                 + self.method.get("reliability", []) + self.method.get("coverage", [])
-                + self.method.get("totals", []))
+                + self.method.get("totals", []) + self.method.get("site", []))
 
     def records(self) -> list[dict]:
         """Every story retrieved: what a quote must come from."""
@@ -480,8 +480,12 @@ def channel1(con, plan: dict) -> list[dict]:
 
 
 def retrieve(con, plan: dict) -> Retrieved:
-    return Retrieved(facts=channel1(con, plan), stories=channel2(con, plan),
-                     counter=channel3(con, plan), method=channel4(con, plan))
+    got = Retrieved(facts=channel1(con, plan), stories=channel2(con, plan),
+                    counter=channel3(con, plan), method=channel4(con, plan))
+    if plan.get("site_topics"):
+        from lib import site
+        got.method["site"] = site.facts(con, plan["site_topics"])
+    return got
 
 
 # ------------------------------------------------------------------ gate
@@ -536,9 +540,19 @@ HARD_OUT_OF_SCOPE = re.compile(
 # asserted" (the Myntra engine's MISSING_CUTS, for the same reason). Where the
 # question's words settle the subject, they override the plan. First match wins.
 SUBJECT_RULES: list[tuple[str, str]] = [
+    # "layout the retrieval journey", "walk me through the steps" (the PM, 2026-09-27): the
+    # whole path, with how often each step is the first to fail.
+    (r"\bjourney\b|\b(?:whole|entire|full) (?:path|process|hunt)\b|\bstep[- ]by[- ]step\b|"
+     r"\blay ?out\b.*\b(?:path|steps|process|hunt)\b|\bwalk (?:me )?through\b|"
+     r"\bwhere (?:does|do) (?:it|the hunt|search|people) (?:break|fail)", "journey"),
     (r"^(?:how many|what is the number of) (?:core |adjacent )?(?:stories|records)"
      r"(?: are there)?\b(?!.*\b(?:stage|go wrong|fail|search))|how many different people",
      "corpus"),
+    # "When people type a clue they remember, does Google Photos bring up the photo?" is
+    # about search's side (step 5), though it says "remember" (2026-09-27).
+    (r"\b(?:clues?|typed?|search(?:ed)? for)\b.*\b(?:bring|brings|find|finds|return|returns|"
+     r"show|shows)(?: up)? the photo|\bdoes (?:google photos|search) (?:bring up|find|return|show)",
+     "stage:5"),
     (r"\bforg[oe]t", "question:2.4"),
     (r"\bremember(?:s|ed)?\b", "question:2.1"),
     (r"\bhow many attempts|\bbefore (?:they |people )?give up|\bhow long do (?:they|people)",
@@ -588,6 +602,10 @@ def normalise_plan(plan: dict, question: str) -> dict:
     q = (question or "").lower()
     p = {**plan, "entities": dict(plan.get("entities") or {})}
     p["adjacent_needed"] = bool(ADJACENT_NEEDED.search(q))
+    # What the other pages show (sources, collection, set-aside, method, scoring, limits,
+    # checks, search terms): the groups this question asks about (lib/site.py).
+    from lib import site
+    p["site_topics"] = site.topics(question)
     if not p["adjacent_needed"]:
         p["entities"]["populations"] = ["core"]
         p["queries"] = [{**x, "args": {**(x.get("args") or {}), "population": "core"}}
@@ -697,6 +715,10 @@ def gate(plan: dict, got: Retrieved, question: str = "") -> Verdict:
         return Verdict("NONE", [], list(plan.get("evidence_needed") or []),
                        ["these are public stories, not usage data: no rate of success or "
                         "failure, and no count of users, can be produced from them"])
+    site_q = bool(got.method.get("site")) and str(plan.get("subject") or "none").partition(
+        ":")[0] not in ("stage", "question", "field", "corpus", "journey")
+    if site_q:
+        return Verdict("FULL", ["site"], [], [])          # what the other pages show
     if disowned and not got.facts:
         return Verdict("NONE", [], [], ["the question falls outside what these stories cover"])
     if subject_is(plan, "method") or (intent == "methodological" and not got.facts):

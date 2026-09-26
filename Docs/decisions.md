@@ -964,3 +964,37 @@ first", a "yes" follow-up). Hard questions graded in `evals/reports/hard_questio
 slip past the checks (H8, H6); a fraction is matched to any share its sentence cites; the "few
 posts say anything about this — N of 331 do" lines count all cases. **Spend $19.95 of $21.**
 
+**D-16, continued (the same evening, `ask_v3.18` → `ask_v3.24`).** Further requests, each done:
+- **A polite fallback, never a list:** "I'm sorry — my first draft made a claim the evidence doesn't
+  fully support…", the reason, one sentence answering the closest question, and an offer to go
+  deeper that "yes" takes up. A courteous tone in the writer's instructions.
+- **Journey questions** ("layout the retrieval journey", "walk me through") have their own route: the
+  whole path with how often each step is the first to fail. The opening claim may be backed
+  anywhere in its first paragraph, and carries its figure.
+- **Ask AI knows the other pages** (`lib/site.py`): sources, how each was collected, what was set
+  aside and why, how cases were read and how reliably, how problems were scored and whether the
+  ranking holds, the study's checks, limits and search terms — as plain fact rows, checked like any
+  figure, given only when the question asks about them. A blind re-read is said to be by an AI model.
+- **Step 5 in plain words.** The codebook's step 5 is "a correct detail was searched for and the
+  photo did not come up" — inferred from what people wrote. It is now said exactly so ("they
+  searched for something that really was in the photo, but search did not bring it up"), never
+  "search misunderstood" (an inner cause no one outside Google can see) and never "usable clue"
+  (jargon). Vague or insufficient wording is steps 4 and 2 and is said so.
+- **Shares among those who say:** a question-level fact now also gives its share among the cases
+  that say anything ("19 of the 76 that say what they typed first") — which is why "most people
+  typed one word" was false (about a quarter). "Mostly/usually/mainly" over figures under half is
+  reworded "most often"; "most" and "the majority" still need over half.
+- **Quotes with context:** asked for people's words, the answer quotes three to five, each with what
+  the person was looking for and what happened ("I searched 'forest' in my gallery — wanted fall
+  photos, found it").
+- **The pages:** the app opens on Ask AI; the Ask AI intro line removed; Analysis Part 2's table was
+  empty (the per-kind totals were read under the wrong grouping) — fixed, with a how-to-read line,
+  plain row labels ("Searched for something really in it — search didn't bring it up") and compact
+  cells; Opportunities reorganised around four questions with detail in fold-outs (about 840 words
+  on screen), Part 4's chart kept as it was.
+
+Final golden run `ask-golden-synth-20260926-230632-13dae6` (`ask_v3.24`): 26/26 routes, 23 served, 3
+fell back (O3 a rate, F2 "the majority", I1 an unbacked opening claim), none late, max 9.5 s,
+$0.066. The hard and site sets were last run at v3.21 (15 and 6 questions; 1 and 0 fell back).
+Suite 396 passed. **Spend $20.42 of $21.**
+

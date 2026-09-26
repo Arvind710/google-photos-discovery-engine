@@ -35,7 +35,12 @@ STAGE = {
     "2": "they could not remember enough about the photo to search for it",
     "3": "they never used the search box — they scrolled, or looked somewhere else",
     "4": "they remembered the photo but could not put it into words the search understood",
-    "5": "the search did not understand what they typed, or showed the wrong photos",
+    # Step 5 as the codebook defines it: a usable clue was typed and the photo still did not
+    # come up — observed, not an inner cause (nobody outside Google can see why a search
+    # missed). Vague or insufficient wording is step 4 or 2 (the PM, 2026-09-27).
+    # "usable clue" was itself jargon (the PM: "what is a usable clue here?"): the codebook
+    # means a correct detail — something really in the photo, like an object or a word on it.
+    "5": "they searched for something that really was in the photo, but search did not bring it up",
     "6": "the photo was in the results, but hard to spot among similar ones",
     "7": "after a failed search, they could not find another way to it",
     "8": "they gave up",
@@ -345,11 +350,13 @@ def sentence(r: dict) -> str | None:
                 f"{r['stories_agreed']} of them and disagreed in {r['stories_disagreed']}{tail}")
     if t == "analysis_method_flags":
         return flag(k, r.get("text", ""))
+    if t == "site":
+        return r.get("text")                  # already a plain sentence (lib/site.py)
     if t == "analysis_opportunity":
         d, n = int(r.get("of") or 0), int(r.get("core_stories") or 0)
         if d >= FLOOR:
             r["percent"] = round(100 * n / d)                    # the one count() prints
-        label = str(r.get("label", "")).rstrip(".")
+        label = label_(r.get("label", "")).rstrip(".")
         status = {"ranked": " It is the one problem with enough stories to rank.",
                   "below_floor": " Too few stories to rank it.",
                   "gated_out": " Better search could not fix it."}.get(r.get("status"), "")
@@ -453,6 +460,16 @@ _STORY_WORD = [(re.compile(r"\bStories\b"), "Cases"), (re.compile(r"\bstories\b"
                (re.compile(r"\b(?:as |only )?directional\b"), "only a rough guide")]
 
 
+# Stored labels written before the step-5 wording was settled (the opportunity table).
+LABEL_FIX = {"Search did not understand or match what they typed":
+             "They searched for something really in the photo, but search did not bring it up"}
+
+
+def label_(text) -> str:
+    t = str(text or "")
+    return LABEL_FIX.get(t.strip().rstrip("."), t)
+
+
 def reader_words(text: str) -> str:
     """"stories" → "cases" in the text's own words — never inside a quotation (a
     poster's words) or a citation (machinery)."""
@@ -501,7 +518,7 @@ _TENS = {w: 10 * i for i, w in enumerate("_ _ twenty thirty forty fifty sixty se
 _NUMBER_WORD = re.compile(
     r"\b((?:" + "|".join(_TENS) + r")(?:[-\s](?:" + "|".join(list(_UNITS)[1:10]) + r"))?|"
     r"(?:" + "|".join(list(_UNITS)[6:]) + r"))\b(?=\s+(?:of|cases?|people|posts?|stories|reports?|"
-    r"said|say|describe))", re.I)
+    r"said|say|describe|platforms?|sources?|sites?|records?|questions?|problems?))", re.I)
 
 
 def number_words(text: str) -> str:
@@ -613,11 +630,22 @@ def build(got, *, story_chars: int = 600, max_facts: int = 30) -> Tags:
     tags = Tags()
     seen: set[str] = set()
     method = got.method
-    for r in (got.facts[:max_facts] + got.counter.get("rivals", []) + method.get("coverage", [])
-              + method.get("reliability", []) + method.get("totals", [])):
+    # How many cases say anything at all about each question: a share among those who say
+    # ("19 of the 24 that say what they typed first") is what "most people typed one word"
+    # means, and without it the writer claimed "most" of 19 in 115 (2026-09-27).
+    said = {str(c.get("question")): int(c.get("n_coded") or 0) for c in method.get("coverage", [])}
+    for r in (method.get("site", []) + got.facts[:max_facts] + got.counter.get("rivals", [])
+              + method.get("coverage", []) + method.get("reliability", [])
+              + method.get("totals", [])):
         c = r.get("_cite") or {}
         cite = f"[[{c.get('table')}|{c.get('key')}]]"
         s = sentence(r)
+        m = re.fullmatch(r"core\.q:([\d.]+)=[^@]+@photo_class:_all", str(c.get("key", "")))
+        if s and m and said.get(m.group(1)) and isinstance(r.get("stories"), int) \
+                and 0 < r["stories"] <= said[m.group(1)] < int(r.get("of") or 0):
+            r["of_said"] = said[m.group(1)]
+            s = (s.rstrip(".") + f" — that is {r['stories']} of the {r['of_said']} cases that say "
+                 f"anything about it (≈ {in_words(r['stories'], r['of_said']) or 'counts only'}).")
         if s and cite not in seen:
             seen.add(cite)
             nd = _share_of(r)

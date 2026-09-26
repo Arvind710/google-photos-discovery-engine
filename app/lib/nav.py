@@ -44,8 +44,8 @@ PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
         ("emerging", "Patterns noticed later"),
     ]),
     ("opportunities.py", "Opportunities", "🎯", "opportunities", [
-        ("recommendation", "The recommendation"),
-        ("candidates", "The candidates"),
+        ("recommendation", "What to fix first"),
+        ("candidates", "Every problem considered"),
         ("weights", "Does the ranking hold?"),
         ("two-by-two", "Two scores at a time"),
         ("handoff", "What the interviews should test"),

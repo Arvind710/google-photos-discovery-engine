@@ -358,3 +358,17 @@ def test_recommendation_checker_refuses_a_percentage_without_its_denominator(cod
     kw = dict(top_id="stage5", candidates={"stage5", "stage2"})
     assert R.check(ok, _pack(), codebook, **kw) == []
     assert any("no 'n of N'" in p for p in R.check(bad, _pack(), codebook, **kw))
+
+
+def test_the_kind_of_photo_table_has_its_columns():
+    """2026-09-27, the PM: "is part 2 in Analysis correctly shown?" — it was not: the
+    per-kind totals were read under the wrong grouping and the table had no columns."""
+    import sqlite3
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    src = (root / "app" / "views" / "analysis.py").read_text()
+    assert 'rows("core.photo_class", "_all", "_all")' in src
+    con = sqlite3.connect(f"file:{root / 'data' / 'corpus.db'}?mode=ro", uri=True)
+    n = con.execute("SELECT count(*) FROM analysis_crosstab WHERE dim_a='core.photo_class' "
+                    "AND dim_b='_all' AND val_b='_all'").fetchone()[0]
+    assert n >= 3
