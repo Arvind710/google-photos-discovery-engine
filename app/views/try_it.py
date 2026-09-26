@@ -87,7 +87,7 @@ if tr:
             f"{ui.esc(sp['outcome'])} · severity {sp['severity']}</div>"
             f"<div style='font-size:.82rem;color:{ui.MUTED};margin-top:.2rem'>Why: "
             f"{ui.esc(sp['why'])}</div>"
-            + "".join(ui.quote(v, f"evidence for {k}") for k, v in c["evidence"].items()),
+            + "".join(ui.quote(v, f"evidence for {plain(k)}") for k, v in c["evidence"].items()),
             ui.BLUE))
         rows = "".join(f"<tr><td style='padding:.15rem .6rem .15rem 0;color:{ui.MUTED}'>{q}</td>"
                        f"<td style='padding:.15rem 0'>{ui.esc(plain(', '.join(v)))}</td></tr>"
@@ -131,7 +131,7 @@ if not pick.empty:
         f"{ui.esc(s['photo_class'])} · outcome {ui.esc(s['outcome'])} · coding confidence "
         f"{s['coding_conf']:.1f}</div><div style='font-size:.8rem;color:{ui.MUTED}'>Why: "
         f"{ui.esc(s['why'])}</div>"
-        + "".join(ui.quote(sp_, f"evidence for {f}") for f, sp_ in zip(ev["field"], ev["span"],
+        + "".join(ui.quote(sp_, f"evidence for {plain(f)}") for f, sp_ in zip(ev["field"], ev["span"],
                                                                          strict=True)),
         ui.GREEN))
     st.html("<table style='font-size:.84rem'>" + "".join(
