@@ -93,7 +93,7 @@ exclusion_reasons:
   low_quality: Nothing in it that could be coded
   exact_duplicate: The same words as an earlier record
   near_duplicate_same_author: A near-repeat by the same person
-  lexicon_rejected: No search term matched
+  lexicon_rejected: Never mentions a photo, picture or screenshot
   out_of_window: Outside the collection window
   no_story: About photos, but no attempt to find one
   span_unverified: Its evidence could not be found in the text
