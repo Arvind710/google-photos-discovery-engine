@@ -53,6 +53,10 @@ T-20:
   measured: 115
   counts: "115 core stories from 109 people; 219 adjacent; 31,235 records collected"
   iterations: 2
+  why_fewer: >
+    The loop-back is collection only, and paid collection is exhausted: the Apify
+    cycle is spent ($9.52 of $10) until 2026-10-18, after submission. The free
+    sources were topped up once already. The PM chose to proceed on 115.
   loop_backs: >
     Two P1-F top-ups (implementationplan.md §0.4): YouTube, Stack Exchange, Hacker
     News (free), then X (Apify, $1.58). The Apify budget for the cycle is spent

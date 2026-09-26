@@ -1,0 +1,1385 @@
+{
+ "summary": {
+  "T8_primary_stage": 0.85,
+  "P3_MET_2_triple_lenient": 0.6666666666666666,
+  "P3_MET_2_triple_strict": 0.6666666666666666,
+  "P3_MET_3_stage2_vs_4": 0.8333333333333334,
+  "photo_class": 0.9,
+  "media_type": 0.925,
+  "outcome": 0.85,
+  "codes_recall": 0.8125,
+  "fatal": 0,
+  "n": 40,
+  "by_group_primary_stage": {
+   "bucket": 0.75,
+   "hinglish": 1.0,
+   "media": 1.0,
+   "photo_class": 0.75,
+   "primary_stage": 0.8333333333333334,
+   "stage2_vs_4": 0.8333333333333334,
+   "triple_5234": 0.8888888888888888
+  }
+ },
+ "rows": [
+  {
+   "id": "tri-A-52",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Object unrecognised; keyword search returned nothing",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "triple_lenient": true,
+   "triple_strict": true,
+   "triple_got": {
+    "5.2": [
+     "object_unrecognised"
+    ],
+    "5.3": [
+     "not_stated"
+    ],
+    "5.4": [
+     "not_stated"
+    ]
+   },
+   "problems": {
+    "quote_unverified": 2
+   },
+   "evidence_fields": 26
+  },
+  {
+   "id": "tri-A-53",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Over-strict date filter excluded the correct photo.",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "triple_lenient": true,
+   "triple_strict": true,
+   "triple_got": {
+    "5.2": [
+     "not_stated"
+    ],
+    "5.3": [
+     "hard_filter_single_cue"
+    ],
+    "5.4": [
+     "not_stated"
+    ]
+   },
+   "problems": {
+    "quote_unverified": 2
+   },
+   "evidence_fields": 28
+  },
+  {
+   "id": "tri-A-54",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Too many cluttered results buried the target",
+   "codes_hit": [
+    2,
+    3
+   ],
+   "codes_missed": [
+    "5.4:buried_below_fold (got ['clutter_ranked_above'])"
+   ],
+   "triple_lenient": false,
+   "triple_strict": false,
+   "triple_got": {
+    "5.2": [
+     "not_stated"
+    ],
+    "5.3": [
+     "not_stated"
+    ],
+    "5.4": [
+     "clutter_ranked_above"
+    ]
+   },
+   "problems": {
+    "quote_unverified": 2
+   },
+   "evidence_fields": 28
+  },
+  {
+   "id": "tri-B-52",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Place search failed due to missing location metadata",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "triple_lenient": true,
+   "triple_strict": true,
+   "triple_got": {
+    "5.2": [
+     "missing_location"
+    ],
+    "5.3": [
+     "not_stated"
+    ],
+    "5.4": [
+     "not_stated"
+    ]
+   },
+   "problems": {
+    "quote_unverified": 7
+   },
+   "evidence_fields": 18
+  },
+  {
+   "id": "tri-B-53",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Wrong year term filtered out results",
+   "codes_hit": [
+    2,
+    3
+   ],
+   "codes_missed": [
+    "5.3:hard_filter_single_cue (got ['and_logic_shrinks_recall'])"
+   ],
+   "triple_lenient": false,
+   "triple_strict": false,
+   "triple_got": {
+    "5.2": [
+     "not_stated"
+    ],
+    "5.3": [
+     "and_logic_shrinks_recall"
+    ],
+    "5.4": [
+     "not_stated"
+    ]
+   },
+   "problems": {
+    "quote_unverified": 2
+   },
+   "evidence_fields": 25
+  },
+  {
+   "id": "tri-B-54",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Correct result was buried among thousands",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "triple_lenient": true,
+   "triple_strict": true,
+   "triple_got": {
+    "5.2": [
+     "not_stated"
+    ],
+    "5.3": [
+     "not_stated"
+    ],
+    "5.4": [
+     "buried_below_fold"
+    ]
+   },
+   "problems": {
+    "quote_unverified": 4
+   },
+   "evidence_fields": 20
+  },
+  {
+   "id": "tri-C-52",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "document",
+    "document"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Wrong indexed date made the 2021 query fail",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "triple_lenient": true,
+   "triple_strict": true,
+   "triple_got": {
+    "5.2": [
+     "wrong_date"
+    ],
+    "5.3": [
+     "not_stated"
+    ],
+    "5.4": [
+     "not_stated"
+    ]
+   },
+   "problems": {
+    "quote_unverified": 3
+   },
+   "evidence_fields": 26
+  },
+  {
+   "id": "tri-C-53",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "document",
+    "document"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Over-strict AND logic made multi-word query return nothing",
+   "codes_hit": [
+    2,
+    2
+   ],
+   "codes_missed": [],
+   "triple_lenient": true,
+   "triple_strict": true,
+   "triple_got": {
+    "5.2": [
+     "not_stated"
+    ],
+    "5.3": [
+     "and_logic_shrinks_recall"
+    ],
+    "5.4": [
+     "not_stated"
+    ]
+   },
+   "problems": {},
+   "evidence_fields": 25
+  },
+  {
+   "id": "tri-C-54",
+   "group": "triple_5234",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "6"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "document",
+    "document"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Too many similar-looking receipts in results",
+   "codes_hit": [
+    2,
+    3
+   ],
+   "codes_missed": [
+    "5.4:crowded_by_near_duplicates (got ['buried_below_fold'])"
+   ],
+   "triple_lenient": false,
+   "triple_strict": false,
+   "triple_got": {
+    "5.2": [
+     "not_stated"
+    ],
+    "5.3": [
+     "not_stated"
+    ],
+    "5.4": [
+     "buried_below_fold"
+    ]
+   },
+   "problems": {},
+   "evidence_fields": 27
+  },
+  {
+   "id": "s24-2a",
+   "group": "stage2_vs_4",
+   "fatal": null,
+   "primary_stage": [
+    "2",
+    "2"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "document"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "They can\u2019t recall time or appearance to form a query.",
+   "codes_hit": [
+    1,
+    2
+   ],
+   "codes_missed": [
+    "2.5:never_encoded (got ['not_stated'])"
+   ],
+   "problems": {},
+   "evidence_fields": 14
+  },
+  {
+   "id": "s24-2b",
+   "group": "stage2_vs_4",
+   "fatal": null,
+   "primary_stage": [
+    "2",
+    "2"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Memory lacks who, when, and where",
+   "codes_hit": [
+    4,
+    4
+   ],
+   "codes_missed": [],
+   "problems": {
+    "quote_unverified": 1
+   },
+   "evidence_fields": 9
+  },
+  {
+   "id": "s24-2c",
+   "group": "stage2_vs_4",
+   "fatal": null,
+   "primary_stage": [
+    "2",
+    "2"
+   ],
+   "photo_class": [
+    "utility",
+    "unclear"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Couldn\u2019t recall which visit or enough visual detail",
+   "codes_hit": [
+    2,
+    3
+   ],
+   "codes_missed": [
+    "2.5:never_encoded (got ['not_stated'])"
+   ],
+   "problems": {},
+   "evidence_fields": 9
+  },
+  {
+   "id": "s24-4a",
+   "group": "stage2_vs_4",
+   "fatal": null,
+   "primary_stage": [
+    "4",
+    "4"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "abandoned_without_fallback",
+    "abandoned_without_fallback"
+   ],
+   "why": "Couldn\u2019t translate vivid memory into a workable query",
+   "codes_hit": [
+    2,
+    3
+   ],
+   "codes_missed": [
+    "2.1:meaning:gist (got ['who:people_present', 'who:relationship', 'what:activity', 'what:objects', 'where:place_type'])"
+   ],
+   "problems": {},
+   "evidence_fields": 18
+  },
+  {
+   "id": "s24-4b",
+   "group": "stage2_vs_4",
+   "fatal": null,
+   "primary_stage": [
+    "4",
+    "4"
+   ],
+   "photo_class": [
+    "utility",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "not_stated"
+   ],
+   "why": "Knew visual details but lacked the name to search.",
+   "codes_hit": [
+    2,
+    2
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 17
+  },
+  {
+   "id": "s24-4c",
+   "group": "stage2_vs_4",
+   "fatal": null,
+   "primary_stage": [
+    "4",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Initial keyword searches returned nothing",
+   "codes_hit": [
+    1,
+    2
+   ],
+   "codes_missed": [
+    "4.1:code_mixed_misspelt_or_synonym (got ['single_noun'])"
+   ],
+   "problems": {},
+   "evidence_fields": 21
+  },
+  {
+   "id": "bkt-ctx-1",
+   "group": "bucket",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "2"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "abandoned_without_fallback"
+   ],
+   "why": "Couldn\u2019t recall the year to target",
+   "codes_hit": [
+    5,
+    6
+   ],
+   "codes_missed": [
+    "2.1:where:named_place (got ['what:main_subject', 'where:city_or_region', 'where:place_type', 'event:trip'])"
+   ],
+   "problems": {
+    "quote_unverified": 4
+   },
+   "evidence_fields": 15
+  },
+  {
+   "id": "bkt-ctx-2",
+   "group": "bucket",
+   "fatal": null,
+   "primary_stage": [
+    "4",
+    "3"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "document"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Chose slow scrolling instead of searching",
+   "codes_hit": [
+    0,
+    1
+   ],
+   "codes_missed": [
+    "4.1:code_mixed_misspelt_or_synonym (got ['single_noun'])"
+   ],
+   "problems": {},
+   "evidence_fields": 17
+  },
+  {
+   "id": "bkt-ctx-3",
+   "group": "bucket",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "unclear",
+    "unclear"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Name search returned zero results despite face grouping",
+   "codes_hit": [
+    0,
+    0
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 12
+  },
+  {
+   "id": "bkt-ctx-4",
+   "group": "bucket",
+   "fatal": null,
+   "primary_stage": [
+    "0",
+    "0"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "abandoned_without_fallback"
+   ],
+   "why": "Photo wasn\u2019t in Google Photos account",
+   "codes_hit": [
+    1,
+    1
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 10
+  },
+  {
+   "id": "bkt-hard-1",
+   "group": "bucket",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "abandoned_without_fallback",
+    "abandoned_without_fallback"
+   ],
+   "why": "Target buried among many generic dog results",
+   "codes_hit": [
+    2,
+    3
+   ],
+   "codes_missed": [
+    "2.1:perceptual:clothing (got ['who:pets', 'what:main_subject', 'when:season_weather_festival', 'when:relative_to_event', 'perceptual:colours'])"
+   ],
+   "problems": {
+    "quote_unverified": 5
+   },
+   "evidence_fields": 12
+  },
+  {
+   "id": "bkt-hard-2",
+   "group": "bucket",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "unclear"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Face recognition missed many photos so name search failed",
+   "codes_hit": [
+    1,
+    1
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 15
+  },
+  {
+   "id": "bkt-hard-3",
+   "group": "bucket",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found",
+    "found_after_struggle"
+   ],
+   "why": "Search for visible text returned zero results",
+   "codes_hit": [
+    1,
+    1
+   ],
+   "codes_missed": [],
+   "problems": {
+    "quote_unverified": 2
+   },
+   "evidence_fields": 31
+  },
+  {
+   "id": "bkt-hard-4",
+   "group": "bucket",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Ask Photos returned a confident but wrong answer",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "problems": {
+    "quote_unverified": 1
+   },
+   "evidence_fields": 17
+  },
+  {
+   "id": "ps-1",
+   "group": "primary_stage",
+   "fatal": null,
+   "primary_stage": [
+    "0",
+    "0"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "abandoned_without_fallback"
+   ],
+   "why": "The photo wasn\u2019t in this Google Photos account.",
+   "codes_hit": [
+    0,
+    1
+   ],
+   "codes_missed": [
+    "0.1:old_device_or_sd_or_other_cloud (got ['device_only_backup_off_or_folder_excluded'])"
+   ],
+   "problems": {},
+   "evidence_fields": 20
+  },
+  {
+   "id": "ps-2",
+   "group": "primary_stage",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Wrong year in query acted as an over-strict filter",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 21
+  },
+  {
+   "id": "ps-3",
+   "group": "primary_stage",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Target buried among many results",
+   "codes_hit": [
+    2,
+    2
+   ],
+   "codes_missed": [],
+   "problems": {
+    "quote_unverified": 3
+   },
+   "evidence_fields": 16
+  },
+  {
+   "id": "ps-4",
+   "group": "primary_stage",
+   "fatal": null,
+   "primary_stage": [
+    "3",
+    "3"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "abandoned_without_fallback",
+    "abandoned_without_fallback"
+   ],
+   "why": "They chose not to search and only scrolled.",
+   "codes_hit": [
+    2,
+    3
+   ],
+   "codes_missed": [
+    "3.4:failed_before (got ['dont_trust_it'])"
+   ],
+   "problems": {
+    "quote_unverified": 2
+   },
+   "evidence_fields": 17
+  },
+  {
+   "id": "ps-5",
+   "group": "primary_stage",
+   "fatal": null,
+   "primary_stage": [
+    "4",
+    "4"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Non-visual cue couldn\u2019t be expressed for search",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "problems": {
+    "quote_unverified": 1
+   },
+   "evidence_fields": 19
+  },
+  {
+   "id": "ps-6",
+   "group": "primary_stage",
+   "fatal": null,
+   "primary_stage": [
+    "7",
+    "6"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "abandoned_without_fallback",
+    "abandoned_without_fallback"
+   ],
+   "why": "User didn\u2019t open a result to swipe the set",
+   "codes_hit": [
+    2,
+    4
+   ],
+   "codes_missed": [
+    "7.2:repeat_same_query (got ['rephrase_synonyms', 'quit'])",
+    "6.3:recognise_event_not_photo (got ['not_stated'])"
+   ],
+   "problems": {
+    "quote_unverified": 3
+   },
+   "evidence_fields": 19
+  },
+  {
+   "id": "cls-1",
+   "group": "photo_class",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "document",
+    "document"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "They typed clear keywords but got zero results.",
+   "codes_hit": [
+    2,
+    3
+   ],
+   "codes_missed": [
+    "1.4:urgency:minutes_under_stress (got ['urgency:seconds_someone_waiting'])"
+   ],
+   "problems": {
+    "quote_unverified": 9
+   },
+   "evidence_fields": 13
+  },
+  {
+   "id": "cls-2",
+   "group": "photo_class",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "2"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "They can\u2019t remember the week/date to target.",
+   "codes_hit": [
+    1,
+    2
+   ],
+   "codes_missed": [
+    "5.4:crowded_by_near_duplicates (got ['not_stated'])"
+   ],
+   "problems": {},
+   "evidence_fields": 22
+  },
+  {
+   "id": "cls-3",
+   "group": "photo_class",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Face search failed to surface the target",
+   "codes_hit": [
+    2,
+    2
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 17
+  },
+  {
+   "id": "cls-4",
+   "group": "photo_class",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "both",
+    "both"
+   ],
+   "media_type": [
+    "document",
+    "document"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Single-keyword search returned zero results",
+   "codes_hit": [
+    2,
+    2
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 23
+  },
+  {
+   "id": "vid-1",
+   "group": "media",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "video",
+    "video"
+   ],
+   "outcome": [
+    "not_stated",
+    "abandoned_without_fallback"
+   ],
+   "why": "Search results showed photos, not the target video",
+   "codes_hit": [
+    0,
+    0
+   ],
+   "codes_missed": [],
+   "problems": {
+    "quote_unverified": 1
+   },
+   "evidence_fields": 14
+  },
+  {
+   "id": "vid-2",
+   "group": "media",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "mixed",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Videos ranked above the desired photo",
+   "codes_hit": [
+    1,
+    1
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 11
+  },
+  {
+   "id": "vid-3",
+   "group": "media",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "screenshot",
+    "screenshot"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Search returned nothing useful for their cues",
+   "codes_hit": [
+    2,
+    2
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 20
+  },
+  {
+   "id": "hi-1",
+   "group": "hinglish",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Search for remembered cues returned zero results",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "problems": {
+    "quote_unverified": 2
+   },
+   "evidence_fields": 12
+  },
+  {
+   "id": "hi-2",
+   "group": "hinglish",
+   "fatal": null,
+   "primary_stage": [
+    "5",
+    "5"
+   ],
+   "photo_class": [
+    "utility",
+    "utility"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "found_after_struggle",
+    "found_after_struggle"
+   ],
+   "why": "Search returned zero results for a valid cue",
+   "codes_hit": [
+    1,
+    3
+   ],
+   "codes_missed": [
+    "4.1:code_mixed_misspelt_or_synonym (got ['single_noun'])",
+    "5.1:code_mixed_language_failed (got ['not_stated'])"
+   ],
+   "problems": {
+    "quote_unverified": 8
+   },
+   "evidence_fields": 21
+  },
+  {
+   "id": "hi-3",
+   "group": "hinglish",
+   "fatal": null,
+   "primary_stage": [
+    "0",
+    "0"
+   ],
+   "photo_class": [
+    "sentimental",
+    "sentimental"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "WhatsApp folder wasn\u2019t backed up to Google Photos",
+   "codes_hit": [
+    1,
+    1
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 8
+  },
+  {
+   "id": "hi-4",
+   "group": "hinglish",
+   "fatal": null,
+   "primary_stage": [
+    "2",
+    "2"
+   ],
+   "photo_class": [
+    "sentimental",
+    "unclear"
+   ],
+   "media_type": [
+    "photo",
+    "photo"
+   ],
+   "outcome": [
+    "not_stated",
+    "not_stated"
+   ],
+   "why": "Can\u2019t recall date or people; only vague cues",
+   "codes_hit": [
+    3,
+    3
+   ],
+   "codes_missed": [],
+   "problems": {},
+   "evidence_fields": 9
+  }
+ ],
+ "run_id": "code-fixtures-20260926-114134-0ce29b",
+ "prompt_version": "code_v1",
+ "usage": {
+  "input": 482180,
+  "cached": 395008,
+  "output": 148741,
+  "usd": 1.645751,
+  "requests": 40
+ }
+}

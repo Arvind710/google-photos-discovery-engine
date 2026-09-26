@@ -288,6 +288,47 @@ if not stor.empty:
          "adjacent. Each story is stored as an exact passage of the post it came from, never "
          "a paraphrase. Stories the second model dropped are kept, marked, not deleted.")
 
+# ================================================================= PART 6
+# From P3: what the coded stories can answer, and how far the coding agrees
+# with itself. Read from analysis_coverage / analysis_reliability only.
+cov = db.query("SELECT * FROM analysis_coverage WHERE source = '_all'")
+rel = db.query("SELECT * FROM analysis_reliability")
+if not cov.empty:
+    n_q = len(cov)
+    coded = cov[cov["disposition"] == "coded"]
+    section(6, f"{len(coded)} of {n_q} questions can be answered from public stories",
+            "Every story was asked every question its length allows. A question that nearly "
+            "every story leaves unanswered is not dropped: it becomes an interview question for "
+            "the next part of the research.", "#CC79A7", slug="coverage")
+    cov = cov.assign(asked=cov["n_coded"] + cov["n_not_stated"],
+                     _k=cov["question"].map(lambda q: tuple(int(x) for x in q.split("."))))
+    cov = cov.sort_values("_k")
+    shown = cov[cov["asked"] > 0]
+    hbar([f"{q} · {words.stage(str(st))}" for q, st in zip(shown["question"], shown["stage"],
+                                                          strict=True)],
+         shown["n_coded"].astype(int).tolist(),
+         [f" {share(int(n), int(a)).text}" + (" · interview" if d == "register" else "")
+          for n, a, d in zip(shown["n_coded"], shown["asked"], shown["disposition"], strict=True)],
+         ["#CC79A7" if d == "coded" else "#BBBBBB" for d in shown["disposition"]],
+         height=60 + 22 * len(shown))
+    verdict(f"<b>{n_q - len(coded)} questions</b> are answered by so few stories that they "
+            f"go to the interview guide instead — public posts rarely say how many attempts "
+            f"were made or how people scan results, so only watching someone search can.",
+            "#CC79A7")
+    note(words.metric("coverage"))
+    if not rel.empty:
+        spine = rel[~rel["field"].str.startswith("q:")].set_index("field")
+        ps = spine.loc["primary_stage"] if "primary_stage" in spine.index else None
+        counts = rel["verdict"].value_counts().to_dict()
+        note(f"A second AI model coded {int(rel['n'].max())} of the stories again. "
+             + (f"On the stage where a story first went wrong, the two agree "
+                f"{share(round(ps['raw_agreement'] * ps['n']), int(ps['n'])).text} of the time "
+                f"(κ {ps['value']:.2f}). " if ps is not None else "")
+             + f"Of {len(rel)} coded fields, {counts.get('ok', 0)} agree well, "
+             f"{counts.get('degenerate', 0)} are nearly constant, and "
+             f"{counts.get('low_reliability', 0)} agree too little to carry a headline. "
+             + words.metric("kappa"))
+
 # ========================================================== read it yourself
 st.html(nav.anchor("browse"))
 st.html(f"<div style='margin:2.6rem 0 .4rem'><div style='height:1px;background:{HAIR}'></div>"

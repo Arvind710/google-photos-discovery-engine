@@ -35,6 +35,10 @@ def exclusion(key: str) -> str:
     return _all().get("exclusion_reasons", {}).get(key, key.replace("_", " "))
 
 
+def stage(key: str) -> str:
+    return (_all().get("stages", {}).get(str(key)) or {}).get("short", f"Stage {key}")
+
+
 def proxy_warning() -> str:
     return " ".join(_all()["proxy_warning"].split())
 

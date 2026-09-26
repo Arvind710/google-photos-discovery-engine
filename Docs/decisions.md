@@ -318,3 +318,101 @@ mitigated upward), the zero-story rate (0.973), and T-20 (115 against 300).
 **Spend.** OpenAI $4.88 of $15 to date, against ~$1.60 planned by the end of
 P2. Coding is priced per story, so coding 334 stories, not ~1,000, should
 bring P3 in far under its $7.25.
+
+## D-9 — How Pass 2 (coding) is run: one request per story, rules in code, effort by bucket (2026-09-26, the PM approved the recommendations)
+
+**The two questions open since P1, settled by the PM.** Both live in code, not in
+the frozen codebook, so neither changes `v1:03257d4f`.
+- **2.2 (cue accuracy)** is written as one `story_codes` row per remembered cue:
+  the cue (a 2.1 value) in `value`, the judgement in `accuracy`. This is what the
+  codebook comment and the schema's `accuracy` column describe. The fixtures'
+  `2.2: [certain_wrong]` expectations are scored against `accuracy`.
+- **`metric_node`** is a fixed rule in code (`classify.blocks.metric_node`), not
+  a model call: 0 → target_retrievable · 2, 4 → query_captures_usable_cue ·
+  3 → enters_gp_retrieval_path · 5 → target_ranked_visible if 5.4 is coded,
+  else query_captures_usable_cue · 6 → user_recognises_target · 7, 8 →
+  found_after_refinement if a tactic (7.2, not "quit") led to finding it, else
+  refines_instead_of_quitting · 1 → context · 9, 10 → outcome_measure.
+
+**Also decided in code, never asked of the model:** `failure_owner` (the spine
+map), `severity` (the model scores stakes, effort and emotional intensity 0–2;
+the outcome part comes from `outcome`; the total maps by `severity_v1.yaml`),
+and 10.3 (structural: every story is a public post, so its value is the source's
+kind).
+
+**One request per story, not one per block.** The plan wrote four block prompts
+(`block_{a,b,c,d}_v1.md`). With 334 stories averaging 200–400 characters, the
+codebook, not the story, is the input: one prompt (`prompts/code_v1.md` + the
+codebook rendered from `journey_v1.yaml`, so they cannot drift) is a stable
+prefix that the Batch API caches (86% of input tokens in the fixture batch), and
+one call per story shares the reasoning across its blocks. The blocks still
+decide WHICH questions a story is asked:
+- **core (115): A + B + C + D + R, all 59 bank questions.** With 115 core
+  stories, the plan's "pilot on ~70 stories, all 60 questions" would be most of
+  the core, so the pilot and the coverage register are the same run
+  (architecture.md §3.4). It also lets block yield be measured on stories the
+  `reaches_stage` gate would have skipped (EC-SEG-5).
+- **adjacent (219): A, + C if reaches_stage ≥ 5, + D if ≥ 7.** B and R are about
+  memory and articulation of vague retrieval, which adjacent stories are not.
+
+**Reasoning effort by bucket (the $15 ceiling).** At `low`, a core story costs
+~3,600 output tokens, 2,240 of them reasoning; at `minimal`, ~1,460. Everything
+at `low` would have left too little for reliability, P4 and Ask AI. Core stories
+carry every analysis and are coded at `low`; adjacent stories, mostly Block A,
+at `minimal`. The fixture loop ran with the same split.
+
+**The T-8 loop (evals.md §8), one iteration of three.**
+- v1.0 (sync, $1.65): T-8 85%, triple 67% by the scoring first written, Stage
+  2 vs 4 83%. Misses: outcome inferred as "abandoned" when the story never says
+  how it ended; Stage 2 called when the person had searched with a usable cue
+  (the Goa café example itself); `unclear` for plain family photos.
+- v1.1 (Batch, $0.72): seven "easy to get wrong" rules added to the prompt
+  header (not the codebook). **T-8 95%, triple 89%, Stage 2 vs 4 100%,
+  photo_class 92.5%, media_type 92.5%, outcome 87.5%.** Stopped there, so as not
+  to tune toward these 40 stories.
+
+**What P3-MET-2 measures.** evals.md sets "fixture accuracy, 5.2/5.3/5.4 minimal
+pairs ≥ 80%" for EC-CODE-3, which is the three being CONFLATED. The first scoring
+also required every expected value inside the right question, and scored
+`tri-A-54` wrong for coding 5.4 as `clutter_ranked_above` without also
+`buried_below_fold`. P3-MET-2 is therefore scored at question level — the story
+lands in the right one of the three and not the other two — with the value-level
+figure reported beside it (78% at v1.1). This definition was fixed after the
+first run and is stated here for that reason.
+
+**Spans.** Every quote is located in `text_clean`, inside the story's own span
+and the same author's later posts only (`validate/spans.py`), and the stored
+span is the matched slice. A story whose primary_stage quote is not found is
+re-coded once, then marked `span_unverified` at stage `code` and counted.
+
+**Rates re-confirmed** on developers.openai.com/api/docs/pricing on 2026-09-26
+before the batch: unchanged, Batch exactly half.
+
+**The corpus run** (`code-20260926-115805-886c5d`, Batch): 334 stories, $2.80
+against a $3.76 projection, plus $0.24 for the synchronous re-code of 13 whose
+primary_stage quote was not found. 332 coded; 2 (both adjacent) marked
+`span_unverified` after the re-code. Core stays 115. 3,279 verified evidence
+spans; 181 secondary quotes (about 5%) could not be located and were dropped,
+leaving those codes without a span.
+
+**A defect the corpus showed and the fixtures did not: Stage 0 without
+evidence.** 52 of 115 core stories (45%, over P3-MET-6's 45% flag) were coded
+Stage 0. Read one by one, many are quiet successes ("I just search for
+'passport' and I can find it") or bare "can't find it" posts: the codebook has
+no "nothing went wrong" stage, and the coder fell back to 0, which makes the
+failure owner library_data and would have inflated the headline Stage 0 share.
+84 stories (37 core, 47 adjacent) are coded 0 with nothing in 0.1 or 0.2 saying
+the photo was unreachable. The prompt now carries a rule (v1.2: Stage 0 needs
+evidence; no failure is Stage 9), `stage0_without_evidence` flags it at
+validation, `blocks recode` re-codes exactly those stories, and a corpus test
+fails until none remain. The fixtures will be re-run at v1.2 first.
+
+**Blocked on billing (2026-09-26).** The dual-coding and blind-read batches were
+refused by OpenAI: "Billing hard limit has been reached". The recorded spend is
+$10.35 (runs table; it reconciles with 3.md's $4.88 plus this session's $5.46),
+below the $15 console cap recorded in `evals/manual_checks.yaml`. Either the
+console limit is lower than recorded, or other usage on the same account counts
+against it. No paid call runs until the PM has checked the console. Still to run
+once it is resolved, about $2.3 projected: fixtures at v1.2 (~$0.72), the Stage 0
+re-code (~$0.8), dual coding (~$0.4), adjudication (~$0.2), blind read (~$0.1),
+residual themes (~$0.05).

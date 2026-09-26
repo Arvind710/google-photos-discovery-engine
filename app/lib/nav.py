@@ -28,6 +28,7 @@ PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
         ("set-aside", "What was set aside"),
         ("thinnest", "Where it is thinnest"),
         ("stories", "From records to stories"),
+        ("coverage", "What the stories can answer"),
         ("browse", "Read the records"),
     ]),
 ]
