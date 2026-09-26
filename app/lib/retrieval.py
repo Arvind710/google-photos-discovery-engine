@@ -30,7 +30,7 @@ from dataclasses import dataclass, field
 from functools import cache
 from pathlib import Path
 
-from lib import words
+from lib import plain, words
 from lib.evidence import FLOOR, share
 
 LIVE = "s.story_id NOT IN (SELECT story_id FROM exclusions WHERE story_id IS NOT NULL)"
@@ -476,26 +476,30 @@ KIND_PHRASE = {"prevalence": "how often this happens in the stories",
                "detail": "what the stories say about this in detail",
                "memory": "what people remember and forget",
                "workaround": "what people do instead", "robustness": "whether this is robust",
-               "opportunity": "how this ranks as an opportunity",
+               "opportunity": "how this ranks among the problems worth fixing",
                "recommendation": "the engine's recommendation",
-               "hypothesis": "hypotheses for the interviews",
+               "hypothesis": "ideas to test in interviews",
                "coverage": "how often public posts answer this",
-               "reliability": "how reliably this was coded", "theme": "the emerging themes",
+               "reliability": "how reliably the stories were read",
+               "theme": "the patterns noticed after the study was designed",
                "composition": "what was collected", "verbatim": "what people actually wrote",
                "method": "how this was measured"}
 
 MISSING_CUTS: list[tuple[str, str]] = [
     (r"\bmen\b|\bwomen\b|\bgender|\bage\b|\bage group|\bolder|\byounger|\bdemographic|"
-     r"\bparents?\b.*\bvs\b", "no demographic data was collected, so no split by age or gender "
-                             "exists"),
+     r"\bparents?\b.*\bvs\b", "the posts say nothing reliable about people's age or gender, so "
+                             "no split by age or gender is possible"),
     (r"\bindia(n)?\b|\busa\b|\bcountr|\bregion|\bcity|\bgeograph",
-     "no reliable location was collected, so no country or region comparison exists"),
+     "the posts say nothing reliable about where people live, so no country or region "
+     "comparison is possible"),
     (r"\bover time\b|\btrend|\bbefore\b.*\bafter\b|\bsince\b.*\bask photos|\bgot worse|"
-     r"\bgetting (better|worse)", "no before-and-after or over-time comparison was built"),
+     r"\bgetting (better|worse)", "the stories were not compared across time, so there is no "
+                               "before-and-after"),
     (r"\bandroid\b.*\bios\b|\bios\b.*\bandroid\b|\biphone users\b|\bplatform",
-     "stories are not reliably tagged by phone platform, so no Android vs iOS split exists"),
+     "the posts do not reliably say which phone people use, so there is no Android vs iPhone "
+     "split"),
     (r"\b(apple photos|icloud|samsung gallery|amazon photos|onedrive)\b",
-     "the corpus does not compare how well other photo apps search"),
+     "the stories do not compare how well other photo apps search"),
 ]
 
 HARD_OUT_OF_SCOPE = re.compile(
@@ -586,15 +590,16 @@ def _satisfied(kind: str, got: Retrieved, classes: list[str] | None = None) -> t
         return bool(got.method.get("flags")), "the method notes could not be loaded"
     if kind == "verbatim":
         n = len(got.stories)
-        return n >= 2, f"too few stories to quote — only {n} matched"
+        return n >= 2, ("no post matches it closely enough to quote" if n == 0 else
+                        "too few posts match it to quote from")
     if kind == "detail" and not _rows_for(kind, got):
         return len(got.stories) >= 2, "no stories bear on this in detail"
     if kind == "reliability":
         return bool(got.method.get("reliability") or _rows_for(kind, got)), \
-            "no agreement figure for that field"
+            "there is no check of how reliably that detail was read"
     if kind == "coverage":
         return bool(got.method.get("coverage") or _rows_for(kind, got)), \
-            "no coverage figure for that question"
+            "there is no count of how many posts mention that"
     rows = _rows_for(kind, got)
     if not rows:
         return False, f"the stories hold nothing on {KIND_PHRASE.get(kind, kind)}"
@@ -603,23 +608,25 @@ def _satisfied(kind: str, got: Retrieved, classes: list[str] | None = None) -> t
     if kind in ("prevalence", "segment_split", "ranking") and counted:
         if not any(r["of"] >= FLOOR for r in counted):
             big = max(r["of"] for r in counted)
-            return True, (f"!only {big} stories in that group — under the {FLOOR} needed for"
-                          " a share or a comparison, so only counts can be given")
+            return True, (f"!only {big} stories fit — too few (under {FLOOR}) for a percentage"
+                          " or a comparison, so only counts are given")
         thin = sorted({r["group"] for r in counted if r["of"] < FLOOR and r.get("group")})
         # The group the question is ABOUT decides it: "what share of utility
         # stories…" with 21 utility stories cannot be given a share at all.
         missing = [c for c in classes or [] if not any(r.get("group") == c for r in counted)]
         if kind == "segment_split" and missing:
-            return True, ("!no core stories are about " + ", ".join(missing) + " photos, so "
-                          "nothing can be said about that group")
+            return True, ("!none of the stories is about " + " or ".join(
+                plain.kind(c) for c in missing) + ", so nothing can be said about them")
         asked = [c for c in classes or [] if any(r.get("group") == c for r in counted)]
         if kind == "segment_split" and asked and all(c in thin for c in asked):
             sizes = {r["group"]: r["of"] for r in counted if r.get("group") in asked}
-            return True, ("!only " + ", ".join(f"{n} {c}" for c, n in sizes.items())
-                          + f" stories — under the {FLOOR} needed for a share, so only "
-                          "counts can be given")
+            return True, ("!only " + " and ".join(f"{n} stories are about {plain.kind(c)}"
+                                                   for c, n in sizes.items())
+                          + f" — too few (under {FLOOR}) for a percentage, so only counts are "
+                          "given")
         if thin and kind == "segment_split":
-            return True, f"~{', '.join(thin)} photos have under {FLOOR} stories: counts only"
+            return True, (f"~fewer than {FLOOR} stories are about "
+                          + " or ".join(plain.kind(g) for g in thin) + ", so those get counts only")
     return True, ""
 
 
@@ -666,21 +673,22 @@ def gate(plan: dict, got: Retrieved, question: str = "") -> Verdict:
         if c["question"] == subj_q and c["disposition"] == "register":
             asked = c["n_coded"] + c["n_not_stated"]
             unmet.append("register")
-            reasons.append(f"public posts rarely answer question {c['question']} — "
-                           f"{c['n_coded']} of {asked} stories do — so it is left to the "
-                           f"interviews")
+            reasons.append(f"few public posts say anything about {plain.question(c['question'])}"
+                           f" — {c['n_coded']} of {asked} stories do — so it is left for "
+                           "interviews with real users")
     # A field the two coders disagreed on cannot carry a finding (P4-INV-3's rule).
     for r in got.method.get("reliability", []):
         if r["verdict"] == "low_reliability" and r["field"] in subj_f:
             unmet.append("reliability")
-            reasons.append(f"the two AI coders agreed too little on {r['field'].replace('q:', 'question ')}"
-                           " to report it as a finding")
+            what = plain.FIELD.get(r["field"]) or plain.question(r["field"][2:])
+            reasons.append(f"two AI readers went through the stories separately and agreed too "
+                           f"rarely on {what} to rely on it")
     absent = missing_cuts(f"{question} {plan.get('restated', '')}")
     if absent:
         unmet.append("missing_cut")
         reasons += absent
     if not met:
-        return Verdict("NONE", met, unmet, reasons or ["nothing relevant was retrieved"],
+        return Verdict("NONE", met, unmet, reasons or ["nothing in the stories bears on this"],
                        caveats)
     if unmet or disowned:
         return Verdict("PARTIAL", met, unmet,

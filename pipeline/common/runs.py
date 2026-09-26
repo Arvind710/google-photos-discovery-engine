@@ -40,8 +40,9 @@ BATCH_DISCOUNT = 0.5
 
 # The console budget (P0-OPS-2); this is the in-code mirror. $15 at P0; the PM
 # added $2 of credit on 2026-09-26 (Docs/decisions.md D-11), and raised it to $18
-# the same night for one more Ask AI sweep ("raise the budget to $18", D-12).
-CEILING_USD = 18.00
+# the same night for one more Ask AI sweep ("raise the budget to $18", D-12), and added $3
+# of credit on 2026-09-27 ("i have added 3 credits in openai"), recorded as a $21 budget (D-14).
+CEILING_USD = 21.00
 HALT_MULTIPLE = 1.5          # T-19
 
 

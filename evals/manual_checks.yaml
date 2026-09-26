@@ -8,7 +8,8 @@
 # $15 set 2026-09-26T00:55+05:30; the PM added $2 of credit on 2026-09-26
 # evening ("I had 2 credits more in openAI console"), so the budget is $17
 # (Docs/decisions.md D-11). Raised to $18 by the PM at ~23:20 IST the same night
-# ("raise the budget to $18 and run the sweep", D-12). Must equal
+# ("raise the budget to $18 and run the sweep", D-12). The PM added $3 of credit at ~01:08
+# IST on 2026-09-27 ("i have added 3 credits in openai"): $21 (D-14). Must equal
 # pipeline.common.runs.CEILING_USD.
-openai_hard_cap_usd: 18            # set by the PM; recorded from their instruction
-openai_hard_cap_confirmed_at: "2026-09-26T23:20+05:30"
+openai_hard_cap_usd: 21            # set by the PM; recorded from their instruction
+openai_hard_cap_confirmed_at: "2026-09-27T01:08+05:30"

@@ -732,3 +732,78 @@ the Myntra engine's layout** at the PM's request ([CTX] §16): threads, a centre
 state with six prompts, question and answer bubbles, a named status line, references in an
 expander, only evidence problems on screen — without streaming, because a withheld draft
 must never reach the screen. Spend $17.00 recorded of $18.
+
+## D-14 — Ask AI v2: plain words through a translation layer, streaming, a 10-second budget, no repair; a $21 budget (2026-09-27, decided by the PM)
+
+**What the PM asked (2026-09-26/27, Docs/6.md §1).** Words that appear as they are written;
+no answer over 10 seconds, and the page to claim about 15; the page to rest at the START of a
+new answer; and answers "extremely simple, precise and unambiguous" with no internal word
+anywhere on the answer page, through a "translation layer".
+
+**As built.**
+1. **The translation layer** (`app/lib/plain.py`, no model call). Every retrieved row becomes one
+   plain sentence with a tag — `[F#]` a fact, `[S#]` a post (fenced, untrusted), `[N#]` a limit of
+   the evidence — and the writer sees only those. Tags expand back to the exact citations, so every
+   existing check still runs. A word the reader cannot know (stage N, core, corpus, coded,
+   directional, κ, …) in the answer's own words is an **absolute** failure; words the asker typed,
+   however hyphenated or pluralised, are exempt. The limit notes take their numbers from the stored
+   flag text, never a number of their own.
+2. **"Directional" said plainly.** A share over 30–79 stories reads "n of N stories (x%) — a small
+   group, so only a rough guide"; the Wilson interval is **dropped from answers** (`share()` still
+   prints it on the charts). This is a deliberate readability trade against [CTX] §15.5's
+   "widened interval". A "rough guide" label on a sentence whose every share is of 80+ is false and
+   is removed in `finish()` (no number changes).
+3. **The 10-second budget.** Planner gpt-5-mini at `minimal`, capped at 4.5 s, then a plan from the
+   question's own words (`rule_plan`, which also resolves a follow-up against the previous question);
+   the writer streams against a deadline 0.5 s before the budget, and **a watchdog closes the stream
+   at that deadline** (the client's timeout bounds each read, not the stream: v2.5 ran one answer to
+   10.4 s without it); **no repair** — EC-ASK-7's one repair is withdrawn; a late or failing draft is
+   replaced by the fallback, which is correct by construction.
+4. **Streaming shows the draft before the check.** A withheld draft is visible for about a second
+   before the fallback replaces it, with a caption saying so. This reverses the "no streaming"
+   decision of the Myntra-layout page (D-13's addendum), at the PM's request. The risk, stated: an
+   injected instruction could be visible for that second.
+5. **Page claim "about 15 seconds"**; measured below. **Scroll:** the page holds at the start of the
+   newest answer (`_scroll_to_answer`; browser check pending).
+6. **Cost of a dropped call.** A draft cut at the deadline, or a planner that timed out, reports no
+   usage but is billed. It is now costed by estimate (≈4 characters a token for what was sent and
+   streamed; a timed-out planner at 457 output tokens, its mean over the 18 calls that completed in
+   the v2.0 sweep) and marked `estimated` on the answer and in the sweep artifact.
+
+**Checker rules added while reading seven sweeps (v2.0 → v2.6), each replayed in
+`evals/test_p5_ask.py`:** a percentage must match its own count (absolute: v2.2 served "1 of 175
+(9%)"); a count called "too few (under 30)" must be under 30 (absolute: v2.5 served "only 32 …
+too few"); label-colons of up to five words, but a colon that opens a quotation is not a label;
+negation read back to the clause start, "none" included (two false positives); the directional
+label read across the whole sentence; an italic closing question is not a claim; the writer is told
+never to quote a fact line (the checker withheld such drafts correctly); a fallback for a split the
+posts do not hold states the gap and lists no unrelated figures, and one about what to fix leads
+with the ranked opportunity. `evals/golden_sweep.py` now records `planned_by`, the replaced draft
+and estimated costs, and its per-question estimates were set from the measured v2.0 sweep (the old
+$0.035 a question was v1's, five times too high).
+
+| Sweep | Routes | Verified | Withheld | Planned by rules | Mean / max s | Cost |
+|---|---|---|---|---|---|---|
+| v2.0 `…184648-ce1261` | 24/24 | — | 8 | not recorded | 7.2 / 9.1 | $0.161 |
+| v2.1 `…191853-f7c05c` | 24/24 | 21 | 11 | 8 | 7.0 / 8.6 | $0.163 |
+| v2.2 `…192303-7769c2` | 24/24 | 23 | 4 | 9 | 6.5 / 7.8 | $0.162 |
+| v2.3 `…192625-0ebf24` | 24/24 | 22 | 7 | 11 | 7.0 / 9.5 | $0.141 |
+| v2.4 `…193835-54d3ac` | 23/24 | 20 | 3 | 17 | 7.0 / 8.5 | $0.130 |
+| v2.5 `…194111-609ea7` | 24/24 | 23 | 2 | 15 | 7.4 / **10.4** | $0.121 |
+| **v2.6 `…194405-b3bfbe`** | **24/24** | **23** | **2** | 19 | 6.9 / 9.0 | $0.105 |
+
+(Run ids are `ask-golden-synth-20260926-…`.) v2.6: 0 absolute problems served, 0 assertion failures
+(N1 carries 115 and 109; the injection probes resisted), both withheld drafts real violations. The
+whole P0–P6 suite passes on it.
+
+**Still open, stated.** (a) The planner timed out on 8–19 of 24 questions at its 4.5 s cap, more as
+the night went on; the rules plans are coarser (P1 in v2.6 answered with where the posts came from).
+Raising the cap trades against the 10-second rule — a PM decision. (b) Reasoning no check catches:
+F1 accepts "Ask Photos fails most often" and answers with figures for all search; U1 claims kinds of
+photo differ and strings ~18 citations on its first sentence; a garbled sentence in R1. (c) The
+browser check of streaming, the scroll hold and the replaced-draft caption.
+
+**Budget.** The PM added $3 of OpenAI credit ("i have added 3 credits in openai", 2026-09-27 01:08
+IST), recorded as a **$21** budget (`runs.CEILING_USD`, `evals/manual_checks.yaml`), read the same
+way as D-11's "2 credits more". **Spend $18.06 recorded of $21**; the six sweeps v2.1–v2.6 cost
+$0.82 (v2.0's $0.16 was the session before).

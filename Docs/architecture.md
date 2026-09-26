@@ -536,6 +536,14 @@ Contract and planner/checker split reused from the Myntra engine per [CTX] §16;
 
 **As built (P5, 2026-09-26, `Docs/decisions.md` D-12).** `app/lib/retrieval.py` (a registry of 18 named queries the planner picks from, the four channels, the gate), `verify.py` (the checker) and `analyst.py` (the two calls). Planner gpt-5-mini at `low`, synthesis gpt-5 at `minimal`, 120 s per call. Every share in the brief is already `share()`'s text, so the floor is inherited. Departures from the Myntra engine, each found on this corpus: numbers are checked **per paragraph** against the rows that paragraph cites (a real number on the wrong row is a misattribution); quotes verify against **stories and the asker's words only**, never engine rows; the planner names a single `subject`, and only the subject — not questions listed as context — can downgrade a route to the interview register or low reliability; rules on the question's own words override the planner where it varied between runs. **An absolute failure is never served under a banner:** after the one repair, a draft with an unsupported number, an unverified quote, a share written as a rate, a label-colon or a leaky refusal is withheld and a deterministic fallback is served, built from retrieved rows, the gate's gap and a story's first words — it states the gap first and flags a false premise. Try it (`lib/tryit.py`) runs the pipeline's own find → confirm → code modules on pasted text (no URL fetching — D-12), writes nothing, and codes only the first confirmed story. Caps: per visit 6 questions / 2 runs, per day 25 / 8, per container.
 
+**Ask AI v2 (2026-09-27, D-14).** A **translation layer** (`app/lib/plain.py`) turns every retrieved row
+into one plain tagged sentence before the writer sees it, so answers carry no internal words (an
+internal word is an absolute failure); tags expand back to exact citations. The planner runs at
+`minimal` under a 4.5 s cap with a rules fallback; the writer **streams** under a 10-second budget
+with a watchdog at the deadline; there is **no repair** — a late or failing draft is replaced by the
+deterministic fallback. The page shows the words as they arrive, claims "about 15 seconds", and holds
+at the start of the newest answer.
+
 ---
 
 ## 8. Cost — the $15 ceiling

@@ -32,9 +32,9 @@ ROWS = [{"about": "core stories at Stage 5", "stories": 31, "of": 115, "people":
 RECS = [{"story_id": "s1", "text": "I searched 'yellow truck' and it found nothing useful at all",
          "source": "reddit", "primary_stage": "5", "photo_class": "unclear"}]
 GOOD = ("Search misreading the cue is the commonest first failure [[analysis_crosstab|k5]].\n\n"
-        "That is 27% (31 of 115) of core stories [[analysis_crosstab|k5]]. One person "
-        "searched and \"it found nothing useful at all\" [[story|s1]], though the core is thin "
-        "[[analysis_method_flags|thin_core]].\n\n*Want the split by kind of photo?*")
+        "That is 27% (31 of 115) of the stories [[analysis_crosstab|k5]]. One person "
+        "searched and \"it found nothing useful at all\" [[story|s1]], though the stories are "
+        "few [[analysis_method_flags|thin_core]].\n\n*Want the split by kind of photo?*")
 
 
 def test_a_clean_answer_passes_every_check():
@@ -48,7 +48,8 @@ def test_a_clean_answer_passes_every_check():
     (GOOD.replace("it found nothing useful at all", "it found nothing of any use"),
      "unverifiable quote"),
     (GOOD.replace("[[story|s1]]", "[[story|s9]]"), "citation not retrieved"),
-    (GOOD.replace("of core stories", "of Google Photos users"), "share stated as"),     # T-16
+    (GOOD.replace("of the stories", "of Google Photos users"), "share stated as"),      # T-16
+    (GOOD.replace("the stories are few", "the core is thin"), "internal word"),        # D-14
     (GOOD.replace("That is", "Caveat: that is"), "label-and-colon"),                      # T-17
     (GOOD.replace("\n\n*Want the split by kind of photo?*", ""), "closing"),
     (GOOD.replace("[[analysis_method_flags|thin_core]]", ""), "evidence"),                # INV-9
@@ -354,14 +355,26 @@ def test_code_names_in_the_answers_own_words_are_caught_quotes_and_citations_are
     assert "code name" not in A.ABSOLUTE[0] and not any("code" in a for a in A.ABSOLUTE)
 
 
-def test_the_brief_shows_plain_words_but_keeps_citation_keys_exact():
-    line = A._row_line({"about": "core stories answering question 5.6 with irrelevant_results",
-                        "scores": {"metric_leverage": 5}, "status": "below_floor",
-                        "_cite": {"table": "analysis_crosstab",
-                                  "key": "core.q:5.6=irrelevant_results@photo_class:_all"}})
-    assert "[[analysis_crosstab|core.q:5.6=irrelevant_results@photo_class:_all]]" in line
-    body = line.split("::", 1)[1]
-    assert "_" not in body and "irrelevant results" in body and "metric leverage 5" in body
+@pytest.mark.needs_corpus
+def test_the_brief_is_plain_tagged_sentences_and_tags_expand_to_exact_keys(con):
+    """D-14: the writer never sees a table, a key, a code or a stage number —
+    only plain sentences with [F…]/[S…]/[N…] tags, mapped back after."""
+    from lib import plain as P
+    q = "Does Google Photos fail to understand the clues people give it?"
+    p = R.normalise_plan(_plan(evidence_needed=["prevalence", "verbatim"],
+                               queries=[_q("stage_prevalence"),
+                                        _q("question_values", question="5.6")]), q)
+    got = R.retrieve(con, p)
+    tags = P.build(got)
+    b = A.brief(p, got, R.gate(p, got, q), q, tags)
+    evidence = b.split("FACTS", 1)[1].split("POSTS", 1)[0]
+    assert "[[" not in evidence and not re.search(r"\b[a-z]+_[a-z_]+\b", evidence)
+    words_only = re.sub(r"\[[FSN]\d+\]", "", evidence)
+    assert not P.check_jargon(words_only), P.check_jargon(words_only)
+    f1 = tags.to_cite["F1"]
+    assert tags.expand("It does [F1].") == f"It does {f1}."
+    assert tags.expand("x [F1, S1]") == f"x {f1}{tags.to_cite['S1']}"
+    assert tags.expand("x [F999]") == "x [F999]" and P.check_jargon("x [F999]")
 
 
 def test_the_ask_page_uses_no_html_tags_in_markdown():
@@ -390,7 +403,7 @@ def test_a_partial_fallback_says_what_the_stories_cannot_support_first(con):
                             "PARTIAL", evidence_needed=["prevalence"],
                             queries=[_q("field_values", dim="source")])
     first_two = " ".join(text.split("\n\n")[:2])
-    assert "phone platform" in first_two and "[[analysis_method_flags|missing_cuts]]" in first_two
+    assert "which phone" in first_two and "[[analysis_method_flags|missing_cuts]]" in first_two
 
 
 @pytest.mark.needs_corpus
@@ -404,7 +417,7 @@ def test_a_fallback_flags_a_false_premise_before_any_figure(con):
                  "correction": ""})
     head, bullets = text.split("\n- ", 1)
     assert "takes as given something these stories do not show" in head
-    assert "Stage 0" in bullets.split("\n")[0]                   # the premise's own stage first
+    assert "already gone" in bullets.split("\n")[0]              # the premise's own stage first
 
 
 @pytest.mark.needs_corpus
@@ -417,7 +430,8 @@ def test_a_split_fallback_shows_one_stage_across_the_kinds_of_photo(con):
     groups = {re.search(r"photo_class:(\w+)\]\]", b).group(1) for b in bullets}
     stages = {re.search(r"primary_stage=(\d+)@", b).group(1) for b in bullets}
     assert len(groups) >= 2 and len(stages) == 1 and stages != {"9"}
-    assert all(b.startswith(f"- {g} photos: ") for b, g in zip(bullets, [re.search(r"photo_class:(\w+)\]\]", b).group(1) for b in bullets], strict=True))
+    from lib import plain as P
+    assert all(P.kind(re.search(r"photo_class:(\w+)\]\]", b).group(1)) in b for b in bullets)
 
 
 def test_an_empty_api_balance_reads_as_paused_not_as_a_stack_of_billing_urls():
@@ -451,7 +465,7 @@ def test_an_unretrieved_citation_is_absolute():
     """Sweep 8, P1: an invented key carried a misattributed figure past the
     per-paragraph number check."""
     bad = GOOD.replace("[[analysis_crosstab|k5]].\n\nThat", "[[analysis_crosstab|k5]].\n\nThat") \
-        .replace("of core stories [[analysis_crosstab|k5]]", "of core stories [[analysis_crosstab|made_up]]")
+        .replace("of the stories [[analysis_crosstab|k5]]", "of the stories [[analysis_crosstab|made_up]]")
     probs = V.check(bad, "FULL", ROWS, RECS).problems()
     assert any(x.startswith("citation not retrieved") for x in probs)
     assert any(x.startswith(A.ABSOLUTE) for x in probs)
@@ -491,9 +505,10 @@ def test_the_brief_says_no_kind_of_photo_differs_and_questions_carry_their_meani
                                queries=[_q("stage_by_photo_class"),
                                         _q("question_values", question="5.2")]), q)
     got = R.retrieve(con, p)
-    b = A.brief(p, got, R.gate(p, got, q), q)
-    assert "no kind of photo can be claimed to differ" in b
-    assert "question 5.2 (Google Photos had never recorded the detail they searched for)" in b
+    from lib import plain as P
+    b = A.brief(p, got, R.gate(p, got, q), q, P.build(got))
+    assert "never say one kind is harder" in b
+    assert P.question("5.2") in b and "google photos had never recorded" in b.lower()
 
 
 @pytest.mark.needs_corpus
@@ -553,3 +568,340 @@ def test_citation_keys_are_repaired_only_when_exactly_one_retrieved_key_matches(
 ])
 def test_directional_is_kept_below_80_and_never_claimed_at_80_or_more(text, n_bad):
     assert len(V.check_directional(text)) == n_bad
+
+
+# ============================================== D-14: plain words, 10 seconds, streaming
+@pytest.mark.parametrize("text, words", [
+    ("Most core stories fail here [[analysis_crosstab|k]].", ["core"]),
+    ("It fails at Stage 5 [[analysis_crosstab|k]].", ["stage 5"]),
+    ("Question 5.3 is thin; the share is directional.", ["directional", "question 5.3"]),
+    ("See [F9].", ["[F9]"]),
+    ("The route was PARTIAL.", ["PARTIAL"]),
+    ("A \"core memory\" photo [[story|s1]] was found; none failed in full.", []),
+])
+def test_the_jargon_check_catches_internal_words_but_not_quotes_or_english(text, words):
+    from lib import plain as P
+    assert P.check_jargon(text) == sorted(words)
+
+
+def test_internal_words_are_absolute_and_the_plain_label_counts_as_directional():
+    assert any("internal word".startswith(a) for a in A.ABSOLUTE)
+    ok = ("In 13 of 48 stories (27%) about a photo the person only vaguely remembered, the "
+          "search misread them — a small group, so only a rough guide.")
+    assert not V.check_directional(ok)
+    assert V.check_directional(ok.replace(" — a small group, so only a rough guide", ""))
+    assert not V.check_percentages(ok)
+
+
+def test_the_page_shows_words_without_tags_while_they_stream():
+    from lib import plain as P
+    assert P.visible("It does [F1]. Most [F2, S1] of them [N") == "It does. Most of them "
+
+
+@pytest.mark.needs_corpus
+def test_every_row_the_engine_can_retrieve_reads_in_plain_words(con):
+    """The translation layer covers every query in the registry: no sentence
+    carries an internal word, a code name, or a number its row does not hold."""
+    from lib import plain as P
+    n = 0
+    for name, spec in R.QUERIES.items():
+        for args in ({}, {"question": "5.6", "dim": "outcome"},
+                     {"population": "adjacent", "question": "2.4", "dim": "failure_owner"}):
+            for r in spec.run(con, {"population": "core", "dim": "", "question": "", "limit": 0,
+                                    **args}):
+                s = P.sentence(r)
+                if s is None:
+                    continue
+                n += 1
+                assert not P.check_jargon(s) and not re.search(r"\b[a-z]+_[a-z_]+\b", s), (name, s)
+                assert not V.check_numbers(f"{s} [[{r['_cite']['table']}|{r['_cite']['key']}]]",
+                                           [r]), (name, s)
+    assert n > 100
+
+
+@pytest.mark.parametrize("q, subject", [
+    ("What do people forget about the photo?", "question:2.4"),
+    ("How many stories are there?", "corpus"),
+    ("Which opportunity does the engine recommend, and why?", "opportunity"),
+    ("Does search understand what people type?", "stage:5"),
+])
+def test_a_late_planner_is_replaced_by_a_plan_from_the_questions_own_words(q, subject):
+    p = A.rule_plan(q)
+    assert p["subject"] == subject and p["evidence_needed"]
+
+
+class _Ev:
+    def __init__(self, **kw):
+        self.__dict__.update(kw)
+
+
+class _FakeClient:
+    """Planner and writer stand-ins: `plan_s` seconds to plan (a timeout past
+    the planner's limit), `word_s` seconds between streamed words."""
+    def __init__(self, plan_s=0.0, word_s=0.0, words=None):
+        self.plan_s, self.word_s, self.timeout = plan_s, word_s, None
+        self.words = words or ["It ", "does ", "[F1]", ". ", "\n\n", "*More?*"]
+        self.responses = self
+
+    def with_options(self, timeout=None, max_retries=None):
+        c = _FakeClient(self.plan_s, self.word_s, self.words)
+        c.timeout = timeout
+        return c
+
+    def create(self, stream=False, **kw):
+        import time
+        if not stream:
+            if self.plan_s > self.timeout:
+                time.sleep(0.01)
+                raise TimeoutError("Request timed out.")
+            raise RuntimeError("no planner in this fake")
+        me = self
+
+        class S:
+            def __iter__(self):
+                for w in me.words:
+                    time.sleep(me.word_s)
+                    yield _Ev(type="response.output_text.delta", delta=w)
+                yield _Ev(type="response.completed", response=_Ev(usage=None))
+
+            def close(self):
+                pass
+        return S()
+
+
+@pytest.mark.needs_corpus
+def test_a_late_planner_falls_back_to_rules_and_the_words_stream_without_tags(con):
+    seen = []
+    a = A.ask(_FakeClient(plan_s=99), con, "Does search understand what people type?",
+              on_text=seen.append)
+    assert a.planned_by == "rules" and not a.error and a.route == "FULL"
+    assert seen and all("[F" not in s for s in seen) and seen[-1].startswith("It does.")
+
+
+@pytest.mark.needs_corpus
+def test_a_draft_past_the_budget_is_replaced_and_the_answer_lands_inside_it(con):
+    a = A.ask(_FakeClient(plan_s=99, word_s=0.4, words=["word "] * 40), con,
+              "Does search understand what people type?", budget_s=3.0)
+    assert a.seconds <= 3.0 and a.withheld and "did not finish" in a.withheld[0]
+    assert a.text and a.report.ok, a.report.problems()
+    # The dropped calls were billed: both are costed, marked as estimates, and
+    # the part of the draft that streamed is kept for the page and the sweep.
+    assert a.draft.startswith("word word") and a.cost_usd > 0
+    assert set(a.estimated) == {A.PLANNER_MODEL, A.SYNTHESIS_MODEL}
+    assert a.usage[A.SYNTHESIS_MODEL][2] > 0 and a.usage[A.PLANNER_MODEL][2] == A.PLANNER_OUT_EST
+
+
+@pytest.mark.needs_corpus
+def test_a_writer_that_times_out_in_the_client_is_late_not_an_error(con):
+    """The SDK's own timeout (not our deadline check) on the stream is a late
+    draft — fallback served, cost estimated — never an error page."""
+    class _Stalls(_FakeClient):
+        def create(self, stream=False, **kw):
+            if stream:
+                raise TimeoutError("Request timed out.")
+            return super().create(stream=stream, **kw)
+
+        def with_options(self, timeout=None, max_retries=None):
+            c = _Stalls(self.plan_s, self.word_s, self.words)
+            c.timeout = timeout
+            return c
+    a = A.ask(_Stalls(plan_s=99), con, "Does search understand what people type?")
+    assert not a.error and a.withheld and "did not finish" in a.withheld[0]
+    assert a.report.ok and A.SYNTHESIS_MODEL in a.estimated and a.draft == ""
+
+
+@pytest.mark.needs_corpus
+def test_every_stored_method_flag_reads_plainly_with_its_own_numbers(con):
+    """plain.FLAG writes no number of its own: each is filled from the stored
+    flag, so the plain sentence always agrees with the row it cites."""
+    from lib import plain as P
+    for r in con.execute("SELECT flag, text FROM analysis_method_flags"):
+        row = {"flag": r[0], "text": r[1], "_cite": {"table": "analysis_method_flags",
+                                                     "key": r[0]}}
+        s = P.sentence(row)
+        if r[0] not in P.FLAG:
+            continue
+        assert s and "{" not in s and not P.check_jargon(s), (r[0], s)
+        assert not V.check_numbers(f"{s} [[analysis_method_flags|{r[0]}]]", [row]), (r[0], s)
+    assert P.flag("thin_core", "There are 200 core stories, below the 300: under 30 … 30 to 79"
+                  ).startswith("There are 200 stories")
+    assert P.flag("thin_core", "no numbers here") is None
+
+
+def test_the_budget_and_the_claim_on_the_page():
+    assert A.BUDGET_S <= 10 and A.PLANNER_TIMEOUT_S < A.BUDGET_S / 2
+    src = (VIEWS / "ask.py").read_text()
+    assert 'TYPICAL = "about 15 seconds"' in src and "on_text=show" in src
+    assert "_scroll_to_answer" in src and "scrollIntoView" in src
+
+
+@pytest.mark.needs_corpus
+def test_no_answer_in_the_golden_sweep_took_longer_than_the_budget():
+    slow = [(r["id"], r["seconds"]) for r in _golden()["rows"] if r["seconds"] > A.BUDGET_S]
+    assert not slow, slow
+
+
+@pytest.mark.needs_corpus
+def test_no_served_answer_in_the_golden_sweep_uses_an_internal_word():
+    bad = [(r["id"], p) for r in _golden()["rows"] for p in r["problems"]
+           if p.startswith("internal word")]
+    assert not bad, bad
+
+
+# ======================= v2.2: what reading sweep ask_v2.1 found (each case replayed)
+@pytest.mark.parametrize("text", [
+    "The stories are public posts; none of the numbers are a success rate.",           # S4
+    "They cannot tell us monthly active users of Ask Photos, any rate of success or "
+    "failure, or any count of users.",                                                   # O2
+])
+def test_a_negated_proxy_phrase_is_not_a_violation(text):
+    assert V.check_proxy(text) == []
+    assert V.check_proxy("In 31 of 115 posts, 27% of users fail.")                       # still caught
+
+
+def test_the_directional_label_counts_before_the_share_and_is_refused_on_a_large_group():
+    before = ("For photos kept as memories, a small group, so only a rough guide: "
+              "11 of 48 stories (23%) start with a single word.")                        # S4
+    assert V.check_directional(before) == []
+    n2 = "This 31 of 115 stories (27%) is a small group, so only a rough guide."          # N2
+    assert V.check_directional_claimed(n2)
+    mixed = ("In 13 of 48 stories (27%) and 31 of 115 stories (27%) the search failed — "
+             "a small group, so only a rough guide.")
+    assert not V.check_directional_claimed(mixed)                  # the label is the 48's
+
+
+def test_a_long_italic_closing_question_is_not_an_uncited_claim():
+    q = "*Want to see which parts of search the stories say did not match what people typed?*"
+    assert V.check_uncited(f"Search failed [[analysis_crosstab|k]].\n\n{q}") == []       # P2
+
+
+def test_attempt_bands_read_as_words():
+    from lib import plain as P
+    assert P.words("few_attempts_minutes") == "a few tries over some minutes"            # R3
+    assert P.words("hour_or_more") == "an hour or more"
+
+
+@pytest.mark.needs_corpus
+def test_a_missing_cut_fallback_states_the_gap_and_lists_no_unrelated_figures(con):
+    """v2.1, P1 and P3: the fallback listed media types and sources under a
+    question about phones and about Apple Photos."""
+    text, v = _fallback_for(con, "Is Apple Photos search better than Google Photos search?",
+                            "PARTIAL", evidence_needed=["prevalence"],
+                            queries=[_q("field_values", dim="source")])
+    assert "other photo apps" in text and "the post was on" not in text
+    assert "takes as given" not in text
+
+
+def test_the_prompt_names_the_label_colons_and_fact_quotes_the_sweep_found():
+    for s in ("A limit:", "What we can say:", "Another set exists:", "one wrong detail hid the photo"):
+        assert s in A.SYNTHESIS_SYSTEM
+
+
+# ======================= v2.3: what reading sweep ask_v2.2 found (each case replayed)
+def test_a_percentage_that_does_not_match_its_own_count_is_absolute():
+    bad = "Detail did not matter in 1 of 175 stories (9%) [[analysis_crosstab|k5]]."      # R2
+    probs = V.check(bad, "PARTIAL", ROWS, RECS).problems()
+    assert any(p.startswith("unsupported number (the %") for p in probs)
+    assert any(p.startswith(A.ABSOLUTE) for p in probs)
+    assert V.check_share_arithmetic("27% (31 of 115) and 13 of 48 stories (27%)") == []
+
+
+def test_a_five_word_label_colon_is_caught():
+    assert V.check_label_colon("x.\nWhat we can say instead: in 17 of 48 stories.")    # L2
+    assert not V.check_label_colon("x.\nOne poster wrote: it was gone.")
+
+
+def test_the_askers_hyphenated_words_are_exempt_from_the_jargon_check():
+    q = "What share of utility-photo stories end with the person giving up?"             # L1
+    t = "Among utility photos, 8 of 21 were gone [[analysis_crosstab|k5]]."
+    assert not V.check(t, "PARTIAL", ROWS, RECS, question=q).jargon
+    assert V.check(t, "PARTIAL", ROWS, RECS, question="What do people forget?").jargon
+
+
+def test_a_rules_plan_resolves_a_follow_up_and_makes_the_split():
+    hist = [{"question": "Where does retrieval most often first go wrong?", "answer": "x"}]
+    p = A.rule_plan("And how does that split by kind of photo?", hist)                    # U1
+    assert "segment_split" in p["evidence_needed"]
+    assert any(q["query"] == "stage_by_photo_class" for q in p["queries"])
+    assert "Where does retrieval" in p["restated"]
+    assert "following on" not in A.rule_plan("How do people search?", hist)["restated"]
+
+
+# ======================= v2.4: what reading sweep ask_v2.3 found (each case replayed)
+def test_a_colon_that_opens_a_quotation_is_not_a_label():
+    assert not V.check_label_colon("x.\nOne post fits the point: “it says no results” [[story|s1]].")
+    assert V.check_label_colon("x.\nWhat we can say instead: in 17 of 48 stories.")
+
+
+@pytest.mark.needs_corpus
+def test_a_what_to_fix_fallback_leads_with_the_ranked_opportunity(con):
+    """v2.3, F2: the rules plan's subject is `opportunity`, whose rows carry no
+    share line — the fallback held only a post, then three unranked stages."""
+    q = "Since most failures happen because the photo was deleted, what should Google fix first?"
+    p = R.normalise_plan(A.rule_plan(q), q)
+    got = R.retrieve(con, p)
+    v = R.gate(p, got, q)
+    text = A.fallback(v, got, p)
+    first = next(ln for ln in text.splitlines() if ln.startswith("- "))
+    assert "[[analysis_opportunity|stage5]]" in first and "enough stories to rank" in first
+    assert V.check(text, v.route, got.rows(), got.records(), question=q, gap=v.gap).ok
+
+
+# ======================= v2.5: what reading sweep ask_v2.4 found (replayed)
+@pytest.mark.parametrize("raw, want", [
+    ("It happened in 31 of 115 stories (27%), a small group, so only a rough guide.",     # F1
+     "It happened in 31 of 115 stories (27%)."),
+    ("This 31 of 115 stories (27%) is a small group, so only a rough guide.",             # N2
+     "This 31 of 115 stories (27%)."),
+    ("In 13 of 48 stories (27%) — a small group, so only a rough guide.",                 # kept
+     "In 13 of 48 stories (27%) — a small group, so only a rough guide."),
+    ("31 of 115 stories (27%) and 13 of 48 stories (27%), a small group, so only a rough guide.",
+     "31 of 115 stories (27%) and 13 of 48 stories (27%), a small group, so only a rough guide."),
+])
+def test_an_unfounded_rough_guide_label_is_dropped_and_a_founded_one_kept(raw, want):
+    assert V.drop_unfounded_rough_guide(raw) == want
+    assert not V.check_directional_claimed(V.drop_unfounded_rough_guide(raw))
+
+
+# ======================= v2.6: what reading sweep ask_v2.5 found (replayed)
+def test_a_count_called_too_few_must_be_under_the_floor():
+    bad = "Only 32 stories are about receipts — too few (under 30) for a percentage."        # U2
+    assert V.check_floor_claim(bad)
+    assert not V.check_floor_claim("Only 21 stories are about receipts — too few (under 30).")
+    assert any(p.startswith(A.ABSOLUTE) for p in
+               V.check(bad + " [[analysis_crosstab|k5]]", "PARTIAL", ROWS, RECS).problems())
+
+
+class _Stall:
+    """A stream that sends a few words, then goes silent until it is closed —
+    the pause before the last event that ran v2.5's R2 to 10.4 s."""
+    def __init__(self):
+        import threading
+        self.closed = threading.Event()
+
+    def __iter__(self):
+        for w in ["It ", "does ", "[F1]"]:
+            yield _Ev(type="response.output_text.delta", delta=w)
+        self.closed.wait(30)                       # silent until the watchdog closes it
+
+    def close(self):
+        self.closed.set()
+
+
+class _StallClient(_FakeClient):
+    def with_options(self, timeout=None, max_retries=None):
+        c = _StallClient(self.plan_s)
+        c.timeout = timeout
+        return c
+
+    def create(self, stream=False, **kw):
+        return _Stall() if stream else super().create(stream=stream, **kw)
+
+
+@pytest.mark.needs_corpus
+def test_a_stream_that_stalls_is_cut_at_the_deadline_not_after(con):
+    a = A.ask(_StallClient(plan_s=99), con, "Does search understand what people type?",
+              budget_s=3.0)
+    assert a.seconds <= 3.0, a.seconds
+    assert a.withheld and "did not finish" in a.withheld[0] and a.report.ok
+    assert a.draft.startswith("It does")

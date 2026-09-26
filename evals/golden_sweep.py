@@ -76,6 +76,8 @@ def one(client, q: dict) -> dict:
             "route_ok": a.route in q["expect"], "verified": a.verified,
             "problems": a.report.problems() if a.report else [a.error or "no report"],
             "repaired": a.repaired, "withheld": a.withheld, "fails": fails, "gap": a.verdict.gap if a.verdict else "",
+            "planned_by": a.planned_by, "draft": a.draft,
+            "cost_estimated": sorted(set(a.estimated) | set(pre.estimated if pre else [])),
             "text": text, "seconds": round(a.seconds, 1),
             "cost_usd": round(a.cost_usd + (pre.cost_usd if pre else 0), 5), "usage": usage,
             "error": a.error}
@@ -93,10 +95,16 @@ def main() -> int:
     # A stuck call must not hold the sweep (the default timeout is 600 s).
     client = OpenAI(api_key=envm.require("OPENAI_API_KEY"), timeout=A.TIMEOUT_S, max_retries=1)
     con = dbm.init()
-    est = 0.035 * len(qs)
-    with rmod.Run(con, "ask-golden-plan", model=A.PLANNER_MODEL, estimate_usd=max(est / 10, .02),
+    # Per-question estimates from the measured ask_v2.0 sweep (writer $0.142, planner
+    # $0.019 for 24 questions, follow-ups included), rounded up by about a third. The
+    # old $0.035 a question was v1's gpt-5 at a longer brief plus a repair; kept, it
+    # would have made the ceiling refuse a sweep that costs a fifth of it — and it made
+    # T-19's 1.5× halt meaningless.
+    plan_est = max(0.0013 * len(qs), .01)
+    synth_est = max(0.0080 * len(qs), .02)
+    with rmod.Run(con, "ask-golden-plan", model=A.PLANNER_MODEL, estimate_usd=plan_est,
                   prompt_version=A.PROMPT_VERSION, n=len(qs)) as rp, \
-         rmod.Run(con, "ask-golden-synth", model=A.SYNTHESIS_MODEL, estimate_usd=max(est, .05),
+         rmod.Run(con, "ask-golden-synth", model=A.SYNTHESIS_MODEL, estimate_usd=synth_est,
                   prompt_version=A.PROMPT_VERSION, n=len(qs)) as rs:
         with ThreadPoolExecutor(args.workers) as ex:
             rows = list(ex.map(lambda q: one(client, q), qs))
@@ -110,6 +118,10 @@ def main() -> int:
             "verified": sum(r["verified"] for r in rows),
             "repaired": sum(r["repaired"] for r in rows),
             "withheld": sum(bool(r["withheld"]) for r in rows),
+            "withheld_late": sum(any(w.startswith("the draft did not finish") for w in r["withheld"])
+                                 for r in rows),
+            "planned_by_rules": sum(r["planned_by"] == "rules" for r in rows),
+            "cost_estimated_rows": sum(bool(r["cost_estimated"]) for r in rows),
             "assertion_fails": sum(bool(r["fails"]) for r in rows),
             "problems_by_type": {k: sum(1 for r in rows for p in r["problems"]
                                         if p.startswith(k)) for k in
@@ -118,7 +130,8 @@ def main() -> int:
                                   "uncited claim", "share stated as", "label-and-colon",
                                   "closing", "refusal", "evidence", "length",
                                   "code name", "directional share", "directional label",
-                                  "comparison between")},
+                                  "comparison between", "internal word")},
+            "max_seconds": max(r["seconds"] for r in rows),
             "cost_usd": round(rp.cost_usd() + rs.cost_usd(), 4),
             "mean_seconds": round(sum(r["seconds"] for r in rows) / len(rows), 1)}
         out = {"run_id": rs.run_id, "plan_run": rp.run_id, "prompt_version": A.PROMPT_VERSION,

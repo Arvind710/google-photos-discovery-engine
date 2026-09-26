@@ -19,7 +19,8 @@ app/            Streamlit app (read-only; every number is a SELECT)
   Home.py       router          lib/  nav, db, evidence (the share() helper), ui, words
   views/        home · data_bank · analysis · opportunities · ask (Ask AI) · try_it
   lib/          Ask AI: retrieval.py (registry, 4 channels, gate) · verify.py (the checker)
-                · analyst.py (planner + synthesis, one repair, withhold + fallback)
+                · analyst.py (planner + streamed synthesis, 10 s budget, withhold + fallback)
+                · plain.py (the translation layer: evidence in plain tagged sentences)
                 Try it: tryit.py (the pipeline's own find → confirm → code) · caps.py
 pipeline/       offline, laptop-only: collect → clean → segment → classify → validate → analyse
   schema.sql    the frozen schema       common/  db, codebook (+freeze), runs (cost), env

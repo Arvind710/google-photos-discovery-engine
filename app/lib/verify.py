@@ -41,8 +41,8 @@ PROXY = re.compile(
     r"\b(success rate|failure rate|retrieval rate|fail(?:ure)? rate|"
     r"of (?:all )?(?:google photos )?users|of (?:all )?searches|of people who search|"
     r"of (?:all )?attempts|users (?:fail|succeed)|searches (?:fail|succeed))\b", re.I)
-_NEGATION = re.compile(r"\b(not|never|no|cannot|can't|isn't|aren't|rather than|instead of|"
-                       r"does not|do not|is not|are not|without)\b", re.I)
+_NEGATION = re.compile(r"\b(not|never|no|none|nor|neither|cannot|can't|isn't|aren't|"
+                       r"rather than|instead of|does not|do not|is not|are not|without)\b", re.I)
 LABEL_COLON = re.compile(r"(?:^|(?<=[.!?]\s)|(?<=\n))\s*[*_]*([A-Z][A-Za-z' ]{0,28}?)[*_]*:\s")
 
 
@@ -148,8 +148,39 @@ def check_percentages(text: str) -> list[str]:
     return bad
 
 
+# "27% (13 of 48", "13 of 48 (27%)", and the plain layer's "13 of 48 stories (27%)".
 _SHARE_N = re.compile(r"(\d+(?:\.\d+)?)%\s*\((\d[\d,]*) of (\d[\d,]*)"
-                      r"|(\d[\d,]*) of (\d[\d,]*)\s*\((\d+(?:\.\d+)?)%\)")
+                      r"|(\d[\d,]*) of (\d[\d,]*)(?:\s+[a-z]+){0,2}\s*\((\d+(?:\.\d+)?)%\)")
+# The label, as share() writes it or as the plain layer says it (plain.rough).
+_LABEL = re.compile(r"directional|rough guide", re.I)
+
+
+def check_share_arithmetic(text: str) -> list[str]:
+    """A percentage must be the one its own count gives: "1 of 175 (9%)" passed
+    every number check (1 is structural, 9% was another row's) and was served
+    (v2.2, R2). Rounding tolerance: 1 point."""
+    t = QUOTE.sub(" ", CITATION.sub(" ", text or ""))
+    bad = []
+    for m in _SHARE_N.finditer(t):
+        pct = float(m.group(1) or m.group(6))
+        n = int((m.group(2) or m.group(4)).replace(",", ""))
+        d = int((m.group(3) or m.group(5)).replace(",", ""))
+        if d == 0 or n > d or abs(100 * n / d - pct) > 1.0:
+            bad.append(m.group(0))
+    return bad
+
+
+_FLOOR_CLAIM = re.compile(r"(\d[\d,]*)\s+(?:stories|posts)\b[^.\n]{0,80}?too few \(under (\d+)\)",
+                          re.I)
+
+
+def check_floor_claim(text: str) -> list[str]:
+    """"Only 32 stories … too few (under 30)" is false on its face: the gate said 21
+    and the writer swapped in another group's count (v2.5, U2). A count called too
+    few for a percentage must be below the floor it names."""
+    t = QUOTE.sub(" ", CITATION.sub(" ", text or ""))
+    return [m.group(0)[:80] for m in _FLOOR_CLAIM.finditer(t)
+            if int(m.group(1).replace(",", "")) >= int(m.group(2))]
 
 
 def check_directional(text: str) -> list[str]:
@@ -171,18 +202,41 @@ def _directional(text: str) -> list[tuple[str, str]]:
     bad = []
     for m in _SHARE_N.finditer(t):
         n = int((m.group(3) or m.group(5)).replace(",", ""))
-        if FLOOR <= n < COMPARABLE and "directional" not in t[m.start():m.end() + 70].lower():
+        # Anywhere in the SAME sentence, before or after: the plain layer ends its
+        # sentence with the label, and a writer may lead with it ("… — a small
+        # group, so only a rough guide: 11 of 48 stories (23%)", v2.1, S4).
+        sent = _sentence_of(t, m.start(), m.end())
+        if FLOOR <= n < COMPARABLE and not _LABEL.search(sent):
             bad.append(("unlabelled", m.group(0)))
-        # The mirror slip (sweep 10, U2; live on the first starter): "27% (31 of 115)
-        # · directional". Only the text right after THIS share is read, so the next
-        # share's own label does not count.
+        # The mirror slip (sweep 10, U2): "27% (31 of 115) · directional". Right
+        # after THIS share, so the next share's own label does not count…
         tail = t[m.end():m.end() + 25].lower()
-        if n >= COMPARABLE and re.match(r"[^.;%]*?·?\s*directional", tail):
+        if n >= COMPARABLE and re.match(r"[^.;%]*?·?\s*(?:directional|— a small group)", tail):
+            bad.append(("claimed", m.group(0)))
+        # … or anywhere in a sentence whose every share is of 80 or more ("This 31
+        # of 115 stories (27%) is a small group, so only a rough guide", v2.1, N2).
+        elif (n >= COMPARABLE and _LABEL.search(sent)
+              and all(int((x.group(3) or x.group(5)).replace(",", "")) >= COMPARABLE
+                      for x in _SHARE_N.finditer(sent))):
             bad.append(("claimed", m.group(0)))
     return bad
 
 
-_KIND = r"(?:sentimental|utility|practical|unclear)"
+_BOUND = re.compile(r"[.!?](?=\s|$)|\n")
+
+
+def _sentence_of(t: str, a: int, b: int, cap: int = 300) -> str:
+    """The sentence holding t[a:b] (at most `cap` characters either side)."""
+    start = 0
+    for m in _BOUND.finditer(t, max(0, a - cap), a):
+        start = m.end()
+    start = max(start, a - cap)
+    end = _BOUND.search(t, b)
+    return t[start:min(end.start() if end else len(t), b + cap)]
+
+
+_KIND = (r"(?:sentimental|utility|practical|unclear|kept as memories|memory photos|"
+         r"for the information in them|why (?:it was|they were) kept)")
 _MORE = (r"(?:most|more|less|least|fewer|harder|hardest|easier|easiest|higher|highest|lower|"
          r"lowest|mainly|mostly|skews?|skewed|bigger|biggest|larger|largest|dominat\w*|than)")
 _KIND_COMPARE = re.compile(rf"\b{_KIND}\b[^.;\n]{{0,40}}\b{_MORE}\b|\b{_MORE}\b[^.;\n]{{0,40}}"
@@ -247,7 +301,10 @@ def check_citations(text: str, rows: list[dict], records: list[dict]) -> list[st
             if (c["table"], c["key"]) not in have]
 
 
-def _negated(text: str, start: int, window: int = 70) -> bool:
+# Back to the start of the clause, up to this far: a refusal's list — "cannot tell
+# us monthly active users of Ask Photos, any rate of success or failure, or any
+# count of users" — puts its negation ~95 characters before "of users" (v2.1, O2).
+def _negated(text: str, start: int, window: int = 160) -> bool:
     before = text[max(0, start - window):start]
     cut = max(before.rfind("."), before.rfind("\n"), before.rfind(";"), before.rfind("?"))
     return bool(_NEGATION.search(before[cut + 1:] if cut >= 0 else before))
@@ -263,8 +320,12 @@ def check_label_colon(text: str) -> list[str]:
     t = CITATION.sub(" ", text or "")
     return [m.group(1).strip() + ":" for m in LABEL_COLON.finditer(t)
             if m.group(1).strip().lower() != "interpretation"
-            and len(m.group(1).split()) <= 4
-            and not _SPEECH.search(m.group(1))]
+            and len(m.group(1).split()) <= 5          # "What we can say instead:" (v2.2, L2)
+            and not _SPEECH.search(m.group(1))
+            # A colon that opens a quotation introduces someone's words — "One post
+            # fits the point: “it says no results”" — it is not a label (v2.3: four
+            # such drafts were withheld once labels of five words were caught).
+            and not re.match(r"\s*[*_]*[\"“‘']", t[m.end():])]
 
 
 # "One poster wrote:" introduces a quote with a subject and a verb — a sentence,
@@ -307,8 +368,11 @@ def _units(text: str) -> list[str]:
 
 def _is_structural(unit: str) -> bool:
     bare = re.sub(r"[*_`>#\-•]", "", unit).strip()
+    # The closing question is an offer, not a claim — in italics it may run a little
+    # longer (a 15-word one was flagged "uncited" in v2.1, P2).
+    italic_q = re.fullmatch(r"[*_][^*_]+\?[*_]", unit.strip()) is not None
     return (not bare or bare.endswith(":") or len(bare.split()) <= 3
-            or (bare.endswith("?") and len(bare.split()) <= 14))
+            or (bare.endswith("?") and len(bare.split()) <= (25 if italic_q else 14)))
 
 
 def check_uncited(text: str) -> list[str]:
@@ -326,6 +390,8 @@ def check_closing(text: str) -> list[str]:
 @dataclass
 class Report:
     numbers: list[str] = field(default_factory=list)       # T-14
+    arithmetic: list[str] = field(default_factory=list)    # T-14: % disagrees with its count
+    floor_claim: list[str] = field(default_factory=list)   # T-14: "32 … too few (under 30)"
     percentages: list[str] = field(default_factory=list)
     quotes: list[str] = field(default_factory=list)        # P5-INV-3
     citations: list[str] = field(default_factory=list)
@@ -340,10 +406,15 @@ class Report:
     directional: list[str] = field(default_factory=list)   # [CTX] §15.5 label
     directional_claimed: list[str] = field(default_factory=list)
     comparison: list[str] = field(default_factory=list)    # no kind of photo differs
+    jargon: list[str] = field(default_factory=list)        # plain words (D-14)
 
     def problems(self) -> list[str]:
         out = []
         for label, items in (("unsupported number", self.numbers),
+                             ("unsupported number (the % does not match its count)",
+                              self.arithmetic),
+                             ("unsupported number (a count called too few is not)",
+                              self.floor_claim),
                              ("percentage without its count", self.percentages),
                              ("unverifiable quote", self.quotes),
                              ("citation not retrieved", self.citations),
@@ -356,13 +427,35 @@ class Report:
                              ("directional share not labelled", self.directional),
                              ("directional label on a comparable share",
                               self.directional_claimed),
-                             ("comparison between kinds of photo", self.comparison)):
+                             ("comparison between kinds of photo", self.comparison),
+                             ("internal word a reader cannot know", self.jargon)):
             out += [f"{label}: {x}" for x in items]
         return out
 
     @property
     def ok(self) -> bool:
         return not self.problems()
+
+
+_FALSE_LABEL = re.compile(r"(?:\s*[,—–-]|\s+is)?\s*(?:this is\s+)?a small group, so only a rough "
+                          r"guide|\s*·\s*directional", re.I)
+
+
+def drop_unfounded_rough_guide(text: str) -> str:
+    """Remove the "rough guide" label from a sentence whose EVERY share is of 80 or
+    more stories: the label is false there (it says the figure is weaker than it
+    is), and the writer added it despite the prompt (v2.4: S1, P3, R2, F1). No number
+    or word of evidence changes; a sentence with any share under 80 keeps it."""
+    out, last = [], 0
+    for end in [m.end() for m in _BOUND.finditer(text or "")] + [len(text or "")]:
+        seg = text[last:end]
+        ns = [int((m.group(3) or m.group(5)).replace(",", "")) for m in _SHARE_N.finditer(
+            CITATION.sub(" ", seg))]
+        if ns and all(n >= COMPARABLE for n in ns):
+            seg = _FALSE_LABEL.sub("", seg)
+        out.append(seg)
+        last = end
+    return "".join(out)
 
 
 def canonical_citations(text: str, rows: list[dict], records: list[dict]) -> str:
@@ -404,6 +497,8 @@ def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
     rep = Report()
     text = answer or ""
     rep.numbers = check_numbers(text, rows, gap)
+    rep.arithmetic = check_share_arithmetic(text)
+    rep.floor_claim = check_floor_claim(text)
     rep.percentages = check_percentages(text)
     rep.quotes = check_quotes(text, records, rows, question)
     rep.citations = check_citations(text, rows, records)
@@ -413,6 +508,12 @@ def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
     rep.directional = check_directional(text)
     rep.directional_claimed = check_directional_claimed(text)
     rep.comparison = check_comparison(text)
+    from lib.plain import check_jargon
+    # A word the asker typed is one they know ("How many core stories…?"), however
+    # they hyphenated or pluralised it ("utility-photo" → "utility photos", v2.2 L1).
+    asked = re.sub(r"[-_]", " ", (question or "").lower())
+    rep.jargon = [w for w in check_jargon(text)
+                  if not all(x.rstrip("s") in asked for x in w.lower().split())]
     words = len(CITATION.sub(" ", text).split())
     if words > 200:
         rep.length = [f"{words} words, over the 200 limit"]

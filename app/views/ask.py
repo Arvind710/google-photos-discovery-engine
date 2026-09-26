@@ -12,11 +12,20 @@ screen — a writing nit shown under a warning teaches readers to distrust an
 answer that was fine. Every rule behind the glass is unchanged: plan →
 retrieve → gate → write → check, one repair, withhold on an absolute failure.
 
-ONE DELIBERATE DIFFERENCE: NO STREAMING. Myntra streams the draft as it
-arrives. Here the checker can WITHHOLD a draft (a made-up number or quote, an
-injected instruction) and serve a fallback instead; streaming would put the
-exact text we refuse to serve on screen for a few seconds first. So the wait is
-carried by a status line that names each stage — `analyst.ask(progress=…)`.
+STREAMING, THEN THE CHECK (D-14). The words appear as they are written
+(`analyst.ask(on_text=…)`), as in Myntra, and the whole answer lands inside 10
+seconds. The checker runs when the draft is complete; a draft it withholds (a
+made-up number or quote, an injected instruction, an internal word) is replaced
+on screen by the fallback, with a line saying so. The draft is visible for the
+second or two it takes to check — the PM's trade for words that appear as they
+are written, and why the status line reads "checking" until the check is done.
+
+When an answer lands the page scrolls to the START of it and stays there
+(`_scroll_to_answer`), not to its end.
+
+Everything on this page is in plain words: the evidence reaches the writer
+through the translation layer (plain.py), and the references, warnings and
+header here use the same words — nothing needs the project's vocabulary.
 
 User text is shown with `st.text` (never parsed); the answer is Markdown with
 HTML OFF and `$` escaped; citation numbers are Unicode superscripts, because a
@@ -27,14 +36,16 @@ import re
 import uuid
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 from lib import analyst as A
 from lib import caps, db, ui
+from lib import plain as P
 from lib import verify as V
 
 MUTED, HAIR, ACCENT, WARN = ui.MUTED, ui.HAIR, ui.BLUE, ui.ORANGE
 AVATAR = {"user": "🙋", "assistant": "🔎"}
-TYPICAL = "about 20 seconds"
+TYPICAL = "about 15 seconds"
 _SUP = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
 
 # (chip, question): the chip fits under the input; the question is what is sent,
@@ -48,33 +59,39 @@ SUGGESTED = [
      "Does Google Photos fail to understand the clues people give it?"),
     ("What should be fixed first?", "Which opportunity does the engine recommend, and why?"),
     ("How big is the evidence?",
-     "How many core stories are there, and from how many different people?"),
+     "How many stories is this based on, and from how many different people?"),
 ]
 
 # The stage names the status line shows (analyst.ask calls progress(stage)).
-STAGE = {"plan": "Reading your question…", "retrieve": "Pulling the stories and figures…",
-         "write": "Writing the answer…", "check": "Checking every number, quote and citation…"}
+STAGE = {"plan": "Reading your question…", "retrieve": "Finding the stories and figures…",
+         "write": "Writing — checking follows…", "check": "Checking every number and quote…"}
 
 # A citation reads as evidence, not as a schema.
-TABLE_LABEL = {"analysis_crosstab": "how often it comes up",
-               "analysis_derived": "what people remember and do",
-               "analysis_coverage": "how often posts answer this",
-               "analysis_reliability": "how well the coders agreed",
-               "analysis_method_flags": "a registered limitation",
-               "analysis_funnel": "the size of the corpus",
-               "analysis_sources": "where the posts came from",
-               "analysis_opportunity": "an opportunity's score",
-               "analysis_weight_sensitivity": "how robust the ranking is",
-               "analysis_synthesis": "the engine's recommendation",
-               "story_themes": "an emerging theme", "story": "what someone actually wrote"}
+TABLE_LABEL = {"analysis_crosstab": "A count from the stories",
+               "analysis_derived": "A count from the stories",
+               "analysis_coverage": "How many posts mention this",
+               "analysis_reliability": "How consistently the stories were read",
+               "analysis_method_flags": "A limit of this evidence",
+               "analysis_funnel": "The size of the evidence",
+               "analysis_sources": "Where the posts came from",
+               "analysis_opportunity": "A problem worth fixing",
+               "analysis_weight_sensitivity": "How stable the ranking is",
+               "analysis_synthesis": "The engine's suggestion",
+               "story_themes": "A pattern noticed later", "story": "What someone wrote"}
 
 # Only findings that bear on whether the answer can be TRUSTED reach the screen;
 # a missing closing question or a long answer is the writing, not the evidence.
-EVIDENCE = ("uncited claim", "directional", "comparison between kinds",
-            "citation not retrieved", "unsupported number", "unverifiable quote")
-VERIFY_WARNING = ("**Part of this answer could not be fully checked.** Every number is "
-                  "checked against the rows retrieved and every quote against the stories "
-                  "read; what did not match is listed here rather than hidden.")
+# Each in plain words: the reader sees what to be careful of, not the checker's rule name.
+EVIDENCE = {"uncited claim": "a sentence is not tied to a source",
+            "directional": "a figure from a small group is not marked as a rough guide",
+            "comparison between kinds": "it compares kinds of photo that have too few stories "
+                                        "to compare",
+            "evidence": "it rests on fewer sources than a full answer should"}
+VERIFY_WARNING = "**Read this answer with care:** "
+REPLACED = {True: "The first draft took too long, so this answer was built straight from the "
+                  "evidence.",
+            False: "The first draft did not pass the fact check, so it was replaced by this "
+                   "answer, built straight from the evidence."}
 
 # Every selector checked against the rendered DOM (the Myntra notes): the stable
 # hooks are data-testid and .stButton; questions are told from answers by a
@@ -138,9 +155,9 @@ fun = db.query("SELECT n, n_authors FROM analysis_funnel WHERE source='_all'"
                " AND step='stories:core'")
 CORE = int(fun.iloc[0]["n"]) if not fun.empty else 0
 PEOPLE = int(fun.iloc[0]["n_authors"]) if not fun.empty else 0
-IDENTITY = (f"Answers come only from <b>{CORE} coded stories</b> told by {PEOPLE} people, cite "
-            "every claim, and have every number and quote checked in code before you see "
-            "them — and say plainly when the stories cannot answer.")
+IDENTITY = (f"Answers come only from <b>{CORE} stories</b> that {PEOPLE} people posted about "
+            "a photo they only vaguely remembered. Every claim shows its source, every number "
+            "and quote is checked, and the answer says plainly when the stories cannot tell.")
 
 
 @st.cache_resource(show_spinner=False)
@@ -187,27 +204,51 @@ def _refs(a: A.Answer) -> dict[str, dict]:
     if not a.retrieved:
         return out
     for s in a.retrieved.records():
+        text = s["text"].replace(" …[cut]", "…")
         out[f"story|{s['story_id']}"] = {
             "label": TABLE_LABEL["story"],
-            "detail": f"{s['source']} · stage {s['primary_stage']} · {s['photo_class']}",
-            "quote": s["text"][:320] + ("…" if len(s["text"]) > 320 else "")}
+            "detail": f"a post on {P.SOURCE.get(s['source'], s['source'])}",
+            "quote": text[:320] + ("…" if len(text) > 320 else "")}
     for r in a.retrieved.rows():
         c = r.get("_cite")
         if c:
-            desc = (r.get("about") or r.get("text") or r.get("label") or r.get("measure")
-                    or r.get("step") or r.get("field") or r.get("question") or c["key"])
-            desc = str(desc).replace("_", " ")                  # plain words, not code names
-            extra = r.get("share") or ""
+            # The same plain sentence the writer was given (plain.py).
             out[f"{c['table']}|{c['key']}"] = {
-                "label": TABLE_LABEL.get(c["table"], c["table"].replace("_", " ")),
-                "detail": f"{desc}{' — ' + extra if extra else ''}"}
+                "label": TABLE_LABEL.get(c["table"], "A figure from the stories"),
+                "detail": P.sentence(r) or P.scrub(r.get("text") or r.get("label") or "")}
     return out
+
+
+def _scroll_to_answer(follow_s: float = 2.0) -> None:
+    """Bring the START of the newest answer to the top of the screen and hold it
+    there for `follow_s` seconds — Streamlit's chat keeps the page pinned to the
+    bottom as content grows, which left readers at the END of a long answer
+    (the PM, 2026-09-27). A reader who scrolls or taps stops the hold at once."""
+    components.html(f"""<script>
+    const doc = window.parent.document;
+    let stop = false;
+    ["wheel", "touchstart", "keydown", "mousedown"].forEach(e =>
+        doc.addEventListener(e, () => {{ stop = true; }}, {{once: true, passive: true}}));
+    const go = () => {{
+      const m = doc.querySelectorAll(".ask-a");
+      if (!m.length) return;
+      const msg = m[m.length - 1].closest('[data-testid="stChatMessage"]') || m[m.length - 1];
+      msg.scrollIntoView({{block: "start"}});
+    }};
+    const t0 = Date.now();
+    const iv = setInterval(() => {{
+      if (stop || Date.now() - t0 > {int(follow_s * 1000)}) {{ clearInterval(iv); return; }}
+      go();
+    }}, 100);
+    </script>""", height=0)
 
 
 def _render_answer(msg: dict) -> None:
     if msg.get("error"):
         st.error(msg["error"])
         return
+    if msg.get("replaced") is not None:
+        st.caption(REPLACED[bool(msg["replaced"])])
     if msg.get("restated"):
         st.html(f"<div style='color:{MUTED};font-size:.78rem;margin-bottom:.4rem'>Understood "
                 f"as: {ui.esc(msg['restated'])}</div>")
@@ -234,10 +275,10 @@ def _render_answer(msg: dict) -> None:
                              f"margin-top:.2rem;color:{MUTED}'>“{ui.esc(ref['quote'])}”</div>")
                 lines.append(body + "</div>")
             st.html("".join(lines))
-    flagged = [p for p in msg.get("problems", []) if p.startswith(EVIDENCE)]
-    if flagged:
-        st.warning(VERIFY_WARNING + "\n\n" + "\n".join(f"- {_escape_md(x)}"
-                                                       for x in flagged[:4]), icon="⚠️")
+    said = list(dict.fromkeys(plain for p in msg.get("problems", [])
+                              for k, plain in EVIDENCE.items() if p.startswith(k)))
+    if said:
+        st.warning(VERIFY_WARNING + "; ".join(said) + ".", icon="⚠️")
     st.caption(msg.get("foot", ""))
 
 
@@ -273,8 +314,9 @@ if thread["messages"]:
             f"border-bottom:1px solid {HAIR};padding-bottom:.55rem;margin:0 0 1.1rem'>"
             f"<span style='font-size:.68rem;font-weight:800;letter-spacing:.18em;"
             f"color:{MUTED}'>ASK AI</span><span style='font-size:.78rem;color:{MUTED};"
-            f"line-height:1.5'>grounded in <b>{CORE}</b> coded stories · every claim cited · "
-            "shares of <b>public stories</b>, never success rates</span></div>")
+            f"line-height:1.5'>based on <b>{CORE}</b> stories people posted · every claim "
+            "shows its source · figures count <b>public posts</b>, not users or searches"
+            "</span></div>")
 
 for msg in thread["messages"]:
     with st.chat_message(msg["role"], avatar=AVATAR[msg["role"]]):
@@ -318,8 +360,8 @@ else:
                 f".75rem;color:{MUTED};border:1px solid {HAIR};border-radius:999px;padding:.2rem"
                 f" .55rem'><span style='display:inline-block;width:.45rem;height:.45rem;"
                 f"border-radius:50%;background:{WARN};margin-right:.4rem;vertical-align:middle'>"
-                "</span>shares of <b>public stories</b> — never a success rate, a share of "
-                "users or a share of searches</span></div>")
+                "</span>every figure counts <b>public posts</b> — not users, not searches, "
+                "not a success rate</span></div>")
 
 question = typed or st.session_state.pop("pending", None)
 
@@ -344,7 +386,13 @@ if question:
     with st.chat_message("assistant", avatar=AVATAR["assistant"]):
         st.html(ANSWER_MARK)
         stage = st.status(f"{STAGE['plan']} · usually {TYPICAL}", expanded=False)
-        a = A.ask(_client(key), db.connection(), question, history=hist,
+        words = st.empty()
+        _scroll_to_answer(follow_s=12.0)
+
+        def show(so_far: str) -> None:
+            words.markdown(_escape_md(so_far) + " ▌", unsafe_allow_html=False)
+
+        a = A.ask(_client(key), db.connection(), question, history=hist, on_text=show,
                   progress=lambda s: stage.update(label=f"{STAGE[s]} · usually {TYPICAL}"))
         stage.update(label=("Could not answer" if a.error else f"Answered in {a.seconds:.0f}s"),
                      state="error" if a.error else "complete")
@@ -353,7 +401,13 @@ if question:
     thread["messages"].append(
         {"role": "assistant", "error": caps.explain(a.error) if a.error else "",
          "text": a.text, "restated": a.restated, "refs": _refs(a),
+         "replaced": (a.withheld[0].startswith("the draft did not finish")
+                      if a.withheld else None),
          "problems": a.report.problems() if a.report else [],
          "foot": (f"{'✓ checked' if a.verified else '⚠ not fully checked'} · {route} · "
                   f"{a.seconds:.0f}s")})
+    st.session_state["scroll_to_answer"] = True
     st.rerun()
+
+if st.session_state.pop("scroll_to_answer", False):
+    _scroll_to_answer()
