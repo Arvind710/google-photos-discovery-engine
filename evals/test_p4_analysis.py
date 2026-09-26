@@ -170,3 +170,171 @@ def test_every_scored_candidate_carries_reasons_and_quotes_verified(con):
         assert all(v["why"] for v in json.loads(sc).values())
         for q in json.loads(detail)["quotes"]:
             assert q["span"] in ev and len(q["span"]) >= 15
+
+
+# ============================================================ recommendation
+def _pack():
+    from pipeline.synthesise import facts
+    p = facts.Pack()
+    p.add("Stage 5: 36 of 115 core stories (31%).", "analysis_crosstab", {})
+    p.add("Headline score 4.467, rank 1.", "analysis_opportunity", {})
+    return p
+
+
+def _rec(**over):
+    s = {"text": "Search misses the cue in 36 of 115 core stories.", "cites": ["F01"]}
+    out = {"top": {"candidate_id": "stage5", "problem_statement": s,
+                   "chain": [dict(s, step=k) for k in ("metric_node", "evidence", "stage",
+                                                       "root_cause")]},
+           "runner_up": {"candidate_id": "stage2", "why_not_top": s},
+           "target_segment": {"direction": "sentimental", "why": s},
+           "root_cause_hypothesis": s, "intelligence_needed": s,
+           "falsifiers": [s], "caveats": [s]}
+    out.update(over)
+    return out
+
+
+def test_recommendation_checker_passes_a_clean_answer(codebook):
+    from pipeline.synthesise import recommendation as R
+    assert R.check(_rec(), _pack(), codebook, top_id="stage5",
+                   candidates={"stage5", "stage2"}) == []
+
+
+@pytest.mark.parametrize("bad, why", [
+    ({"caveats": [{"text": "It is 42 of 115.", "cites": ["F01"]}]}, "number 42"),
+    ({"caveats": [{"text": "Stage 5 dominates.", "cites": ["F99"]}]}, "unknown facts"),
+    ({"caveats": [{"text": "Stage 5 dominates.", "cites": []}]}, "cites no fact"),
+    ({"caveats": [{"text": "31% of users fail at Stage 5.", "cites": ["F01"]}]},
+     "users/searches"),
+    ({"falsifiers": []}, "P4-INV-7"),
+    ({"runner_up": {"candidate_id": "stage5", "why_not_top": {"text": "x", "cites": ["F01"]}}},
+     "runner_up"),
+])
+def test_recommendation_checker_catches(codebook, bad, why):
+    from pipeline.synthesise import recommendation as R
+    probs = R.check(_rec(**bad), _pack(), codebook, top_id="stage5",
+                    candidates={"stage5", "stage2"})
+    assert any(why in p for p in probs), probs
+
+
+def test_recommendation_checker_refuses_a_different_top(codebook):
+    from pipeline.synthesise import recommendation as R
+    assert any("ranking's first" in p for p in R.check(
+        _rec(), _pack(), codebook, top_id="stage2", candidates={"stage5", "stage2"}))
+
+
+def test_handoff_checker_requires_every_register_question(codebook):
+    from pipeline.synthesise import handoff as H
+    s = {"text": "Ask about a recent attempt.", "cites": ["F01"]}
+    out = {"hypotheses": [dict(s, test_how="t")] * 3, "screener": [dict(s, criterion="c")] * 3,
+           "interview_prompts": [{"question_id": "8.1", "stage": "8", "prompt": "How long?"}],
+           "observed_tasks": [{"story_id": "a", "task": "t", "watch_for": "w"}] * 4,
+           "theme_probes": [{"theme": "x", "prompt": "p"}]}
+    reg = [{"question_id": "8.1"}, {"question_id": "6.2"}]
+    probs = H.check(out, _pack(), codebook, reg, {"a"}, {"x"})
+    assert any("6.2" in p for p in probs) and len(probs) == 1
+
+
+@pytest.fixture(scope="module")
+def synth(corpus):
+    rows = {r[0]: r for r in corpus.execute("SELECT kind, content_json, facts_json, checks_json"
+                                            " FROM analysis_synthesis")}
+    if not rows:
+        pytest.skip("no synthesis yet — python -m pipeline.synthesise.recommendation")
+    return rows
+
+
+@pytest.mark.needs_corpus
+def test_P4_INV_6_every_claim_cites_a_fact_whose_row_exists(corpus, synth):
+    from pipeline.synthesise import facts
+    from pipeline.synthesise import recommendation as R
+    for kind, content, facts_json, _ in synth.values():
+        fs = {f["id"]: f for f in json.loads(facts_json)}
+        assert all(facts.row_exists(corpus, f) for f in fs.values()), kind
+        for path, s in R.statements(json.loads(content)):
+            assert s["cites"] and all(c in fs for c in s["cites"]), (kind, path)
+
+
+@pytest.mark.needs_corpus
+def test_P4_INV_7_recommendation_has_a_falsifier_and_the_ranked_top(corpus, synth):
+    rec = json.loads(synth["recommendation"][1])
+    assert [f for f in rec["falsifiers"] if f["text"].strip()]
+    top = corpus.execute("SELECT candidate_id FROM analysis_opportunity WHERE rank_headline=1"
+                         ).fetchone()[0]
+    assert rec["top"]["candidate_id"] == top and "hypothesis" in rec["label"]
+
+
+@pytest.mark.needs_corpus
+def test_P4_MET_3_handoff_built_from_the_coverage_register(corpus, synth):
+    assert "handoff" in synth, "python -m pipeline.synthesise.handoff"
+    h = json.loads(synth["handoff"][1])
+    reg = {r[0] for r in corpus.execute("SELECT question FROM analysis_coverage WHERE"
+                                        " source='_all' AND disposition='register'")}
+    assert {p["question_id"] for p in h["interview_prompts"]} >= reg
+    live = {r[0] for r in corpus.execute("SELECT story_id FROM stories WHERE story_id NOT IN"
+                                         " (SELECT story_id FROM exclusions WHERE story_id IS"
+                                         " NOT NULL)")}
+    assert h["observed_tasks"] and all(t["story_id"] in live for t in h["observed_tasks"])
+
+
+def test_recommendation_checker_refuses_moving_a_share_and_a_gated_runner_up(codebook):
+    from pipeline.synthesise import recommendation as R
+    bad = _rec(caveats=[{"text": "Fixing it would raise the share of coded public stories.",
+                         "cites": ["F01"]}])
+    assert any("outcome to move" in p for p in R.check(
+        bad, _pack(), codebook, top_id="stage5", candidates={"stage5", "stage2"}))
+    ru = _rec(runner_up={"candidate_id": "stage0", "why_not_top": {"text": "x", "cites": ["F01"]}})
+    assert any("does not pass both gates" in p for p in R.check(
+        ru, _pack(), codebook, top_id="stage5", candidates={"stage5", "stage0", "stage2"},
+        runner_ok={"stage2"}))
+
+
+# ====================================================================== pages
+import re  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+VIEWS = Path(__file__).resolve().parents[1] / "app" / "views"
+
+
+@pytest.mark.parametrize("page", ["analysis.py", "opportunities.py"])
+def test_P4_INV_1_pages_format_no_share_themselves(page):
+    """Every share through lib.evidence.share(): no view builds a percentage."""
+    src = (VIEWS / page).read_text()
+    assert not re.search(r":\.\d*%|\{[^}]*%\}|\* ?100\b", src), page
+    assert "share(" in src
+
+
+def test_opportunities_escapes_model_and_user_text():
+    """Recommendation text comes from a model and quotes from users: both are
+    escaped before st.html (fmt → html.escape; ui.quote escapes the span)."""
+    src = (VIEWS / "opportunities.py").read_text()
+    for field in (r"\['text'\]", r"\['label'\]", r"\['prompt'\]", r"\['task'\]"):
+        uses = re.findall(rf"\{{[^{{}}]*{field}[^{{}}]*\}}", src)
+        assert uses and all("fmt(" in u for u in uses), (field, uses)
+    ui = (VIEWS.parent / "lib" / "ui.py").read_text()
+    assert "esc(span)" in ui
+
+
+def test_P4_INV_8_crosstabs_are_two_dimensional_only():
+    """Headline claims use at most two dimensions: the cross-tab has exactly
+    one row dimension and one segment dimension, and no view joins a third."""
+    for page in ("analysis.py", "opportunities.py"):
+        src = (VIEWS / page).read_text()
+        assert src.count("JOIN") == 0, page
+
+
+def test_pages_are_in_the_nav_and_no_longer_planned():
+    from lib import nav
+    files = [p[0] for p in nav.PAGES]
+    assert {"analysis.py", "opportunities.py"} <= set(files)
+    assert not {"Analysis", "Opportunities"} & {t for t, _ in nav.PLANNED}
+
+
+@pytest.mark.needs_corpus
+@pytest.mark.parametrize("page, title", [("analysis.py", "Analysis"),
+                                         ("opportunities.py", "Opportunities")])
+def test_pages_render_without_exception(corpus, page, title):
+    from streamlit.testing.v1 import AppTest
+    at = AppTest.from_file(str(VIEWS / page), default_timeout=60).run()
+    assert not at.exception, at.exception
+    assert at.title and at.title[0].value == title

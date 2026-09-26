@@ -12,7 +12,7 @@ are listed as `not_a_failure`, never scored.
 
 SCORES, 1–5, each with a one-line reason:
     frequency          core stories at this stage ÷ live core stories, banded
-    metric_leverage    the stage's most common metric node → node_leverage
+    metric_leverage    the stage's metric node (the fixed rule) → node_leverage
     evidence_strength  distinct sources, less one if mean coding_conf < 0.6
     reach              judgement (opportunity_inputs_v1.yaml)
     severity           mean story severity — `low_reliability` (κ 0.33), so it
@@ -41,6 +41,7 @@ from pathlib import Path
 
 import yaml
 
+from pipeline.classify import blocks as B
 from pipeline.common import codebook as cbm
 from pipeline.common import db as dbm
 from pipeline.common import runs as rmod
@@ -52,7 +53,10 @@ FLOOR = 30                                  # [CTX] §15.5 — the same floor as
 FAILURE_STAGES = ("0", "2", "3", "4", "5", "6", "7", "8")
 HEADLINE = ("metric_leverage", "frequency", "evidence_strength", "reach")   # D-11: no severity
 # What each criterion is computed from — P4-INV-3 checks none is low_reliability.
-CRITERION_FIELDS = {"frequency": ["primary_stage"], "metric_leverage": ["metric_node"],
+# metric_leverage is scored from the candidate's STAGE through the fixed node rule
+# (classify.blocks.metric_node), not from story-level metric_node, whose κ fell to
+# 0.58 after the D-11 re-code; the story-level nodes are shown, never scored.
+CRITERION_FIELDS = {"frequency": ["primary_stage"], "metric_leverage": ["primary_stage"],
                     "evidence_strength": ["source"], "reach": [], "severity": ["severity"]}
 # Reliable questions that say HOW a stage went wrong (display only, never scored).
 FAILURE_MODE_QS = {"0": ("0.1", "0.2"), "2": ("2.4",), "3": ("3.2", "3.4"), "4": ("4.3",),
@@ -154,7 +158,7 @@ def build(con, scoring: dict, inputs: dict, rel: dict[str, str]) -> list[dict]:
         spec = inputs["candidates"][cid]                    # KeyError = an unscored candidate
         c["label"] = spec["label"]
         f, fw = frequency_score(len(rs), denom)
-        node = detail["metric_nodes"] and next(iter(detail["metric_nodes"]))
+        node = B.metric_node(stage, {}, "not_stated")        # the stage's node (D-11)
         e, ew = evidence_score(len(detail["sources"]), detail["mean_coding_conf"])
         sev = round(sum(r["severity"] for r in rs) / len(rs))
         c["scores"] = {"frequency": f, "metric_leverage": node_lev[node]["score"],

@@ -257,6 +257,25 @@ def stage0_without_evidence(stage: str, codes: dict[str, list[str]],
     return outcome in ("found", "found_after_struggle")
 
 
+# What a story must state for Stage 2, 4 or 5 to be a FAILURE rather than the
+# stage that happened to work: something search got wrong, or what blocked the words.
+FAILURE_EVIDENCE = {"5.1": {"parsed_ok"}, "5.2": set(), "5.3": {"soft_ok"}, "5.4": set(),
+                    "5.6": set(), "4.3": set()}         # question → values that are NOT failure
+
+
+def success_without_failure(stage: str, codes: dict[str, list[str]], outcome: str) -> bool:
+    """A quiet success coded as a failure stage (D-11, EC-CODE-18's twin). Under
+    code_v1.1 a search that simply worked was coded the stage that worked —
+    Stage 5 "search matched", Stage 2 "lacked the date but found it" — until
+    v1.2 said "no failure is Stage 9". Flags Stage 2, 4 or 5 on a story that
+    ends `found` (straight away, not after a struggle) and states no failure in
+    5.1–5.6 or 4.3."""
+    if stage not in ("2", "4", "5") or outcome != "found":
+        return False
+    return not any(v not in ("not_stated", *ok) for q, ok in FAILURE_EVIDENCE.items()
+                   for v in codes.get(q, []))
+
+
 def metric_node(stage: str, codes: dict[str, list[str]], outcome: str) -> str:
     """The fixed rule (Docs/decisions.md D-9). primary_stage alone does not
     decide it: Stage 5 splits on whether the photo came back buried (5.4), and
@@ -767,9 +786,10 @@ def main() -> int:
         submit(con, client, cb, items, est)
         return 0
     if args.cmd == "recode":
-        # Stories whose stored coding breaks the Stage 0 rule (D-9), re-coded
-        # with the current prompt. collect() replaces their rows.
-        ids = stage0_suspects(con)
+        # Stories whose stored coding breaks the Stage 0 rule (D-9) or codes a
+        # quiet success as a failure stage (D-11), re-coded with the current
+        # prompt. collect() replaces their rows.
+        ids = recode_suspects(con)
         items = [i for i in live_items(con, skip_done=False) if i.story_id in ids]
         est = estimate(items, cb)
         print(json.dumps(est))
@@ -781,6 +801,21 @@ def main() -> int:
         return 0
     collect(con, client, cb, accept_overrun=args.accept_overrun)
     return 0
+
+
+def success_suspects(con) -> set[str]:
+    codes: dict[str, dict[str, list[str]]] = {}
+    for r in con.execute("SELECT story_id, question, value FROM story_codes WHERE question IN"
+                         f" ({','.join('?' * len(FAILURE_EVIDENCE))})", tuple(FAILURE_EVIDENCE)):
+        codes.setdefault(r[0], {}).setdefault(r[1], []).append(r[2])
+    live = ("story_id NOT IN (SELECT story_id FROM exclusions WHERE story_id IS NOT NULL)")
+    return {r[0] for r in con.execute(f"SELECT story_id, primary_stage, outcome FROM story_spine"
+                                      f" WHERE {live}")
+            if success_without_failure(r[1], codes.get(r[0], {}), r[2])}
+
+
+def recode_suspects(con) -> set[str]:
+    return stage0_suspects(con) | success_suspects(con)
 
 
 def stage0_suspects(con) -> set[str]:

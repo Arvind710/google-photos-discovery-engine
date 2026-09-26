@@ -468,3 +468,23 @@ def test_emergent_theme_tags_are_verified_and_on_live_stories(con):
     dead = con.execute("SELECT count(*) FROM story_themes WHERE story_id IN (SELECT story_id"
                        " FROM exclusions WHERE story_id IS NOT NULL)").fetchone()[0]
     assert dead == 0
+
+
+def test_quiet_success_is_not_a_failure_stage():
+    """D-11: a search that simply worked is Stage 9, not the stage that worked."""
+    ok = {"5.1": ["parsed_ok"], "5.3": ["soft_ok"]}
+    assert B.success_without_failure("5", ok, "found")
+    assert B.success_without_failure("2", {"2.4": ["date_or_year"]}, "found")
+    assert not B.success_without_failure("5", ok, "found_after_struggle")
+    assert not B.success_without_failure("5", {"5.6": ["irrelevant_results"]}, "found")
+    assert not B.success_without_failure("5", {"5.1": ["code_mixed_language_failed"]}, "found")
+    assert not B.success_without_failure("4", {"4.3": ["no_word_for_thing"]}, "found")
+    assert not B.success_without_failure("6", {}, "found")          # scanning IS the failure
+    assert not B.success_without_failure("9", {}, "found")
+
+
+@pytest.mark.needs_corpus
+def test_no_quiet_success_coded_as_a_failure_stage(con):
+    """Fixed by `blocks recode` (D-11)."""
+    bad = B.success_suspects(con)
+    assert not bad, f"{len(bad)} stories coded Stage 2/4/5 that end found with no failure stated"

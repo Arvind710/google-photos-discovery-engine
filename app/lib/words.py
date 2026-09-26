@@ -45,3 +45,11 @@ def proxy_warning() -> str:
 
 def metric(key: str) -> str:
     return " ".join(str(_all().get("metrics", {}).get(key, "")).split())
+
+
+def stage_title(key: str) -> str:
+    return (_all().get("stages", {}).get(str(key)) or {}).get("title", f"Stage {key}")
+
+
+def owner(key: str) -> str:
+    return _all().get("failure_owners", {}).get(key, key.replace("_", " "))

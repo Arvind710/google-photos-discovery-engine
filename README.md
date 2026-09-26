@@ -24,7 +24,9 @@ pipeline/       offline, laptop-only: collect → clean → segment → classify
   validate/     spans.py (quotes verified in text_clean) · agreement.py (dual coding, κ,
                 adjudication) · lexicon_probe.py
   analyse/      funnel.py · coverage.py (60-question register) · blind_read.py · lexicon_hits.py
+                crosstabs.py · derived.py · opportunity.py (gates, scores, sensitivity)
   synthesise/   residual.py (emergent themes) · themes.py (tags the approved ones)
+                facts.py · recommendation.py · handoff.py (gpt-5, checked against the facts)
 prompts/        segment_v1 · confirm_v1 · code_v1 · relevance_probe_v1
 codebook/       journey_v1.yaml (THE codebook, frozen) + severity, metric nodes, scoring, lexicon,
                 emergent_themes_v1.yaml (approved after the freeze, not in its hash)

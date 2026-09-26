@@ -302,6 +302,14 @@ CREATE TABLE IF NOT EXISTS analysis_weight_sensitivity (
   PRIMARY KEY (variant, candidate_id, pool)
 );
 
+CREATE TABLE IF NOT EXISTS analysis_synthesis (       -- A.13: recommendation + Part 3 handoff
+  kind          TEXT PRIMARY KEY CHECK (kind IN ('recommendation','handoff')),
+  content_json  TEXT NOT NULL,               -- the validated model output
+  facts_json    TEXT NOT NULL,               -- the facts it was allowed to cite (P4-INV-6)
+  checks_json   TEXT NOT NULL,               -- what validation found, and whether a repair ran
+  run_id        TEXT NOT NULL
+);
+
 -- -------------------------------------------------------------- provenance
 CREATE TABLE IF NOT EXISTS runs (
   run_id           TEXT PRIMARY KEY,

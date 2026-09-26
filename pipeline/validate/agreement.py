@@ -200,6 +200,21 @@ def _load_double(con) -> tuple[dict, dict, str]:
     return p, s, rid
 
 
+def refresh_primary(con, cb) -> int:
+    """After a re-code, the `primary` side of double_coding is stale for the
+    re-coded stories. Rebuild it from the CURRENT coding (free; the secondary
+    coder's answers are untouched), keeping the dual run's id (D-11)."""
+    _, s, dual_run = _load_double(con)
+    now = primary(con, cb, list(s))
+    con.execute("DELETE FROM double_coding WHERE coder='primary'")
+    con.executemany("INSERT INTO double_coding (story_id, field, coder, value, run_id)"
+                    " VALUES (?,?,?,?,?)",
+                    [(sid, f, "primary", json.dumps(v), dual_run)
+                     for sid, fs in now.items() for f, v in fs.items()])
+    con.commit()
+    return len(now)
+
+
 def reliability(con, cb) -> None:
     p, s, dual_run = _load_double(con)
     rows, gaps = reliability_rows(cb, p, s)
@@ -293,11 +308,15 @@ def adjudicate(con, client, cb) -> None:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["dual", "reliability", "adjudicate"])
+    ap.add_argument("cmd", choices=["dual", "reliability", "adjudicate", "refresh"])
     ap.add_argument("--n", type=int, default=100)
     args = ap.parse_args()
     cb = cbm.load()
     con = dbm.init()
+    if args.cmd == "refresh":
+        print(f"primary coding refreshed for {refresh_primary(con, cb)} stories")
+        reliability(con, cb)
+        return 0
     if args.cmd == "reliability":
         reliability(con, cb)
         return 0

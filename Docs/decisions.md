@@ -560,6 +560,43 @@ console"). The budget is recorded as $17 (`runs.CEILING_USD`,
 `evals/manual_checks.yaml`, and the gate report reads the same constant).
 $4.11 remains.
 
+**Quiet successes were still coded as failures at Stage 2 and 5 (found building the
+recommendation).** Reading the Stage 5 candidate's quotes turned up stories like "I
+searched 'cat on a countertop' and it found the only picture", coded Stage 5 with
+`why` "no failure occurred". Under `code_v1.1` a search that simply worked was coded
+the stage that worked; D-9's v1.2 rule ("no failure is Stage 9") re-coded only the
+Stage 0 suspects. `blocks.success_without_failure` now flags Stage 2, 4 or 5 on a
+story that ends `found` (straight away) and states no failure in 5.1–5.6 or 4.3 —
+13 stories (9 core, 4 adjacent). They were re-coded with v1.2 (`code-recode-20260926-
+144116-5cb9d9`, Batch, $0.178): 12 moved to Stage 9; one (Apple Photos search failed
+before Google Photos found it) stayed Stage 5 as `found_after_struggle`. None remain;
+a corpus test pins it. **Core Stage 5: 36 → 31 · Stage 9: 30 → 38 · Stage 2: 9 → 6.**
+Stage 5 still clears the floor of 30 — by one story, which the recommendation states.
+Stage 3 and 6 stories that end "found" after long scrolling are not flagged: the
+scrolling is the failure those stages describe.
+
+**Reliability recomputed, and one field changed verdict.** Four re-coded stories were
+in the dual-coding sample, so the primary side of `double_coding` was stale.
+`agreement refresh` (free) rebuilt it from the current coding; gpt-5-mini's answers
+are unchanged. gpt-5-mini had coded those four as failures too, so agreement FELL:
+primary_stage κ 0.63 → **0.60** (still `ok`, only just), failure_owner 0.65 → 0.62,
+**metric_node 0.61 → 0.58, now `low_reliability`**; 43 ok / 15 low / 8 degenerate.
+Metric leverage is therefore scored from the candidate's STAGE through the fixed
+node rule (`classify.blocks.metric_node`), which rests on primary_stage, not from
+story-level metric_node; the scores did not change, because every stage's rule node
+is the node its stories carried. The story-level node distribution is not a headline.
+
+**The recommendation and handoff** (`synthesise/recommendation.py`, `handoff.py`)
+are written by gpt-5 from a facts pack of 44 facts, each tied to a materialised row
+(`synthesise/facts.py`); every statement cites fact ids, every number must appear in a
+fact it cites, the top must be the rank-1 candidate, the runner-up must pass both
+gates, and no share of public stories may be written as an outcome to move. The first
+recommendation passed the checks but named a gated-out runner-up and described the
+metric step as raising "the share of coded public stories" — the facts pack had never
+stated the decomposition. The pack gained that fact, the checker gained both rules
+(`recommendation_v1.1`), and it was re-run; v1.1 needed its one synchronous repair. Recommendation
+$0.03 + $0.03 + repair $0.05, handoff $0.05. **Spend: $13.23 of $17.**
+
 **A bug fixed alongside.** The Data Bank's record browser put stored post text
 and thread titles into Markdown-rendering widgets (expander labels, captions)
 unescaped, and built the permalink as a Markdown link. A `$…$` in a post would

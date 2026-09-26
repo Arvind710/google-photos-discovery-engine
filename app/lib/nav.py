@@ -18,8 +18,8 @@ import streamlit as st
 from lib import db
 
 # (module filename, title, icon, url_path, [(slug, label), ...])
-# P0 ships only the front door. Data Bank lands in P1, Analysis and
-# Opportunities in P4, Ask AI and Try it in P5, the full How it works in P6.
+# P0 shipped the front door, P1 the Data Bank, P4 Analysis and Opportunities;
+# Ask AI and Try it land in P5, the full How it works in P6.
 PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
     ("home.py", "How it works", "🔎", "", []),
     ("data_bank.py", "Data Bank", "🗂️", "data_bank", [
@@ -31,13 +31,28 @@ PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
         ("coverage", "What the stories can answer"),
         ("browse", "Read the records"),
     ]),
+    ("analysis.py", "Analysis", "📊", "analysis", [
+        ("stages", "Where it first breaks"),
+        ("photo-type", "By kind of photo"),
+        ("owners", "Who owns the failure"),
+        ("memory", "What people remember"),
+        ("modes", "How they looked"),
+        ("hypotheses", "What posts cannot test"),
+        ("sources", "Across sources"),
+        ("emerging", "Emerging themes"),
+    ]),
+    ("opportunities.py", "Opportunities", "🎯", "opportunities", [
+        ("recommendation", "The recommendation"),
+        ("candidates", "The candidates"),
+        ("weights", "Weights and sensitivity"),
+        ("two-by-two", "Two criteria at a time"),
+        ("handoff", "What the interviews should test"),
+    ]),
 ]
 
 # Pinned in implementationplan.md §0.5 — shown on the front door as "coming",
 # never as nav links, until each is built.
 PLANNED: list[tuple[str, str]] = [
-    ("Analysis", "Where retrieval breaks across the eleven stages, and what people remember"),
-    ("Opportunities", "Ranked opportunity areas, the scoring behind them, and the recommendation"),
     ("Ask AI", "Questions answered only from the coded stories, with citations"),
     ("Try it", "Paste a post and watch the pipeline classify and code it"),
 ]

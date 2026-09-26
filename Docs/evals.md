@@ -262,6 +262,8 @@ All invariants green · T-2, T-3 at 100% · T-7, T-8, T-11 met · κ computed an
 | P4-MET-2 | MET | Emergent-theme pass produced candidates, or reported none explicitly | Either, never silent **[EC-ANL-8]** |
 | P4-MET-3 | MET | Part 3 handoff generated from the coverage register | Present **[EC-COV-5]** |
 
+**Measured 2026-09-26 (D-11).** P4-INV-2: only Stage 5 (31 core) is ranked; three gate-passing candidates are shown below the floor. P4-INV-3: the headline uses metric leverage (from the stage via the node rule), frequency, evidence strength and reach — severity (κ 0.33) only in a sensitivity row. P4-MET-1: Stage 5 first in 100% of 1,000 draws in both variants, and in the illustrative pool that ignores the floor — it scores at least as high on every criterion. P4-INV-6/7: every recommendation statement cites facts whose rows exist; four falsifiers. P4-MET-3: an interview prompt for each of the 28 register questions. Also pinned: no quiet success coded Stage 2/4/5 (`success_without_failure`); recommendation checks refuse a gated-out runner-up and a "share of stories" written as an outcome.
+
 **On P4-MET-1.** "The top opportunity survives 87% of plausible weightings" is a far stronger claim than a single ranking. At 40%, the honest headline is that the top two cannot be separated, which makes the interviews the tiebreak rather than a formality.
 
 **Gate:** invariants green · sensitivity reported · handoff generated → deploy P4.

@@ -285,6 +285,8 @@ If T-20 fails at 3B's projection, trigger the §0.4 loop-back to P1-F before sub
 | 4.6 | `views/analysis.py`, `views/opportunities.py` | Numbered parts, one visual each, one-sentence verdicts |
 | 4.7 | `evals/test_p4_analysis.py` | |
 
+**As run (2026-09-26, D-11).** Candidates are primary stages (every failure-mode cell is under ten stories); only Stage 5 (31 core) clears the floor of 30 and is ranked; Stages 2, 3, 6 pass the gates below the floor; Stage 0 is gated out. The gates, reach and node leverage were proposed by Claude and approved by the PM (`codebook/opportunity_inputs_v1.yaml`); severity is out of the headline (κ 0.33) and shown as a sensitivity row. Building the recommendation found quiet successes still coded Stage 2/5; 13 were re-coded ($0.18) and reliability recomputed (metric_node became `low_reliability`). Recommendation and handoff: gpt-5 from a 44-fact pack, checked in code (`synthesise/recommendation.py`, `handoff.py`), $0.16 in all. Tasks 4.1–4.6 are built as listed; `ui.py` holds the page furniture.
+
 **Gate:** P4-INV-1…8 green — especially **INV-3 (no `low_reliability` field feeds a score)** and **INV-4 (`pre_registered_at` precedes the first ranking run)** · sensitivity reported · handoff generated · both pages live and browser-checked → **P5 starts.**
 
 ---
