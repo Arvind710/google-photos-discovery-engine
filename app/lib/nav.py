@@ -19,9 +19,19 @@ from lib import db
 
 # (module filename, title, icon, url_path, [(slug, label), ...])
 # P0 shipped the front door, P1 the Data Bank, P4 Analysis and Opportunities;
-# P5 Ask AI and Try it; the full How it works lands in P6.
+# P5 Ask AI and Try it; P6 the full How it works and Methodology.
 PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
-    ("home.py", "How it works", "🔎", "", []),
+    ("home.py", "How it works", "🔎", "", [
+        ("what", "What the numbers are"),
+        ("funnel", "From records to stories"),
+        ("codebook", "The codebook"),
+        ("register", "What posts can answer"),
+        ("reliability", "How far to trust it"),
+        ("sanity", "Ten stories to judge"),
+        ("scoring", "How opportunities rank"),
+        ("limits", "What it cannot tell you"),
+        ("gates", "The gates it passed"),
+    ]),
     ("data_bank.py", "Data Bank", "🗂️", "data_bank", [
         ("what-was-read", "What was read"),
         ("how-obtained", "How each source was obtained"),

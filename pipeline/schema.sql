@@ -40,6 +40,8 @@
 --   A.13 (P4, 2026-09-26) analysis_derived, analysis_opportunity,
 --        analysis_weight_sensitivity — derived, rebuilt whole, new tables only.
 --   A.14 (P5, 2026-09-26) analysis_method_flags — the registered caveats Ask AI cites.
+--   A.15 (P6, 2026-09-26) analysis_methodology — the Methodology page's figures that
+--        otherwise live only in artifact files, materialised by analyse/publish.py.
 
 PRAGMA foreign_keys = ON;
 
@@ -317,6 +319,15 @@ CREATE TABLE IF NOT EXISTS analysis_method_flags (
   flag    TEXT PRIMARY KEY,
   text    TEXT NOT NULL,                     -- one plain sentence, with its own numbers
   run_id  TEXT NOT NULL
+);
+
+-- A.15 (P6, 2026-09-26): what How it works shows beyond the other analysis tables —
+-- lexicon hits, blind read, adjudication, fixtures, the sanity strip's story ids,
+-- the stated limitations, the publish manifest. One JSON value per key; rebuilt whole.
+CREATE TABLE IF NOT EXISTS analysis_methodology (
+  key         TEXT PRIMARY KEY,
+  value_json  TEXT NOT NULL,
+  run_id      TEXT NOT NULL
 );
 
 -- -------------------------------------------------------------- provenance
