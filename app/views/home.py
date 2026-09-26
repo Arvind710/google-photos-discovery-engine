@@ -192,7 +192,8 @@ ui.verdict("Public posts say what people remember, typed and saw; they rarely sa
 rel = db.query("SELECT field, metric, value, raw_agreement, n, verdict FROM analysis_reliability")
 spine = rel[~rel["field"].str.startswith("q:")].set_index("field")
 counts = rel["verdict"].value_counts().to_dict()
-low = sorted(f.replace("q:", "question ") for f in rel[rel["verdict"] == "low_reliability"]["field"])
+low = sorted(f.replace("q:", "question ").replace("_", " ")
+             for f in rel[rel["verdict"] == "low_reliability"]["field"])
 br, adj, sp, fx = meth["blind_read"], meth["adjudication"], meth["spans"], meth["coding_fixtures"]
 ui.section(5, "How far the coding can be trusted", "", ui.RED, slug="reliability")
 ui.verdict("<b>There is no human-checked gold standard.</b> No person reviewed a sample of the "

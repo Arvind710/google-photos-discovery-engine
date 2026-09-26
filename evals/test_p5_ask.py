@@ -494,3 +494,14 @@ def test_the_brief_says_no_kind_of_photo_differs_and_questions_carry_their_meani
     b = A.brief(p, got, R.gate(p, got, q), q)
     assert "no kind of photo can be claimed to differ" in b
     assert "question 5.2 (Google Photos had never recorded the detail they searched for)" in b
+
+
+@pytest.mark.needs_corpus
+def test_a_withheld_refusal_says_why_instead_of_sounding_broken(con):
+    q = "What is the search success rate on Google Photos?"
+    p = R.normalise_plan(_plan(intent="out_of_scope", answerable="no"), q)
+    got = R.retrieve(con, p)
+    v = R.gate(p, got, q)
+    text = A.fallback(v, got, p)
+    assert v.route == "NONE" and "could not write" not in text and "usage data" in text
+    assert V.check(text, "NONE", [], []).ok

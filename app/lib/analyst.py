@@ -424,8 +424,13 @@ def fallback(v: R.Verdict, got: R.Retrieved, plan: dict | None = None) -> str:
     any figure."""
     plan = plan or {}
     if v.route == "NONE" or not got.facts:
-        return ("I could not write an answer to this that passed every check, so none is "
-                "shown. The stories behind this engine do not hold what this question needs.")
+        # A refusal is not a failure: say why, from the gate's own reason (no number,
+        # quote or citation — the refusal rules still hold). The earlier text, "I
+        # could not write an answer…", read as a broken system on the live page.
+        why = (v.gap or "the question falls outside what these stories cover").rstrip(".")
+        return ("This engine holds only public stories about trying to find photos, not usage "
+                f"data. {why[0].upper() + why[1:]}. Answering it would need data this engine "
+                "does not hold.")
     have = {str(r["_cite"]["key"]) for r in got.method.get("flags", [])}
     lines = ["I could not write an answer to this that passed every check, so the draft is "
              "withheld and what follows is built from the evidence directly "
