@@ -16,7 +16,11 @@ breaks — and where intelligence is actually needed.
 
 ```
 app/            Streamlit app (read-only; every number is a SELECT)
-  Home.py       router          lib/  nav, db, evidence (the share() helper)
+  Home.py       router          lib/  nav, db, evidence (the share() helper), ui, words
+  views/        home · data_bank · analysis · opportunities · ask (Ask AI) · try_it
+  lib/          Ask AI: retrieval.py (registry, 4 channels, gate) · verify.py (the checker)
+                · analyst.py (planner + synthesis, one repair, withhold + fallback)
+                Try it: tryit.py (the pipeline's own find → confirm → code) · caps.py
 pipeline/       offline, laptop-only: collect → clean → segment → classify → validate → analyse
   schema.sql    the frozen schema       common/  db, codebook (+freeze), runs (cost), env
   segment/      stories.py (gpt-5-mini finds) · confirm.py (gpt-5 confirms) · dual.py
@@ -25,12 +29,14 @@ pipeline/       offline, laptop-only: collect → clean → segment → classify
                 adjudication) · lexicon_probe.py
   analyse/      funnel.py · coverage.py (60-question register) · blind_read.py · lexicon_hits.py
                 crosstabs.py · derived.py · opportunity.py (gates, scores, sensitivity)
+                method_flags.py (the registered caveats Ask AI cites)
   synthesise/   residual.py (emergent themes) · themes.py (tags the approved ones)
                 facts.py · recommendation.py · handoff.py (gpt-5, checked against the facts)
 prompts/        segment_v1 · confirm_v1 · code_v1 · relevance_probe_v1
 codebook/       journey_v1.yaml (THE codebook, frozen) + severity, metric nodes, scoring, lexicon,
                 emergent_themes_v1.yaml (approved after the freeze, not in its hash)
 evals/          pytest gates p0…p6, fixtures, gate reports, browser checklist
+                golden_sweep.py + fixtures/golden_questions.yaml (the Ask AI golden set, paid)
 data/corpus.db  the frozen corpus the app serves
 ```
 

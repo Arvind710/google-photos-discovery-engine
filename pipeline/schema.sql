@@ -39,6 +39,7 @@
 --        carries a quote verified against text_clean.
 --   A.13 (P4, 2026-09-26) analysis_derived, analysis_opportunity,
 --        analysis_weight_sensitivity — derived, rebuilt whole, new tables only.
+--   A.14 (P5, 2026-09-26) analysis_method_flags — the registered caveats Ask AI cites.
 
 PRAGMA foreign_keys = ON;
 
@@ -308,6 +309,14 @@ CREATE TABLE IF NOT EXISTS analysis_synthesis (       -- A.13: recommendation + 
   facts_json    TEXT NOT NULL,               -- the facts it was allowed to cite (P4-INV-6)
   checks_json   TEXT NOT NULL,               -- what validation found, and whether a repair ran
   run_id        TEXT NOT NULL
+);
+
+-- A.14 (P5, 2026-09-26): the registered limitations an answer cites when it
+-- reports a count (Ask AI's answer contract, arch §7; P5-INV-9).
+CREATE TABLE IF NOT EXISTS analysis_method_flags (
+  flag    TEXT PRIMARY KEY,
+  text    TEXT NOT NULL,                     -- one plain sentence, with its own numbers
+  run_id  TEXT NOT NULL
 );
 
 -- -------------------------------------------------------------- provenance

@@ -20,6 +20,10 @@ VIEWS = HERE / "views"
 # process started — Cloud starts at the repo root, a local run often in `app/`.
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
+# Try it runs the pipeline's own find / confirm / code modules (P5), so the repo
+# root must be importable too; appended, so `lib` still resolves to app/lib.
+if str(HERE.parent) not in sys.path:
+    sys.path.append(str(HERE.parent))
 
 from lib import nav  # noqa: E402  (must follow the sys.path line above)
 

@@ -24,12 +24,13 @@ st.html("<div style='font-size:1.02rem;max-width:70ch;margin:-.4rem 0 1.4rem'>"
 
 st.html(f"<div style='border:1px solid {HAIR};border-left:4px solid {ACCENT};"
         f"border-radius:7px;padding:.75rem .9rem;max-width:70ch;font-size:.9rem'>"
-        "<b>Being built.</b> The foundation is in place: the codebook of 60 questions is "
-        "frozen, the database schema is fixed, and the tests that gate each phase exist. "
-        "Sections appear in the sidebar only once they are built and checked.</div>")
+        "<b>Being finished.</b> The Data Bank, Analysis, Opportunities, Ask AI and Try it are "
+        "live in the sidebar. This page — the method and its full methodology — is written "
+        "last, because only then is it true.</div>")
 
-st.html(f"<div style='font-size:.68rem;font-weight:800;letter-spacing:.16em;color:{MUTED};"
-        "margin:1.8rem 0 .6rem'>COMING, IN THIS ORDER</div>")
+if nav.PLANNED:
+    st.html(f"<div style='font-size:.68rem;font-weight:800;letter-spacing:.16em;color:{MUTED};"
+            "margin:1.8rem 0 .6rem'>COMING, IN THIS ORDER</div>")
 cards = "".join(
     f"<div style='flex:1;min-width:150px;border:1px solid {HAIR};border-top:4px solid "
     f"{HAIR};border-radius:7px;padding:.7rem .8rem'>"
@@ -37,7 +38,8 @@ cards = "".join(
     f"<div style='font-size:.95rem;font-weight:700;margin:.15rem 0 .3rem'>{title}</div>"
     f"<div style='font-size:.8rem;color:{MUTED};line-height:1.4'>{blurb}</div></div>"
     for i, (title, blurb) in enumerate(nav.PLANNED, start=1))
-st.html(f"<div style='display:flex;flex-wrap:wrap;gap:.6rem'>{cards}</div>")
+if cards:
+    st.html(f"<div style='display:flex;flex-wrap:wrap;gap:.6rem'>{cards}</div>")
 
 st.html(f"<div style='font-size:.82rem;color:{MUTED};max-width:80ch;margin-top:1.4rem'>"
         "Every share this engine will show is a share of coded public stories — never a "

@@ -19,7 +19,7 @@ from lib import db
 
 # (module filename, title, icon, url_path, [(slug, label), ...])
 # P0 shipped the front door, P1 the Data Bank, P4 Analysis and Opportunities;
-# Ask AI and Try it land in P5, the full How it works in P6.
+# P5 Ask AI and Try it; the full How it works lands in P6.
 PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
     ("home.py", "How it works", "🔎", "", []),
     ("data_bank.py", "Data Bank", "🗂️", "data_bank", [
@@ -48,13 +48,16 @@ PAGES: list[tuple[str, str, str, str, list[tuple[str, str]]]] = [
         ("two-by-two", "Two criteria at a time"),
         ("handoff", "What the interviews should test"),
     ]),
+    ("ask.py", "Ask AI", "💬", "ask", []),
+    ("try_it.py", "Try it", "🧪", "try_it", [
+        ("live", "Run it on a post"),
+        ("stored", "Read a coded story"),
+    ]),
 ]
 
 # Pinned in implementationplan.md §0.5 — shown on the front door as "coming",
 # never as nav links, until each is built.
 PLANNED: list[tuple[str, str]] = [
-    ("Ask AI", "Questions answered only from the coded stories, with citations"),
-    ("Try it", "Paste a post and watch the pipeline classify and code it"),
 ]
 
 MUTED = "#8a8a8a"

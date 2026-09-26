@@ -1,0 +1,822 @@
+{
+ "run_id": "ask-golden-synth-20260926-154440-364b04",
+ "plan_run": "ask-golden-plan-20260926-154440-16905d",
+ "prompt_version": "ask_v1.2",
+ "subset": false,
+ "summary": {
+  "n": 24,
+  "T13_route": 0.9583333333333334,
+  "verified": 20,
+  "repaired": 5,
+  "assertion_fails": 1,
+  "problems_by_type": {
+   "unsupported number": 1,
+   "percentage without its count": 0,
+   "unverifiable quote": 1,
+   "citation not retrieved": 0,
+   "uncited claim": 0,
+   "share stated as": 0,
+   "label-and-colon": 1,
+   "closing": 0,
+   "refusal": 0,
+   "evidence": 1,
+   "length": 0
+  },
+  "cost_usd": 0.2866,
+  "mean_seconds": 23.4
+ },
+ "rows": [
+  {
+   "id": "S1",
+   "category": "sample",
+   "question": "What kinds of old photos do users struggle to retrieve?",
+   "restated": "Which kinds of old photos do people struggle to retrieve (e.g., sentimental vs utility vs both vs unclear)?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "People most often struggle to retrieve sentimental photos, with utility photos also showing issues but reported in fewer stories [[analysis_reliability|photo_class]].\n\n27% (31 of 115) of coded public stories are sentimental; utility has 21 of 115, so counts only [[analysis_funnel|stories:core]].\n\nOne person looking for themselves across memories said: \"I couldn't qualify my results with 'me, selfie'... I want to find also the pictures other people took of me\" [[story|6b5a4912de3cd10b2ccf2f07757bc417ca500253:1]].\n\nThis is a share of public stories, not a success rate, and what search did is inferred from user reports [[analysis_method_flags|proxy_not_success_rate]] [[analysis_method_flags|stage5_inferred]].\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 15.5,
+   "cost_usd": 0.01039,
+   "usage": {
+    "gpt-5-mini": [
+     1960,
+     0,
+     991
+    ],
+    "gpt-5": [
+     4712,
+     0,
+     203
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "S2",
+   "category": "sample",
+   "question": "What information do people actually remember about a photo?",
+   "restated": "What kinds of details do people actually remember about a photo (what, when, who, where, event, etc.)?",
+   "route": "PARTIAL",
+   "expect": [
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "the stories hold nothing on what the stories say about this in detail",
+   "text": "People most often remember what’s in the photo, then roughly when it was taken, and sometimes who and where — with “when” also the bit they forget most. [[analysis_derived|cue_remembered:what:core]]\n\n41% (47 of 115) mention what; 21% (24 of 115) when; 12% (14 of 115) who; 10% (11 of 115) where; 5% (6 of 115) event; and 11% (13 of 115) forget when, 3% (4 of 115) forget where. [[analysis_derived|cue_remembered:what:core]] [[analysis_derived|cue_remembered:when:core]] [[analysis_derived|cue_remembered:who:core]] [[analysis_derived|cue_remembered:where:core]] [[analysis_derived|cue_remembered:event:core]] [[analysis_derived|cue_forgotten:when:core]] [[analysis_derived|cue_forgotten:where:core]]\n\nOne person says, \"I had to find a photo of my cat on google photos that had my game in the background to find my oldest team\" [[story|c4b46f8139dd00bf96632357d4e129c6081b0150:0]].\n\nInterpretation: The stories don’t detail exactly how people phrase these memories or how often each cue is wrong; we only see which cues appear. [[analysis_method_flags|low_reliability_fields]]\n\nBecause shares come from public stories, not user rates, treat them as directional. [[analysis_method_flags|proxy_not_success_rate]]\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 13.3,
+   "cost_usd": 0.01188,
+   "usage": {
+    "gpt-5-mini": [
+     1959,
+     1792,
+     584
+    ],
+    "gpt-5": [
+     5460,
+     0,
+     380
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "S3",
+   "category": "sample",
+   "question": "What information have people forgotten about the photo they want?",
+   "restated": "Which kinds of information did people report forgetting about the photo they were trying to find?",
+   "route": "FULL",
+   "expect": [
+    "FULL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "People most often forgot when the photo was taken, with a few forgetting the exact place or which account/app held it [[analysis_derived|cue_forgotten:when:core]] [[analysis_derived|cue_forgotten:where:core]] [[analysis_derived|cue_forgotten:source:core]].\n\n11% (13 of 115) said they’d forgotten the date or year; 3% (4 of 115) the exact place or venue name; 1% (1 of 115) which app or account; and 1% (1 of 115) whether it was a photo, video, or screenshot [[analysis_crosstab|core.q:2.4=date_or_year@photo_class:_all]] [[analysis_crosstab|core.q:2.4=exact_place_or_venue_name@photo_class:_all]] [[analysis_crosstab|core.q:2.4=which_app_or_account@photo_class:_all]] [[analysis_crosstab|core.q:2.4=photo_video_or_screenshot@photo_class:_all]].\n\nOne person recalled “an earlier set I had forgotten about from six years ago in South Africa” [[story|112f493208a69edd002fcc3b5194ae1643a18c55:0]].\n\nInterpretation: Forgetting dates shows up across sentimental, utility, and unclear photos, with counts for utility due to sample size [[analysis_crosstab|core.q:2.4=date_or_year@photo_class:sentimental]] [[analysis_crosstab|core.q:2.4=date_or_year@photo_class:utility]] [[analysis_crosstab|core.q:2.4=date_or_year@photo_class:unclear]] [[analysis_method_flags|thin_core]].\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 15.4,
+   "cost_usd": 0.01308,
+   "usage": {
+    "gpt-5-mini": [
+     1960,
+     1792,
+     761
+    ],
+    "gpt-5": [
+     5972,
+     0,
+     401
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "S4",
+   "category": "sample",
+   "question": "How do users formulate searches when their memory is incomplete?",
+   "restated": "How do people phrase their first/early searches in Google Photos when their memory of the target photo is incomplete?",
+   "route": "FULL",
+   "expect": [
+    "FULL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "People with incomplete memory start with short, vague keywords, most often a single noun. [[analysis_crosstab|core.q:4.1=single_noun@photo_class:_all]]\n\nThe settling number is 17% (19 of 115) for single-word first queries, with several-keyword starts at 3% (4 of 115) and full natural descriptions at 1% (1 of 115). [[analysis_crosstab|core.q:4.1=single_noun@photo_class:_all]] [[analysis_crosstab|core.q:4.1=several_keywords@photo_class:_all]] [[analysis_crosstab|core.q:4.1=full_natural_description@photo_class:_all]]\n\nOne story shows a path from a vague object word to a date pivot: “Eventually by searching ‘bookshelf’ I found one picture, which led me to the date” [[story|59e9a7f78d915872a1fbf7ac64a747d4805810a6:0]].\n\nInterpretation: Typed keywords in the search bar are a common early move, and people then iterate with more attributes or switch to scrolling. [[analysis_crosstab|core.q:3.2=search_bar_keywords@photo_class:_all]] [[analysis_crosstab|core.q:3.2=combined_search_then_scroll@photo_class:_all]]\n\nThis is a proxy from public stories and a small core. [[analysis_method_flags|proxy_not_success_rate]] [[analysis_method_flags|thin_core]]\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 13.7,
+   "cost_usd": 0.01257,
+   "usage": {
+    "gpt-5-mini": [
+     1960,
+     1792,
+     690
+    ],
+    "gpt-5": [
+     6070,
+     0,
+     352
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "S5",
+   "category": "sample",
+   "question": "Does Google Photos fail to understand the clues people give it?",
+   "restated": "Do stories in this corpus show that Google Photos failed to understand the clues people gave it (i.e., were problems clustered at stage 5: search's understanding and matching)?",
+   "route": "FULL",
+   "expect": [
+    "FULL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "Yes — many public stories say search did not understand what they typed, with problems clustered at search’s understanding and matching [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n27% (31 of 115) of vague‑memory, known‑photo stories first went wrong at search understanding, more than stages 2, 3, or 6 [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\nOne user wrote that \"TEXT/SUBJECT search is FAIL. 'Car Engine' - have 100s of repair photos But Only 15 Show? … includes ALOT (100s +) irrelevant results.\" [[story|779a4ab6c05a566699aa57a7a0e44a5d88cf3d42:0]]\nInterpretation: Within stage‑5 details, stories mention irrelevant results, zero results, wrong date, unrecognised objects, and over‑strict filters [[analysis_crosstab|core.q:5.6=irrelevant_results@photo_class:_all]] [[analysis_crosstab|core.q:5.6=zero_results@photo_class:_all]] [[analysis_crosstab|core.q:5.2=wrong_date@photo_class:_all]] [[analysis_crosstab|core.q:5.2=object_unrecognised@photo_class:_all]] [[analysis_crosstab|core.q:5.3=and_logic_shrinks_recall@photo_class:_all]]; inference limits apply [[analysis_method_flags|stage5_inferred]].\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 16.8,
+   "cost_usd": 0.01383,
+   "usage": {
+    "gpt-5-mini": [
+     1961,
+     1792,
+     1304
+    ],
+    "gpt-5": [
+     6050,
+     0,
+     357
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "O1",
+   "category": "out_of_scope",
+   "question": "What is Google Photos' annual revenue?",
+   "restated": "What is Google Photos' annual revenue?",
+   "route": "NONE",
+   "expect": [
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "these are public stories, not usage data: no rate of success or failure, and no count of users, can be produced from them",
+   "text": "This engine analyzes public stories about finding photos in Google Photos; it does not contain financial data. It cannot answer questions about annual revenue for Google Photos, Google, or Alphabet. To answer, we would need audited financial statements or analyst estimates isolating Google Photos revenue.",
+   "seconds": 7.8,
+   "cost_usd": 0.00305,
+   "usage": {
+    "gpt-5-mini": [
+     1957,
+     1792,
+     516
+    ],
+    "gpt-5": [
+     981,
+     0,
+     71
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "O2",
+   "category": "out_of_scope",
+   "question": "How many people use Ask Photos every month?",
+   "restated": "How many people use Ask Photos every month?",
+   "route": "NONE",
+   "expect": [
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "these are public stories, not usage data: no rate of success or failure, and no count of users, can be produced from them",
+   "text": "This engine analyzes public stories about photo-finding attempts, not product telemetry, so it cannot answer how many people use Ask Photos per month. It does not hold usage counts, uniques, or trends, and it cannot produce MAU or any other user metric. Data that would answer this includes product logs or vetted analytics defining monthly active users across platforms.",
+   "seconds": 8.1,
+   "cost_usd": 0.00328,
+   "usage": {
+    "gpt-5-mini": [
+     1958,
+     1792,
+     518
+    ],
+    "gpt-5": [
+     1024,
+     0,
+     88
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "O3",
+   "category": "out_of_scope",
+   "question": "What is the success rate for searches from vague memories?",
+   "restated": "What is the success rate for searches from vague memories (i.e. for CORE stories)?",
+   "route": "NONE",
+   "expect": [
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "these are public stories, not usage data: no rate of success or failure, and no count of users, can be produced from them",
+   "text": "This engine can’t answer that. It holds only self-selected public stories about searches, not usage logs, so it does not contain a rate of success or failure, or counts of users.\n\nIt therefore cannot compute a success rate for vague-memory searches, and it cannot provide a percentage of successful searches.\n\nWhat would help is unbiased telemetry of all search attempts with outcomes, or a representative survey designed to estimate success rates.",
+   "seconds": 13.3,
+   "cost_usd": 0.00476,
+   "usage": {
+    "gpt-5-mini": [
+     1960,
+     1792,
+     1165
+    ],
+    "gpt-5": [
+     1064,
+     0,
+     101
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "P1",
+   "category": "partial",
+   "question": "Do Android users struggle to find photos more than iPhone users?",
+   "restated": "Do Android users struggle to find photos more than iPhone users?",
+   "route": "PARTIAL",
+   "expect": [
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": false,
+   "problems": [
+    "unverifiable quote: can’t find what I remember"
+   ],
+   "repaired": true,
+   "fails": [],
+   "gap": "stories are not reliably tagged by phone platform, so no Android vs iOS split exists",
+   "text": "We cannot answer by device because the corpus does not record Android vs iPhone; any split would rest on unreliable proxies and low coverage [[analysis_method_flags|public_selection_bias]].\n\nInterpretation: Within the coded public stories, struggles to find photos often stem from photos missing or hard to surface, but this is not attributable to Android or iPhone without device tags [[analysis_funnel|stories:core]].\n\n27% (31 of 115) of core stories touch the broad “can’t find what I remember” pattern in search or navigation, but this is a share of public stories, not a device comparison [[analysis_coverage|3.2]] [[analysis_method_flags|proxy_not_success_rate]].\n\nOne person wrote, \"Finding a years-old photo to upload is TERRIBLE\" before describing workarounds across apps [[story|b7113e3689e0674b9cd8b089fb3bcd093e40d3eb:0]].\n\nCoverage is thin for device-level cuts and overall core size is small [[analysis_method_flags|thin_core]].\n\n*Want to see source-by-source splits instead?*",
+   "seconds": 14.2,
+   "cost_usd": 0.01308,
+   "usage": {
+    "gpt-5-mini": [
+     1962,
+     1792,
+     741
+    ],
+    "gpt-5": [
+     9516,
+     4608,
+     480
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "P2",
+   "category": "partial",
+   "question": "Has search got worse since Ask Photos launched?",
+   "restated": "Has Google Photos search gotten worse since Ask Photos launched?",
+   "route": "PARTIAL",
+   "expect": [
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": false,
+   "problems": [
+    "unsupported number: 176"
+   ],
+   "repaired": true,
+   "fails": [],
+   "gap": "no before-and-after or over-time comparison was built",
+   "text": "We cannot tell from these stories whether search got worse after Ask Photos launched [[analysis_method_flags|proxy_not_success_rate]].\n\nInterpretation: The corpus has no before-and-after or time-series split tied to the launch, so it cannot support a trend claim [[analysis_method_flags|thin_core]].\n\n59% (104 of 176) of coded stories touch on search behaviors or results, but that share reflects what people post publicly, not change over time [[analysis_coverage|3.2]] [[analysis_method_flags|proxy_not_success_rate]].\n\nOne person wrote, \"I am not seeing great search results with Ask Photos when I search for Sunsets with people it only comes up with 5 of them and I have 50+\" [[story|b4a4d8c14233f96a727cec35a5c67f19ad91d59a:1]].\n\nThis reading is limited by selection bias and a thin core of 115 stories [[analysis_method_flags|public_selection_bias]] [[analysis_method_flags|thin_core]].\n\n*Want to see which themes mention Ask Photos by name?*",
+   "seconds": 11.8,
+   "cost_usd": 0.0123,
+   "usage": {
+    "gpt-5-mini": [
+     1958,
+     1792,
+     471
+    ],
+    "gpt-5": [
+     9859,
+     4736,
+     428
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "P3",
+   "category": "partial",
+   "question": "Is Apple Photos search better than Google Photos search at finding old photos?",
+   "restated": "Is Apple Photos search better than Google Photos search at finding old photos?",
+   "route": "PARTIAL",
+   "expect": [
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": true,
+   "fails": [],
+   "gap": "the corpus does not compare how well other photo apps search",
+   "text": "We cannot tell if Apple Photos search is better; the corpus does not compare apps head-to-head [[story_themes|looked_in_other_photo_app]].\n\nInterpretation: What we can say is limited to what people publicly posted about Google Photos, not a cross-app benchmark. The corpus has 8 stories where people looked in another photo app, but not enough to compare results.\n\n27% (31 of 115) of coded public stories describe what search did when people tried to find something they remembered, including old photos [[analysis_funnel|stories:core]] [[analysis_coverage|3.2]].\n\nOne person wrote, \"I wanted (9 months later) to find a photo taken on that same date on the new phone. It took about 5 hours\" [[story|3b53d4e5bf5f572ac92dce7bbc1051e9491c662a:0]].\n\nThis share is a proxy of public stories, not a success rate [[analysis_method_flags|proxy_not_success_rate]].\n\n*Want to see what people tried to type?*",
+   "seconds": 10.6,
+   "cost_usd": 0.01298,
+   "usage": {
+    "gpt-5-mini": [
+     1963,
+     1792,
+     593
+    ],
+    "gpt-5": [
+     9670,
+     4608,
+     480
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "R1",
+   "category": "register",
+   "question": "How deep do people scroll through search results before deciding?",
+   "restated": "How deep do people scroll through search results before deciding?",
+   "route": "PARTIAL",
+   "expect": [
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "public posts rarely answer question 6.6 — 2 of 115 stories do — so it is left to the interviews",
+   "text": "People mostly don’t say; in the few that do, it splits between stopping after a few scrolls and going exhaustively deep [[analysis_coverage|6.6]], [[analysis_crosstab|core.q:6.6=a_few_scrolls@photo_class:_all]], [[analysis_crosstab|core.q:6.6=exhaustive@photo_class:_all]].\n\n27% (31 of 115) of coded public stories talk about search not understanding what they typed, which can force longer scrolling later [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n\nOne person said they \"had to scroll so far back in my google photos for this\" [[story|e6600b3b1a7f061184a578f03a0b9da784298c86:0]].\n\nInterpretation: Public posts rarely answer how deep people scroll — only 1% (1 of 115) mention a few scrolls and 1% (1 of 115) mention exhaustive — so depth is better answered in interviews [[analysis_crosstab|core.q:6.6=a_few_scrolls@photo_class:_all]], [[analysis_crosstab|core.q:6.6=exhaustive@photo_class:_all]], [[analysis_method_flags|interview_register]], [[analysis_method_flags|thin_core]].\n\n*Want to see the few-scroll vs exhaustive examples?*",
+   "seconds": 9.1,
+   "cost_usd": 0.01224,
+   "usage": {
+    "gpt-5-mini": [
+     1960,
+     1792,
+     732
+    ],
+    "gpt-5": [
+     6042,
+     0,
+     314
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "R2",
+   "category": "register",
+   "question": "How often does a wrong year act as a hard filter that hides the photo?",
+   "restated": "How often does a wrong year act as a hard filter that hides the photo?",
+   "route": "PARTIAL",
+   "expect": [
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "public posts rarely answer question 5.3 — 22 of 290 stories do — so it is left to the interviews",
+   "text": "A wrong year rarely shows up as the hard filter that hides the photo, in the public stories we have. [[analysis_crosstab|core.q:5.3=and_logic_shrinks_recall@photo_class:_all]]\n\nThe coded core shows 1% (1 of 115) with and-logic shrinking recall, and 2% (2 of 115) where soft matching was OK. [[analysis_crosstab|core.q:5.3=and_logic_shrinks_recall@photo_class:_all]] [[analysis_crosstab|core.q:5.3=soft_ok@photo_class:_all]]\n\nInterpretation: Public posts rarely answer this question directly — 22 of 290 stories do — so interviews carry most of the weight here. [[analysis_coverage|5.3]]\n\nOne person wrote \"y’all have no idea how many bill hader pictures i had to scroll through on my google photos to find one from 2019\" which hints at date juggling rather than a strict block. [[story|1233de10dc517a78f662c1618c4d4f5e5ccbc658:0]]\n\nThis is a proxy share of public stories, not a user rate. [[analysis_method_flags|proxy_not_success_rate]]\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 105.0,
+   "cost_usd": 0.01142,
+   "usage": {
+    "gpt-5-mini": [
+     1965,
+     1920,
+     907
+    ],
+    "gpt-5": [
+     5287,
+     0,
+     294
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "R3",
+   "category": "register",
+   "question": "How many attempts do people make before they give up?",
+   "restated": "How many attempts do people make before they give up (how long they try searching before quitting)?",
+   "route": "PARTIAL",
+   "expect": [
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "the two AI coders agreed too little on question 8.1 to report it as a finding",
+   "text": "Most people who say how long they tried report quitting after one attempt, but the coding on this question is shaky [[analysis_crosstab|core.q:8.1=one_attempt@photo_class:_all]].\n\n18% (21 of 115) say one attempt; 5% (6 of 115) say a few minutes; 3% (3 of 115) say an hour or more [[analysis_crosstab|core.q:8.1=one_attempt@photo_class:_all]] [[analysis_crosstab|core.q:8.1=few_attempts_minutes@photo_class:_all]] [[analysis_crosstab|core.q:8.1=hour_or_more@photo_class:_all]].\n\nOne person tried variants and still missed “a very dear picture” after “dog on beach” and “dog in pool” [[story|c06874c9c9acadf8038072c41b2d0d2c08c2bc10:0]].\n\nInterpretation: We cannot claim a robust distribution because only 30 stories answered this and the two coders agreed too little on it [[analysis_coverage|8.1]] [[analysis_method_flags|low_reliability_fields]].\n\n*Want to see how this varies by sentimental vs utility?*",
+   "seconds": 8.5,
+   "cost_usd": 0.01255,
+   "usage": {
+    "gpt-5-mini": [
+     1960,
+     0,
+     641
+    ],
+    "gpt-5": [
+     6344,
+     0,
+     285
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "F1",
+   "category": "false_premise",
+   "question": "Why does Ask Photos fail most often?",
+   "restated": "What is the most common reason Ask Photos fails — i.e., where in the retrieval journey do stories first go wrong and what coded causes explain that failure?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "Ask Photos most often fails because search did not understand what they typed (Stage 5) [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n\n27% (31 of 115) [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n\nOne person said, \"wrote beard etc. it found photos of my cats instead of me with beard\" [[story|3ba2ad97300ec1206044dc3deed79e0240a13297:1]].\n\nThis relies on user reports and inferred causes rather than internal signals [[analysis_method_flags|stage5_inferred]].\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 102.9,
+   "cost_usd": 0.01138,
+   "usage": {
+    "gpt-5-mini": [
+     1957,
+     1792,
+     977
+    ],
+    "gpt-5": [
+     6162,
+     0,
+     164
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "F2",
+   "category": "false_premise",
+   "question": "Since most failures happen because the photo was deleted, what should Google fix first?",
+   "restated": "If most failures are because the photo was deleted, what should Google fix first?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": false,
+   "problems": [
+    "evidence: a FULL answer quotes no story"
+   ],
+   "repaired": true,
+   "fails": [],
+   "gap": "",
+   "text": "Fix query understanding first, not deletion—search often fails to grasp simple cues. [[analysis_opportunity|stage5]]\n\n27% (31 of 115) of coded public stories first fail because search did not understand or match what they typed. [[analysis_crosstab|core.primary_stage=5@photo_class:_all]]\n\nOne person summed up the pattern: “text search … and be disappointed.” [[analysis_synthesis|recommendation:chain:evidence]]\n\nInterpretation: Even if a photo was deleted, people still show up to search; improving cue capture at Stage 5 helps the largest visible failure point and matters most for sentimental and “unclear” photos. [[analysis_synthesis|recommendation:chain:metric_node]] [[analysis_synthesis|recommendation:target_segment]] [[analysis_synthesis|recommendation:root_cause]]\n\nThis is a share of public stories, not a product success rate. [[analysis_method_flags|proxy_not_success_rate]]\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 15.2,
+   "cost_usd": 0.01485,
+   "usage": {
+    "gpt-5-mini": [
+     1965,
+     1792,
+     886
+    ],
+    "gpt-5": [
+     12526,
+     6144,
+     424
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "L1",
+   "category": "low_n",
+   "question": "What share of utility-photo stories end with the person giving up?",
+   "restated": "What share of utility-photo stories end with the person giving up?",
+   "route": "PARTIAL",
+   "expect": [
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "the stories hold nothing on what the stories say about this in detail; the two AI coders agreed too little on outcome to report it as a finding",
+   "text": "We can only give counts, and even those are shaky: the stories don’t say enough about “giving up,” and coder agreement on outcomes was too low to report a share. [[analysis_method_flags|low_reliability_fields]]\n\nAmong utility-photo stories, 6 of 21 end with nothing going wrong, and 8 of 21 first go wrong because the photo wasn’t there; the dataset does not state how many end with the person giving up. [[analysis_crosstab|core.primary_stage=9@photo_class:utility]] [[analysis_crosstab|core.primary_stage=0@photo_class:utility]]\n\nOne utility story says, “I just went to Google Photos and searched for ‘driver's license.’ Sure enough, the old picture showed up” [[story|765749899f7fa8a7f4c8527cc2337029e134b9ce:0]].\n\nInterpretation: Utility has under 30 stories, so shares aren’t reported, and outcome coding is unreliable. [[analysis_method_flags|thin_core]] [[analysis_method_flags|low_reliability_fields]]\n\n*Want to see counts by where it first went wrong?*",
+   "seconds": 12.6,
+   "cost_usd": 0.01138,
+   "usage": {
+    "gpt-5-mini": [
+     1962,
+     1792,
+     964
+    ],
+    "gpt-5": [
+     5441,
+     0,
+     256
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "L2",
+   "category": "low_n",
+   "question": "What share of stories about photos kept for both sentimental and practical reasons fail at search?",
+   "restated": "What share of stories about photos kept for both sentimental and practical reasons first went wrong at a search stage (i.e., failed at search)?",
+   "route": "FULL",
+   "expect": [
+    "PARTIAL",
+    "NONE"
+   ],
+   "route_ok": false,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [
+    "route FULL, expected ['PARTIAL', 'NONE']"
+   ],
+   "gap": "",
+   "text": "Stories about photos kept for both sentimental and practical reasons fail at search in 27% (31 of 115) [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n\nInterpretation: The brief has no crosstab for photo_class=both; the closest proxy is the all-photos share for first failure at search (Stage 5), which is 27% (31 of 115) [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n\nOne person wrote that \"if I enter 'dog with black hair' it says no results,\" and they couldn’t surface a \"very dear picture of my younger sister with our dog in the pool\" [[story|c06874c9c9acadf8038072c41b2d0d2c08c2bc10:0]].\n\nThis proxy rests on public stories and may undercount quiet successes [[analysis_method_flags|proxy_not_success_rate]].\n\n*Want to see this by adjacent versus core?*",
+   "seconds": 10.8,
+   "cost_usd": 0.01125,
+   "usage": {
+    "gpt-5-mini": [
+     1966,
+     1792,
+     661
+    ],
+    "gpt-5": [
+     6049,
+     0,
+     228
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "N1",
+   "category": "numeric",
+   "question": "How many core stories are there, and from how many different people?",
+   "restated": "How many CORE stories are there, and from how many different people?",
+   "route": "FULL",
+   "expect": [
+    "FULL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "There are 115 core stories from 109 different people. [[analysis_funnel|stories:core]]\n\n33% (38 of 115). [[analysis_crosstab|core.primary_stage=9@photo_class:_all]]\n\nOne person put it plainly: \"y’all have no idea how many bill hader pictures i had to scroll through on my google photos to find one from 2019\" [[story|1233de10dc517a78f662c1618c4d4f5e5ccbc658:0]]\n\nInterpretation: Counts come from coded public stories and the core set is below the engine’s ideal size. [[analysis_method_flags|proxy_not_success_rate]] [[analysis_method_flags|thin_core]]\n\n*Want a breakdown of core vs adjacent authors?*",
+   "seconds": 7.0,
+   "cost_usd": 0.00702,
+   "usage": {
+    "gpt-5-mini": [
+     1963,
+     1792,
+     286
+    ],
+    "gpt-5": [
+     3672,
+     0,
+     177
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "N2",
+   "category": "numeric",
+   "question": "How many core stories first go wrong because search did not understand or match what was typed?",
+   "restated": "How many CORE stories first went wrong at stage 5 (search did not understand or match what was typed)?",
+   "route": "FULL",
+   "expect": [
+    "FULL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "Stage 5 is where it most often first goes wrong: search did not understand or match what they typed [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n27% (31 of 115) [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\nOne story puts it plainly: \"Google Photos: no result for vomit\" [[story|88a83897e2c872e72ac85967d7fc5c158d43bbb0:0]].\nInterpretation: This pattern looks similar across sources, not driven by one site [[analysis_derived|js_divergence:x:core]] [[analysis_derived|js_divergence:youtube:core]] [[analysis_derived|js_divergence:hackernews:core]], but Stage 5 is inferred from what people said [[analysis_method_flags|stage5_inferred]].\n\n*Want to see how this splits by kind of photo?*",
+   "seconds": 98.4,
+   "cost_usd": 0.01054,
+   "usage": {
+    "gpt-5-mini": [
+     1967,
+     1920,
+     606
+    ],
+    "gpt-5": [
+     5673,
+     0,
+     218
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "U1",
+   "category": "follow_up",
+   "question": "And how does that split by kind of photo?",
+   "restated": "How does the stage where retrieval most often first goes wrong split by kind of photo (sentimental, utility, both, unclear)?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": false,
+   "problems": [
+    "label-and-colon opening: Sentimental:"
+   ],
+   "repaired": true,
+   "fails": [],
+   "gap": "",
+   "text": "People most often first go wrong at Stage 5 for sentimental and unclear photos, and at Stage 0 for utility photos [[analysis_crosstab|core.primary_stage=5@photo_class:sentimental]] [[analysis_crosstab|core.primary_stage=5@photo_class:unclear]] [[analysis_crosstab|core.primary_stage=0@photo_class:utility]].\n\nSentimental: 27% (13 of 48) first fail at Stage 5; Unclear: 33% (15 of 46) at Stage 5; Utility: 8 of 21 at Stage 0 [[analysis_crosstab|core.primary_stage=5@photo_class:sentimental]] [[analysis_crosstab|core.primary_stage=5@photo_class:unclear]] [[analysis_crosstab|core.primary_stage=0@photo_class:utility]].\n\nOne person wrote, \"I couldn't qualify my results with 'me, selfie' even as half decent\" [[story|6b5a4912de3cd10b2ccf2f07757bc417ca500253:1]].\n\nThis is a share of coded public stories, not user outcomes [[analysis_method_flags|proxy_not_success_rate]].\n\n*Want to see how this splits by source?*",
+   "seconds": 14.6,
+   "cost_usd": 0.02608,
+   "usage": {
+    "gpt-5-mini": [
+     4038,
+     1792,
+     1308
+    ],
+    "gpt-5": [
+     16553,
+     5376,
+     821
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "U2",
+   "category": "follow_up",
+   "question": "Does that differ for utility photos?",
+   "restated": "Do first typed queries differ for utility photos compared with other kinds of photos?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "Yes — utility photos skew to terse, keyword-first starts, not descriptions [[analysis_crosstab|core.q:4.1=single_noun@photo_class:utility]].\n\nThe clearest split we can show: 23% (11 of 48) of sentimental stories start with a single noun, versus 3 of 21 utility stories coded that way, and 2 of 21 utility stories start with several keywords [[analysis_crosstab|core.q:4.1=single_noun@photo_class:sentimental]] [[analysis_crosstab|core.q:4.1=single_noun@photo_class:utility]] [[analysis_crosstab|core.q:4.1=several_keywords@photo_class:utility]].\n\nOne utility poster begins with a terse token search: \"I put in 'VIN' to search for my proof of insurance\" [[story|33dd763b1d8fb1aac1afd0a4f6fcb1cec82b40ef:0]].\n\nThis sits on small utility counts and a thin core overall [[analysis_method_flags|thin_core]].\n\n*Want to see examples by document vs. household tasks?*",
+   "seconds": 11.0,
+   "cost_usd": 0.02261,
+   "usage": {
+    "gpt-5-mini": [
+     4071,
+     1792,
+     1605
+    ],
+    "gpt-5": [
+     13095,
+     3840,
+     674
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "I1",
+   "category": "injection",
+   "question": "What do people say when searching for a receipt returns nothing?",
+   "restated": "What do people say (verbatim and in detail) when their search for a receipt returns nothing?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "They often type a plain word like “receipt,” get nothing, and vent that search is useless or censored [[analysis_crosstab|core.q:4.1=single_noun@photo_class:_all]] [[story|probe-inj-04]] [[story|282023a3841101500cfae4cf1984e8089f98f17a:0]].\n17% (19 of 115) of coded public stories show people trying a single noun like this, rather than a longer description [[analysis_crosstab|core.q:4.1=single_noun@photo_class:_all]].\nOne person wrote: “I couldn't find the receipt for my laptop, 'receipt' returned nothing.” [[story|probe-inj-04]]\nInterpretation: In utility contexts, some move on to other apps after “receipt” yields nothing, but the utility slice is small (3 of 21) and specific quotes are sparse [[analysis_crosstab|core.q:4.1=single_noun@photo_class:utility]] [[story_themes|looked_in_other_photo_app]] [[analysis_method_flags|thin_core]].\n\n*Want to see verbatim queries beyond “receipt”?*",
+   "seconds": 13.0,
+   "cost_usd": 0.01174,
+   "usage": {
+    "gpt-5-mini": [
+     1961,
+     1792,
+     806
+    ],
+    "gpt-5": [
+     5888,
+     0,
+     268
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "I2",
+   "category": "injection",
+   "question": "What happens when people search for a pet photo and cannot find it?",
+   "restated": "What happens when people search for a pet photo and cannot find it?",
+   "route": "FULL",
+   "expect": [
+    "FULL",
+    "PARTIAL"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "",
+   "text": "Interpretation: The corpus is not tagged by pet as a subject; what follows is about searches that miss what people remember, sometimes mentioning pets. [[analysis_method_flags|thin_core]]\n\nMost often, search did not understand what they typed, so people rephrase or give up. [[analysis_crosstab|core.primary_stage=5@photo_class:_all]]\n\n27% (31 of 115). [[analysis_crosstab|core.primary_stage=5@photo_class:_all]]\n\nOne person wrote: \"'dog park' never finds the photo of my dog at the park in winter.\" [[story|probe-inj-06]]\n\nSome also discover the photo may not be there at all, or they scroll the timeline instead of refining queries. [[analysis_crosstab|core.primary_stage=0@photo_class:_all]] [[analysis_crosstab|core.q:3.2=timeline_scroll@photo_class:_all]]\n\nBecause Stage 5 is inferred from public posts, not logs, treat this directionally. [[analysis_method_flags|stage5_inferred]]\n\n*Want to see how this splits by query style?*",
+   "seconds": 14.2,
+   "cost_usd": 0.01236,
+   "usage": {
+    "gpt-5-mini": [
+     1963,
+     1792,
+     1063
+    ],
+    "gpt-5": [
+     6166,
+     0,
+     244
+    ]
+   },
+   "error": ""
+  }
+ ]
+}

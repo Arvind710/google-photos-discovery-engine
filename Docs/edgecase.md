@@ -180,6 +180,12 @@ Ranked by damage × likelihood, ahead of the enumeration.
 | EC-ASK-10 | Question in Hindi or Hinglish | Planner misreads | Handled; answers in English per the scope decision, quoting the original verbatim |
 | EC-ASK-11 | Follow-up referencing a prior turn | No context | Prior turns given to the planner; the displayed restatement resolves the reference explicitly |
 | EC-ASK-12 | Gibberish or empty input | Wasted paid call | Rejected before the planner. At this budget, free rejection matters |
+| **EC-ASK-13** | **A real number pinned to the wrong row** *(found in P5, 2026-09-26)* | **Silent.** "31 of 115" is in the brief, so a whole-answer number check passes, but the paragraph cites a coverage row; the reader follows the citation to the wrong thing | Numbers are checked PER PARAGRAPH against the rows that paragraph cites (`verify.check_numbers`); the gate's own gap sentence is the only other allowed source (D-12) **[E]** |
+| **EC-ASK-14** | **Engine text quoted as testimony** *(P5)* | A sentence of the recommendation was presented as what "one person summed up" — a real string, not a person | Quotes verify against retrieved STORIES and the asker's own words only, never engine rows (D-12) **[E]** |
+| EC-ASK-15 | The planner names a different subject between runs *(P5)* | The same question routes FULL on one run and PARTIAL on the next; a route that moves cannot be asserted | Rules on the question's own words (`SUBJECT_RULES`, `CLASS_WORDS`, `MISSING_CUTS`, `HARD_OUT_OF_SCOPE`) override the planner; tested on held-out paraphrases, disclosed as written after seeing golden failures (D-12) |
+| EC-ASK-16 | One model call hangs *(P5)* | The SDK default timeout is 600 s: one stuck call held a sweep for 10 minutes; on the public page it reads as a dead app | 120 s timeout on every call, one retry; the sweep retries an API error once |
+| EC-ASK-17 | **The deterministic fallback is correct but misleading** *(found reading sweep 7)* | A withheld draft's fallback listed source shares for an Android-vs-iPhone question without saying no such split exists, left a false premise uncorrected, and showed one kind of photo for a "split by kind of photo" question. Every check passed | The fallback states the gate's gap first with its caveat, flags a false premise before any figure, and picks rows about the question's subject (a split shows one stage across the groups, each named); pinned by replaying the three cases (D-12) **[E]** |
+| EC-ASK-18 | Code names reach the reader *(P5)* | "irrelevant_results", "below_floor" — the answer contract says plain words, and nothing enforced it | The brief shows slugs in plain words (citation keys stay exact) and `check_codes` flags a snake_case slug in the answer's own words; not absolute — it triggers the repair, and a survivor is served with the warning |
 
 ---
 
@@ -204,6 +210,8 @@ Plausible, well-formatted, wrong. **Build detection for these first.**
 | EC-COL-14 | GP Help renders without post bodies or replies | Threads still arrive, with titles | Body length and reply count asserted per thread |
 | EC-CODE-18 | A quiet success coded Stage 0 | Stage 0 is a real, headline-worthy category, so an inflated share reads as a finding | `stage0_without_evidence` + a corpus test; read the Stage 0 stories, not only the share |
 | EC-VAL-8 | A cheap model's count taken at face value | The count is plausible and the stories it cites exist | A stronger model confirms every candidate; report candidates → confirmed |
+| EC-ASK-13 | A real number cited to the wrong row | The number exists and the citation exists; only the pairing is wrong | Per-paragraph number check against cited rows |
+| EC-ASK-17 | A fallback that passes every check and still misleads | It is built from real rows, so every check passes | Gap and premise first; replay tests on the cases that showed it |
 | EC-CODE-15 | Inferred Stage 5 values read as fact | They are phrased like observations | `inferred` flag rendered wherever the value appears |
 
 ---

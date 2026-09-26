@@ -1,0 +1,99 @@
+{
+ "run_id": "ask-golden-synth-20260926-152202-ca0622",
+ "plan_run": "ask-golden-plan-20260926-152202-916d74",
+ "prompt_version": "ask_v1",
+ "subset": true,
+ "summary": {
+  "n": 2,
+  "T13_route": 0.5,
+  "verified": 1,
+  "repaired": 1,
+  "assertion_fails": 1,
+  "problems_by_type": {
+   "unsupported number": 0,
+   "percentage without its count": 0,
+   "unverifiable quote": 0,
+   "citation not retrieved": 0,
+   "uncited claim": 0,
+   "share stated as": 0,
+   "label-and-colon": 1,
+   "closing": 1,
+   "refusal": 0,
+   "evidence": 0,
+   "length": 0
+  },
+  "cost_usd": 0.0189,
+  "mean_seconds": 15.2
+ },
+ "rows": [
+  {
+   "id": "S5",
+   "category": "sample",
+   "question": "Does Google Photos fail to understand the clues people give it?",
+   "restated": "Does Google Photos fail to understand the clues people give it?",
+   "route": "PARTIAL",
+   "expect": [
+    "FULL"
+   ],
+   "route_ok": false,
+   "verified": false,
+   "problems": [
+    "label-and-colon opening: One poster wrote:",
+    "closing: the answer does not end with one italic closing question"
+   ],
+   "repaired": true,
+   "fails": [
+    "route PARTIAL, expected ['FULL']"
+   ],
+   "gap": "too few stories to quote — only 1 matched; the stories hold nothing on how reliably this was coded; public posts rarely answer question 5.2 — 36 of 290 stories do — so it is left to the interviews; public posts rarely answer question 5.3 — 22 of 290 stories do — so it is left to the interviews; public posts rarely answer question 5.4 — 8 of 290 stories do — so it is left to the interviews; public posts rarely answer question 5.6 — 46 of 331 stories do — so it is left to the interviews; the two AI coders agreed too little on outcome to report it as a finding; the two AI coders agreed too little on metric_node to report it as a finding; the two AI coders agreed too little on question 2.1 to report it as a finding",
+   "text": "People do report that search did not understand what they typed, but the public stories are thin here [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n\n27% (31 of 115) of coded core stories first went wrong when the search tried to interpret the clue [[analysis_crosstab|core.primary_stage=5@photo_class:_all]].\n\nOne poster wrote: \"I ask for 'yellow truck' and it finds 2 out of the 10 different days I had taken pictures of yellow trucks... And the obligatory dump of pictures that contain nothing close t\" [[story|9a7306c83836251e47a6ca073afd34441115de00:0]].\n\nInterpretation: Too few stories to quote — only 1 matched; several sub-questions on how it misunderstood are rarely answered in public posts, and coder agreement on some related fields was low [[analysis_method_flags|thin_core]].\n\nWant to see how this splits by kind of photo?",
+   "seconds": 16.8,
+   "cost_usd": 0.01446,
+   "usage": {
+    "gpt-5-mini": [
+     1746,
+     1664,
+     698
+    ],
+    "gpt-5": [
+     12341,
+     6016,
+     434
+    ]
+   },
+   "error": ""
+  },
+  {
+   "id": "O3",
+   "category": "out_of_scope",
+   "question": "What is the success rate for searches from vague memories?",
+   "restated": "What is the success rate for searches from vague memories (i.e. how often people searching from vague memories found the photo)?",
+   "route": "NONE",
+   "expect": [
+    "NONE"
+   ],
+   "route_ok": true,
+   "verified": true,
+   "problems": [],
+   "repaired": false,
+   "fails": [],
+   "gap": "these are public stories, not usage data: no rate of success or failure, and no count of users, can be produced from them",
+   "text": "This engine analyzes public stories about Google Photos; it does not contain the usage data needed to compute a success rate for searches from vague memories. It holds no representative user counts, so it cannot provide a single measurable rate of success or failure.\n\nIt can only show how often posted stories describe outcomes, not how often users succeed or fail in general, so it cannot answer this question as asked.\n\nTo answer it, we would need event-level usage data or a representative survey that records whether searches from vague memories found the photo, over a defined population and time window.",
+   "seconds": 13.6,
+   "cost_usd": 0.00443,
+   "usage": {
+    "gpt-5-mini": [
+     1745,
+     0,
+     679
+    ],
+    "gpt-5": [
+     1069,
+     0,
+     130
+    ]
+   },
+   "error": ""
+  }
+ ]
+}
