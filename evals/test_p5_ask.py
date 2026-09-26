@@ -495,7 +495,9 @@ def test_a_comparison_between_kinds_of_photo_is_flagged(text, flagged):
 
 
 def test_the_new_rules_trigger_the_repair_but_never_withhold():
-    assert not any(a.startswith(("directional", "comparison")) for a in A.ABSOLUTE)
+    # v2.8: "comparison" left this list — v2 has no repair, so a flagged claim that
+    # kinds of photo differ was served (U1). It is absolute now.
+    assert not any(a.startswith("directional") for a in A.ABSOLUTE)
 
 
 @pytest.mark.needs_corpus
@@ -905,3 +907,135 @@ def test_a_stream_that_stalls_is_cut_at_the_deadline_not_after(con):
     assert a.seconds <= 3.0, a.seconds
     assert a.withheld and "did not finish" in a.withheld[0] and a.report.ok
     assert a.draft.startswith("It does")
+
+
+def test_the_ask_page_footer_stamp_is_in_plain_words():
+    """Browser check, 2026-09-27: the only internal words on the answer page were
+    the footer's "core" and "codebook"."""
+    from lib import nav
+    from lib import plain as P
+    s = nav.plain_stamp("Corpus v1.0 — 115 core stories from 109 people, in 31,235 public "
+                        "records collected 2026-09-25 to 2026-09-26 · codebook v1:03257d4f")
+    assert s.startswith("Data version 1.0 — 115 stories") and "109 people" in s
+    assert not P.check_jargon(s) and "codebook" not in s
+    assert 'nav.footer(plain=page.url_path == "ask")' in (ROOT / "app" / "Home.py").read_text()
+
+
+@pytest.mark.parametrize("q", ["Does that differ for photos of receipts and documents?",
+                               "Is it different for bills or prescriptions?"])
+def test_everyday_names_for_information_photos_ask_for_the_utility_split(q):
+    """Browser check, 2026-09-27: named in everyday words, the kind of photo was
+    not recognised and the answer said no split by kind of photo was possible."""
+    p = R.normalise_plan({"subject": "none", "entities": {}, "evidence_needed": []}, q)
+    assert p["named_classes"] == ["utility"] and "segment_split" in p["evidence_needed"]
+
+
+def test_a_source_split_is_named_as_posts_on_a_site_not_a_kind_of_photo():
+    """Sweep v2.7, P3: "14 of 49 stories (29%) among x photos" — a split by site
+    was worded as a kind of photo."""
+    from lib import plain as P
+    s = P._crosstab("core.q:5.1=no@source:hackernews", {"stories": 6, "of": 11})
+    assert "among posts on Hacker News" in s and "photos," not in s.split("among")[1]
+    assert P.about("x") == "from posts on X (Twitter)"
+    assert P.about("utility").startswith("about photos kept for the information")
+
+
+def test_a_statement_question_reads_as_whether_and_a_name_keeps_its_capital():
+    """Sweep v2.7, R2: "say anything about the system discarded the photo…"."""
+    from lib import plain as P
+    assert P.question("5.3").startswith("whether the system discarded the photo")
+    assert P.question("5.2").startswith("whether Google Photos had never")
+    assert P.question("2.4") == "what they have forgotten about the photo"
+
+
+def test_a_sentence_that_only_calls_a_115_story_figure_a_rough_guide_is_dropped():
+    """Sweep v2.7, N2: "This figure is only a rough guide, because it comes from 31 of
+    115 stories (27%)." was served. Its citations go with it; the sentence before
+    keeps its own; a real 30–79 label stays."""
+    t = ("31 of 115 stories (27%) first went wrong. [[analysis_crosstab|k]]\nThis figure is "
+         "only a rough guide, because it comes from 31 of 115 stories (27%). "
+         "[[analysis_crosstab|k]]\nOne limit is that these are public posts. [[f|p]]")
+    assert V.drop_unfounded_rough_guide(t) == (
+        "31 of 115 stories (27%) first went wrong. [[analysis_crosstab|k]]\n"
+        "One limit is that these are public posts. [[f|p]]")
+    t = "A. [[a|b]] This figure is a rough guide, from 31 of 115 stories (27%). [[a|b]] B. [[c|d]]"
+    assert V.drop_unfounded_rough_guide(t) == "A. [[a|b]] B. [[c|d]]"
+    keep = "This figure is only a rough guide: 13 of 48 stories (27%). [[a|b]]"
+    assert V.drop_unfounded_rough_guide(keep) == keep
+
+
+def test_a_quote_written_inside_a_tag_becomes_a_checked_quote_and_never_shows_as_a_tag():
+    """Sweep v2.8, L1: "[S1 “returned way too many images”]" reached the reader."""
+    from lib import plain as P
+    t = P.Tags()
+    t.add("S", "[[story|abc:0]]", "a post")
+    s = "3 say the search missed. [S1 “returned way too many images”]"
+    assert t.expand(s).endswith("“returned way too many images” [[story|abc:0]]")
+    assert "[S1" not in P.visible(s)
+    assert P.check_jargon("x. [S1 “a b c”]") and P.check_jargon("x [S9]")
+
+
+def test_a_leading_rough_guide_label_on_a_115_story_count_is_dropped():
+    """Sweep v2.8, R3: "A small group, so only a rough guide: 30 of 115 stories say
+    anything about how long they kept trying." — a count, no %, of 115."""
+    t = "A small group, so only a rough guide: 30 of 115 stories say anything. [[a|b]]"
+    assert V.drop_unfounded_rough_guide(t) == "30 of 115 stories say anything. [[a|b]]"
+
+
+@pytest.mark.parametrize("t", ["By kind of photo, the first misstep differs.",
+                               "Search goes wrong in different ways by kind of photo."])
+def test_a_claim_that_kinds_of_photo_differ_is_caught_and_absolute(t):
+    """U1, v2.7 and v2.8: served with the problem flagged, because v2 has no repair."""
+    assert V.check_comparison(t)
+    assert "comparison between kinds" in A.ABSOLUTE
+
+
+@pytest.mark.parametrize("t", ["The stories cannot say whether it differs by kind of photo.",
+                               "*Want to see how this differs by kind of photo?*"])
+def test_denying_or_offering_a_split_by_kind_is_not_a_comparison(t):
+    assert not V.check_comparison(t)
+
+
+@pytest.mark.parametrize("t,want", [
+    ("But not always: in 38 of 115 stories (33%), nothing went wrong.",
+     "But not always — in 38 of 115 stories (33%), nothing went wrong."),
+    ("Some found the photo anyway: 38 of 115 stories (33%).",
+     "Some found the photo anyway — 38 of 115 stories (33%)."),
+    ("Caveat: these are public posts.", "Caveat: these are public posts.")])
+def test_a_clause_colon_figure_becomes_a_dash_and_a_form_label_stays_caught(t, want):
+    """Sweep v2.9: 5 of 7 withheld drafts were "clause: figure"; P1's fallback then
+    kept nothing but a link. "Caveat:" is still a label-colon, still absolute."""
+    assert V.dash_figure_labels(t) == want
+    assert bool(V.check_label_colon(want)) == want.startswith("Caveat")
+
+
+def test_a_stand_alone_rough_guide_sentence_after_a_115_story_figure_is_dropped():
+    """Sweep v2.9, R2: "…2 of 115 stories (2%). A small group, so only a rough guide.\""""
+    t = ("Some said it did not matter — 2 of 115 stories (2%). [[a|b]]\n"
+         "A small group, so only a rough guide. [[c|d]]\nOne post. [[e|f]]")
+    assert V.drop_unfounded_rough_guide(t) == ("Some said it did not matter — 2 of 115 stories "
+                                               "(2%). [[a|b]]\nOne post. [[e|f]]")
+    keep = "For memories, 13 of 48 stories (27%). [[a|b]] A small group, so only a rough guide."
+    assert V.drop_unfounded_rough_guide(keep) == keep
+
+
+def test_a_too_few_claim_is_caught_across_a_parenthesis_but_not_across_another_count():
+    assert V.check_floor_claim("only 32 stories are about photos kept for the information in "
+                               "them (receipts, documents, notes) — too few (under 30)")
+    assert not V.check_floor_claim("In 31 of 115 stories, and only 21 stories are about "
+                                   "receipts — too few (under 30).")
+
+
+@pytest.mark.needs_corpus
+def test_the_gate_names_the_main_groups_size_when_the_other_population_is_retrieved(con):
+    """Sweep v2.9, U2: the gate said "only 32 stories are about photos kept for the
+    information in them — too few (under 30)"; 32 is the OTHER population's."""
+    q = "Does that differ for utility photos?"
+    p = R.normalise_plan(_plan(evidence_needed=["segment_split"],
+                               queries=[_q("question_by_photo_class", question="4.1",
+                                           population="core"),
+                                        _q("question_by_photo_class", question="4.1",
+                                           population="adjacent")]), q)
+    got = R.retrieve(con, p)
+    v = R.gate(p, got, q)
+    assert not V.check_floor_claim(" ".join(v.caveats + [v.gap or ""]))

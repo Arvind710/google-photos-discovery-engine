@@ -770,7 +770,7 @@ anywhere on the answer page, through a "translation layer".
    streamed; a timed-out planner at 457 output tokens, its mean over the 18 calls that completed in
    the v2.0 sweep) and marked `estimated` on the answer and in the sweep artifact.
 
-**Checker rules added while reading seven sweeps (v2.0 → v2.6), each replayed in
+**Checker rules added while reading eleven sweeps (v2.0 → v2.10), each replayed in
 `evals/test_p5_ask.py`:** a percentage must match its own count (absolute: v2.2 served "1 of 175
 (9%)"); a count called "too few (under 30)" must be under 30 (absolute: v2.5 served "only 32 …
 too few"); label-colons of up to five words, but a colon that opens a quotation is not a label;
@@ -782,6 +782,24 @@ with the ranked opportunity. `evals/golden_sweep.py` now records `planned_by`, t
 and estimated costs, and its per-question estimates were set from the measured v2.0 sweep (the old
 $0.035 a question was v1's, five times too high).
 
+Added in v2.7–v2.10, from the same reading (each a served or wrongly-withheld answer):
+receipts, documents, bills, prescriptions, whiteboards, ID cards and invoices name the utility kind
+(the browser follow-up about receipts was told no split by kind was possible); the Ask AI footer
+stamp is in plain words; a split by site reads "among posts on X", not "among x photos" (P3); a
+codebook meaning that is a statement reads "whether …" ("say anything about the system discarded
+the photo", R2); a quote written inside a tag ("[S1 “…”]", L1 — shown raw) is untangled and then
+checked like any quote, and any unexpanded tag is an internal word; a "rough guide" label on a
+figure of 80+ stories is dropped also when it is a sentence of its own, leads the sentence, or sits
+on a bare count (N2, R2, R3); **a claim that kinds of photo differ is caught ("differs by kind of
+photo") and is now absolute** — v2 has no repair, so this non-absolute problem was being served
+(U1, twice); the gate names the main group's size when both populations are retrieved (U2 said
+"only 32 stories … too few (under 30)"; 32 is the other population's); and **a "clause: figure"
+colon becomes a dash before the check** ("Some found the photo anyway: 38 of 115 stories (33%)" →
+"… anyway — 38 of 115 …"). That last is formatting only, like `canonical_citations`: all five
+label-colons withheld at v2.9 had this shape, and the fallback that replaced them lost the answer
+(P1 kept one link). A colon before anything but a figure ("Caveat: …") is untouched and still
+absolute (EC-ASK-8).
+
 | Sweep | Routes | Verified | Withheld | Planned by rules | Mean / max s | Cost |
 |---|---|---|---|---|---|---|
 | v2.0 `…184648-ce1261` | 24/24 | — | 8 | not recorded | 7.2 / 9.1 | $0.161 |
@@ -790,20 +808,26 @@ $0.035 a question was v1's, five times too high).
 | v2.3 `…192625-0ebf24` | 24/24 | 22 | 7 | 11 | 7.0 / 9.5 | $0.141 |
 | v2.4 `…193835-54d3ac` | 23/24 | 20 | 3 | 17 | 7.0 / 8.5 | $0.130 |
 | v2.5 `…194111-609ea7` | 24/24 | 23 | 2 | 15 | 7.4 / **10.4** | $0.121 |
-| **v2.6 `…194405-b3bfbe`** | **24/24** | **23** | **2** | 19 | 6.9 / 9.0 | $0.105 |
+| v2.6 `…194405-b3bfbe` | 24/24 | 23 | 2 | 19 | 6.9 / 9.0 | $0.105 |
+| v2.7 `…195301-6d311e` | 24/24 | 22 | 5 | 15 | 6.7 / 8.9 | $0.120 |
+| v2.8 `…195830-be2a6e` | 24/24 | 23 | 4 | 17 | 6.8 / 8.2 | $0.113 |
+| v2.9 `…200235-ef0773` | 24/24 | 22 | 7 | 17 | 7.0 / 9.0 | $0.131 |
+| **v2.10 `…200607-604b5a`** | **24/24** | **23** | **2** | 19 | 6.9 / 8.0 | $0.115 |
 
-(Run ids are `ask-golden-synth-20260926-…`.) v2.6: 0 absolute problems served, 0 assertion failures
-(N1 carries 115 and 109; the injection probes resisted), both withheld drafts real violations. The
-whole P0–P6 suite passes on it.
+(Run ids are `ask-golden-synth-20260926-…`.) v2.10: 0 absolute problems served, 0 assertion
+failures (N1 carries 115 and 109; the injection probes resisted), 0 label-colon withholds, both
+withheld drafts real (P1 summed two counts into "3,000 app-store reviews"; F2 invented a quote).
+One non-absolute warning served (U1 quotes no story). The whole P0–P6 suite passes on it (366).
 
 **Still open, stated.** (a) The planner timed out on 8–19 of 24 questions at its 4.5 s cap, more as
 the night went on; the rules plans are coarser (P1 in v2.6 answered with where the posts came from).
 Raising the cap trades against the 10-second rule — a PM decision. (b) Reasoning no check catches:
-F1 accepts "Ask Photos fails most often" and answers with figures for all search; U1 claims kinds of
-photo differ and strings ~18 citations on its first sentence; a garbled sentence in R1. (c) The
-browser check of streaming, the scroll hold and the replaced-draft caption.
+F1 accepts "Ask Photos fails most often" and answers with figures for all search; L2 asked about
+failing and was answered with finding; the odd stray quote after the limit line (R2). (c) The
+browser check of streaming, the scroll hold and the replaced-draft caption — done locally
+2026-09-27 (`evals/reports/browser_P5_20260927.md`); live pending the push.
 
 **Budget.** The PM added $3 of OpenAI credit ("i have added 3 credits in openai", 2026-09-27 01:08
 IST), recorded as a **$21** budget (`runs.CEILING_USD`, `evals/manual_checks.yaml`), read the same
-way as D-11's "2 credits more". **Spend $18.06 recorded of $21**; the six sweeps v2.1–v2.6 cost
-$0.82 (v2.0's $0.16 was the session before).
+way as D-11's "2 credits more". **Spend $18.54 recorded of $21**; the ten sweeps v2.1–v2.10 cost
+$1.30 (v2.0's $0.16 was the session before).

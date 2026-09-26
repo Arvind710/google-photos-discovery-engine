@@ -531,7 +531,12 @@ SUBJECT_RULES: list[tuple[str, str]] = [
      r"\bsearch\b.*\b(?:understand|match)", "stage:5"),
 ]
 CLASS_WORDS = [(r"\bboth\b.*\b(?:sentimental|practical|reasons)\b", "both"),
-               (r"\butility\b|\bpractical\b", "utility"), (r"\bsentimental\b", "sentimental")]
+               # The everyday names too: "Does that differ for photos of receipts and
+               # documents?" was answered "we cannot split by kind of photo" (browser
+               # check, 2026-09-27) because only the words utility/practical counted.
+               (r"\butility\b|\bpractical\b|\breceipts?\b|\bdocuments?\b|\bbills?\b|"
+                r"\bprescriptions?\b|\bwhiteboards?\b|\bid cards?\b|\binvoices?\b", "utility"),
+               (r"\bsentimental\b", "sentimental")]
 
 
 def normalise_plan(plan: dict, question: str) -> dict:
@@ -619,14 +624,19 @@ def _satisfied(kind: str, got: Retrieved, classes: list[str] | None = None) -> t
                 plain.kind(c) for c in missing) + ", so nothing can be said about them")
         asked = [c for c in classes or [] if any(r.get("group") == c for r in counted)]
         if kind == "segment_split" and asked and all(c in thin for c in asked):
-            sizes = {r["group"]: r["of"] for r in counted if r.get("group") in asked}
+            # The size that IS too few, and the main population's when both are
+            # retrieved: the 32 other stories about information photos once
+            # overwrote the 21 and the answer said "32 … too few (under 30)" (v2.9, U2).
+            sizes = {r["group"]: r["of"] for r in sorted(
+                (r for r in counted if r.get("group") in asked and r["of"] < FLOOR),
+                key=lambda r: str((r.get("_cite") or {}).get("key", "")).startswith("core."))}
             return True, ("!only " + " and ".join(f"{n} stories are about {plain.kind(c)}"
                                                    for c, n in sizes.items())
                           + f" — too few (under {FLOOR}) for a percentage, so only counts are "
                           "given")
         if thin and kind == "segment_split":
-            return True, (f"~fewer than {FLOOR} stories are about "
-                          + " or ".join(plain.kind(g) for g in thin) + ", so those get counts only")
+            return True, (f"~fewer than {FLOOR} stories are "
+                          + " or ".join(plain.about(g) for g in thin) + ", so those get counts only")
     return True, ""
 
 

@@ -170,8 +170,10 @@ def check_share_arithmetic(text: str) -> list[str]:
     return bad
 
 
-_FLOOR_CLAIM = re.compile(r"(\d[\d,]*)\s+(?:stories|posts)\b[^.\n]{0,80}?too few \(under (\d+)\)",
-                          re.I)
+# Up to 140 characters ("32 stories are about photos kept for the information in
+# them (receipts, documents, notes) — too few", v2.9), but never across another count.
+_FLOOR_CLAIM = re.compile(r"(\d[\d,]*)\s+(?:stories|posts)\b(?:(?!\d[\d,]*\s+(?:stories|posts)\b)"
+                          r"[^.\n]){0,140}?too few \(under (\d+)\)", re.I)
 
 
 def check_floor_claim(text: str) -> list[str]:
@@ -242,6 +244,9 @@ _MORE = (r"(?:most|more|less|least|fewer|harder|hardest|easier|easiest|higher|hi
 _KIND_COMPARE = re.compile(rf"\b{_KIND}\b[^.;\n]{{0,40}}\b{_MORE}\b|\b{_MORE}\b[^.;\n]{{0,40}}"
                            rf"\b{_KIND}\b", re.I)
 
+_KIND_DIFFER = re.compile(r"\bdiffer\w*\b[^.;\n]{0,40}\bkinds? of photos?\b|\bkinds? of photos?\b"
+                          r"[^.;\n]{0,40}\bdiffer\w*\b", re.I)
+
 
 def check_comparison(text: str) -> list[str]:
     """No kind of photo can be claimed to differ from another: every kind has
@@ -251,7 +256,18 @@ def check_comparison(text: str) -> list[str]:
     Flags a comparative word within a few words of a kind of photo, in the
     answer's own words. Not absolute: it triggers the repair."""
     t = QUOTE.sub(" ", CITATION.sub(" ", text or ""))
-    return [m.group(0)[:80] for m in _KIND_COMPARE.finditer(t)]
+    bad = [m.group(0)[:80] for m in _KIND_COMPARE.finditer(t)]
+    # "By kind of photo, the first misstep differs." / "Search goes wrong in
+    # different ways by kind of photo." (U1, v2.7 and v2.8) — a claim of difference
+    # with no comparative word. Not when denied ("cannot say whether it differs by
+    # kind of photo") nor in the closing offer ("Want to see how this differs…?").
+    for m in _KIND_DIFFER.finditer(t):
+        sent = _sentence_of(t, m.start(), m.end())
+        if sent.rstrip(" *_").endswith("?") or _NEGATION.search(sent) or re.search(
+                r"\bwhether\b", sent, re.I):
+            continue
+        bad.append(m.group(0)[:80])
+    return bad
 
 
 def _norm(s: str) -> str:
@@ -313,6 +329,20 @@ def _negated(text: str, start: int, window: int = 160) -> bool:
 def check_proxy(text: str) -> list[str]:
     t = QUOTE.sub(" ", text or "")
     return [m.group(0) for m in PROXY.finditer(t) if not _negated(t, m.start())]
+
+
+def dash_figure_labels(text: str) -> str:
+    """Formatting only: "Some found the photo anyway: 38 of 115 stories (33%)." →
+    "Some found the photo anyway — 38 of 115 stories (33%)." Every label-colon the
+    v2.9 sweep withheld (5 of 24 drafts) was this shape — a clause, a colon, then
+    a figure — and the fallback that replaced it lost the answer (P1). A colon
+    before anything else ("Caveat: these are…") is untouched, and still absolute."""
+    t = text or ""
+    for m in reversed(list(LABEL_COLON.finditer(t))):
+        if re.match(r"\s*(?:in\s+|about\s+|just\s+|only\s+)?\d", t[m.end():]):
+            c = t.rindex(":", m.start(), m.end())
+            t = t[:c] + " —" + t[c + 1:]
+    return t
 
 
 def check_label_colon(text: str) -> list[str]:
@@ -441,19 +471,52 @@ _FALSE_LABEL = re.compile(r"(?:\s*[,—–-]|\s+is)?\s*(?:this is\s+)?a small gr
                           r"guide|\s*·\s*directional", re.I)
 
 
+_N_OF_M = re.compile(r"(\d[\d,]*) of (\d[\d,]*)")
+_LEAD_LABEL = re.compile(r"^(\s*)a small group, so only a rough guide\s*[:,—–-]\s*(\S)", re.I)
+_ONLY_LABEL = re.compile(r"\s*(?:this is\s+|that is\s+)?(?:a small group,?\s*)?(?:so\s+)?only a "
+                         r"rough guide\.?\s*$", re.I)
+_LABEL_SENTENCE = re.compile(r"\s*(?:this|that|the|these)\s+(?:figure|number|count|share|"
+                             r"percentage)s?\b[^.!?\n]*\brough guide", re.I)
+
+
 def drop_unfounded_rough_guide(text: str) -> str:
     """Remove the "rough guide" label from a sentence whose EVERY share is of 80 or
     more stories: the label is false there (it says the figure is weaker than it
     is), and the writer added it despite the prompt (v2.4: S1, P3, R2, F1). No number
     or word of evidence changes; a sentence with any share under 80 keeps it."""
-    out, last = [], 0
+    out, last, dropped, prev = [], 0, False, []
     for end in [m.end() for m in _BOUND.finditer(text or "")] + [len(text or "")]:
         seg = text[last:end]
-        ns = [int((m.group(3) or m.group(5)).replace(",", "")) for m in _SHARE_N.finditer(
-            CITATION.sub(" ", seg))]
-        if ns and all(n >= COMPARABLE for n in ns):
+        if dropped:                        # the dropped sentence's own citations
+            seg = re.sub(r"^[ \t]*" + CITATION.pattern + r"(?:\s*" + CITATION.pattern + r")*",
+                         "", seg)
+            if not seg.strip() and "".join(out).endswith("\n"):
+                seg = ""                   # the dropped line's own line break
+            dropped = False
+        # Every "N of M" counts, with or without its %: "A small group, so only a
+        # rough guide: 30 of 115 stories say anything about…" (v2.8: R3).
+        ns = [int(m.group(2).replace(",", "")) for m in _N_OF_M.finditer(
+            QUOTE.sub(" ", CITATION.sub(" ", seg)))]
+        bare = CITATION.sub(" ", seg)
+        if not ns and prev and all(n >= COMPARABLE for n in prev) and _ONLY_LABEL.match(bare):
+            # "…2 of 115 stories (2%). A small group, so only a rough guide." (v2.9: R2)
+            lead = re.match(r"(?:\s*" + CITATION.pattern + r")*", seg).group(0)
+            seg, dropped, ns = lead, True, prev
+        elif ns and all(n >= COMPARABLE for n in ns):
+            seg = _LEAD_LABEL.sub(lambda m: m.group(1) + m.group(2).upper(), seg)
             seg = _FALSE_LABEL.sub("", seg)
+            # A sentence that exists only to say it ("This figure is only a rough
+            # guide, because it comes from 31 of 115 stories (27%).", v2.7: N2)
+            # goes whole: nothing in it is new, and what it claims is false.
+            if _LABEL_SENTENCE.match(CITATION.sub(" ", seg)):
+                # Citations that open the segment close the sentence before it.
+                lead = re.match(r"(?:\s*" + CITATION.pattern + r")*", seg).group(0)
+                seg, dropped = lead + ("\n" if seg.endswith("\n") else ""), True
         out.append(seg)
+        if ns:
+            prev = ns
+        elif bare.strip():
+            prev = []
         last = end
     return "".join(out)
 

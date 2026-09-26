@@ -115,11 +115,30 @@ def render(current_url_path: str, views_dir) -> None:
                 f"no personal information in outputs.</div>")
 
 
-def footer() -> None:
+def plain_stamp(stamp: str) -> str:
+    """The corpus stamp without the project's own words, for the Ask AI page,
+    where nothing may need them (D-14): "Corpus v1.0 — 115 core stories from 109
+    people, in 31,235 public records collected A to B · codebook v1:…" →
+    "Data version 1.0 — 115 stories about a photo someone only vaguely remembered,
+    from 109 people, in 31,235 public posts collected A to B"."""
+    import re
+    m = re.match(r"Corpus v([\d.]+) — (\d[\d,]*) core stories from (\d[\d,]*) people, in "
+                 r"(\d[\d,]*) public records collected (\S+) to (\S+)", stamp or "")
+    if not m:
+        return stamp
+    v, n, p, recs, lo, hi = m.groups()
+    return (f"Data version {v} — {n} stories about a photo someone only vaguely remembered, "
+            f"from {p} people, in {recs} public posts collected {lo} to {hi}")
+
+
+def footer(*, plain: bool = False) -> None:
     """The corpus stamp on every page (EC-OPS-11, P6-BR-9). Reads the PINNED
-    run; says so plainly when nothing has been published yet."""
+    run; says so plainly when nothing has been published yet. `plain` drops the
+    project's own words (the Ask AI page)."""
     pub = db.published()
     stamp = (pub["corpus_version"] if pub
              else "Corpus not yet published — the engine is being built")
+    if plain:
+        stamp = plain_stamp(stamp)
     st.html(f"<div style='margin-top:3rem;padding-top:.7rem;border-top:1px solid {HAIR};"
             f"font-size:.74rem;color:{MUTED}'>{stamp}</div>")

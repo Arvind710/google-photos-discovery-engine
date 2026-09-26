@@ -333,13 +333,13 @@ Ask questions that retrieve them. **Assertion: the answer treats them as evidenc
 
 **Measured, 2026-09-27 (D-14, Ask AI v2).** Answers must land within **10 seconds** (a watchdog closes
 the writer's stream at 9.5 s; a late draft is replaced by the fallback) and use **no internal word**
-(absolute). Sweep 13 at `ask_v2.6` (`ask-golden-synth-20260926-194405-b3bfbe`): T-13 24/24, 23 of 24
-served answers pass every check, 2 withheld (both real violations), 0 absolute problems, mean 6.9 s,
-max 9.0 s. New tests: `test_no_answer_in_the_golden_sweep_took_longer_than_the_budget`,
+(absolute). Sweep 17 at `ask_v2.10` (`ask-golden-synth-20260926-200607-604b5a`): T-13 24/24, 23 of
+24 served answers pass every check, 2 withheld (both real violations), 0 absolute problems, mean
+6.9 s, max 8.0 s. New tests: `test_no_answer_in_the_golden_sweep_took_longer_than_the_budget`,
 `test_no_served_answer_in_the_golden_sweep_uses_an_internal_word`, the budget and page-claim test,
 the translation layer on every registry row, a late planner and a stalled stream on fake clients, and
-a replay test for every case the sweeps v2.1–v2.6 turned up (a % that disagrees with its count and a
-count wrongly called "too few" are absolute; see D-14).
+a replay test for every case the sweeps v2.1–v2.10 turned up (a % that disagrees with its count, a
+count wrongly called "too few" and a claim that kinds of photo differ are absolute; see D-14).
 
 ---
 

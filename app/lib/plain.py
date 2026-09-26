@@ -178,10 +178,20 @@ def _questions() -> dict[str, str]:
     return {q["id"]: q["plain"] for s in cb["stages"] for q in s["questions"]}
 
 
+_ASKING = ("what", "why", "whether", "how", "which", "whose", "when", "where", "who")
+
+
 def question(qid) -> str:
-    """A codebook question's meaning, lower-case and without its full stop."""
-    q = _questions().get(str(qid), "")
-    return (q[:1].lower() + q[1:]).rstrip(". ")
+    """A codebook question's meaning, lower-case (a name keeps its capital) and
+    without its full stop. Three meanings are statements ("The system discarded
+    the photo because one detail was wrong"); they read as "whether …", or "say
+    anything about the system discarded the photo" is not a sentence (v2.7: R2)."""
+    q = _questions().get(str(qid), "").rstrip(". ")
+    if not q.startswith("Google"):
+        q = q[:1].lower() + q[1:]
+    if q and q.split()[0].lower() not in _ASKING:
+        q = f"whether {q}"
+    return q
 
 
 def words(slug) -> str:
@@ -201,6 +211,23 @@ def words(slug) -> str:
 
 def kind(group) -> str:
     return KIND.get(str(group), f"{words(group)} photos")
+
+
+def among(by: str, group) -> str:
+    """A cross-tab's group in words, by what it groups on: a source split read
+    "among x photos" when every group was taken for a kind of photo (v2.7: P3)."""
+    if by == "source":
+        return f"among posts on {SOURCE.get(str(group), words(group))}"
+    if by == "outcome":
+        return f"among stories where {OUTCOME.get(str(group), 'the end was: ' + words(group))}"
+    return f"among {kind(group)}"
+
+
+def about(group) -> str:
+    """"about photos kept as memories", or "from posts on Hacker News" for a
+    source group — never "about hackernews photos"."""
+    g = str(group)
+    return f"from posts on {SOURCE[g]}" if g in SOURCE else f"about {kind(g)}"
 
 
 def count(n: int, d: int, unit: str = "stories") -> str:
@@ -225,9 +252,9 @@ def _crosstab(key: str, r: dict) -> str | None:
     m = re.fullmatch(r"(core|adjacent)\.([^=]+)=(.+)@([^:]+):(.+)", key)
     if not m:
         return None
-    pop, dim, val, _by, group = m.groups()
+    pop, dim, val, by, group = m.groups()
     n, d = int(r.get("stories", 0)), int(r.get("of", 0))
-    about = POP[pop] if group == "_all" else f"{POP[pop]}, among {kind(group)}"
+    about = POP[pop] if group == "_all" else f"{POP[pop]}, {among(by, group)}"
     head = f"In {count(n, d)} {about}"
     tail = rough(d) + "."
     if dim == "primary_stage" and val == "9":
@@ -351,7 +378,7 @@ JARGON = re.compile(
     r"\b(?:[Ss]tages?\s+\d+|[Cc]ore|[Aa]djacent|[Cc]orpus|[Cc]oded|[Cc]odebook|[Cc]oders?|"
     r"[Cc]ohort|[Dd]ataset|[Dd]irectional|[Kk]appa|[Mm]etric nodes?|[Pp]roxy|[Gg]ated|[Cc]rosstab|"
     r"[Rr]etrieval stor(?:y|ies)|[Uu]tility (?:photos?|stories)|"
-    r"(?:[Qq]uestion|[Qq])\s*\d+\.\d+|FULL|PARTIAL|NONE)\b|κ|\[[FSN]\d+\]")
+    r"(?:[Qq]uestion|[Qq])\s*\d+\.\d+|FULL|PARTIAL|NONE)\b|κ|\[\s*[FSN]\d+\b(?:\s*\])?")
 
 
 def check_jargon(text: str) -> list[str]:
@@ -408,6 +435,13 @@ def desnake(text) -> str:
 _TAG = re.compile(r"\[\s*([FSN]\d+(?:\s*(?:,|;|/|&|and)\s*[FSN]?\d+)*)\s*\]")
 _ONE = re.compile(r"([FSN])?(\d+)")
 _PARTIAL = re.compile(r"\[[FSN]?[\d,\s FSN]{0,12}$")          # a tag still arriving
+# A quote written INSIDE the tag ("[S1 “returned way too many images”]", v2.8: L1)
+# is the quote followed by its tag; the quote is then checked like any other.
+_QUOTED_TAG = re.compile(r"\[\s*([FSN]\d+)\s*[:,—–-]?\s*(“[^”\]]*”|\"[^\"\]]*\")\s*\]")
+
+
+def untangle(text: str) -> str:
+    return _QUOTED_TAG.sub(r"\2 [\1]", text or "")
 
 
 @dataclass
@@ -431,12 +465,12 @@ class Tags:
                 last = k or last
                 out.append(self.to_cite.get(f"{last}{n}", f"[{last}{n}]"))
             return "".join(out)
-        return _TAG.sub(one, text or "")
+        return _TAG.sub(one, untangle(text))
 
 
 def visible(text: str) -> str:
     """What the page shows WHILE the draft streams: the words, without tags."""
-    t = _PARTIAL.sub("", _TAG.sub("", text or ""))
+    t = _PARTIAL.sub("", _TAG.sub("", untangle(text)))
     return re.sub(r"[ \t]{2,}", " ", re.sub(r"[ \t]+([.,;:!?])", r"\1", t))
 
 

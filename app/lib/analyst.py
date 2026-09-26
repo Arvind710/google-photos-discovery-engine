@@ -37,7 +37,7 @@ from lib import retrieval as R
 from lib import verify as V
 from lib.evidence import COMPARABLE
 
-PROMPT_VERSION = "ask_v2.6"   # v1.1 subject · v1.2 planner low, default queries · v1.3 per-paragraph numbers,
+PROMPT_VERSION = "ask_v2.10"   # v1.1 subject · v1.2 planner low, default queries · v1.3 per-paragraph numbers,
 # withhold · v1.4 subject and photo-type rules on the question's own words ·
 # v1.5 gap numbers supported, question-named photo types only, citation completion ·
 # v1.6 plain words in the brief + the code-name check; the fallback names its gap ·
@@ -55,7 +55,14 @@ PROMPT_VERSION = "ask_v2.6"   # v1.1 subject · v1.2 planner low, default querie
 # v2.4 a colon that opens a quotation is not a label; a fallback with no share rows shows the
 # ranked opportunity first (writer prompt unchanged from v2.3) ·
 # v2.5 a "rough guide" label on a sentence whose every share is of 80+ is dropped in finish() ·
-# v2.6 a watchdog closes the stream AT the deadline; a count called "too few" must be under 30
+# v2.6 a watchdog closes the stream AT the deadline; a count called "too few" must be under 30 ·
+# v2.7 receipts, documents, bills… name the utility kind (retrieval.CLASS_WORDS); plain footer
+# v2.8 a site split reads "among posts on X", not "among x photos"; statement questions read
+#      "whether …"; a sentence that only calls a 80+ figure a rough guide is dropped
+# v2.9 a quote inside a tag is untangled, an unexpanded tag is jargon; a leading or bare-count
+#      false label is dropped; "kinds differ" is caught and absolute (no repair since v2.0)
+# v2.10 "clause: figure" → "clause — figure" (5 of 7 withheld at v2.9); a stand-alone label
+#      after an 80+ figure is dropped; the gate names the main group's size (U2: "32 … too few")
 # `minimal` since v2.0: at `low` the planner alone took 5–9 s, and the budget is
 # 10 s for everything. At minimal it mis-named the subject on 2 of 24 golden
 # questions (S5, R3) in sweep 5; the subject rules in retrieval.normalise_plan,
@@ -291,7 +298,7 @@ def brief(p: dict, got: R.Retrieved, v: R.Verdict, question: str, tags: P.Tags) 
     if split and all(r["of"] < COMPARABLE for r in split):
         parts.append(f"KINDS OF PHOTO: every kind of photo has fewer than {COMPARABLE} stories, "
                      "so never say one kind is harder, more common or more affected than "
-                     "another. Give each kind its own figure.")
+                     "another, or that the kinds differ. Give each kind its own figure.")
     prem = p.get("premise") or {}
     if prem.get("status") in ("contradicted", "unverifiable") and prem.get("asserts"):
         parts.append(f"WRONG ASSUMPTION — correct it first: {P.scrub(prem['asserts'])} — "
@@ -434,10 +441,12 @@ def _within(client, seconds: float):
 
 
 def finish(raw: str, tags: P.Tags, got: R.Retrieved) -> str:
-    """Tags → citations, then formatting only — and one deterministic correction: a
-    "rough guide" label on a sentence whose every share is of 80 or more stories is
-    false, and is dropped (v2.5; no number or word of evidence changes)."""
-    text = V.drop_unfounded_rough_guide(V.italicise_closing(tags.expand(raw)))
+    """Tags → citations, then formatting only — a "clause: figure" colon becomes a
+    dash (v2.10) — and one deterministic correction: a "rough guide" label on a
+    sentence whose every share is of 80 or more stories is false, and is dropped
+    (v2.5; no number or word of evidence changes)."""
+    text = V.drop_unfounded_rough_guide(V.dash_figure_labels(
+        V.italicise_closing(tags.expand(raw))))
     return V.canonical_citations(V.canonical_story_citations(text, got.records()), got.rows(),
                                  got.records())
 
@@ -451,6 +460,10 @@ ABSOLUTE = ("unsupported number", "percentage without its count", "unverifiable 
             # escapes the per-paragraph number check (sweep 8, P1: "27% (31 of 115)"
             # pinned to an invented key). A made-up source, like a made-up quote.
             "citation not retrieved",
+            # v2.8: with no repair, a flagged claim that kinds of photo differ was
+            # SERVED (U1, twice). No kind has 80 stories; the claim is a finding the
+            # stories cannot support, like a made-up number.
+            "comparison between kinds",
             # D-14: an answer a stranger cannot read has failed the reader as surely
             # as a wrong number — and with no repair, the only remedy is the fallback.
             "internal word")
