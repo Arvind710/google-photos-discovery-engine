@@ -998,3 +998,22 @@ fell back (O3 a rate, F2 "the majority", I1 an unbacked opening claim), none lat
 $0.066. The hard and site sets were last run at v3.21 (15 and 6 questions; 1 and 0 fell back).
 Suite 396 passed. **Spend $20.42 of $21.**
 
+
+**D-16, continued (`ask_v3.25` → `ask_v3.28`, decided by the PM).**
+- **Step 5's wording, the PM's pick:** "Searched with what they remembered, but the photo wasn't in
+  the results." It replaces "searched for something really in it" everywhere (fact sentences,
+  Analysis, Opportunities, the codebook's plain labels, the writer's instructions). It says they
+  searched, with what they remembered, and the photo was not in the results — nothing about why.
+- **"Usually about 10 seconds"** on the Ask AI status (measured mean 7.6 s, max 9.1–9.5 s).
+- **"What people typed when search failed"** routes to step 5, whose stored passages are the words
+  typed and what happened. The fallback may quote up to three of the study's own verified passages
+  (from the database, with their links) — never a post that arrived with the question (T-15).
+- **"First search attempt"**, never a bare "first": question 4.1 reads "what they typed on their first
+  search attempt" in answers, offers and the Analysis heading.
+- **Offers continue the answer** they close and never repeat one already made in the conversation
+  (the offers made so far are passed to the writer). A stock example offer in the instructions had
+  taught the writer to repeat it; it is gone.
+
+Final golden run `ask-golden-synth-20260926-233202-98647d` (`ask_v3.28`): 26/26 routes, 24 served, 2
+fell back (S1 quoted the hint "about a quarter"; I1 altered a quote), none late, max 9.1 s, $0.068;
+23 offers, all distinct. Suite 398 passed. **Spend $20.61 of $21.** Session record: `Docs/7.md`.

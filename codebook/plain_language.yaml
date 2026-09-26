@@ -15,7 +15,7 @@ stages:
   "2":  {title: "What they remember",                 short: "What they remember"}
   "3":  {title: "Where and how they look",            short: "Where they looked"}
   "4":  {title: "Putting the memory into words",      short: "Putting it into words"}
-  "5":  {title: "Does searching for a true detail find it?", short: "True detail, not found"}
+  "5":  {title: "Does their search return the photo?", short: "Searched, not in results"}
   "6":  {title: "Spotting it in the results",         short: "Spotting it in results"}
   "7":  {title: "Working out what went wrong",        short: "Trying another way"}
   "8":  {title: "Keep going or give up",              short: "Keep going or give up"}
@@ -27,7 +27,7 @@ failure_owners:
   memory: They couldn't remember enough
   strategy: They looked in the wrong place, or never searched
   expression: They remembered it but couldn't put it into words
-  system: They searched for something really in the photo, but search didn't bring it up
+  system: Searched with what they remembered, but the photo wasn't in the results
   presentation: It was in the results but hard to recognise
   recovery: After a miss, they couldn't find a better way in
   persistence: They gave up

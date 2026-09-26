@@ -749,7 +749,7 @@ def test_every_stored_method_flag_reads_plainly_with_its_own_numbers(con):
 def test_the_budget_and_the_claim_on_the_page():
     assert A.BUDGET_S <= 10 and A.PLANNER_TIMEOUT_S < A.BUDGET_S / 2
     src = (VIEWS / "ask.py").read_text()
-    assert 'TYPICAL = "about 15 seconds"' in src and "on_text=show" in src
+    assert 'TYPICAL = "about 10 seconds"' in src and "on_text=show" in src
     # ask_v3: `_hold_still` keeps the answer in place (the scroll hold fought the page).
     assert "_scroll_guard()" in src and "_bring_into_view()" in src
 
@@ -1316,9 +1316,34 @@ def test_step_five_is_said_as_observed_not_as_an_inner_cause():
     insufficient?" — the codebook: step 5 is a usable clue typed and the photo not coming
     up, inferred from what people wrote; vague wording is steps 4 and 2."""
     from lib import plain as P
-    assert "really was in the photo" in P.STAGE["5"] and "understand" not in P.STAGE["5"]
+    assert "searched with what they remembered" in P.STAGE["5"] and "understand" not in P.STAGE["5"]
+    assert "wasn't in the results" in P.STAGE["5"]
     assert P.label_("Search did not understand or match what they typed").startswith(
-        "They searched for something really in the photo")
+        "Searched with what they remembered")
     t = "People mostly typed a single word. [[analysis_crosstab|k5]]"
     assert V.soften_majority(t, ROWS).startswith("People most often typed")
     assert "never claim search \"misunderstood\" as an\ninner cause" in A.SYNTHESIS_SYSTEM
+
+
+@pytest.mark.needs_corpus
+def test_typed_when_search_failed_routes_to_step_five_and_the_fallback_quotes_people(con):
+    """The PM, 2026-09-27: "Show what people actually typed when search failed" got a
+    fallback with no quotes — "Why are the answers shying away from writing exact quotes?" """
+    q = "Show what people actually typed when search failed."
+    p = R.normalise_plan(A.rule_plan(q), q)
+    assert p["subject"] == "stage:5"
+    got = R.retrieve(con, p)
+    assert any(s.get("said") for s in got.stories)
+    v = R.gate(p, got, q)
+    t = A.fallback(v, got, p, held=True)
+    assert "What people wrote about it: “" in t
+    assert V.check(t, v.route, got.rows(), got.records(), question=q).ok
+
+
+def test_the_closing_offer_continues_the_answer_and_never_repeats():
+    """The PM, 2026-09-27: "you always ask this follow up … regardless of the context"."""
+    assert "CONTINUES THIS\n  ANSWER" in A.SYNTHESIS_SYSTEM and "Want to see what people typed" not in A.SYNTHESIS_SYSTEM
+    assert A._last_offer("x\n\n*Want to see the posts behind that figure?*") == \
+        "Want to see the posts behind that figure?"
+    src = (ROOT / "app" / "lib" / "analyst.py").read_text()
+    assert "OFFERS ALREADY MADE — do not repeat them" in src

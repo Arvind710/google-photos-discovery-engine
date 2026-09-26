@@ -40,7 +40,10 @@ STAGE = {
     # missed). Vague or insufficient wording is step 4 or 2 (the PM, 2026-09-27).
     # "usable clue" was itself jargon (the PM: "what is a usable clue here?"): the codebook
     # means a correct detail — something really in the photo, like an object or a word on it.
-    "5": "they searched for something that really was in the photo, but search did not bring it up",
+    # The PM's wording (2026-09-27): every case here is a half-remembered photo, so the plain
+    # statement is that they searched with what they remembered and the photo was not among
+    # the results — which also keeps it apart from "in the results but hard to spot" (step 6).
+    "5": "they searched with what they remembered, but the photo wasn't in the results",
     "6": "the photo was in the results, but hard to spot among similar ones",
     "7": "after a failed search, they could not find another way to it",
     "8": "they gave up",
@@ -186,12 +189,17 @@ def _questions() -> dict[str, str]:
 _ASKING = ("what", "why", "whether", "how", "which", "whose", "when", "where", "who")
 
 
+# Codebook wordings a newcomer reads wrongly (the PM, 2026-09-27: "'first' here is
+# ambiguous" — it means their first search attempt, before any retry).
+QUESTION_PLAIN = {"4.1": "what they typed on their first search attempt"}
+
+
 def question(qid) -> str:
     """A codebook question's meaning, lower-case (a name keeps its capital) and
     without its full stop. Three meanings are statements ("The system discarded
     the photo because one detail was wrong"); they read as "whether …", or "say
     anything about the system discarded the photo" is not a sentence (v2.7: R2)."""
-    q = _questions().get(str(qid), "").rstrip(". ")
+    q = QUESTION_PLAIN.get(str(qid)) or _questions().get(str(qid), "").rstrip(". ")
     if not q.startswith("Google"):
         q = q[:1].lower() + q[1:]
     if q and q.split()[0].lower() not in _ASKING:
@@ -462,7 +470,7 @@ _STORY_WORD = [(re.compile(r"\bStories\b"), "Cases"), (re.compile(r"\bstories\b"
 
 # Stored labels written before the step-5 wording was settled (the opportunity table).
 LABEL_FIX = {"Search did not understand or match what they typed":
-             "They searched for something really in the photo, but search did not bring it up"}
+             "Searched with what they remembered, but the photo wasn't in the results"}
 
 
 def label_(text) -> str:

@@ -76,7 +76,7 @@ _PLAIN_TERMS = [
     (r"\butility\b", "kept-for-information"),
     (r"\bsearch (?:did not|didn't|fails? to|failed to) understand(?: or match)? (?:what "
      r"(?:they|people|the person) typed|the (?:query|cue|words))",
-     "search did not bring up the photo when people searched for something really in it"),
+     "the photo wasn't in the results when people searched with what they remembered"),
     (r"\(not practical\)", "(not kept-for-information)"),
     (r"\bunclear\b(?= \d)", "reason-not-said"),
     (r"\bcodebook questions?\b", "study questions"), (r"\bcodebook\b", "study's questions"),

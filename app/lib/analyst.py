@@ -37,7 +37,7 @@ from lib import retrieval as R
 from lib import verify as V
 from lib.evidence import COMPARABLE
 
-PROMPT_VERSION = "ask_v3.24"   # v1.1 subject · v1.2 planner low, default queries · v1.3 per-paragraph numbers,
+PROMPT_VERSION = "ask_v3.28"   # v1.1 subject · v1.2 planner low, default queries · v1.3 per-paragraph numbers,
 # withhold · v1.4 subject and photo-type rules on the question's own words ·
 # v1.5 gap numbers supported, question-named photo types only, citation completion ·
 # v1.6 plain words in the brief + the code-name check; the fallback names its gap ·
@@ -118,6 +118,12 @@ PROMPT_VERSION = "ask_v3.24"   # v1.1 subject · v1.2 planner low, default queri
 # v3.23 shares among the cases that say; "mostly/usually/mainly" need over half, else "the most common"
 # v3.24 step 5 in plain words ("searched for something really in the photo"); a "mostly /
 #      usually" over figures under half is reworded "most often" instead of withheld
+# v3.25 step 5, the PM's pick: "searched with what they remembered, but the photo wasn't in the results"
+# v3.26 "what people typed when search failed" routes to step 5 with its quotes; the fallback
+#      quotes the study's verified passages (never a post that arrived with the question)
+# v3.27 "typed first" → "typed on their first search attempt"; a false "usually" in an opening
+#      claim is reworded against its paragraph's figures
+# v3.28 the closing offer continues this answer; offers already made are passed in, not repeated
 # `minimal` since v2.0: at `low` the planner alone took 5–9 s, and the budget is
 # 10 s for everything. At minimal it mis-named the subject on 2 of 24 golden
 # questions (S5, R3) in sweep 5; the subject rules in retrieval.normalise_plan,
@@ -256,6 +262,12 @@ def _planner_schema() -> dict:
                                                                "unverifiable"]}}}}}
 
 
+def _last_offer(answer: str) -> str:
+    """An answer's closing offer — its last line, when that is a question."""
+    lines = [ln.strip().strip("*_ ") for ln in str(answer or "").strip().splitlines() if ln.strip()]
+    return lines[-1] if lines and lines[-1].endswith("?") else ""
+
+
 def _history(history: list[dict] | None, instruction: str) -> str:
     if not history:
         return ""
@@ -310,10 +322,10 @@ half-remembered cases; the rest are counted separately.) The aim: find where sea
 and which problem is most worth fixing — ideas that interviews with real users then test.
 Public posts over-represent things going wrong, cannot count users or searches, and cannot
 compare apps, phones, countries, ages or years.
-What "went wrong at search" means here: the person searched for something that really was
-in the photo — a correct detail, like an object, a word on it, or a person — and search still
-did not bring it up; say it in those plain words, never "a usable clue". Seen from what
-people wrote; nobody
+What "went wrong at search" means here: the person searched with what they remembered (at
+least one detail right, even if another was wrong), but the photo wasn't in the results; say
+it in those plain words, never "a usable clue" or "something really in the photo". Seen from
+what people wrote; nobody
 outside Google can see why a search missed, so never claim search "misunderstood" as an
 inner cause. It is not the case where people typed something too vague: that is "couldn't
 put the memory into words" or "couldn't remember enough". Say it that way.
@@ -381,10 +393,12 @@ HOW TO WRITE
   things side by side.
 - After each sentence that rests on the evidence, the tags it rests on, e.g. [F2] or
   [F2][S1]. Your own reasoning sentences need no tag. Use only tags you were given.
-- Never offer what this answer already showed, and vary the offer from one answer to the next.
-- End with one short follow-up question in italics on its own line, offering something the
-  evidence can answer: what people typed or remembered, where a step went wrong, one group's
-  figures, the posts behind a point — e.g. *Want to see what people typed first?*
+- End with one short follow-up question in italics on its own line that CONTINUES THIS
+  ANSWER — the natural next step from what you just said, and something the study can
+  answer: after a figure, the posts behind it; after a finding about one step, the step
+  before or after it; after a recommendation, what would prove it wrong; after a limit, what
+  interviews could test. Never a stock offer, never one already made in this conversation,
+  never what this answer already showed. Say "first search attempt", never a bare "first".
 
 THE ANSWER TYPE is decided before you write:
 - FULL: answer the question.
@@ -845,6 +859,13 @@ def _topic(r: dict) -> str:
     return "what the evidence shows here"
 
 
+def _inner(span: str) -> str:
+    """A stored passage to quote: its own double quotes made single (the quote check treats
+    quote styles alike), so a post's "50%" stays inside the quotation it belongs to."""
+    t = str(span).strip().rstrip(".")[:160]
+    return t.replace("“", "‘").replace("”", "’").replace('"', "'")
+
+
 def fallback(v: R.Verdict, got: R.Retrieved, plan: dict | None = None, *,
              held: bool = False, late: bool = False) -> str:
     """What the reader gets when no checked draft can be served (the PM, 2026-09-27: "if
@@ -905,6 +926,16 @@ def fallback(v: R.Verdict, got: R.Retrieved, plan: dict | None = None, *,
     if rows:
         lines += ["The closest thing the evidence does show: "
                   + " ".join(f"{P.sentence(r)} {_cite(r)}" for r in rows) + post, ""]
+    # People's own words, when the retrieval stored them (the PM, 2026-09-27: "Why are the
+    # answers shying away from writing exact quotes?"). Only the study's verified passages
+    # (`said`, found word for word in the post when the corpus was built) — never a post
+    # that arrived with the question, the T-15 case that made this fallback stop quoting.
+    said = [x for x in got.stories if x.get("said") and x.get("source_url")][:3]
+    if said:
+        lines += ["What people wrote about it: " + " ".join(
+            f"“{_inner(x['said'])}” [[story|{x['story_id']}]]" for x in said),
+                  ""]
+    if rows:
         lines += [f"*Would you like me to go deeper into {_topic(rows[0])}?*"]
     else:
         lines += ["*Would you like to ask about one part of it instead — what people typed, "
@@ -1030,6 +1061,12 @@ def ask(client, con, question: str, *, history=None, inject_stories=None,
     tags = P.build(got)
     b = _history(history, "THIS CONVERSATION SO FAR — do not repeat what was said") + \
         brief(p, got, v, question, tags)
+    # The offers already made, so the next one continues instead of repeating (the PM,
+    # 2026-09-27: "you always ask this follow up … regardless of the context").
+    made = [_last_offer(h.get("answer", "")) for h in history or []]
+    made = [o for o in made if o]
+    if made:
+        b += "\n\nOFFERS ALREADY MADE — do not repeat them:\n" + "\n".join(f"- {o}" for o in made)
     say("write")
     text, rep = None, None
     try:

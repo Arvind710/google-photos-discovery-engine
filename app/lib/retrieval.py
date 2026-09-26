@@ -553,6 +553,10 @@ SUBJECT_RULES: list[tuple[str, str]] = [
     (r"\b(?:clues?|typed?|search(?:ed)? for)\b.*\b(?:bring|brings|find|finds|return|returns|"
      r"show|shows)(?: up)? the photo|\bdoes (?:google photos|search) (?:bring up|find|return|show)",
      "stage:5"),
+    # "Show what people actually typed when search failed" (the PM, 2026-09-27): what they
+    # typed at the moment search failed is step 5, whose stored quotes carry the words typed.
+    (r"\b(?:typed|type|typing|searched|search(?:ed)? for|tried)\b.*\b(?:fail\w*|didn't work|did not "
+     r"work|no results?|returned nothing|nothing came up|wrong photos?|missed)\b", "stage:5"),
     (r"\bforg[oe]t", "question:2.4"),
     (r"\bremember(?:s|ed)?\b", "question:2.1"),
     (r"\bhow many attempts|\bbefore (?:they |people )?give up|\bhow long do (?:they|people)",
@@ -568,7 +572,8 @@ SUBJECT_RULES: list[tuple[str, str]] = [
     # was planned with no subject, so no typed words were retrieved).
     (r"\b(?:words?|terms?|quer(?:y|ies)|phrases?|keywords?)\b.*\b(?:tried|typed|used|type|"
      r"search(?:ed)?)\b|\b(?:typed|type|tried|search(?:ed)? for)\b.*\bfirst\b|"
-     r"\bwhat (?:do |did )?(?:people|users|they) (?:type|typed|search)|\bformulate (?:a )?searches",
+     r"\bwhat (?:\w+ ){0,2}(?:people|users|they) (?:\w+ ){0,2}(?:type|typed|search)|"
+     r"\bformulate (?:a )?searches",
      "question:4.1"),
     # Hard questions, 2026-09-27 (H9, H11, H13): each was answered with the generic first-
     # failure figures because no rule named the codebook question it is about.

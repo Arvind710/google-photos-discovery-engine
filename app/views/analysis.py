@@ -57,7 +57,7 @@ KIND_HEAD = {"sentimental": "KEPT AS MEMORIES", "utility": "KEPT FOR INFORMATION
 FIRST_WRONG = {"0": "The photo was already gone", "1": "The post only says why they looked",
                "2": "Couldn't remember enough to search", "3": "Never used search — scrolled "
                "or looked elsewhere", "4": "Couldn't put the memory into words",
-               "5": "Searched for something really in it — search didn't bring it up",
+               "5": "Searched with what they remembered, but the photo wasn't in the results",
                "6": "Hard to spot among the results", "7": "Couldn't find another way in",
                "8": "Gave up", "9": "Nothing went wrong — they found it",
                "10": "Changed their habits afterwards"}
@@ -180,8 +180,8 @@ ui.hbar([words.owner(o) for o in own["val_a"]], own["n"].astype(int).tolist(),
          zip(own["n"], own["denom"], own["n_authors"], strict=True)],
         [ui.SKY if o != "none" else ui.GREY for o in own["val_a"]])
 sysrow = own[own["val_a"] == "system"]
-ui.verdict(f"Search's side — people searched for something really in the photo and it did "
-           f"not come up — accounts for "
+ui.verdict(f"Search's side — people searched with what they remembered and the photo wasn't "
+           f"in the results — accounts for "
            f"{share(int(sysrow['n'].iloc[0]), n_core).text if len(sysrow) else '0'} of these "
            f"cases; the person's own memory accounts for far fewer. The problem people describe "
            f"is the product's, not their recall.", ui.SKY)
@@ -220,9 +220,9 @@ if low("q:2.1"):
             "agreed too rarely on which details a case recalls to rest a headline on it.")
 
 # ================================================================= PART 5
-ui.section(5, "How they looked", "Where they looked inside Google Photos, and the form of the "
-           "first thing they typed, among the cases that say.", ui.ORANGE, slug="modes")
-for dim, title in (("core.q:3.2", "Where they looked"), ("core.q:4.1", "What they typed first")):
+ui.section(5, "How they looked", "Where they looked inside Google Photos, and what they typed on "
+           "their first search attempt, among the cases that say.", ui.ORANGE, slug="modes")
+for dim, title in (("core.q:3.2", "Where they looked"), ("core.q:4.1", "What they typed on their first search attempt")):
     r = rows(dim).head(6)
     if r.empty:
         continue

@@ -58,7 +58,7 @@ from lib import verify as V
 
 MUTED, HAIR, ACCENT, WARN = ui.MUTED, ui.HAIR, ui.BLUE, ui.ORANGE
 AVATAR = {"user": "🙋", "assistant": "🔎"}
-TYPICAL = "about 15 seconds"
+TYPICAL = "about 10 seconds"   # the PM, 2026-09-27; measured mean 7.6 s, max 9.1 s
 
 # (chip, question): the chip fits under the input; the question is what is sent,
 # each one from the golden set the engine is graded on.

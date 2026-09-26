@@ -265,16 +265,23 @@ def soften_majority(text: str, rows: list[dict]) -> str:
     by_key = {(r["_cite"]["table"], str(r["_cite"]["key"])): r for r in rows or []
               if r.get("_cite")}
 
-    def fix(m):
-        sent = m.group(0)
-        cited = [by_key[(c["table"], c["key"])] for c in citations(sent)
-                 if (c["table"], c["key"]) in by_key]
-        vals = _shares(cited)
-        if vals and all(v <= 0.5 for v in vals):
-            return _LOOSE_MAJORITY.sub(lambda w: "Most often" if w.group(0)[0].isupper()
-                                       else "most often", sent)
-        return sent
-    return _SENT_CITED.sub(fix, text or "")
+    def para_fix(para: str) -> str:
+        # Like the check: the sentence's own citations, else its paragraph's, else all —
+        # an opening claim usually cites nothing (v3.26: two answers lost to "usually").
+        para_rows = [by_key[(c["table"], c["key"])] for c in citations(para)
+                     if (c["table"], c["key"]) in by_key]
+
+        def fix(m):
+            sent = m.group(0)
+            cited = [by_key[(c["table"], c["key"])] for c in citations(sent)
+                     if (c["table"], c["key"]) in by_key] or para_rows or list(by_key.values())
+            vals = _shares(cited)
+            if vals and all(v <= 0.5 for v in vals):
+                return _LOOSE_MAJORITY.sub(lambda w: "Most often" if w.group(0)[0].isupper()
+                                           else "most often", sent)
+            return sent
+        return _SENT_CITED.sub(fix, para)
+    return "\n\n".join(para_fix(p) for p in re.split(r"\n\s*\n", text or ""))
 
 
 def check_proportions(text: str, rows: list[dict]) -> list[str]:
