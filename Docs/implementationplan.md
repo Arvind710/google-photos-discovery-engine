@@ -335,7 +335,7 @@ retrieval.py (4 channels, query registry) ──▶ gate() ──▶ verify.py �
 
 **Gate:** P6-BR-1…12 green · X-1…X-6 green · final spend reported against $15 · every [CTX] §14 criterion mapped to a passing eval → **engine frozen. Parts 3–8 begin.**
 
-**As run (2026-09-26, D-13).** 6.1–6.3 and 6.5–6.6 done: How it works with the full Methodology, the unhedged disclosure, `pipeline/analyse/publish.py` pinning `publish-20260926-173336-c13120` with a manifest, the corpus stamp in the footer, gate reports rendered in the app, the P6 browser sweep (11 of 12). **6.4 is open: cold start after the app has slept (P6-BR-10)** — the gate reads 14/15 until it is measured. Spend $16.34 recorded of $17.
+**As run (2026-09-26, D-13).** 6.1–6.3 and 6.5–6.6 done: How it works with the full Methodology, the unhedged disclosure, `pipeline/analyse/publish.py` pinning `publish-20260926-181556-a2dff0` with a manifest, the corpus stamp in the footer, gate reports rendered in the app, the P6 browser sweep (11 of 12). **6.4 is open: cold start after the app has slept (P6-BR-10)** — the gate reads 14/15 until it is measured. Spend $16.34 recorded of $17.
 
 ---
 

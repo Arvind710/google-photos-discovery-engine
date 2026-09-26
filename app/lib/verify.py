@@ -153,6 +153,16 @@ _SHARE_N = re.compile(r"(\d+(?:\.\d+)?)%\s*\((\d[\d,]*) of (\d[\d,]*)"
 
 
 def check_directional(text: str) -> list[str]:
+    return [b for kind, b in _directional(text) if kind == "unlabelled"]
+
+
+def check_directional_claimed(text: str) -> list[str]:
+    """"directional" on a share of a group of 80 or more — the label says the
+    figure is weaker than it is (sweep 11, F2)."""
+    return [b for kind, b in _directional(text) if kind == "claimed"]
+
+
+def _directional(text: str) -> list[tuple[str, str]]:
     """[CTX] §15.5: a share over a group of 30–79 is shown AND labelled
     directional. share() writes "27% (13 of 48; 17%–41%) · directional"; an
     answer that keeps "27% (13 of 48)" and drops the label reads as settled
@@ -162,7 +172,13 @@ def check_directional(text: str) -> list[str]:
     for m in _SHARE_N.finditer(t):
         n = int((m.group(3) or m.group(5)).replace(",", ""))
         if FLOOR <= n < COMPARABLE and "directional" not in t[m.start():m.end() + 70].lower():
-            bad.append(m.group(0))
+            bad.append(("unlabelled", m.group(0)))
+        # The mirror slip (sweep 10, U2; live on the first starter): "27% (31 of 115)
+        # · directional". Only the text right after THIS share is read, so the next
+        # share's own label does not count.
+        tail = t[m.end():m.end() + 25].lower()
+        if n >= COMPARABLE and re.match(r"[^.;%]*?·?\s*directional", tail):
+            bad.append(("claimed", m.group(0)))
     return bad
 
 
@@ -190,6 +206,9 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip().lower()
 
 
+LABEL_WORDS = 6
+
+
 def check_quotes(text: str, records: list[dict], rows: list[dict],
                  question: str = "") -> list[str]:
     # Testimony comes from STORIES (and the asker's own words, quoted back). The
@@ -198,6 +217,14 @@ def check_quotes(text: str, records: list[dict], rows: list[dict],
     hay = [_norm(question)] if question else []
     for r in records or []:
         hay += [_norm(r.get("text", "")), _norm(fence(r.get("text", "")))]
+    # A category's own NAME, quoted as a term ("a few scrolls", "Is the photo there to
+    # find?"), is not testimony. Sweep 10 withheld three drafts for it once rows
+    # carried plain-word labels. Only row LABELS (a cross-tab row's `about`, a derived
+    # row's measure and value) and only up to LABEL_WORDS words — never an engine
+    # sentence, so the quoted-recommendation case above stays closed.
+    labels = [_norm(" ".join(str(r.get(k, "")) for k in ("measure", "which")).replace("_", " "))
+              for r in rows or [] if r.get("measure")]
+    labels += [_norm(str(r["about"]).replace("_", " ")) for r in rows or [] if r.get("about")]
     bad = []
     for m in QUOTE.finditer(text or ""):
         # Punctuation the writer adds at the quote's edge ("…where," for "…where.")
@@ -205,6 +232,8 @@ def check_quotes(text: str, records: list[dict], rows: list[dict],
         q = _norm(m.group(1)).strip(" .,;:!?…")
         if len(q.split()) < 3:
             continue                                          # a term, not testimony
+        if len(q.split()) <= LABEL_WORDS and any(q in lab for lab in labels):
+            continue                                          # a category's name
         parts = [p for p in re.split(r"\s*(?:…|\.\.\.)\s*", q) if len(p.split()) >= 3] or [q]
         if not all(any(p in h for h in hay) for p in parts):
             bad.append(m.group(1)[:80])
@@ -309,6 +338,7 @@ class Report:
     length: list[str] = field(default_factory=list)
     codes: list[str] = field(default_factory=list)         # plain words, not slugs
     directional: list[str] = field(default_factory=list)   # [CTX] §15.5 label
+    directional_claimed: list[str] = field(default_factory=list)
     comparison: list[str] = field(default_factory=list)    # no kind of photo differs
 
     def problems(self) -> list[str]:
@@ -324,6 +354,8 @@ class Report:
                              ("evidence", self.evidence), ("length", self.length),
                              ("code name instead of plain words", self.codes),
                              ("directional share not labelled", self.directional),
+                             ("directional label on a comparable share",
+                              self.directional_claimed),
                              ("comparison between kinds of photo", self.comparison)):
             out += [f"{label}: {x}" for x in items]
         return out
@@ -331,6 +363,27 @@ class Report:
     @property
     def ok(self) -> bool:
         return not self.problems()
+
+
+def canonical_citations(text: str, rows: list[dict], records: list[dict]) -> str:
+    """Formatting, not content: a citation that is not retrieved as written is
+    rewritten ONLY when exactly one retrieved key matches it — the key with its
+    spaces restored to underscores ("missing cuts" → "missing_cuts", the brief
+    shows plain words), or the same key under another table ("stories:core"
+    cited as a cross-tab when it is the funnel's). Never invents a source."""
+    have = {(r["_cite"]["table"], str(r["_cite"]["key"])) for r in rows or [] if r.get("_cite")}
+    have |= {("story", str(r["story_id"])) for r in records or []}
+
+    def fix(m):
+        t, k = m.group(1), m.group(2).strip()
+        if (t, k) in have:
+            return m.group(0)
+        for cand in (k.replace(" ", "_"),):
+            if (t, cand) in have:
+                return f"[[{t}|{cand}]]"
+        other = [(tt, kk) for tt, kk in have if kk in (k, k.replace(" ", "_"))]
+        return f"[[{other[0][0]}|{other[0][1]}]]" if len(other) == 1 else m.group(0)
+    return CITATION.sub(fix, text or "")
 
 
 def canonical_story_citations(text: str, records: list[dict]) -> str:
@@ -358,6 +411,7 @@ def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
     rep.label_colon = check_label_colon(text)
     rep.codes = check_codes(text)
     rep.directional = check_directional(text)
+    rep.directional_claimed = check_directional_claimed(text)
     rep.comparison = check_comparison(text)
     words = len(CITATION.sub(" ", text).split())
     if words > 200:

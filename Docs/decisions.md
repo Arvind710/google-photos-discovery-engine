@@ -719,3 +719,16 @@ therefore reads 14/15, "GATE FAILED", until it is measured.
 **Also from the sweep:** a withheld refusal now states the gate's reason instead of "I
 could not write an answer…"; the secret-scan OpenAI pattern gained a left boundary (run ids
 "ask-golden-…" matched it once golden artifacts were committed; no key was ever present).
+
+**D-12, continued (late the same night).** The PM raised the budget to **$18** ("raise the
+budget to $18 and run the sweep"; `runs.CEILING_USD`, `evals/manual_checks.yaml`). Two
+more iterations, each from reading the previous sweep: v1.9 lets a category's own name be
+quoted as a term (≤ 6 words, row labels only — engine sentences stay unquotable) and
+refuses "directional" on a comparable share; v1.10 repairs a citation key only when
+exactly one retrieved key matches. **Sweep 12 (`ask_v1.10`): T-13 24/24, 0 absolute
+problems served, 1 of 24 withheld (was 7); P5 gate 83/83.** A sweep interrupted by the PM
+left two `runs` rows `failed` with cost unrecorded (≤ ≈ $0.33). **The Ask AI page now has
+the Myntra engine's layout** at the PM's request ([CTX] §16): threads, a centred empty
+state with six prompts, question and answer bubbles, a named status line, references in an
+expander, only evidence problems on screen — without streaming, because a withheld draft
+must never reach the screen. Spend $17.00 recorded of $18.

@@ -25,12 +25,14 @@ from lib import retrieval as R
 from lib import verify as V
 from lib.evidence import COMPARABLE
 
-PROMPT_VERSION = "ask_v1.8"   # v1.1 subject · v1.2 planner low, default queries · v1.3 per-paragraph numbers,
+PROMPT_VERSION = "ask_v1.10"   # v1.1 subject · v1.2 planner low, default queries · v1.3 per-paragraph numbers,
 # withhold · v1.4 subject and photo-type rules on the question's own words ·
 # v1.5 gap numbers supported, question-named photo types only, citation completion ·
 # v1.6 plain words in the brief + the code-name check; the fallback names its gap ·
 # v1.7 fallback cites stories, never quotes them; an unretrieved citation is absolute ·
-# v1.8 directional label + kinds-of-photo comparison checks; question rows carry their meaning
+# v1.8 directional label + kinds-of-photo comparison checks; question rows carry their meaning ·
+# v1.9 a category's own name may be quoted as a term; 'directional' only below 80 ·
+# v1.10 citation keys repaired when exactly one retrieved key matches
 # `low`, not `minimal`: at minimal the planner mis-named the subject on 2 of 24
 # golden questions (S5, R3), and a wrong subject is a wrong route. Cost: fractions of a cent.
 PLANNER_MODEL, PLANNER_EFFORT = "gpt-5-mini", "low"
@@ -470,12 +472,16 @@ def fallback(v: R.Verdict, got: R.Retrieved, plan: dict | None = None) -> str:
     return "\n".join(lines)
 
 
-def ask(client, con, question: str, *, history=None, inject_stories=None) -> Answer:
+def ask(client, con, question: str, *, history=None, inject_stories=None,
+        progress=None) -> Answer:
     """The whole loop. `inject_stories` feeds the injection probes THROUGH
     retrieval, as a planted story would arrive — the corpus is the attack
-    surface, not the question box (T-15)."""
+    surface, not the question box (T-15). `progress(stage)` is called as each
+    stage starts, so the page can say what it is doing; it changes nothing."""
+    say = progress or (lambda _stage: None)
     t0 = time.time()
     a = Answer(question=question)
+    say("plan")
     try:
         p, u = plan(client, question, history)
     except Exception as exc:                                    # noqa: BLE001
@@ -484,6 +490,7 @@ def ask(client, con, question: str, *, history=None, inject_stories=None) -> Ans
     p = R.normalise_plan(p, question)          # registered subject + photo-type rules
     a.plan, a.restated = p, str(p.get("restated") or question)
     a.add(PLANNER_MODEL, u)
+    say("retrieve")
     got = R.retrieve(con, p)
     for s in inject_stories or []:
         got.stories.insert(0, {**s, "_cite": {"table": "story", "key": s["story_id"]}})
@@ -492,13 +499,16 @@ def ask(client, con, question: str, *, history=None, inject_stories=None) -> Ans
     a.verdict, a.route = v, v.route
     b = _history(history, "## THIS CONVERSATION SO FAR — do not repeat what was said") + \
         brief(p, got, v, question)
+    say("write")
     try:
         text, u = _synth(client, b)
-        text = V.canonical_story_citations(V.italicise_closing(text), got.records())
+        text = V.canonical_citations(V.canonical_story_citations(
+            V.italicise_closing(text), got.records()), got.rows(), got.records())
     except Exception as exc:                                    # noqa: BLE001
         a.error, a.seconds = f"The answer could not be generated: {exc}", time.time() - t0
         return a
     a.add(SYNTHESIS_MODEL, u)
+    say("check")
     rep = V.check(text, v.route, got.rows(), got.records(), question=question,
                   gap=v.gap)
     if not rep.ok:                                              # ONE repair (EC-ASK-7)
@@ -506,7 +516,8 @@ def ask(client, con, question: str, *, history=None, inject_stories=None) -> Ans
         try:
             t2, u2 = _synth(client, b + "\n\n" + REPAIR.format(
                 problems="\n".join(f"- {x}" for x in rep.problems())))
-            t2 = V.canonical_story_citations(V.italicise_closing(t2), got.records())
+            t2 = V.canonical_citations(V.canonical_story_citations(
+                V.italicise_closing(t2), got.records()), got.rows(), got.records())
             a.add(SYNTHESIS_MODEL, u2)
             r2 = V.check(t2, v.route, got.rows(), got.records(), question=question,
                   gap=v.gap)

@@ -8,7 +8,7 @@
 # module already in sys.modules keeps its old definitions and a view calling a
 # new helper dies with AttributeError on the deployed app only. Editing this
 # file is what forces a real restart. Cost the Myntra build a deploy, 2026-08-22.
-# rebuild-token: 2026-09-26-j
+# rebuild-token: 2026-09-26-l
 streamlit>=1.40
 pandas>=2.2
 plotly>=5.24

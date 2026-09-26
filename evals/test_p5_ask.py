@@ -243,7 +243,7 @@ def test_user_and_model_text_is_escaped_before_html():
     and HTML disabled."""
     ask = (VIEWS / "ask.py").read_text()
     assert "unsafe_allow_html=False" in ask and "_escape_md(" in ask
-    assert "st.text(question)" in ask and 'st.text(turn["question"])' in ask
+    assert "st.text(question)" in ask and 'st.text(msg["content"])' in ask
     tri = (VIEWS / "try_it.py").read_text()
     for field in (r"s\['text'\]", r"sp\['why'\]", r"s\['why'\]"):
         uses = re.findall(rf"\{{[^{{}}]*{field}[^{{}}]*\}}", tri)
@@ -505,3 +505,51 @@ def test_a_withheld_refusal_says_why_instead_of_sounding_broken(con):
     text = A.fallback(v, got, p)
     assert v.route == "NONE" and "could not write" not in text and "usage data" in text
     assert V.check(text, "NONE", [], []).ok
+
+
+
+# ================================= v1.9: labels quoted as terms; "directional" only below 80
+def test_a_category_name_quoted_as_a_term_is_not_fabrication_but_engine_sentences_still_are():
+    rows = [{"about": "core stories answering question 6.6 (How far down the results they "
+                      "went) with a_few_scrolls", "stories": 1, "of": 48,
+             "_cite": {"table": "analysis_crosstab", "key": "k"}},
+            {"about": "core stories first going wrong at Stage 0 (Is the photo there to find?)",
+             "_cite": {"table": "analysis_crosstab", "key": "k0"}},
+            {"part": "top", "text": "Search did not understand or match the cue in most stories",
+             "_cite": {"table": "analysis_synthesis", "key": "recommendation:top"}}]
+    assert V.check_quotes('Stories coded "a few scrolls" are rare.', [], rows) == []    # R1
+    assert V.check_quotes('The stage "Is the photo there to find?" holds 8.', [], rows) == []
+    # an engine SENTENCE is still not testimony, even a short one
+    assert V.check_quotes('One said "did not understand or match the cue".', [], rows)
+    # and a label longer than six words is not a term
+    assert V.check_quotes('"core stories first going wrong at Stage 0".', [], rows)
+
+
+def test_directional_claimed_on_a_comparable_share_has_its_own_wording():
+    assert V.check_directional_claimed("27% (31 of 115) · directional of core.") == [
+        "27% (31 of 115"]
+    assert any(p.startswith("directional label on a comparable share") for p in
+               V.check("x 27% (31 of 115) · directional [[analysis_crosstab|k5]].", "PARTIAL",
+                       ROWS, RECS).problems())
+
+
+def test_citation_keys_are_repaired_only_when_exactly_one_retrieved_key_matches():
+    rows = ROWS + [{"step": "stories:core", "n": 115,
+                    "_cite": {"table": "analysis_funnel", "key": "stories:core"}},
+                   {"text": "x", "_cite": {"table": "analysis_method_flags",
+                                           "key": "missing_cuts"}}]
+    t = ("A [[analysis_method_flags|missing cuts]] B [[analysis_crosstab|stories:core]] "
+         "C [[analysis_crosstab|invented]]")
+    out = V.canonical_citations(t, rows, RECS)
+    assert "[[analysis_method_flags|missing_cuts]]" in out
+    assert "[[analysis_funnel|stories:core]]" in out
+    assert "[[analysis_crosstab|invented]]" in out                 # never invents a source
+
+
+@pytest.mark.parametrize("text, n_bad", [
+    ("27% (31 of 115) · directional of core stories.", 0),          # counted separately now
+    ("27% (31 of 115) of core; 27% (13 of 48; 17%–41%) · directional.", 0),
+    ("27% (13 of 48; 17%–41%) · directional.", 0),
+])
+def test_directional_is_kept_below_80_and_never_claimed_at_80_or_more(text, n_bad):
+    assert len(V.check_directional(text)) == n_bad
