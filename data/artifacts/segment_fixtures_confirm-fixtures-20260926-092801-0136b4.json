@@ -1,0 +1,1453 @@
+{
+ "seg": [
+  {
+   "id": "seg-01",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "count_ok": true,
+   "checks": []
+  },
+  {
+   "id": "seg-02",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "count_ok": true,
+   "checks": []
+  },
+  {
+   "id": "seg-03",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "a3",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "Tried to find my Aadhaar photo by searching 'aadhaar' and it showed nothing. Had to scroll",
+     "reason": "document keyword search failed, required manual scrolling"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "Tried to find my Aadhaar photo",
+     "found": true,
+     "author_ok": true,
+     "stage": 9,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-04",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "count_ok": true,
+   "checks": []
+  },
+  {
+   "id": "seg-05",
+   "returned": 2,
+   "located": 2,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "a5",
+     "bucket": "core",
+     "stage": 9,
+     "text": "First, I couldn't find the photo of my car's number plate for an insurance form \u2014 'car' ga",
+     "reason": "too many results for 'car', gave up"
+    },
+    {
+     "author": "a5",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "Second, totally different: I was looking for our Shimla trip from maybe 2016 and 'shimla' ",
+     "reason": "location metadata wrong, search returned nothing"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "First, I couldn't find the photo of my c",
+     "found": true,
+     "author_ok": true,
+     "stage": 9,
+     "stage_ok": true
+    },
+    {
+     "expected": "Second, totally different: I was looking",
+     "found": true,
+     "author_ok": true,
+     "stage": 9,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-06",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "a6",
+     "bucket": "core",
+     "stage": 9,
+     "text": "I searched 'mountains' and got nothing, then tried 'hills', then 'trek', then scrolled 201",
+     "reason": "tried multiple vague queries then found by browsing"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "I searched 'mountains' and got nothing",
+     "found": true,
+     "author_ok": true,
+     "stage": 9,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-07",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "op",
+     "bucket": "core",
+     "stage": 10,
+     "text": "I can't find a photo of my late mother's handwritten note. I don't know the year. Searchin",
+     "reason": "found after searching 'handwriting'"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "I can't find a photo of my late mother's",
+     "found": true,
+     "author_ok": true,
+     "stage": 10,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-08",
+   "returned": 3,
+   "located": 3,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "u1",
+     "bucket": "core",
+     "stage": 6,
+     "text": "Can't find the photo of my son's school ID card, I think it was taken in June. 'ID card' s",
+     "reason": "precise object/date search returned no results"
+    },
+    {
+     "author": "u2",
+     "bucket": "core",
+     "stage": 6,
+     "text": "Same here! I've been trying to find a photo of a medicine box for my dad for two days, 'me",
+     "reason": "searched object term returned nothing useful"
+    },
+    {
+     "author": "u3",
+     "bucket": "core",
+     "stage": 6,
+     "text": "Me too, lost a receipt photo from last Diwali, searched 'bill' and 'receipt', nothing.",
+     "reason": "searched receipt keywords returned nothing"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "Can't find the photo of my son's school ",
+     "found": true,
+     "author_ok": true,
+     "stage": 6,
+     "stage_ok": true
+    },
+    {
+     "expected": "I've been trying to find a photo of a me",
+     "found": true,
+     "author_ok": true,
+     "stage": 6,
+     "stage_ok": true
+    },
+    {
+     "expected": "lost a receipt photo from last Diwali",
+     "found": true,
+     "author_ok": true,
+     "stage": 6,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-09",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "count_ok": true,
+   "checks": []
+  },
+  {
+   "id": "seg-10",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "a10",
+     "bucket": "core",
+     "stage": 10,
+     "text": "Looking for a photo I took of a bookshop in Pondicherry, maybe 2018 or 2019. Search 'books",
+     "reason": "known-item with fuzzy date cue, found after browsing"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "Looking for a photo I took of a bookshop",
+     "found": true,
+     "author_ok": true,
+     "stage": 10,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-11",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "a11",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "searched for 'passport' and it did find my passport photo.",
+     "reason": "keyword search successfully returned passport photo"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "searched for 'passport'",
+     "found": true,
+     "author_ok": true,
+     "stage": 9,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-12",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "a12",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "My mom asked for the photo of her with her college friends at the reunion, I think 2015? I",
+     "reason": "photo unavailable due to lack of backup (library state)"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "My mom asked for the photo of her with h",
+     "found": true,
+     "author_ok": true,
+     "stage": 9,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-13",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "count_ok": true,
+   "checks": []
+  },
+  {
+   "id": "seg-14",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "a14",
+     "bucket": "core",
+     "stage": 10,
+     "text": "I want the photo of the chai stall near my old office. I have no idea when. Search 'chai' ",
+     "reason": "known-item with vague cues, search returned many results"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "I want the photo of the chai stall",
+     "found": true,
+     "author_ok": true,
+     "stage": 10,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-15",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "count_ok": true,
+   "checks": []
+  },
+  {
+   "id": "seg-16",
+   "returned": 2,
+   "located": 2,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "a16",
+     "bucket": "core",
+     "stage": 7,
+     "text": "Two years ago I photographed a whiteboard at a workshop. Last week I needed it. I tried 'w",
+     "reason": "known whiteboard photo but search terms failed"
+    },
+    {
+     "author": "a16",
+     "bucket": "adjacent",
+     "stage": 6,
+     "text": "The same day my wife was also trying to find her Goa trip pics from before we married and ",
+     "reason": "precise place cue returned wrong account's results"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "Two years ago I photographed a whiteboar",
+     "found": true,
+     "author_ok": true,
+     "stage": 7,
+     "stage_ok": true
+    },
+    {
+     "expected": "my wife was also trying to find her Goa ",
+     "found": true,
+     "author_ok": true,
+     "stage": 6,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-17",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "count_ok": false,
+   "checks": [
+    {
+     "expected": "I remember a photo was mostly red",
+     "found": false,
+     "author_ok": false,
+     "stage": null,
+     "stage_ok": false
+    }
+   ]
+  },
+  {
+   "id": "seg-18",
+   "returned": 1,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "count_ok": false,
+   "checks": [
+    {
+     "expected": "photo nahi mil rahi",
+     "found": false,
+     "author_ok": false,
+     "stage": null,
+     "stage_ok": false
+    }
+   ]
+  },
+  {
+   "id": "seg-19",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "b19",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "Mine was a menu from a restaurant in Hampi, 2017. Search never found it; I found it by acc",
+     "reason": "precise cue (year) but search failed"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "Mine was a menu from a restaurant in Ham",
+     "found": true,
+     "author_ok": true,
+     "stage": 9,
+     "stage_ok": true
+    }
+   ]
+  },
+  {
+   "id": "seg-20",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "op",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "I'm looking for a screenshot of a train ticket PNR from last month.",
+     "reason": "found by scrolling the Screenshots folder"
+    }
+   ],
+   "count_ok": true,
+   "checks": [
+    {
+     "expected": "I'm looking for a screenshot of a train ",
+     "found": true,
+     "author_ok": true,
+     "stage": 9,
+     "stage_ok": true
+    }
+   ]
+  }
+ ],
+ "bucket": [
+  {
+   "id": "bb-01",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 6,
+     "text": "I remember a pic of a small caf\u00e9 in Goa from a trip, no idea which year, search for 'cafe ",
+     "reason": "vague memory with no year, search failed"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "bb-02",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Needed the photo of my prescription, took ages scrolling, finally found by searching 'tabl",
+     "reason": "known-document found after trying object keyword"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "bb-03",
+   "returned": 1,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "expected": "adjacent",
+   "got": "irrelevant",
+   "ok": false
+  },
+  {
+   "id": "bb-04",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "My WhatsApp photos never got backed up so I couldn't find the one from my brother's weddin",
+     "reason": "WhatsApp photos were not backed up"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "adjacent",
+   "ok": true
+  },
+  {
+   "id": "bb-05",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "expected": "irrelevant",
+   "got": "irrelevant",
+   "ok": true
+  },
+  {
+   "id": "bb-06",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 7,
+     "text": "I know I took a photo of the Wi-Fi password on the router at my in-laws' place, sometime l",
+     "reason": "known-item search failed with vague time cues"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "bb-07",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "Search for 'Eiffel Tower' works perfectly, shows all my Paris photos.",
+     "reason": "successful precise query"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "adjacent",
+   "ok": true
+  },
+  {
+   "id": "bb-08",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "expected": "irrelevant",
+   "got": "irrelevant",
+   "ok": true
+  },
+  {
+   "id": "bb-09",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Somewhere in my 40,000 photos there's one of my grandmother holding me as a baby. I don't ",
+     "reason": "known-item with very vague cues; endless scrolling"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "bb-10",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 6,
+     "text": "Can't find the video from my brother's graduation, it was in 2019.",
+     "reason": "video_out_of_scope"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "adjacent",
+   "ok": true
+  },
+  {
+   "id": "bb-11",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "expected": "irrelevant",
+   "got": "irrelevant",
+   "ok": true
+  },
+  {
+   "id": "bb-12",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Google Photos search found my Aadhaar card when I typed 'aadhaar' but not the back side, w",
+     "reason": "found one side but not the other despite searching"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "core",
+   "ok": false
+  },
+  {
+   "id": "bb-13",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "expected": "irrelevant",
+   "got": "irrelevant",
+   "ok": true
+  },
+  {
+   "id": "bb-14",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 6,
+     "text": "yaad hai ek photo thi mandir ke bahar, shayad 2019 ya 2020, 'temple' search karne pe kuch ",
+     "reason": "vague memory, search returned nothing"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  }
+ ],
+ "authored": [
+  {
+   "id": "tri-A-52",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Last winter I photographed my mum's tablet strip so I'd remember what the doctor gave her.",
+     "reason": "search failed to recognise the document; found by scrolling"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "tri-A-53",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Last winter I photographed my mum's tablet strip so I'd remember what the doctor gave her.",
+     "reason": "precise but wrong date led search to miss the photo"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "tri-A-54",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Last winter I photographed my mum's tablet strip so I'd remember what the doctor gave her.",
+     "reason": "known-item with fuzzy cues; found after long scrolling"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "tri-B-52",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 10,
+     "text": "I remember a photo of a tiny caf\u00e9 in Goa from a trip, no idea which year. Searching 'goa' ",
+     "reason": "vague year; found by date; missing location metadata"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "tri-B-53",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 10,
+     "text": "I remember a photo of a tiny caf\u00e9 in Goa from a trip, I was sure it was 2019. Searching 'c",
+     "reason": "wrong precise year; dropping year returned photo"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "tri-B-54",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "I remember a photo of a tiny caf\u00e9 in Goa from a trip, no idea which year. Searching 'goa' ",
+     "reason": "known-item with vague time/place cue; required long scrolling"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "tri-C-52",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "I need the fridge receipt for the warranty; I think I photographed it in 2021. I searched ",
+     "reason": "photo dated differently due to WhatsApp backup timing"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "tri-C-53",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "I need the fridge receipt for the warranty; I think I photographed it in 2021. I searched ",
+     "reason": "hedged year; broad query found receipt"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "tri-C-54",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "I need the fridge receipt for the warranty; I think I photographed it in 2021. Searching '",
+     "reason": "known-item with vague temporal cue, search results too numerous"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "s24-2a",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 2,
+     "text": "I need the plumber's visiting card I photographed at some point. I don't remember when he ",
+     "reason": "very vague memory prevents forming useful search cues"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "s24-2b",
+   "returned": 0,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "expected": "core",
+   "got": "irrelevant",
+   "ok": false
+  },
+  {
+   "id": "s24-2c",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 2,
+     "text": "There's a plant at my aunt's place I photographed on one of our visits. I can't remember w",
+     "reason": "known-item with very vague visual cues"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "s24-4a",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "I remember the photo exactly \u2014 my son asleep at the dining table with noodles stuck to his",
+     "reason": "vague description failed, user gave up"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "s24-4b",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 8,
+     "text": "I know exactly what the flower looked like \u2014 bright orange, trumpet-shaped, on a vine by t",
+     "reason": "known-item with vague cues, couldn't name subject"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "s24-4c",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Needed the photo of my prescription. I remembered it clearly \u2014 the white box with the blue",
+     "reason": "eventual success after changing query to 'tablet'"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "bkt-ctx-1",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 6,
+     "text": "I remember a pic of a small caf\u00e9 in Goa from a trip, no idea which year, search for 'cafe ",
+     "reason": "vague memory, search returned nothing"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "bkt-ctx-2",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Needed the photo of my prescription, took ages scrolling, finally found by searching 'tabl",
+     "reason": "known-item found after searching with an object cue"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "bkt-ctx-3",
+   "returned": 1,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "expected": "adjacent",
+   "got": "irrelevant",
+   "ok": false
+  },
+  {
+   "id": "bkt-ctx-4",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "My WhatsApp photos never got backed up so I couldn't find the one from my brother's weddin",
+     "reason": "missing backup prevented retrieval of specific photo"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "adjacent",
+   "ok": true
+  },
+  {
+   "id": "bkt-hard-1",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Searching 'dog' shows my dog's photos fine, but I can't find the one where she's wearing t",
+     "reason": "vague temporal cue; specific photo not surfaced"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "bkt-hard-2",
+   "returned": 1,
+   "located": 0,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [],
+   "expected": "adjacent",
+   "got": "irrelevant",
+   "ok": false
+  },
+  {
+   "id": "bkt-hard-3",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "I took a photo of the parking level sign yesterday at the mall. Search 'parking' shows not",
+     "reason": "precise recent timeline search succeeded instead of keyword"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "adjacent",
+   "ok": true
+  },
+  {
+   "id": "bkt-hard-4",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 6,
+     "text": "Asked Ask Photos for 'the houseboat photo from our Kerala trip'. It confidently told me it",
+     "reason": "assistant misidentified year and showed wrong image"
+    }
+   ],
+   "expected": "core",
+   "got": "adjacent",
+   "ok": false
+  },
+  {
+   "id": "ps-1",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "Spent an hour searching 'grandpa birthday' and scrolling 2019 for the photo of grandpa cut",
+     "reason": "camera folder never backed up, photo absent"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "adjacent",
+   "ok": true
+  },
+  {
+   "id": "ps-2",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Looking for our Coorg trip photos from 2020, I was certain of the year. 'coorg 2020' retur",
+     "reason": "misremembered year; broader query succeeded"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "ps-3",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Searched 'wedding' for my cousin's mehendi photo. Got hundreds, the right one was way down",
+     "reason": "broad query returned many results, target buried"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "ps-4",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "I didn't even bother with search, it never works for me. Scrolled through years of photos ",
+     "reason": "scrolled through photos for target then gave up"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "ps-5",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 6,
+     "text": "The photo from the evening we got the news about my dad's job. I know exactly the moment b",
+     "reason": "emotion-based memory not captured by tags"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "ps-6",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Searching 'beach' found the right trip straight away, but not the exact sunset photo. I ke",
+     "reason": "repeated queries failed to surface exact photo; gave up"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "cls-1",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "At the bank counter they wanted my PAN card and I knew I'd photographed it, but searching ",
+     "reason": "precise cue (PAN) but search failed to surface it"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "cls-2",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 6,
+     "text": "Looking for the whiteboard photo from last quarter's planning meeting \u2014 the one with the r",
+     "reason": "vague timing, many similar matches"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "cls-3",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 7,
+     "text": "My grandfather passed last month and I want the photo of him laughing at my graduation. Se",
+     "reason": "face search returns other photos, uncertain year"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "cls-4",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "I photographed my nani's handwritten recipe card for her dal years ago. I want to cook it ",
+     "reason": "known-item with vague time cue; search failed"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "vid-1",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 6,
+     "text": "Can't find the video of my daughter's first steps, somewhere in 2020. Searching 'walking' ",
+     "reason": "video_out_of_scope"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "adjacent",
+   "ok": true
+  },
+  {
+   "id": "vid-2",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 6,
+     "text": "From my sister's wedding there are photos and a few videos. I'm after one PHOTO, the famil",
+     "reason": "videos prioritized over target photo in results"
+    }
+   ],
+   "expected": "core",
+   "got": "adjacent",
+   "ok": false
+  },
+  {
+   "id": "vid-3",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 6,
+     "text": "I screenshotted a delivery address someone sent on Instagram a few months ago. 'address' a",
+     "reason": "text-based screenshot not found by keywords"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "hi-1",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 6,
+     "text": "Goa trip wali cafe ki photo dhoondh rahi hu. Cafe ka naam yaad nahi, year bhi pata nahi. '",
+     "reason": "vague cues; search failed to return photo"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "hi-2",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 9,
+     "text": "Mummy ki dawai ki photo li thi pichle saal, ab doctor naam puch rahe hai. Search me 'dawai",
+     "reason": "known-item with fuzzy cues; found after extensive scrolling"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  },
+  {
+   "id": "hi-3",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "adjacent",
+     "stage": 9,
+     "text": "Bhai ne shaadi ki photos WhatsApp pe bheji thi, woh Google Photos me hai hi nahi. WhatsApp",
+     "reason": "Stage 0 backup issue prevented photos being in library"
+    }
+   ],
+   "expected": "adjacent",
+   "got": "adjacent",
+   "ok": true
+  },
+  {
+   "id": "hi-4",
+   "returned": 1,
+   "located": 1,
+   "unlocated": 0,
+   "overlapping": 0,
+   "stories": [
+    {
+     "author": "author",
+     "bucket": "core",
+     "stage": 2,
+     "text": "Bas itna yaad hai ki baarish ho rahi thi aur hum chai pee rahe the. Kaunsa saal tha, kaun ",
+     "reason": "very vague memory, hasn't run focused searches yet"
+    }
+   ],
+   "expected": "core",
+   "got": "core",
+   "ok": true
+  }
+ ],
+ "summary": {
+  "P2_MET_3_count_exact": 0.9,
+  "story_found": 0.8888888888888888,
+  "author_ok": 0.8888888888888888,
+  "stage_floor_ok": 0.8888888888888888,
+  "T9_bucket_boundary": 0.8571428571428571,
+  "authored_bucket": 0.875,
+  "unlocated": 0,
+  "returned": 66,
+  "overlapping": 0
+ },
+ "run_id": "confirm-fixtures-20260926-092801-0136b4",
+ "effort": "low",
+ "pipeline": "find+confirm",
+ "usage": {
+  "find_usd": 0.03031,
+  "confirm_usd": 0.124531,
+  "records": 74
+ }
+}

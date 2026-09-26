@@ -1,0 +1,64 @@
+# Stated limitations — measured metrics that stayed below threshold after their
+# remediation loop (implementationplan.md §0.3: "reported as a stated limitation
+# in the app and the deck and the phase passes carrying it. Never silently
+# dropped"). A gate test accepts a below-threshold metric ONLY through an entry
+# here whose `measured` matches the committed artifact.
+#
+# Absolute thresholds (T-1, T-2, T-14, T-15, T-16, T-18) can never appear here.
+
+P2-MET-1:
+  threshold: "T-5 ≥ 0.80 — story-count agreement, gpt-5-mini vs gpt-5"
+  measured: 0.35
+  artifact: data/artifacts/segment_dual_segment-dual-20260926-092027-c4ea26.json
+  sample: 60 story-bearing records, equal per source (a mixed sample read 0.80, but 3 in 4 of its records hold no story)
+  iterations: 3
+  direction: >
+    One-sided. gpt-5 found fewer stories in 39 of 60 records and more in none; the
+    disputed candidates were general deletion, device and export problems.
+  mitigation: >
+    gpt-5 now confirms every candidate gpt-5-mini finds (pipeline/segment/confirm.py,
+    Docs/decisions.md D-8). The stored stories are gpt-5-confirmed; gpt-5-mini alone
+    is not trusted to count stories.
+  disclosed_in: [Docs/decisions.md D-8, Data Bank Part 5 note, Methodology (P6)]
+
+P2-MET-2:
+  threshold: "T-6 ≥ 0.75 — reaches_stage agreement on the gating band (<5 · 5–6 · ≥7)"
+  measured: 0.55
+  artifact: data/artifacts/segment_dual_segment-dual-20260926-092027-c4ea26.json
+  sample: 20 matched stories
+  iterations: 3
+  mitigation: >
+    Every stored story's reaches_stage is the HIGHER of gpt-5-mini's and gpt-5's
+    (confirmation pass), so disagreement resolves upward across the whole corpus,
+    not only the sample (EC-SEG-5). Block yield (P3-MET-9) is the downstream check.
+  disclosed_in: [Docs/decisions.md D-8, Methodology (P6)]
+
+P2-MET-4:
+  threshold: "zero-story rate among records Pass 1 read ≤ 0.25"
+  measured: 0.973
+  counts: "11,475 of 11,794 records read hold no confirmed story (1,340 of them emptied by gpt-5 confirmation)"
+  iterations: 0
+  why_fewer: >
+    The rate flags a gate that is too broad, which costs money, not correctness.
+    Narrowing it failed the recall probe in round 1 (T-4 6.5%, D-5), and T-4 is
+    never cut. Pass 1 cost less than its estimate on every batch, so there was no
+    cost to recover.
+  mitigation: >
+    Reported as a finding. Most public text that mentions finding a photo is about
+    lost, deleted or unsynced photos, not about searching from vague memory.
+  disclosed_in: [Docs/decisions.md D-8, Data Bank Part 3 and Part 5]
+
+T-20:
+  threshold: "≥ 300 core stories ([CTX] §14.3) — a P3 gate, recorded here when it was known"
+  measured: 115
+  counts: "115 core stories from 109 people; 219 adjacent; 31,235 records collected"
+  iterations: 2
+  loop_backs: >
+    Two P1-F top-ups (implementationplan.md §0.4): YouTube, Stack Exchange, Hacker
+    News (free), then X (Apify, $1.58). The Apify budget for the cycle is spent
+    ($9.52 of $10).
+  mitigation: >
+    The PM chose to proceed (2026-09-26). Every share goes through share(), so thin
+    cells show counts only. Headline claims stay at one dimension. The Part 3
+    interviews carry more of the weight.
+  disclosed_in: [Docs/decisions.md D-8, Data Bank Part 5 verdict, deck]

@@ -50,6 +50,26 @@ def build(con) -> dict[str, int]:
             rows.append(("kept", 99, kept[0], kept[1]))
             con.executemany("INSERT INTO analysis_funnel VALUES (?,?,?,?,?,?,?)",
                             [(s, o, src, n, tot[0], a, rid) for s, o, n, a in rows])
+            # P2: the unit changes from records to stories. Story steps carry
+            # the story total as their denominator, and distinct STORY authors
+            # (A.2), not record authors.
+            # Only stories not marked at story level (gpt-5 confirmation, D-8).
+            live = ("s.story_id NOT IN (SELECT story_id FROM exclusions"
+                    " WHERE story_id IS NOT NULL)")
+            swhere = f"WHERE {live}" + ("" if src == "_all" else " AND r.source = ?")
+            st = con.execute("SELECT count(*), count(DISTINCT s.author_key) FROM stories s"
+                             f" JOIN records r USING (record_id) {swhere}", args).fetchone()
+            if st[0]:
+                srows = [("stories", 100, st[0], st[1])]
+                for k, b in enumerate(("core", "adjacent", "irrelevant"), 101):
+                    bn = con.execute(
+                        "SELECT count(*), count(DISTINCT s.author_key) FROM stories s JOIN records r"
+                        f" USING (record_id) WHERE s.bucket = ? AND {live}"
+                        f" {'AND r.source = ?' if args else ''}",
+                        (b, *args)).fetchone()
+                    srows.append((f"stories:{b}", k, bn[0], bn[1]))
+                con.executemany("INSERT INTO analysis_funnel VALUES (?,?,?,?,?,?,?)",
+                                [(s, o, src, n, st[0], a, rid) for s, o, n, a in srows])
 
         spend: dict[str, float] = {}
         for stage, params in con.execute("SELECT stage, params_json FROM runs"

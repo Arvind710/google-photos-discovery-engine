@@ -1,0 +1,410 @@
+{
+ "run_id": "segment-dual-20260926-091145-12ec26",
+ "n_records": 60,
+ "with_stories": true,
+ "T5_count_agreement": 0.25,
+ "matched_stories": 19,
+ "T6_band_agreement": 0.631578947368421,
+ "reaches_exact": 0.47368421052631576,
+ "reaches_within_one": 0.631578947368421,
+ "bucket_agreement": 0.5263157894736842,
+ "raised_upward": [
+  {
+   "story_id": "44b4850815c8b4d468118ced98ea43f6d5c04342:0",
+   "from": 6,
+   "to": 8
+  },
+  {
+   "story_id": "a002df4d99a2ac92a4fe47f287f1257b3087a97d:0",
+   "from": 1,
+   "to": 2
+  },
+  {
+   "story_id": "6ca7e3c8a9edbff94276d0c929ed25f2015fbc89:0",
+   "from": 3,
+   "to": 8
+  },
+  {
+   "story_id": "8da3d01b94e5fede428acc6de407b9a9344b10df:2",
+   "from": 6,
+   "to": 7
+  },
+  {
+   "story_id": "b089cec146c452441b80a96b9603b7a704f39f94:0",
+   "from": 6,
+   "to": 9
+  },
+  {
+   "story_id": "eaeb1b1eab737f66c8b703e0244cbfbf8dadd1b8:0",
+   "from": 6,
+   "to": 9
+  }
+ ],
+ "records": [
+  {
+   "record_id": "f047a75d8e703646ef29cb6bcd69d85c8c421cc0",
+   "source": "appstore",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "845863f139f2666ad496e8c79c1f87bc81bcced5",
+   "source": "appstore",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "89478329d749866157a432694e0f6f53e79ec21a",
+   "source": "appstore",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "5ef15f00013331f481384da1f4640699069826d5",
+   "source": "appstore",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "28f4012d275d427bb406a975388159bc3695b673",
+   "source": "appstore",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "19d655b93cd41aa19db82d55491c6eb51a1e34d0",
+   "source": "appstore",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "44b4850815c8b4d468118ced98ea43f6d5c04342",
+   "source": "gp_help",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "e485a93236655473fa5dc1ec08b10266e9350539",
+   "source": "gp_help",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "a002df4d99a2ac92a4fe47f287f1257b3087a97d",
+   "source": "gp_help",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "5d89ca9cc1f4818c318cc68d2959c0e3a4c15e3d",
+   "source": "gp_help",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "440a41ce01618928473ab8de7de594354c302e1e",
+   "source": "gp_help",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "6ca7e3c8a9edbff94276d0c929ed25f2015fbc89",
+   "source": "gp_help",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "94e836f639aa60aad3cec95afc581c0f668bb5b4",
+   "source": "hackernews",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "38a1f4902df344ccbb34a778342c550118173b44",
+   "source": "hackernews",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "4ec1c28fff87c9fc6ac1eb3aec40c0765ff24d14",
+   "source": "hackernews",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "4e590d775dbab527ab072682d78445b807d2d150",
+   "source": "hackernews",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "b7113e3689e0674b9cd8b089fb3bcd093e40d3eb",
+   "source": "hackernews",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "15102a0acba5e401f1d958fd512da9d43003b792",
+   "source": "hackernews",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "dbe7c1e2c700970c47a6b3a42b5d27613adf0cb8",
+   "source": "play",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "a4f32f16c4ef302f1a468b9c6421d6fcf5363eba",
+   "source": "play",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "e0c65e6dbe448aabc74eab6d1bf1266c6b2e098c",
+   "source": "play",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "0c2e64622c4d77dbe5c33627279cd8ac21287491",
+   "source": "play",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "d6abc83dffbdb2e92140bc3b8e288b6d573c9925",
+   "source": "play",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "725f127a0e48784e33e698fd57c58a8d58be695c",
+   "source": "play",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "dffef8a589c7ac9fb25a3b24bd8a916b4ae88b84",
+   "source": "quora",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "752b6cd03937f1d0feca0fb2fe9cf3ff25dd6385",
+   "source": "quora",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "c4e7ec77082ff35d623632ad061a77320eb7a1ca",
+   "source": "quora",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "0e47aa419e7a8c7ddb3c31088ea3319628ef7021",
+   "source": "quora",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "b6893a4cddc5fc70ad725f8585b848e711e6e722",
+   "source": "quora",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "7bf7c0d128c81e628d649ce87562c9317d3a3b1f",
+   "source": "quora",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "9335c70917d307387169da7ef07511fc0644965f",
+   "source": "reddit",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "08709edbcf2e95177707c13bf0b9b07c6a275a90",
+   "source": "reddit",
+   "primary": 2,
+   "second": 0
+  },
+  {
+   "record_id": "d579fb36ed3245cd948196e4f1d5fc643c3dec29",
+   "source": "reddit",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "69d8275a310e9d641ab1490a3c685a745284a699",
+   "source": "reddit",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "33dd763b1d8fb1aac1afd0a4f6fcb1cec82b40ef",
+   "source": "reddit",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "8da3d01b94e5fede428acc6de407b9a9344b10df",
+   "source": "reddit",
+   "primary": 8,
+   "second": 7
+  },
+  {
+   "record_id": "b089cec146c452441b80a96b9603b7a704f39f94",
+   "source": "stackexchange",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "b5d0569ab04705c0d9ea2866d7ea1a3855515568",
+   "source": "stackexchange",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "3a2e08850e43d8f90b03bc9fc4cb2d9ba393230d",
+   "source": "stackexchange",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "c96a7b9faae9bcc57ef3378e3010f770040a7894",
+   "source": "stackexchange",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "df38c25e0ec1398fec4982285e6945e2007bfe89",
+   "source": "stackexchange",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "9204e8b322eb646efbaa4b249cb4a9188df07a05",
+   "source": "stackexchange",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "396aa36cf8075d92566a22d076630f01ef23d29f",
+   "source": "x",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "30c33da652d85e547b4aa90f16c4fff78044ee5c",
+   "source": "x",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "ba42e17407384893c6ebd5110c2000ee744688b8",
+   "source": "x",
+   "primary": 1,
+   "second": 1
+  },
+  {
+   "record_id": "7f068649c55e2470e149e30614b5d6ed55a8414c",
+   "source": "x",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "0f8925259a37de97060b4776fc42cccfc7095712",
+   "source": "x",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "29c776c81bf3055cecbbddc92666b82771dda8ca",
+   "source": "x",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "436a9bd362d1d36eb238e784d9638d6e00c002cd",
+   "source": "youtube",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "c0f1b3e1a95affad42a344b7545cf2d83e14ede4",
+   "source": "youtube",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "3f2117d1ecd4fae688da2908c54018bbce69c507",
+   "source": "youtube",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "6a5fa1de09e12f2971938d1909304c153111634f",
+   "source": "youtube",
+   "primary": 4,
+   "second": 1
+  },
+  {
+   "record_id": "e2df15de8c11a4d35e679af093cc69ebb8b75b8b",
+   "source": "youtube",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "13456893f3e5e7727d5922c453865d9446556b2b",
+   "source": "youtube",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "e1d4477d24a0b5615ab02c403e5b4628f591d6c3",
+   "source": "youtube",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "572ee2385f4c946294bf1b74c501e1d480ad7e73",
+   "source": "hackernews",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "0944cd2bd39b98723481c83265497f319f58afb8",
+   "source": "appstore",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "b9c70f3d51745ad341980ccbf90e2503fda2abd5",
+   "source": "youtube",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "a0d85b0b4b40ec78815f81e2130d93460f65a3d8",
+   "source": "gp_help",
+   "primary": 1,
+   "second": 0
+  },
+  {
+   "record_id": "eaeb1b1eab737f66c8b703e0244cbfbf8dadd1b8",
+   "source": "reddit",
+   "primary": 1,
+   "second": 1
+  }
+ ],
+ "usage": {
+  "input": 27518,
+  "output": 17587,
+  "usd": 0.195148
+ }
+}

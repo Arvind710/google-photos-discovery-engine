@@ -202,3 +202,119 @@ until the cost stops changing (`settled_usage`, pinned by a test). Every
 recorded run was re-read from Apify's own records (run `repair-apify-usage`,
 $5.52 → $6.99 recorded; the rest of the account total is the refused X actor,
 the aborted Reddit run and the shape probes).
+
+## D-7 — How Pass 1 (segmentation) is run, and what T-6 measures (2026-09-26, Claude, disclosed)
+
+**Anchors, not copies.** The model returns each story's post number and its
+first and last 5–12 words. Code locates both with an exact search inside that
+post, and the stored story is the text between them (`pipeline/segment/stories.py`).
+Every story is therefore verbatim by construction (T-1). Output tokens, 75% of
+the bill (architecture.md §8), fall to a fraction of what a copied span costs.
+Matching tolerates only whitespace runs and straight vs curly quotes; case,
+spelling and punctuation must match. Unfound anchors and overlapping spans are
+discarded AND counted.
+
+**Packing.** The prompt is ~1,700 tokens and most records are short reviews, so
+one request carries up to 12 records or 10,000 characters. Records longer than
+10,000 characters are split on post boundaries (EC-COL-4, A.5); a single longer
+post is sent whole, never cut. The fixtures are run shuffled and packed the same
+way, so they test the conditions the corpus meets.
+
+**The prompt as drafted disagreed with the fixtures in five places, and was
+corrected before any run.** A follow-up post by the same author counts toward
+`reaches_stage` but does not move the span (seg-07, seg-20). A story told about
+someone else belongs to the post's author (seg-16). A quiet success is a story
+(seg-11). A question to others or a general habit is not (seg-19). A record with
+no story scores as `irrelevant` on the bucket fixtures.
+
+**Two remediation iterations on the fixtures** (evals.md §8 loop, max three):
+1. "Precise" is about what the person REMEMBERS, not the words they typed. A
+   wrong or hedged cue is vague. A known item wanted before any search is a
+   story. A new habit afterwards reaches 10.
+2. `reaches_stage` is how far a story is TOLD, not where it first went wrong. A
+   changed query is "trying something else" (≥ 7). One specific photo inside a
+   person or category search is core when the rest is fuzzy.
+
+Result on gpt-5-mini at `low` effort: story counts 95% exact (P2-MET-3 ≥ 85%),
+T-9 92.9% (≥ 90%), `reaches_stage` at or above the fixture floor 94%, authored-story
+buckets 90%, every anchor located. Stopped at two iterations, so as not to tune
+toward these particular fixtures. Two known misses: seg-17 (a feature request
+that mentions a red photo gets no story) and bb-12, which flips between runs.
+
+**Effort.** `minimal` reasoning cost a third as much but failed story counts (75%)
+and T-9 (85.7%), so the batch runs at `low`. The projection at `low` is $1.64
+against architecture.md §8's $1.20. The recorded estimate stays $1.20, so
+T-19 still halts at $1.80. The submit refuses only a projection that would cross
+that halt. The submit's own recorded projection ($0.82) was taken from the
+`minimal` fixture run by mistake. It is annotated in the run's params, and
+the lookup now matches on effort.
+
+**What T-6 measures.** evals.md sets T-6 at "≥ 75% agreement" on `reaches_stage`
+without defining agreement. What `reaches_stage` decides is which coding blocks
+run (C at ≥ 5, D at ≥ 7). So T-6 is agreement on that GATING BAND
+(< 5 · 5–6 · ≥ 7), with exact and within-one agreement reported beside it. The
+second coder is gpt-5 with the same prompt. Disagreements resolve upward
+(EC-SEG-5), and every raised story is listed in the artifact.
+
+## D-8 — gpt-5 confirms every story; two top-ups; 115 core stories and why (2026-09-26, decided by the PM)
+
+**The dual check failed, in one direction.** On 60 story-bearing records,
+gpt-5-mini and gpt-5 agreed on the story count in 25% (T-5 ≥ 80%) after the
+second prompt iteration, and in 35% after the third. gpt-5 found fewer stories
+in 39 of 60 records and more in none. Read one by one, the disputed candidates
+were general deletion-recovery requests, device and export problems, and questions
+about photos on the web: complaints with no particular photo sought. gpt-5-mini
+kept calling them stories even after the prompt excluded them by name.
+
+**Decision (PM): gpt-5 confirms every candidate** (`pipeline/segment/confirm.py`).
+- gpt-5-mini stays the recall-first finder over every record.
+- gpt-5 judges each candidate against the same definitions, reused verbatim
+  from `segment_v1.md`, plus a short header of its own (`confirm_v1.md`).
+- A rejected story is MARKED `no_story` with its story_id (A.1); a record whose
+  every story is rejected is marked too.
+- gpt-5's bucket is kept.
+- `reaches_stage` takes the higher of the two, which resolves T-6 upward across
+  the whole corpus.
+
+The confirmation header needed one fix: gpt-5 first rejected [CTX]'s own
+"searching my wife's name shows nothing" (a set defined by a precise cue IS a
+target) and short, vague wanted-photo stories. On the fixtures, the two-stage
+pipeline gives story counts 90% exact and T-9 92.9%.
+
+**Two top-ups (the §0.4 loop-back), because core fell below 300:**
+- **Free sources:** YouTube +14,817 comment threads, Hacker News +740, Stack
+  Exchange +267. GP Help's 10,000-thread listing returned nothing.
+- **X via Apify:** +3,903 posts for $1.58, all 26 terms at 250 posts each.
+  Apify is now $9.52 of $10.
+
+The recall probe was re-run after each top-up (T-4 4.0%, passed both times).
+
+**Result:** 31,235 records, 11,794 read by Pass 1, **334 confirmed stories:
+115 core (109 people), 219 adjacent.** Core by source: X 49, YouTube 30,
+Hacker News 11, Quora 8, Reddit 8, GP Help 7, App Store 2. Play and Stack
+Exchange have none. 71 of the first 88 core stories run to stage 7 or beyond,
+so they are rich.
+
+**Why so few, stated as a finding.** gpt-5 rejected 1,348 of the first 1,643
+candidates, and a sample from every source bears it out. Public talk about
+not finding a photo is overwhelmingly about photos that are GONE:
+- deleted-photo recovery (thousands of YouTube comments under recovery
+  tutorials, largely in Hinglish);
+- backup and sync;
+- dead phones and exports.
+
+It is rarely about photos remembered only vaguely. That is EC-ANL-3's case
+("much 'can't find it' is 'was never there'"), and it is a result for the deck,
+not a defect to hide.
+
+**What passes as a stated limitation** (`evals/limitations.yaml`,
+implementationplan.md §0.3): T-5 (0.35, gpt-5-mini alone), T-6 (0.55,
+mitigated upward), the zero-story rate (0.973), and T-20 (115 against 300).
+**The PM chose to proceed** with the thin core:
+- every share goes through `share()`, so thin cells show counts only;
+- headline claims stay at one dimension;
+- the Part 3 interviews carry more of the weight.
+
+**Spend.** OpenAI $4.88 of $15 to date, against ~$1.60 planned by the end of
+P2. Coding is priced per story, so coding 334 stories, not ~1,000, should
+bring P3 in far under its $7.25.

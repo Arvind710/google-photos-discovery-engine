@@ -1,0 +1,1638 @@
+{
+ "counts": {
+  "kept_core": 27,
+  "bucket_changed": 7,
+  "stage_raised": 7,
+  "rejected_adjacent": 33,
+  "rejected_core": 53,
+  "kept_adjacent": 12,
+  "records_emptied": 86
+ },
+ "changes": [
+  {
+   "story_id": "0440ba39731decfcaa2b3211d22c949528ab0cdb:0",
+   "primary": [
+    "core",
+    3
+   ],
+   "confirm": [
+    true,
+    "core",
+    3
+   ],
+   "reason": "Planning to check for a screenshot of codes."
+  },
+  {
+   "story_id": "054fd4c0159b1775619aa7621cb8ce83f0e59d4a:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "General discovery, no specific target sought."
+  },
+  {
+   "story_id": "0879c6bd343e7afc9ccabdcc2e5d01f29fb4cd3b:0",
+   "primary": [
+    "core",
+    4
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "General habit editing, no specific target."
+  },
+  {
+   "story_id": "0c0460710fa462f8ad03c26d7a91e35937297a36:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    2
+   ],
+   "reason": "Can't find specific two-moons photo in library."
+  },
+  {
+   "story_id": "0c231b118e7363be9d205be40e16be4db2a97217:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    9
+   ],
+   "reason": "Found specific nude in deleted folder, then removed."
+  },
+  {
+   "story_id": "0ef3821f2d59998617a4b53f428fd49c9a22d2ff:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    6
+   ],
+   "reason": "Searched 'scrap' for receipt; too many results."
+  },
+  {
+   "story_id": "10b70a04f2974736aca58e54dc80b4ad6c82633f:0",
+   "primary": [
+    "adjacent",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Can't find specific Banana Fantasy effect photo."
+  },
+  {
+   "story_id": "13df921efffe72546f87310c62304dacba40a342:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Automatic memory notification, no retrieval attempt."
+  },
+  {
+   "story_id": "16355ade4920938f870a69d9829f27d836579c58:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Not searching own library for a specific photo."
+  },
+  {
+   "story_id": "17bdf4eb0ecbb9f64fba51b493532e6cfa501604:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Automatic reminder, not seeking a photo."
+  },
+  {
+   "story_id": "17caf4ddd1fe5fab0f25b03f339f23ba7758ad92:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    9
+   ],
+   "reason": "Retrieved kid-with-Santa photo to show him."
+  },
+  {
+   "story_id": "199c586d578b930309cdabab2e391d499a1d8c47:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Web face search, not own library retrieval."
+  },
+  {
+   "story_id": "1ca5df802733cf1736b687c5481abcd073c0d5f4:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Surfaced ex photo automatically, not retrieval."
+  },
+  {
+   "story_id": "1e5b016e6b361c9c8ec47e3937ec94e6f2b05e61:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Accidental find, no attempt to retrieve."
+  },
+  {
+   "story_id": "1e5e9d1c6e47f66971b08fb8bbad70957c7647da:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Notification of old photo, no retrieval attempt."
+  },
+  {
+   "story_id": "238ec5be01df991cb6b8fd229ae91e29b2e35af4:0",
+   "primary": [
+    "core",
+    7
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Spent long finding Japan monkey photo; search lacks monkey label."
+  },
+  {
+   "story_id": "2656590a807bfd2a314a03d0439de4de2b9f906f:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Browsing reminder, no specific target sought."
+  },
+  {
+   "story_id": "268a18fa11a7b6b334030063ae34ed48586bfd2e:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "General browsing by age, no specific photo target."
+  },
+  {
+   "story_id": "288686453f119a687c2aef30ec30311e10c46575:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Gave up finding a pint photo among many similar."
+  },
+  {
+   "story_id": "29333d9cb270a40b3afcde454760d41f3ee657cf:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    0
+   ],
+   "reason": "General claim about future face search, no attempt."
+  },
+  {
+   "story_id": "31dce20be962f17c60f0bc2951bdc39a36c92846:0",
+   "primary": [
+    "adjacent",
+    3
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    3
+   ],
+   "reason": "Habit of searching a name, no specific target."
+  },
+  {
+   "story_id": "326bea5b8985b0f0f7cd57b6f7b9a74d01d0bc63:0",
+   "primary": [
+    "core",
+    7
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Attaching photo UX complaint, no retrieval attempt."
+  },
+  {
+   "story_id": "346adeec584d4ac2df9090145e995deb4acb616e:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    6
+   ],
+   "reason": "Searched 'forest' to find old fall photos; viewed results."
+  },
+  {
+   "story_id": "3581be8104f7fedda6cc5f2c4dae079504c6446d:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    6
+   ],
+   "reason": "Searched \"child\" for baby pics; many ex photos appeared."
+  },
+  {
+   "story_id": "3e18b783ef4069ea0f1fc80b48bc3d5272a7a5e3:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Casual find while browsing, no specific target."
+  },
+  {
+   "story_id": "3e317eb5f55dc3ff342477456d85d802de17a7a1:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Memory notification, not user retrieval."
+  },
+  {
+   "story_id": "3f6c7b626f52b658b0c519881ff8cb6967208570:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Repeatedly looked back but cannot find Regaleira shot."
+  },
+  {
+   "story_id": "4256f9f1e616806d84fc9c43dcfdfc7962d034fc:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Web search/photos, not own library retrieval."
+  },
+  {
+   "story_id": "47fa319e38db3672e041d1d6ec19a66814d3a799:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Memory surfaced by app, no attempt."
+  },
+  {
+   "story_id": "4c08b255c8df10d4e12abf349a448f3e73780641:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Found screenshot while browsing, no retrieval attempt."
+  },
+  {
+   "story_id": "4e4c3d4d4f1ff1abb32daed134634b5fd1d39956:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Organizational/sync disaster, no specific photo sought"
+  },
+  {
+   "story_id": "4f26f666502d6ef3e8a15302889d4c80113611ea:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    3
+   ],
+   "reason": "Searching mentioned, but no target described"
+  },
+  {
+   "story_id": "4f674d60015f3e6a09702a78d0fc454d6a93bd5e:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Browsing old drive, no specific target"
+  },
+  {
+   "story_id": "509e1fce6731fa7e0422d34f4d7b74f48ce980ff:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    4
+   ],
+   "reason": "General praise of search, no specific photo target"
+  },
+  {
+   "story_id": "5713dd3e07c13dff7ab69d3f605192ce3440af94:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    6
+   ],
+   "reason": "Tried \u2018grandparent\u2019 to find father\u2011in\u2011law; results wrong"
+  },
+  {
+   "story_id": "59282e2b625c76c28611e8dbafdce26950574c11:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    0
+   ],
+   "reason": "Video/backup issue, no concrete retrieval attempt"
+  },
+  {
+   "story_id": "60494c3d27f81719175ff04676c7128eb506a0d6:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    5
+   ],
+   "reason": "Person search shown, no specific photo sought"
+  },
+  {
+   "story_id": "63a8f8f93612080f9c77ac44478da414f3f8f352:0",
+   "primary": [
+    "adjacent",
+    6
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    0
+   ],
+   "reason": "Video editing/backup problem, no retrieval attempt"
+  },
+  {
+   "story_id": "66a3fc526dc2bb367d5d1219731f274324d16522:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Reminder nostalgia, not seeking anything"
+  },
+  {
+   "story_id": "690e08b3798b165800ac641f4d2f9b6c2f7efaef:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Sought a specific photo; found it by browsing"
+  },
+  {
+   "story_id": "6b5b098ff4054dff58acb46b2aff57a17fe9f25a:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Searched for proof; found a specific old photo"
+  },
+  {
+   "story_id": "6cd966f594f86d671f30cbe066e2f0f94149788d:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    4
+   ],
+   "reason": "Web reverse image search, not own library"
+  },
+  {
+   "story_id": "6e98e9de69e53a5894a9ad195d42340b20c94157:0",
+   "primary": [
+    "core",
+    10
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    4
+   ],
+   "reason": "Web OSINT via reverse image, not library retrieval"
+  },
+  {
+   "story_id": "707149aded55c3fe002109c4191b7778cc600dda:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Recovered a specific photo via Google Photos after device loss"
+  },
+  {
+   "story_id": "75113bf05d49eaf7f829986f4cb93208731bf1bd:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    5
+   ],
+   "reason": "Webwide image finding, not personal library retrieval"
+  },
+  {
+   "story_id": "757523f4f1cfca818eae703be7d31a43acd22578:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    9
+   ],
+   "reason": "Web face search, not own library"
+  },
+  {
+   "story_id": "77376060541d62f9400df0436a0516c0fd40e598:0",
+   "primary": [
+    "adjacent",
+    6
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    0
+   ],
+   "reason": "General complaint, no specific photo sought"
+  },
+  {
+   "story_id": "7c59e4c6dc3fe9d6132be821ef23b53bee05ea17:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto reminder, no retrieval attempt"
+  },
+  {
+   "story_id": "82aacf26eb0263a69841e8c46f6109fcfc1e8f77:0",
+   "primary": [
+    "core",
+    7
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    3
+   ],
+   "reason": "Web search for public figure, not own library"
+  },
+  {
+   "story_id": "8719c1475bb410fa3323b4a432623dd6502b2fba:0",
+   "primary": [
+    "core",
+    2
+   ],
+   "confirm": [
+    true,
+    "core",
+    2
+   ],
+   "reason": "Vague personal photo described without search attempt"
+  },
+  {
+   "story_id": "88a83897e2c872e72ac85967d7fc5c158d43bbb0:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    6
+   ],
+   "reason": "Searched \u2018vomit\u2019 for son\u2019s photos; no results returned"
+  },
+  {
+   "story_id": "8ce8320e030dd4ff60f7f53e9d82f8dd6935250b:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Accidental rediscovery, no search attempt"
+  },
+  {
+   "story_id": "8d9edd639d7e85225032ce02029f4905dc3e4a27:0",
+   "primary": [
+    "core",
+    2
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto-surfaced photo, no retrieval attempt"
+  },
+  {
+   "story_id": "8eb7d381f036197c1460b2170fb37e49ecbf5a2f:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Browsing discovery, no target or search recounted"
+  },
+  {
+   "story_id": "8f4cbd737a4f46a5354c1c23f446599f7cf204da:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    5
+   ],
+   "reason": "Ambiguous web-like results, not clear own-library search"
+  },
+  {
+   "story_id": "8f5be8ab7a369d3460ca05100a32742184532d28:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto resurfaced memory, no search"
+  },
+  {
+   "story_id": "926e5106e0c338added4a58e6e7df349f0a33a68:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    0
+   ],
+   "reason": "General loss, no specific target sought"
+  },
+  {
+   "story_id": "9276931d0874b54940bd6cdeb4bccca721f4a1ab:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Found while browsing, no retrieval attempt described"
+  },
+  {
+   "story_id": "9296aee4fc3028219d8b713088f07f263e8fdf26:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Unrelated to photo retrieval"
+  },
+  {
+   "story_id": "92d98e168f1a9e5f7dda755993c455443ef9b2a6:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Saw a photo, no search attempt"
+  },
+  {
+   "story_id": "96eaf2494a0c8e7f67f8911cfa7c8773c3214a63:0",
+   "primary": [
+    "core",
+    2
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Seeking online/physical photos, not from own library"
+  },
+  {
+   "story_id": "9754d8d92979538a21940600c39ef28a54db5b8c:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    5
+   ],
+   "reason": "Precise person target; face recognition fails to find brother"
+  },
+  {
+   "story_id": "994ca86cf399a6c9a1624c0670b40ae78d262e88:0",
+   "primary": [
+    "core",
+    2
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto reminder; no retrieval attempt"
+  },
+  {
+   "story_id": "99d61076737dfb83a1d92bf9032d62af53072da3:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Researching locations online, not own photo retrieval"
+  },
+  {
+   "story_id": "9a1a5006f3e13ccb968fcacb0cbb13aec29e8691:0",
+   "primary": [
+    "core",
+    2
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Joke about reminders; no search attempt"
+  },
+  {
+   "story_id": "9dae9d519d7ab4ea447734d120f4412dc75d1277:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Provenance claim on web; no personal retrieval attempt"
+  },
+  {
+   "story_id": "9ef087dfc9cee5f0e5fd84617d1cfd03130397df:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    2
+   ],
+   "reason": "Browsing old negatives, not app/library retrieval"
+  },
+  {
+   "story_id": "9fa42ad487b8700dece61a889e8e126363d3a6a1:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    9
+   ],
+   "reason": "Found own mosque trip photo using precise place cue"
+  },
+  {
+   "story_id": "a2354b16df84464899cf93de77e2adf01c71d458:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    0
+   ],
+   "reason": "General loss from phone erase; no specific target sought"
+  },
+  {
+   "story_id": "a2c5d2fa138219a3384bc6d3d11e7d279c898657:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Searched for demolition shots; couldn\u2019t find them, posted another"
+  },
+  {
+   "story_id": "a2d48f97439d430f6d2399321a058252025a6085:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Specific camping photo retrieved instantly by query"
+  },
+  {
+   "story_id": "a6fed8b5ad9ce389e9573a3b091b46117b6131af:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Memory surfacing; no retrieval attempt"
+  },
+  {
+   "story_id": "a818e9b4270f94173c96e8b95d8064434dd18b05:0",
+   "primary": [
+    "core",
+    5
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto album surfacing; no search attempt"
+  },
+  {
+   "story_id": "ab6202bd9d1a8ce8d9b2768c24fe1208e3a3476c:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Stumbled on old photo; no search target"
+  },
+  {
+   "story_id": "ab6a44c8e803f12d4106ea2a9328bfc81ce66908:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Found photo without stating any retrieval attempt"
+  },
+  {
+   "story_id": "af0fd376707a37aa3e51705cb7079424e468aee3:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Sought first photo of a pair and found it in Google Photos."
+  },
+  {
+   "story_id": "b2358d9efca162742579284a99c00a353586c178:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Searched back to first Beatles photo and found it."
+  },
+  {
+   "story_id": "b23b0cab87254de5d3a0761dbae422b57c044313:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Browsing old photos, no specific target described."
+  },
+  {
+   "story_id": "b51fdf0d09e38906c77b9a323b00eaf9af633b7e:0",
+   "primary": [
+    "adjacent",
+    6
+   ],
+   "confirm": [
+    false,
+    "adjacent",
+    5
+   ],
+   "reason": "Face search behavior noted without a specific target photo."
+  },
+  {
+   "story_id": "b525a9063f9a953db27a60de6019c2e4c8bd2004:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    5
+   ],
+   "reason": "Memory surfaced; no attempt to find a particular photo."
+  },
+  {
+   "story_id": "b526179286c2b3c9db1c198db44e50543ed2f275:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    3
+   ],
+   "reason": "Trying to retrieve a certificate photo; outcome unstated."
+  },
+  {
+   "story_id": "b6d16f146ab5844f3ec5df36d960cc64a9690567:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Permission/access complaint, no specific photo sought."
+  },
+  {
+   "story_id": "b8f52442902e70011bb9193090429a8511451497:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Found a specific photo using vague color cue \u2018purple\u2019."
+  },
+  {
+   "story_id": "b98dca47ba549bbc20214c1fc88e91465832f0ad:0",
+   "primary": [
+    "adjacent",
+    10
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Describes a general system, not a single retrieval attempt."
+  },
+  {
+   "story_id": "bab90b1de62ccbe1ae30a49d63fb19f823c1c5c8:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    3
+   ],
+   "reason": "Looking through old photos to find lifer shots."
+  },
+  {
+   "story_id": "bb22e350914583e0d83bdffc9f3f46240abcf996:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    9
+   ],
+   "reason": "Couldn\u2019t find photos of self at exact age 21."
+  },
+  {
+   "story_id": "bbc47fa365bf88e48f78f82cbd0246aa76b29fb7:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    3
+   ],
+   "reason": "Browsing a set, not seeking a particular photo."
+  },
+  {
+   "story_id": "bd8c167e431813195d5c9cc71e9c1c02c1b1d73c:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Ordered a photo book; no retrieval attempt recounted."
+  },
+  {
+   "story_id": "beb1a101235f99c355c091316da9f88af0a3b0a5:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto memory surfaced; no search for a specific photo."
+  },
+  {
+   "story_id": "c0b92ff23eef74bbae7167897954db95f6eac772:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    3
+   ],
+   "reason": "Browsing school account to find old photos of self."
+  },
+  {
+   "story_id": "c37963d44e0c16313b8fd6c860f0ed387362a149:0",
+   "primary": [
+    "core",
+    3
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    10
+   ],
+   "reason": "General habit change, no specific photo sought"
+  },
+  {
+   "story_id": "c4b46f8139dd00bf96632357d4e129c6081b0150:0",
+   "primary": [
+    "core",
+    2
+   ],
+   "confirm": [
+    true,
+    "core",
+    2
+   ],
+   "reason": "Sought a specific cat photo with game in background"
+  },
+  {
+   "story_id": "c523d829fc5180939a4a6010952010eaea062a8d:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Browsing an auto-album, no target photo"
+  },
+  {
+   "story_id": "c5a9d0e2167be697bffb8606d1f4a2fbfe4c8bfa:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    2
+   ],
+   "reason": "Asking others for old project media, not own library"
+  },
+  {
+   "story_id": "c5b7072bb2461d13736b2699a6bad89a8bdab71d:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "General loss/organization complaint, no specific target"
+  },
+  {
+   "story_id": "c7a876626a54bdebd8f35a7254d6c7479bb6e1b1:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Found while browsing, not trying to retrieve"
+  },
+  {
+   "story_id": "c8c069d688d148262dfc1d104c631d4d9fa4a3a0:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Seeking others\u2019 ship photos, not own library"
+  },
+  {
+   "story_id": "ca3c4022164a7f654f61a7dc848d7ecddf0ff90b:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    2
+   ],
+   "reason": "Can\u2019t find a specific reference photo after moving libraries"
+  },
+  {
+   "story_id": "cbc995976ab0e7519ef70d4d3bf1b20c0485baf8:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    6
+   ],
+   "reason": "Search for \u2018Boba\u2019 failed to surface the cafe photo"
+  },
+  {
+   "story_id": "cd462ce73087c042a3ac140b6910afded2544179:0",
+   "primary": [
+    "core",
+    7
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Advice only, no personal attempt recounted"
+  },
+  {
+   "story_id": "cd768e18c0f09654abc5a9f26872bb5f5ff8bfae:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    9
+   ],
+   "reason": "Stage 0 account mix-up blocked finding concert photos/videos"
+  },
+  {
+   "story_id": "ce4ad99a12364330d50839ccb9926c1bdaa5adde:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto resurfaced memory, no retrieval attempt"
+  },
+  {
+   "story_id": "ceeeee8d9c6ca0be67cf0ad0d24a2f04ec4d242c:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Casual browsing find, no specific target"
+  },
+  {
+   "story_id": "cef78236422ba36044446832946ad17739c38726:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Deleted photo loss, no retrieval attempt"
+  },
+  {
+   "story_id": "d4bf4022fc82f5ca21c8419fb9ad7bd52e44ff42:0",
+   "primary": [
+    "adjacent",
+    6
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    2
+   ],
+   "reason": "video_out_of_scope specific recent video cannot be found"
+  },
+  {
+   "story_id": "d612f47e48e106d6a3f693cf3e73c40556cf7143:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    5
+   ],
+   "reason": "No specific photo target; assistant extracted info from library"
+  },
+  {
+   "story_id": "d860bc14d5bf60054cc48f7274230bac29677ab8:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto-surfaced memory; no search or target described"
+  },
+  {
+   "story_id": "d8658981bb7b9f7a9966c8448f2111242522f8b2:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    5
+   ],
+   "reason": "Searched for specific beach-rocks photo; noted unexpected result"
+  },
+  {
+   "story_id": "d8dd495931c5f6c07ede2883eb7b1f7d7ef7cfc5:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto-suggested ex photo; no retrieval attempt"
+  },
+  {
+   "story_id": "d925f1beba0cca79389ea6c108c93196f6af23ea:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    3
+   ],
+   "reason": "Investigating museum/web photo, not own library retrieval"
+  },
+  {
+   "story_id": "de86ffd080f6df6b1d5cd4d167bc78788b06c48a:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Already found screenshot; no attempt to retrieve it"
+  },
+  {
+   "story_id": "e468869952501c3da0b721621318338a362a4406:0",
+   "primary": [
+    "adjacent",
+    4
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    9
+   ],
+   "reason": "Looking for yesterday\u2019s specific RFP screenshot; says it\u2019s missing"
+  },
+  {
+   "story_id": "e50e961e147cdd353aa14410eee1d65b14798da7:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    9
+   ],
+   "reason": "Sought a photo of PIN and found it"
+  },
+  {
+   "story_id": "e6ff401c11a5ff521cdd84fb4f279e2dfdaac9d5:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Browsing old cruise photos; no specific target retrieval"
+  },
+  {
+   "story_id": "ecd52fc44dbdbf6b3d2df07c9970eb8165a48534:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Corruption question; no retrieval target"
+  },
+  {
+   "story_id": "f0321bae7ddf531255f45656bb028e9865f592df:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Searched \u2018drake\u2019 and found a specific screenshot"
+  },
+  {
+   "story_id": "f0d1a02cdd8e86e0bf3b29e75baee1f7e5e93236:0",
+   "primary": [
+    "adjacent",
+    2
+   ],
+   "confirm": [
+    true,
+    "adjacent",
+    2
+   ],
+   "reason": "video_out_of_scope Wants a video, no attempts narrated"
+  },
+  {
+   "story_id": "f2132aa7da72fbeaced8298de21ca27112065be7:0",
+   "primary": [
+    "adjacent",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    1
+   ],
+   "reason": "Auto memory of car photo; no retrieval attempt"
+  },
+  {
+   "story_id": "f370a00871fc541ef4dc9d1b5b40f0c09b8367bd:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    true,
+    "core",
+    9
+   ],
+   "reason": "Can\u2019t find a specific screenshot from a particular day"
+  },
+  {
+   "story_id": "f37feeec734571963e6cb88caf5dd8bd6879d39e:0",
+   "primary": [
+    "core",
+    6
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    3
+   ],
+   "reason": "Seeking reference images on the web, not own library"
+  },
+  {
+   "story_id": "f7af51d02d153643ca626d4254b2024a85b75c0a:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "No attempt to find a specific photo."
+  },
+  {
+   "story_id": "f7fbd91b914214794565cbaf0c3dc363b8f7bae8:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    3
+   ],
+   "reason": "Search mentioned but no specific target described."
+  },
+  {
+   "story_id": "fb17d44aa233de120b3e2f64be0f2aa25d9aebfd:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Found surfaced photo, no retrieval attempt."
+  },
+  {
+   "story_id": "fcec7d0def679d95105151c39f483e3ad56e8b46:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    3
+   ],
+   "reason": "Browsing backups, no specific photo sought."
+  },
+  {
+   "story_id": "fd23dca0f0536c2730881c82623bc77e2725a534:0",
+   "primary": [
+    "core",
+    9
+   ],
+   "confirm": [
+    false,
+    "irrelevant",
+    0
+   ],
+   "reason": "Auto-suggested memory, no search target."
+  }
+ ]
+}

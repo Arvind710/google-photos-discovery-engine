@@ -1,0 +1,1255 @@
+{
+ "run_id": "probe-lexicon-recall-20260926-103837-2b6373",
+ "n": 200,
+ "core": 8,
+ "adjacent": 20,
+ "t4_core_share": 0.04,
+ "core_or_adjacent_share": 0.14,
+ "t4_threshold": 0.05,
+ "passed": true,
+ "by_source": {
+  "appstore": {
+   "n": 14,
+   "core": 0,
+   "adjacent": 0,
+   "irrelevant": 14
+  },
+  "hackernews": {
+   "n": 1,
+   "core": 0,
+   "adjacent": 0,
+   "irrelevant": 1
+  },
+  "play": {
+   "n": 5,
+   "core": 0,
+   "adjacent": 0,
+   "irrelevant": 5
+  },
+  "quora": {
+   "n": 1,
+   "core": 0,
+   "adjacent": 1
+  },
+  "reddit": {
+   "n": 1,
+   "core": 0,
+   "adjacent": 0,
+   "irrelevant": 1
+  },
+  "x": {
+   "n": 35,
+   "core": 0,
+   "adjacent": 0,
+   "irrelevant": 35
+  },
+  "youtube": {
+   "n": 143,
+   "core": 8,
+   "adjacent": 19,
+   "irrelevant": 116
+  }
+ },
+ "verdicts": [
+  {
+   "record_id": "c609e6d8eaa4595aff1b032a821a14d7fe7e098c",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval tasks; it's product praise."
+  },
+  {
+   "record_id": "b9d6b0df515fdba15c12db611a947d3821c24e1f",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praise about memories, not a search for a specific photo or retrieval issue."
+  },
+  {
+   "record_id": "562f6a59dbd9a9f08b90a8e1dc09ca18fff0183f",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General praise about backups/memories, no attempt to locate a specific photo."
+  },
+  {
+   "record_id": "abdf5d7adda54ad13149ebbdce330a20cf19aa35",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching or retrieving a specific photo; general praise only."
+  },
+  {
+   "record_id": "86e36a829face28da9e0d260b381a061df24ba33",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praise with no mention of searching for a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "34a037f43dcb970f616f067aaef7e95d1e4a2247",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo or retrieval details; just titles/phrases."
+  },
+  {
+   "record_id": "6aa1d9d718669e54a327e3e673aca1f22ea8ff24",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "About video transition speed, not searching for a specific photo in a library."
+  },
+  {
+   "record_id": "81a765fc1f09977638c70a7f72e7eff25dbd9855",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching or retrieving a specific photo; not about photo retrieval."
+  },
+  {
+   "record_id": "2a0599640011384597162a9f5f931ec2a20075ad",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Issue about app malfunction after update, not about finding a specific photo."
+  },
+  {
+   "record_id": "8a6496d4a69f1057283607648f7d1386e662b020",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praising slideshow feature on TV, no evidence of searching for a specific photo."
+  },
+  {
+   "record_id": "49dbbfb31e406f18a28275bd4a05f6876f6bfed8",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "General complaint about app scam and payments, not about finding a specific photo."
+  },
+  {
+   "record_id": "851a84ad18f862142b22298b7fb72a7a8c3c4a23",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Complaint about storage and email, not searching for a specific photo."
+  },
+  {
+   "record_id": "ebd108c6d54c3e3a2a309c960882cc7d5ebdef7a",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Praise without any indication of searching for a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "a0a2cd53720375ed4e9480637c28d11e152c01c3",
+   "source": "appstore",
+   "bucket": "irrelevant",
+   "reason": "Not a search for a specific photo; brief caption or comment about a scene."
+  },
+  {
+   "record_id": "234e75826cb709ebc6c4cefe06776acf01daa238",
+   "source": "hackernews",
+   "bucket": "irrelevant",
+   "reason": "No known-item retrieval; describing museum enjoyment and examples, not searching own photos."
+  },
+  {
+   "record_id": "25c7217305faa90d5cf456919093f64f1ba4e1aa",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "Gibberish text with no indication of searching for a specific photo."
+  },
+  {
+   "record_id": "549560f6e9b72d8b6e9d04ce5cd6da8262dd9b0a",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo; text is garbled/irrelevant."
+  },
+  {
+   "record_id": "1de94c011823aa681975e41b32db3075ef730220",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "Praise of a presentation; no mention of searching for a specific photo or retrieval."
+  },
+  {
+   "record_id": "2d734d80b2ddf7b79d010ac062b9bda6bbb533ae",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "Complains app is freezing; no evidence about finding a specific photo."
+  },
+  {
+   "record_id": "47db98754573a11916a0501bf15a70c1f883e3eb",
+   "source": "play",
+   "bucket": "irrelevant",
+   "reason": "Discusses new phone/activation, does not describe searching for a specific photo."
+  },
+  {
+   "record_id": "f73eb03e6d8801da79f96b6e92002440c5afb654",
+   "source": "quora",
+   "bucket": "adjacent",
+   "reason": "Discusses backup/account retention affecting retrieval (Stage 0) rather than searching for a specific photo."
+  },
+  {
+   "record_id": "3cfd03d97a931fb1500b29af1b0b456a83516ef7",
+   "source": "reddit",
+   "bucket": "irrelevant",
+   "reason": "Discussion about PullPush indexing Reddit threads, not searching for a specific photo."
+  },
+  {
+   "record_id": "7010e2aade39bc14e4788818e5e20f62f6514c0a",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "General essay about manga industry; no mention of searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "f2d794af80fce355d32d8d8c5e4e42790ec42fd6",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "General motivational text unrelated to searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "4da6830fa465b4e23e638a24cb67c49d8fbc45ee",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discusses entrepreneurship and product validation, not photo retrieval."
+  },
+  {
+   "record_id": "74afa2d4ec6a46d81ad60726895febb2b5f61c6c",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Asking about Google Pay cashback, not about finding a photo in a library."
+  },
+  {
+   "record_id": "90880a14621b04b2a4090878965bb48820e422b8",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discusses Bitcoin fear & greed index, not searching for a photo or retrieval issues."
+  },
+  {
+   "record_id": "4aad3c393ace0e7626f4a1eb5429df637d319644",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Not a photo retrieval request; no indication of searching for a specific photo."
+  },
+  {
+   "record_id": "6d2307decde60c168d1055084ab5d80bd0b82267",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discussion about a game mechanic, not searching for a photo in a personal library."
+  },
+  {
+   "record_id": "c1c1d4f76a79b3b6597f95226a36c6f55ce8df87",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a photo or retrieving images; it's political abuse."
+  },
+  {
+   "record_id": "66711a4347b25eddb04d4ce93e213e18e3978523",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Technical GPU/settings issue, not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "fb97f49a1a4bad2f4bc6714e2650b6f0a4fbae8f",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discusses Noah/Ark claims, not searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "5977cd9fddefdbc71c1e3bf2bb8d40840983bbb1",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Political opinion about voting, not about finding a photo in a personal library."
+  },
+  {
+   "record_id": "6d005becdde3b120b51ff1344d910481b98952f1",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "No attempt to locate a specific photo; casual status update about napping."
+  },
+  {
+   "record_id": "22a4e4d90367e18ea3a0a6e221c72f89dd19090e",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "About Google browsing history and privacy, not searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "85325397d45a87848b4dea18974d8d10c5be41dd",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Insulting rant about AI and pork health, not about finding a photo in a library."
+  },
+  {
+   "record_id": "50cda88855f915676ad49e6fed11b87a34c4e054",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Political news about fraud; not about retrieving a known photo from a personal library."
+  },
+  {
+   "record_id": "bb9ad900904dededa7014b3e9e6d2e63f5d3bbdf",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discusses Ballon d\u2019Or opinions, not searching for a specific photo in a library."
+  },
+  {
+   "record_id": "2aa8a1a01cf45dbe52b6792c9ed011974006ff09",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discussion about AI models/hardware, not searching for a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "f32d3bb3866390b46eeea27b962939bd5905fb20",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Political commentary about mosque growth, not about finding a specific photo in a personal library."
+  },
+  {
+   "record_id": "87794db4035f5cd2eb2228f020afbdefeb699507",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Personal reflection on loss and resilience, not about finding a photo in a library."
+  },
+  {
+   "record_id": "d944e994ff467acef8ed60aae43c336b75ceb553",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Fictional lore about characters, not about finding a photo in a personal library."
+  },
+  {
+   "record_id": "f00c1da36b4c849260c67d719f63527d1fc2eaf7",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "It's about cryptocurrency trading/profit, not searching for a specific photo."
+  },
+  {
+   "record_id": "78d5a9213c6e0ca256a63393833ac8e8eb0b45fb",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discussion about chat UI and GitHub Copilot, not searching for a personal photo."
+  },
+  {
+   "record_id": "d02bd29706c1e88326d1538e2c347c1d962300a6",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo in a personal photo library."
+  },
+  {
+   "record_id": "183e298d5b3b11592d73af80c27a44d1df67ad99",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discusses loans and financial help, not searching for a photo in a personal library."
+  },
+  {
+   "record_id": "ff4623881a5898a08b4bffe18f2f5959fde3b014",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "No attempt to find a specific photo; it's a memory/comment about cigarettes and a character."
+  },
+  {
+   "record_id": "88759735d9e2445771460994843989ecef9069fe",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Anecdote about a date, not about searching for a photo in a personal library."
+  },
+  {
+   "record_id": "6327687b3bf4ec001199fba2915868b4b41e9a11",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Political/identity statement, not about retrieving a specific photo from a personal library."
+  },
+  {
+   "record_id": "ecc80bc35916a2bdef8ab7ce91750e249982b5b6",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Political commentary unrelated to searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "d80e748278df04012eeb084045168fa236efb483",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Puzzle request unrelated to finding a specific photo in a personal library."
+  },
+  {
+   "record_id": "118f1b3c9473bfa555b9fe5b31aac34d8e299f20",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Political statement about military aid, not about retrieving a photo from a personal library."
+  },
+  {
+   "record_id": "fa9c2519ea157cac9284d3cfafcc5123830f4a51",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "About receiving money/giveaway, not searching for a specific photo in a library."
+  },
+  {
+   "record_id": "ff07cb0e242d07585e799eb71ff80753b60a0614",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Discusses options trading, not searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "7e9ce650725cc7152b324997d5d46447c934ace9",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "News about hazing incident, not about searching for a specific photo in a personal library."
+  },
+  {
+   "record_id": "d41eb19c0e43b5d7d5221fb9959cbc3898bfa31a",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "General AI/SEO commentary, not about finding a specific photo in a personal library."
+  },
+  {
+   "record_id": "c30f70995219938a82d5a22c18fa49cb53318af8",
+   "source": "x",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo or photo retrieval from a personal library."
+  },
+  {
+   "record_id": "cafd968edc1d9ed281a3cf701ceca6d1b6a58aed",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo or retrieval in a photo library."
+  },
+  {
+   "record_id": "357d341407406bddd1dae196f3e4518641a2c399",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Describes account/backup recovery after phone reset affecting access to photos (Stage 0)."
+  },
+  {
+   "record_id": "40ce8ab3826dbeb181c2ec301b8a58a0de108ba8",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Casual comment about websites, not about finding a specific photo in a personal library."
+  },
+  {
+   "record_id": "04b2f8236ff871785fd534ab53653dade44b17ab",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Nonsensical social message, no attempt to locate a specific photo in a personal library."
+  },
+  {
+   "record_id": "3995db0ec2828acb02de5b4f38b251cc0660e199",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Generic praise, no mention of searching for a specific photo or retrieval details."
+  },
+  {
+   "record_id": "59cae754a4d7821c4644446128e315e6517c27a0",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing a photo search or retrieval; unclear casual message.}"
+  },
+  {
+   "record_id": "e1da3258bc46a9406f1979f85d84cb33b0d85c0d",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo in a personal library; it's about app/payment interaction."
+  },
+  {
+   "record_id": "1f27d06e8433531ff1c7545a6ac60962ed8c0e4b",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Retrieval failure due to storage/media corruption (Stage 0 issue affecting finding photos)."
+  },
+  {
+   "record_id": "b787dde967914503f293245abf034c1a2ba90f5b",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No attempt to retrieve or locate a specific photo; just thanks."
+  },
+  {
+   "record_id": "0c81000d61c87fd7d2e9c13e2a086ee4da44bb65",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a known photo; unclear comment about upload/existence."
+  },
+  {
+   "record_id": "7d6f081df497cc2269b61bf86b85dfef2303bb61",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Storage capacity note, no attempt to locate a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "511886d16231e09e238c8222c738994bc4d7aba1",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discussion about always-on voice recording and Ok Google, not searching for a photo."
+  },
+  {
+   "record_id": "143f54b7cb2e07d45141c64b032ec2f7152a7c9b",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Congratulatory message, no indication of searching for a specific photo."
+  },
+  {
+   "record_id": "aab5f907d2ffe7bd5e825f650b9a68863f5040a6",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; mentions compression duration only."
+  },
+  {
+   "record_id": "9b41fe90b2f668a38f318ccea97b488d32539d16",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Opinion about a song snippet, not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "e822ecb0fe61a823ef27e3442089ac01a39aa408",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Thanks/feedback about a video, not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "5b6c5703ed746d3d9f1f4f2d2ceb6188ce9fc142",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Describes a precise UI/options issue blocking retrieval, not vague known-item search."
+  },
+  {
+   "record_id": "9764cc0d7de39aeeab7786758a1d7174d58177aa",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a personal photo or retrieval cues; unrelated technical/bragging text."
+  },
+  {
+   "record_id": "1dea5dee12ea0d9c5175a0a7d8003f4fb75b9488",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking how to sit down a laptop / keyboard shortcut, not about finding a specific photo."
+  },
+  {
+   "record_id": "9792b000da57041103c1a2d355e9f25ed10ae103",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval; just gratitude and failure."
+  },
+  {
+   "record_id": "857e0c12df487686c53240d6dfdb6021631cb4b9",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about searching for a specific photo or retrieval details."
+  },
+  {
+   "record_id": "d2fdd612f3451b7b2aeac8bd99bc21ff48475e4b",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Casual comment about a photo/video moment, not a known-item retrieval attempt."
+  },
+  {
+   "record_id": "7571019c7af81da65dbafecc2159098b991dde86",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asking how to restore photos deleted from bin\u2014retrieval affected by backup/account state."
+  },
+  {
+   "record_id": "e60ebfb33a403c9b41bb0cb4904851cf7f27117c",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing a photo retrieval attempt; just an exclamation/complaint in Hindi."
+  },
+  {
+   "record_id": "6e87a6ee5977feaa2ac5905360498b52464b8803",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about searching for a specific photo or photo library retrieval."
+  },
+  {
+   "record_id": "5815cd011000db1cfb5bad0e7e020b1ed8de3088",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asking to recover/identify a specific (compromised) account/password affecting access\u2014precise retrieval/account issue."
+  },
+  {
+   "record_id": "fdd347c0ff31673f7c3cbf39c18a78fe67c87461",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval attempt; it's a general comment."
+  },
+  {
+   "record_id": "3ae658088fb0c461fed9a7e082dd41b5078cbf1d",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking about laptop fingerprint sensor and warranty\u2014no attempt to locate a photo."
+  },
+  {
+   "record_id": "cf4f06654e4fd5f9bdb6e7333293c67b3107cf96",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval details."
+  },
+  {
+   "record_id": "d65ad86761c22b7bb7842e952fd97fd39996ea58",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo or retrieval effort."
+  },
+  {
+   "record_id": "088b54c1b2d9453e60930847e1aac19f802cb9b7",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Generic thank-you message; no evidence about searching for a specific photo."
+  },
+  {
+   "record_id": "aa0b66e8f900d9b11b7dfe3741d99418e3c7e894",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing a search for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "ada2806c79e3cea57a39d89a2805383d1b21f48d",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication it's about finding a specific photo; it's a device compatibility complaint."
+  },
+  {
+   "record_id": "fe6c5a340749b79d95f386c0c8bdbf8600e863e3",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo in a personal library; asks for phone recommendations."
+  },
+  {
+   "record_id": "53df21cc1f9a20c85672f8ccaa1012c9f3fbcd8e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; it's about Chrome/work not functioning."
+  },
+  {
+   "record_id": "16ea78b303c1ff9486242caa685ecafab3194597",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a specific photo; general congratulation."
+  },
+  {
+   "record_id": "d97612201bd1b0a0a77f1ab7660dd39279785307",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discusses app features/pricing and editing, not searching for a specific photo."
+  },
+  {
+   "record_id": "6547f27f22579577857a94ccf996aa3e50ec5f8e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not a search for a specific photo; it's a caption/comment, no retrieval intent."
+  },
+  {
+   "record_id": "c6092ecdc9627da174fa0960d76993bc026fe814",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific known photo; unclear complaint about photos not coming."
+  },
+  {
+   "record_id": "21c0bab4eb1def910843568f893e7d5d21868b5e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval cues; asking for another trick."
+  },
+  {
+   "record_id": "920476ba2230a178d6e68c6343e7d7464437c3d5",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Generic complaint about iPhone, no mention of finding a specific photo or search."
+  },
+  {
+   "record_id": "9334a734b84d299bd8526dd17d2752656835db98",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User describes finding a specific photo (found it) but it's blurred\u2014known-item retrieval issue."
+  },
+  {
+   "record_id": "909ddf036950a0e8637bb5d281f25cbab1c7ff44",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "Vague known-item description implying user seeks a specific photo in their library."
+  },
+  {
+   "record_id": "ff1761838c98a46ceaf810df671a78624019ee6e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a photo; general gratitude only."
+  },
+  {
+   "record_id": "f8ddb05c2f80f5d7228e1c24d87edf3299481252",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo in a personal library; unrelated notification."
+  },
+  {
+   "record_id": "bf7717f12aab66edbb71df1f1ef3d8f65fadf39a",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asks about recovery of deleted recording (precise backup/recovery issue affecting retrieval)."
+  },
+  {
+   "record_id": "b4555ae3f0f41ab727a6bf2f8a4e021e9b3d7ea1",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a photo or retrieval details\u2014just a comment about an image."
+  },
+  {
+   "record_id": "cd00d63efd83f2b6998b2d5e6218c01e685dfee8",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing searching for a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "77daf6bf5f22c483999bd7d3f6605ac15d7b3e6d",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Expresses gratitude, no mention of searching for a specific photo or retrieval details."
+  },
+  {
+   "record_id": "05fc810743cec9587d5a6535242629c4ef6b4bbb",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of trying to find or retrieve a specific photo in a personal library."
+  },
+  {
+   "record_id": "cf6851cd3243c81325388de68fdf037aa375977e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about locating a specific photo; no retrieval cues or library context."
+  },
+  {
+   "record_id": "6a645a487298475b05ac4df111d53168d148d01d",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "2ffa5ed088603c4d92abe54b4440ca2257099edf",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Just a thank-you exchange; no mention of searching for a specific photo or retrieval."
+  },
+  {
+   "record_id": "d522f984a408526af09d32b25cdde6e4dd422457",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Conversation about YouTube, not about locating a known photo in a personal library."
+  },
+  {
+   "record_id": "78cdaa16c85c590a75982dd8f664ea1a55fffd06",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Celebratory message, no attempt to locate or retrieve a specific photo."
+  },
+  {
+   "record_id": "2b1445b1ba59bcabd0f163bba2e563258807feac",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about searching or retrieving a photo; just an expression of sympathy."
+  },
+  {
+   "record_id": "134656f668d6f55dd6ceccb4cb34b3bcea2e2b2b",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo or retrieval; it's a general comment about understanding viewers."
+  },
+  {
+   "record_id": "21d1bac6ed5f714fee52a5cd001f5e1d451cbe40",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Vague, incoherent statement not describing searching for a specific photo or retrieval issue."
+  },
+  {
+   "record_id": "f2fe4f84a2010b92186368fc00a3ff67fe0e5370",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Vague complaint not describing searching for a specific photo or retrieval cues."
+  },
+  {
+   "record_id": "4f31b05113d71d32670731a0212a14463bae6fa9",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking about restoring a browser game coins page, not finding a photo in a library."
+  },
+  {
+   "record_id": "5afd2db6e4ff00408bcdbcd7a8ad3f90784cd9dd",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "aa3198fe5bb5c3ea26bba538f62cfedc9e0b20f3",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asks about recovering call recordings, not locating a specific photo in a personal library."
+  },
+  {
+   "record_id": "d1821753e157fc36f5c3ba07403b88fe0312ecf2",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "User reports inability to access phone settings (Stage 0/library state issue affecting retrieval)."
+  },
+  {
+   "record_id": "c812c207c476e2efc3856415d949e225d9590160",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about searching or retrieving a specific photo; unrelated to photo retrieval."
+  },
+  {
+   "record_id": "1658fb4c7862e73a050f4b90a4e8e83c4a32eb90",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not seeking a specific photo or describing retrieval; just an exclamation."
+  },
+  {
+   "record_id": "806ff6ac815e3877b2aac7432eaa41137763e184",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Casual joke/complaint about humor, not about finding a photo in a library."
+  },
+  {
+   "record_id": "ed8267becc4e1acf9ebbf449c53e23f75d34ab9a",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking for Gmail password/verification, not about finding a photo in a library."
+  },
+  {
+   "record_id": "0112e94bc722d7de54ceb2fc3526c9e9331f7af3",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User describes identifying a specific photo (flying plane) in their library\u2014known-item retrieval."
+  },
+  {
+   "record_id": "339f0f62ff3dbfad781b5968d8d770a2f5b3594a",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Conversation about Google's name, not about finding a photo in a personal library."
+  },
+  {
+   "record_id": "7caa845ce32498aaaeb5c1852b4ff297f3d44dcf",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Expresses gratitude/affection, no mention of searching or retrieving photos."
+  },
+  {
+   "record_id": "984c58a3dc92678aa14af5330a048be37bf152c9",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Casual social post and lyrics, no attempt to find a specific photo in a personal library."
+  },
+  {
+   "record_id": "cdde0e5141c50a8fb1e4fd379426f1e0e12ece46",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; asks about shopping/buying, unrelated to retrieval."
+  },
+  {
+   "record_id": "86d32c66f8fd7e7f1f5beeb7fbc269a85842456e",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asks about restoring deleted item/backup (Stage 0 account/library issue), precise recovery question."
+  },
+  {
+   "record_id": "fe2f3a02db4244adc3f2571aeb259400858d8d34",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching or retrieving a photo; just an emotional comment."
+  },
+  {
+   "record_id": "2644f78c0bf16d7f5f9f2067f576da2f6de93f02",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a photo; just an expletive complaint."
+  },
+  {
+   "record_id": "767e7dde970a37485e6c5b492600505a3c4239bc",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User describes a remembered photo location with vague cues to find in their library."
+  },
+  {
+   "record_id": "e27aecf2dd0920ea21ae0de849e3315a92914660",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a known photo or retrieval; just a brief thanks."
+  },
+  {
+   "record_id": "c2e05152dcaf14eac361df587651a0278089b51a",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking about recovering a deleted audio file, not searching for a photo in a personal library."
+  },
+  {
+   "record_id": "6013dacb178ecdc5aac01ba0183a9911bb7bb2a1",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asking about password protection on Google Drive affects retrieval (Stage 0/account access)."
+  },
+  {
+   "record_id": "2af78e560397f16418f10a1076fc9d07be6db525",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Praising correctness/thanks; no mention of searching for a specific photo or retrieval."
+  },
+  {
+   "record_id": "540ae977667b974efbe9acd7f19757f6eb618d8f",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discussion about tattoo aftercare, not searching for a known photo in a library."
+  },
+  {
+   "record_id": "2434c89644f9e5673763aed7535a0a59b1d7649d",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discusses deleting via notification settings, not searching for a specific photo."
+  },
+  {
+   "record_id": "850c963fc0d5495f73338e210eede8518b347d5c",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "User reports precise UI issue about 'my phone' option missing, affecting retrieval."
+  },
+  {
+   "record_id": "9ff269b635983752f9d5e77498d6959cb3a19061",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discussion about app option availability, not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "43e3ffcd9cab482fba4ad6bce2b16840d505f782",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asks how to access files via menu (precise navigation cue), affects retrieval."
+  },
+  {
+   "record_id": "95010e3f355732294000f63f1f22fbcce5a9d10c",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking who has an 'unblur' option\u2014about app feature availability, not finding a specific photo."
+  },
+  {
+   "record_id": "b7d1c8e36da3341b6d9f262480de097ae193720c",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about locating a specific photo; unclear UI complaint unrelated to known-item retrieval."
+  },
+  {
+   "record_id": "756e48a8e7a3170bb54f75fc5227c33f6d986e9e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a known photo; casual comment about watching Siri attack them."
+  },
+  {
+   "record_id": "cfae78274b7f550de11a49771f95995f87ef9692",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "5c9d4d55c3fda0363d58458ec044c766dabf6072",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Precise issue about phone not working affects retrieval (Stage 0/device problem)."
+  },
+  {
+   "record_id": "1f7f42e96e34cf71431c013a525c4dbdd4d1bf50",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No indication of searching for or retrieving a specific photo; unrelated short message."
+  },
+  {
+   "record_id": "09053931d1a8b9af174566915f640677bb4813dd",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Precise issue about selection state preventing retrieval or action in photo app (Stage 1)."
+  },
+  {
+   "record_id": "f2531ba7d27bb2bfcd0cad7e9fe5c0b732027c0e",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asks about mail saving/downloading (backup/account Stage 0 affecting retrieval) rather than vague known-item search."
+  },
+  {
+   "record_id": "db4a66905149cf2cfbee41e2556fad7175075c41",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Just a thank-you message, contains no evidence of searching for a specific photo."
+  },
+  {
+   "record_id": "232cd717bd6debec6fe660846c254fb0fcd5192e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Praise message, no mention of searching for or retrieving a specific photo."
+  },
+  {
+   "record_id": "d0cc66ae2db543e19a9665ae435a0864c36eee53",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not a known-item photo search; product request unrelated to finding photos."
+  },
+  {
+   "record_id": "fc0c1d777e47fe9442ab91064f48fffd14958a52",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of trying to find a specific photo or retrieval-related content."
+  },
+  {
+   "record_id": "0e540bb1729bc3007b8be73abdedf73ef1b6d6c3",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Asking about account/backup access affecting retrieval (Stage 0 issue with Google Takeout)."
+  },
+  {
+   "record_id": "e8db2bfb81948a063a3309c896c9f7659a4ee1b1",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No attempt to find a specific photo or retrieval-related content; just a brief thank-you."
+  },
+  {
+   "record_id": "46497836f56b34662a5427269dcc5853fe9dfe09",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a specific photo or retrieval; it's a casual comment about a costume."
+  },
+  {
+   "record_id": "394dfea28509f11d6c9cb0b13276e438edd98c72",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a photo; appears to be informal remark about a 'death clock'."
+  },
+  {
+   "record_id": "59c006a7b222b6328f6ce6495b581ab17e115564",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a photo; discusses creating/transferring mail account (email)."
+  },
+  {
+   "record_id": "c6d9978af47c7c107f123f1bec94250155c033f4",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Describes an anecdote/news story, not someone searching for a specific photo in their library."
+  },
+  {
+   "record_id": "7ab4dd80cbfbd1812222efa50492b86aa84b027c",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing searching for a specific photo or retrieval issue."
+  },
+  {
+   "record_id": "cf55e716bec48138532fe8d8cf142830133e7504",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving photos; just a brief thanks."
+  },
+  {
+   "record_id": "52561f6614312294ad1861200573a9d36a386397",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Joke about editing results (magic eraser) not about finding a specific photo."
+  },
+  {
+   "record_id": "5e4804f56a9ff1259ce0e90b373e06e8d2256251",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for a photo or retrieval; just a comment on advice."
+  },
+  {
+   "record_id": "02ee43f76c1e2b532d2e67d65fc4edcc6b494f87",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing searching for a specific photo or retrieval cues."
+  },
+  {
+   "record_id": "8a6b3be7ad4ceceb56bb558977480432bc42ba7a",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No attempt to find a specific photo; casual comment in Telugu about using mobile for 10 years."
+  },
+  {
+   "record_id": "e897cacba6cd10fcafdffaf5744189355d787e2f",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; just an expression of frustration (no retrieval cues)."
+  },
+  {
+   "record_id": "05b73522eccad7cc65a024d1e5958ea4133c2557",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Generic gratitude about Takeout/JSON, no mention of finding a specific photo or retrieval."
+  },
+  {
+   "record_id": "c57577aa26a8a5c734486b903c24e70353482f76",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User refers to a specific known person's photo (face reveal) being found\u2014known-item retrieval."
+  },
+  {
+   "record_id": "83d9d881ccae91b24400ea6c3ce7be0324d74816",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking for explanation/help, not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "8e0f80a44cde36a6194465f104adaf4bff869fdf",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Comment about someone's style, not about finding a photo or retrieval attempt."
+  },
+  {
+   "record_id": "7b444d89bb0190b03a815bc67536c7f8f3dc1a0b",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No attempt to retrieve a specific photo; frustrated about scrolling/YouTube shorts."
+  },
+  {
+   "record_id": "15555fdb63e29bdde217552a1d4c32b613082ba0",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asking how to check college Google application, not searching for a specific photo."
+  },
+  {
+   "record_id": "80d10f3dc6f5714f57f8c2f0729eb658b926d000",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo or photo-library retrieval."
+  },
+  {
+   "record_id": "3531f5e0026d211513b1930e849485f7e2de6395",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a photo; it's a social comment about viewing comments before searching Google."
+  },
+  {
+   "record_id": "b186f17937324ebffe751274fc15264d79534a2e",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Discusses phone data battery drain, not searching for a specific photo."
+  },
+  {
+   "record_id": "b599e133e69a494db6d90651f94d949651c3a37d",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a specific photo in a personal library."
+  },
+  {
+   "record_id": "831c9b76f03328fe97fe96442057d500d20aa5fd",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "User reports checking for a specific photo and not finding it\u2014a known-item retrieval failure."
+  },
+  {
+   "record_id": "4809e5afa467d34dce2b0417556bde0a9fcad5f6",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo or photo-library retrieval."
+  },
+  {
+   "record_id": "861a717f08ffd4b4f1a3afcc6e3dde69bdde2026",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or locating a specific photo or retrieval issues."
+  },
+  {
+   "record_id": "7eb6becc4208ab9ff05d997ed4573166565ede09",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "Vague recollection of a specific photo (dad's hand) seeking known item."
+  },
+  {
+   "record_id": "7a6ec3381297628e4f352259f0faa91c596d8041",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Issue about storage preventing deletions\u2014Stage 0 account/library state affecting retrieval."
+  },
+  {
+   "record_id": "d83dc3fdd500688d015a036f22e3d239d51399cc",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a photo; it's general commentary about people and lying."
+  },
+  {
+   "record_id": "213ff072a092638c831bc996a6ca5e5ac53b78be",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval attempt."
+  },
+  {
+   "record_id": "57bd60253d0721a94995c89f8256f67bcb41f440",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No clear indication of searching a personal photo or retrieval attempt."
+  },
+  {
+   "record_id": "0c8c1f111d9927137ece0dbf4a58db4dd5b13772",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Describes account/backup loss (Stage 0) affecting ability to retrieve photos from library."
+  },
+  {
+   "record_id": "845d7e9425c172418b3f59c40467c93f3fcddf75",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No evidence of searching for a specific photo or retrieval attempts; casual thanks message."
+  },
+  {
+   "record_id": "26690306de6bfe7f0300d0a17bf78fa745a7c50f",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo or search/retrieval\u2014just holding the phone."
+  },
+  {
+   "record_id": "184f1cef8c8b13b33cb5629a5ae0a7cbd97541c0",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a photo; it's casual teasing in Hindi, no retrieval cues."
+  },
+  {
+   "record_id": "eb64bb7fc8af30d21e910e6a31005a2a9d4077bc",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a photo; it's a casual comment about Ronaldo, no retrieval context."
+  },
+  {
+   "record_id": "948e437e1ca44614664188559ec77f1dcda6f081",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asks who is watching in 2026 \u2014 not about finding a specific photo in a library."
+  },
+  {
+   "record_id": "c190e608569c7da5cd56992e06d501a79312f527",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "User reports precise folder/location issue preventing retrieval from phone (Stage 0/library state)."
+  },
+  {
+   "record_id": "06d53ebb10f6b436eb9f1bab261648ddb762baf9",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about finding a specific photo; it's casual comments/questions about demogorgons."
+  },
+  {
+   "record_id": "3a25b3b731c8bde07bcb7dab9270feebb0aae313",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Asks about a setting/function use, not searching for a specific photo."
+  },
+  {
+   "record_id": "10234415e6cb1cb0fa5a725663e729a29dcb9e88",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "No mention of searching for or retrieving a specific photo; casual greetings only."
+  },
+  {
+   "record_id": "6f0ee2fb912208cb13d560981b83f349e4fa91ea",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not describing searching for a specific photo; humorous comment about bananas on a phone."
+  },
+  {
+   "record_id": "535a321fd0ecd63d27897dbfba9156293c8be760",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Praise for success, no evidence of searching for a specific photo."
+  },
+  {
+   "record_id": "56f64a49cc529fddeee49074b30b63c4c2dea14f",
+   "source": "youtube",
+   "bucket": "core",
+   "reason": "Asking about a specific photo/item in their library with vague, unclear cues."
+  },
+  {
+   "record_id": "6aea554d865eae20d45a7571720c8ad29c719246",
+   "source": "youtube",
+   "bucket": "irrelevant",
+   "reason": "Not about searching or retrieving a specific photo; unrelated to photo retrieval."
+  },
+  {
+   "record_id": "fa2c0d6e546c052874095ebe9055dc9a654c9b42",
+   "source": "youtube",
+   "bucket": "adjacent",
+   "reason": "Describes backup/device issues affecting retrieval (Stage 0), precise account-level problem."
+  }
+ ]
+}

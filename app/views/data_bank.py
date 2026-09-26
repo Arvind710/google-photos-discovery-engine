@@ -244,6 +244,50 @@ verdict(("Every source is above the floor where a share can be shown."
 note("Grey counts with no percentage are below 30 records: too few for a share to mean "
      "anything. From 30 to 79 a share is marked directional.")
 
+# ================================================================= PART 5
+# From P2: the unit changes from records to retrieval stories ([CTX] §5).
+stor = funnel[funnel["step"].str.startswith("stories")]
+if not stor.empty:
+    sall = stor[stor["source"] == "_all"].set_index("step")
+    n_st, n_core = int(sall.loc["stories", "n"]), int(sall.loc["stories:core", "n"])
+    section(5, f"{n_st:,} retrieval stories, {n_core:,} of them core",
+            "A story is one person's attempt to find one photo they believe exists. A thread "
+            "can hold several people's stories; most reviews hold none. From here on, every "
+            "number counts stories and the people who told them, not records.",
+            OK, slug="stories")
+    cols = st.columns(3)
+    for col, b, label, sub in (
+            (cols[0], "stories:core", "core", "a known photo, vaguely remembered"),
+            (cols[1], "stories:adjacent", "adjacent", "precise cues, or the photo was never there"),
+            (cols[2], "stories:irrelevant", "irrelevant", "a search story outside the scope")):
+        sh = share(int(sall.loc[b, "n"]), n_st)
+        col.html(f"<div style='border-top:3px solid {OK};padding-top:.5rem'>"
+                 f"<div style='font-size:1.9rem;font-weight:750;line-height:1'>"
+                 f"{int(sall.loc[b, 'n']):,}</div><div style='font-size:.9rem;margin-top:.15rem'>"
+                 f"{label} · {int(sall.loc[b, 'n_authors'] or 0):,} people</div>"
+                 f"<div style='font-size:.76rem;color:{MUTED}'>{sh.text} of stories · {sub}"
+                 f"</div></div>")
+    per_src = (stor[(stor["source"] != "_all") & (stor["step"] == "stories:core")]
+               .sort_values("n", ascending=False))
+    hbar([words.source(s) for s in per_src["source"]], per_src["n"].astype(int).tolist(),
+         [f" {int(n):,} core of {int(d):,} stories · {int(a or 0):,} people" for n, d, a in
+          zip(per_src["n"], per_src["denom"], per_src["n_authors"], strict=True)],
+         [OK] * len(per_src))
+    floor = 300                                            # [CTX] §14.3, T-20
+    verdict((f"<b>{n_core:,} core stories</b> clears the {floor} the engine needs to compare "
+             f"segments ([CTX] §14.3). Which of them are coded, and how, is the next step."
+             if n_core >= floor else
+             f"<b>{n_core:,} core stories</b> is below the {floor} the engine was designed "
+             f"for, after two rounds of extra collection. That is itself a finding: most public "
+             f"talk about not finding a photo is about photos that were lost or deleted, not "
+             f"about photos someone remembers only vaguely. Comparisons between groups are "
+             f"therefore directional at best."), OK if n_core >= floor else WARN)
+    note("One AI model reads every record and proposes stories. A second, stronger model "
+         "then checks each one against the project's written definitions: it drops "
+         "complaints that are not an attempt to find a photo, and settles core versus "
+         "adjacent. Each story is stored as an exact passage of the post it came from, never "
+         "a paraphrase. Stories the second model dropped are kept, marked, not deleted.")
+
 # ========================================================== read it yourself
 st.html(nav.anchor("browse"))
 st.html(f"<div style='margin:2.6rem 0 .4rem'><div style='height:1px;background:{HAIR}'></div>"

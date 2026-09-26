@@ -341,6 +341,11 @@ VERIFIED_FULL_LENGTH = {
     # user-written post in the thread is whole.
     "463935872": "GP Help thread; 'Read more' ends an embedded Help Center article preview",
     "469005917": "GP Help thread; 'Read more' ends embedded Help Center article previews",
+    # D-8 top-ups, checked 2026-09-26 against the raw Apify / API payloads:
+    "2101228349104287964": "X post, 500 chars in the raw payload too; ends a sentence",
+    "2101696509255278785": "X post, 500 chars in the raw payload too; ends a sentence",
+    "2102666550352171244": "X post, 1,036 raw; a URL scrubbed to [URL] leaves exactly 1,000",
+    "Ugy8-tWrD-HUp9fxyhp4AaABAg": "YouTube comment of 280 chars ending '…carefully!' — whole",
 }
 
 
