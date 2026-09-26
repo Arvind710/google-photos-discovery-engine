@@ -114,6 +114,8 @@ Ranked by damage × likelihood, ahead of the enumeration.
 | EC-CODE-15 | Stage 5 values presented as fact | Every Stage 5 value is **inferred** from a user's account of a system they cannot see | `inferred` flag on every Stage 5 row, and the app renders it as "inferred from user evidence" wherever it appears. Never a bare claim about Google Photos' behaviour. **[E]** |
 | EC-CODE-16 | Severity is unreliable | A subjective 1–5 scale will have the weakest agreement of any field | Expected. Reported with its κ; if below 0.6, flagged `low_reliability` and barred from headline claims like any other field. Severity feeds scoring, so a low κ here is material and must be visible |
 | EC-CODE-17 | Video-involving story routed inconsistently | §15.1 puts video in `adjacent` | `media_type = video` → bucket `adjacent`, reason `video_out_of_scope`. A story covering both photo and video is `mixed` and stays in core. Count both and report |
+| **EC-CODE-18** | **A story where nothing went wrong is coded Stage 0** *(found in the corpus, 2026-09-26)* | **Silent.** `primary_stage` is where the story FIRST went wrong, and the codebook has no "nothing went wrong" stage. Faced with a quiet success ("searched 'passport' and found it"), the coder fell back to Stage 0 — failure owner `library_data` — and core Stage 0 read 45%, inflating the headline "much can't-find is was-never-there" finding. The authored fixtures had no quiet successes, so they could not catch it | Prompt rule (code_v1.2): Stage 0 needs the story to say the photo was unreachable; no failure is Stage 9 (owner `none`). `stage0_without_evidence` flags Stage 0 on a story that ends with the photo found and nothing in 0.1/0.2 saying it was unreachable; `blocks recode` re-codes them; a corpus test fails while any remain. A story that says the photo VANISHED, even without saying where, is a correct Stage 0 and is not flagged (D-9) **[E]** |
+| EC-CODE-19 | A coder's `other:` text spells a listed value | The value is under-counted and the `other:` rate over-stated | `other:` text equal to a listed value becomes that value at validation; a corpus test pins that none remain (D-10) |
 
 ---
 
@@ -129,6 +131,7 @@ Ranked by damage × likelihood, ahead of the enumeration.
 | EC-VAL-4 | Dual-coded sample is unrepresentative | Reliability measured on the wrong mix | Stratified across source, `photo_class` and `primary_stage`; strata composition published beside the κ table |
 | EC-VAL-5 | Span verification passes on a trivial span | A one-word quote is always a substring | Minimum span length (~15 chars) and a requirement that the span overlap the semantic content, not just any token. **[E]** |
 | EC-VAL-6 | Fixture set tests the codebook, not reality | Synthetic stories are cleaner than real ones; passing them proves less than it appears | Stated explicitly in Methodology and in `evals.md`. Fixtures are a **floor**: they prove the boundaries are applied as written. They cannot prove accuracy on messy text, and no claim rests on them alone |
+| **EC-VAL-8** | **A cheap first model over-finds, in one direction** *(seen three times, 2026-09-26)* | gpt-5-mini called general loss complaints retrieval stories (D-8), and tagged 62 stories "looked in another photo app" for merely mentioning Google Photos (D-10). Counts from it alone are inflated, and look plausible | The cheap model proposes; gpt-5 confirms every candidate against the written definition; both counts are kept in the artifact. Never trust a mini count alone **[E]** |
 | EC-VAL-7 | Blind-read audit needs its own mapping step | Comparing free-text "what is this about" to an assigned code is itself a judgement that can fail | The audit reports *disagreement candidates* for inspection, not a score. It is a discovery tool, not a metric |
 
 ---
@@ -198,6 +201,8 @@ Plausible, well-formatted, wrong. **Build detection for these first.**
 | EC-COL-6 | One prolific author dominates | 200 stories sounds like 200 people | Distinct-author count beside every story count |
 | EC-COL-13 | An Apify actor's output shape drifts | Records still arrive, so the count looks healthy | Field-survival check per actor (P1-PROBE-2) |
 | EC-COL-14 | GP Help renders without post bodies or replies | Threads still arrive, with titles | Body length and reply count asserted per thread |
+| EC-CODE-18 | A quiet success coded Stage 0 | Stage 0 is a real, headline-worthy category, so an inflated share reads as a finding | `stage0_without_evidence` + a corpus test; read the Stage 0 stories, not only the share |
+| EC-VAL-8 | A cheap model's count taken at face value | The count is plausible and the stories it cites exist | A stronger model confirms every candidate; report candidates → confirmed |
 | EC-CODE-15 | Inferred Stage 5 values read as fact | They are phrased like observations | `inferred` flag rendered wherever the value appears |
 
 ---
@@ -219,7 +224,9 @@ Plausible, well-formatted, wrong. **Build detection for these first.**
 | EC-OPS-11 | `corpus.db` committed mid-pipeline | The app serves half-coded data as if final | The app pins a **published** `run_id`, never "latest". A partial run is never published **[E]** |
 | EC-OPS-12 | Cold start reads as broken | Observed on the Myntra app: 78s against a stated 15. An evaluator reads that as a dead app | Minimal `requirements.txt`; a warm-up note in the empty state; ping the app before the evaluation window **[E]** |
 | EC-OPS-13 | Malformed row crashes a page | Defensive rendering — skip and log on-page, never a white screen |
-| EC-OPS-14 | `corpus.db` exceeds GitHub limits | ~1,000 stories ≈ 10–18MB, well inside. Release-asset fallback documented |
+| EC-OPS-14 | `corpus.db` exceeds GitHub limits | ~1,000 stories ≈ 10–18MB, well inside. Release-asset fallback documented. *Actual: 60 MB at the end of P3 — the 31,235 raw records dominate, not the stories. GitHub warns above 50 MB on every push and refuses 100 MB* |
+| EC-OPS-15 | **The provider's billing limit is hit below the recorded spend** *(2026-09-26)* | OpenAI refused batches ("Billing hard limit has been reached") at $10.35 recorded against a $15 cap. The `runs` table reconciled, so the difference was on the account side. Stop every paid call and ask the PM to check the console; never retry around it |
+| EC-OPS-16 | **One request in a batch stalls** *(2026-09-26)* | 83 of 84 done, the last stuck for 20 minutes. Cancel the batch: cancelling itself took ~25 minutes before the partial output appeared. `collect` writes what finished; the rest stays un-coded and a later `submit`/`recode` picks it up by diff (X-6) |
 
 ---
 

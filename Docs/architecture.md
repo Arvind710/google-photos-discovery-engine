@@ -383,6 +383,8 @@ CREATE TABLE runs (
 
 `story_codes` is long and narrow rather than 60 sparse columns: most questions do not apply to most stories, and adding a question becomes a codebook edit rather than a migration.
 
+**Emergent themes (A.12, D-10):** `story_themes (story_id, theme, span, run_id)` — themes the PM approved after the codebook froze, beside it rather than in it, each tag carrying a span verified against `text_clean`.
+
 **Materialised analysis tables**, precomputed once and read by both the app and Ask AI, every one carrying `n`, denominator and `run_id`, mapping to the thirteen views in [CTX] §8.4:
 
 `analysis_funnel` · `analysis_stage_prevalence` · `analysis_failure_owner` · `analysis_metric_node` · `analysis_cue_matrix` · `analysis_cue_to_query` · `analysis_query_shape` · `analysis_photo_type` · `analysis_tactics` · `analysis_workaround` · `analysis_mode_outcome` · `analysis_crosstab` (one generic table: `dim_a, val_a, dim_b, val_b, n, denom`) · `analysis_source_stage` · `analysis_opportunity` · `analysis_weight_sensitivity` · `analysis_method_flags` · `analysis_coverage` · `analysis_reliability`
@@ -447,6 +449,8 @@ Pass 1 does segmentation and bucketing in one call: the model must read the post
 
 Each coding call carries the relevant codebook slice in a **cached prefix**, stable across every story, with the story in the fresh suffix. Structured outputs with `strict: true` so the schema is enforced rather than hoped for.
 
+**As built (2026-09-26, `Docs/decisions.md` D-9).** One request per story, not one per block: the prefix is the WHOLE codebook (`prompts/code_v1.md` + the codebook rendered from `journey_v1.yaml`), and the story's blocks decide which questions its schema asks. With 334 stories of 200–400 characters, the codebook is the input; the Batch API cached 86% of it. Core stories (115) were asked all 59 bank questions — the pilot and the coverage register in one run; adjacent stories Block A, plus C at `reaches_stage` ≥ 5 and D at ≥ 7. Core ran at `low` reasoning effort, adjacent at `minimal`. `failure_owner`, `metric_node`, `severity` and 10.3 are fixed rules in code, not model answers; 2.2 is stored as cue (`value`) + judgement (`accuracy`). Every quote is located in `text_clean` and stored as the matched slice.
+
 `why` is **one clause of about 15 words**, not a paragraph. It preserves the audit trail [CTX] §8.1 requires and the disagreement analysis §5.6 needs, at roughly a fifth of the output cost of full reasoning. This is a direct concession to the $15 ceiling and it is the right one — the long form buys marginal boundary accuracy at a price the budget cannot pay.
 
 ### 5.4 Model assignment, and the experiment hidden inside it
@@ -459,6 +463,8 @@ Each coding call carries the relevant codebook slice in a **cached prefix**, sta
 
 - **Residual pass.** Collect every `other:<free text>` value plus low-confidence stories; one gpt-5 call groups them, names each group, and proposes candidate codes with exemplar ids.
 - **Blind-read audit.** Sample ~60 *confidently* coded stories; ask a model, with no sight of the assigned code, what the story is about; compare. This catches what the residual pass cannot — themes the codebook confidently **mis-codes** rather than leaves as `other`.
+
+**As run (D-9, D-10).** The residual pass read 187 `other:` values, 126 low-confidence stories and 14 blind-read disagreements and proposed 12 groups; six were already counted under listed values. The PM approved four as **emergent themes**, kept beside the frozen codebook (`codebook/emergent_themes_v1.yaml`, table `story_themes`, schema A.12) and tagged across every story — gpt-5-mini proposes with a verbatim quote, gpt-5 confirms. Not pre-registered and each below 30 stories, they are reported as counts only and never ranked. The blind read ran on the 60 most confidently coded stories: 77% stage agreement.
 
 Together these are the guard against codebook blindness ([CTX] §13), and §15.7 makes them more important, not less: with no human reviewing samples, they are the only views of the data the question bank did not shape. Neither needs UMAP. At ~1,000 short stories, density clustering would produce noisy clusters and a large noise bucket anyway.
 
@@ -555,6 +561,18 @@ Contract and planner/checker split reused from the Myntra engine per [CTX] §16;
 4. **`why` as one clause** — output tokens are ~75% of the bill and this was the biggest single line.
 
 **Two honest caveats.** ~$14.25 against a $15 cap leaves no room for a *second* re-run; the first cuts if it comes to that are block D (−$0.75) and Ask AI testing down to 50 questions (−$1.00). And these are estimates against approximate per-token rates — the only *measured* anchors are the Myntra repo's own ($0.0349/question on gpt-5 at low effort, $0.0051 on mini).
+
+**Measured, 2026-09-26 (end of P3).** $12.89 spent, from the `runs` table:
+
+| Line | Plan | Actual | Why it moved |
+|---|---|---|---|
+| Pass 1 — find (gpt-5-mini) + confirm (gpt-5), incl. two top-ups | ~$1.20 | $4.70 | Re-segmentation, dual checks, and a gpt-5 confirmation of every candidate (D-7, D-8) |
+| Coding, blocks A–D + pilot, 334 stories | ~$6.15 | $3.85 | 334 stories, not ~1,000; one call per story with a cached codebook (D-9). Includes the Stage 0 re-code and retries |
+| Fixture loop (three runs) + a token probe | cents | $3.11 | Coding fixtures cost ~$1.65 synchronous at `low`; later runs went through Batch |
+| Reliability, blind read, residual, themes | ~$1.10 | $1.04 | |
+| Probes (P1) | ~$0.05 | $0.18 | Four recall probes across three top-ups |
+
+**$2.11 remains** for recommendation/handoff (~$0.60) and Ask AI (~$2.80 planned), so Ask AI testing is cut to fit (implementationplan.md §7).
 
 **So the ceiling is enforced by a hard spend limit in the OpenAI console, set to $15 before the first call — not by this table being right.** The `runs` table records actual tokens and cost per pass, and the pilot replaces every figure above with a measurement on day one. This excludes the Claude Code budget for building it, which is separate.
 

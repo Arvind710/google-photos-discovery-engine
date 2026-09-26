@@ -12,7 +12,7 @@
 version: v1
 approved_by: PM
 approved_at: "2026-09-26"
-source_run: residual-themes-20260926-132130-ef4c74    # the residual pass that proposed them
+source_run: residual-themes-20260926-132405-cd8ccb    # the residual pass whose list the PM approved
 
 themes:
   search_refuses_sensitive_terms:

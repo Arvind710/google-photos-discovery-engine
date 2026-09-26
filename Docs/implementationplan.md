@@ -82,6 +82,8 @@ Phase budgets reconcile to `architecture.md` §8 and separate **committed** spen
 | **Ceiling if the reserve is spent** | **~$14.75** |
 | Console hard cap | **$15.00** |
 
+**Actual, 2026-09-26 (end of P3):** $12.89 spent of $15 — P0–P2 $4.88 (3.md), P3 $8.01: coding $3.53 (the corpus batch $2.80 + the Stage 0 re-code $0.73), synchronous re-codes $0.32, three fixture runs and a token probe $3.11, dual coding, adjudication, blind read, residual and themes $1.04. **$2.11 remains** for P4 (~$0.60) and P5 (~$2.80 planned), so P5 is cut to fit: the golden set drops to 24 questions (Appendix B), and live Ask AI testing is rationed. See `Docs/decisions.md` D-9, D-10 and `Docs/4.md`.
+
 Two consequences. The reserve funds **one** codebook repair and re-run, not two — if a second is needed, Appendix B decides what goes. And the base path leaves ~$2.65 of headroom under the cap, which is the only thing standing between a surprise and a halted project. **Spend is checked against estimate after every pass (T-19); 1.5× halts the pipeline for a decision rather than quietly continuing.**
 
 ### 1.1 Critical path
@@ -219,6 +221,7 @@ P1-INV-1…6 green (accounting identity, `source_url`, idempotence, **zero PII**
 
 The heaviest phase, and the one with the immovable deadline inside it.
 **Duration:** 1.5 days · **Budget:** ~$7.25 committed, **plus a $2.40 re-run reserve** · **Committed to date:** ~$8.85
+**Actual (2026-09-26, one day early):** $8.01 · gate **passed 49/49** (`evals/reports/gate_P3_20260926.md`) · 331 live stories coded (115 core) · carries stated limitations T-20 and T-7 (B, C, D). How it was actually run differs from §5.1–5.2 in the ways below; `Docs/decisions.md` D-9 and D-10 give the reasoning.
 
 ### 5.1 Sub-phase order — not negotiable
 
@@ -238,18 +241,20 @@ The heaviest phase, and the one with the immovable deadline inside it.
 
 **Blocks B, C and D do not wait for Block A.** They gate on `reaches_stage` and `bucket`, both set in P2. All four submit together. One overnight.
 
+**As run (D-9).** With 115 core stories, 3A's "~70-story pilot" would have been most of the core, so 3A and 3D became one step: every core story was asked all 59 bank questions (the coverage register and the pilot at once), every adjacent story Block A plus C/D by `reaches_stage`. The order was 3C (fixture loop, three runs) → 3D (one Batch job, 334 stories, ~40 minutes, not overnight) → 3B (coverage register) → a corpus-found repair (the Stage 0 re-code, D-9) → 3E. Pass 1's gpt-5 confirmation (D-8) had already moved the core-count decision (T-20) before P3.
+
 ### 5.2 Build tasks
 
 | # | Task | Notes |
 |---|---|---|
-| 3.1 | `prompts/block_{a,b,c,d}_v1.md` | Codebook slice in a **cached prefix**, story in the fresh suffix. `strict: true` structured output |
+| 3.1 | `prompts/block_{a,b,c,d}_v1.md` | Codebook slice in a **cached prefix**, story in the fresh suffix. `strict: true` structured output. **As built:** ONE prompt, `prompts/code_v1.md` + the whole codebook rendered from `journey_v1.yaml`, one request per story; the blocks choose the questions (D-9). 86% of input tokens were cache hits |
 | 3.2 | `classify/blocks.py` | `why` is **one clause, ~15 words** — the direct concession to the ceiling |
 | 3.3 | `validate/spans.py` | Exact substring against **`text_clean`**, min 15 chars. Re-code once, then drop and count |
 | 3.4 | `analyse/coverage.py` | All 60 questions, pooled and per source; disposition at 85% |
-| 3.5 | `classify/batch.py` | Checkpoint by `run_id`; resume diffs `stories` against the block's output. Never re-submit a completed slice |
+| 3.5 | `classify/batch.py` | Checkpoint by `run_id`; resume diffs `stories` against the block's output. Never re-submit a completed slice. **As built:** inside `classify/blocks.py` (`submit` skips coded or marked stories; `collect` writes what succeeded; `recode` re-codes a named set) |
 | 3.6 | `validate/agreement.py` | κ + raw agreement + marginals. **Verdict reads all three** — `degenerate` ≠ `low_reliability` (EC-VAL-2) |
-| 3.7 | `validate/adjudicate.py`, `analyse/blind_read.py` | Blind-read is the only independent view of the coding |
-| 3.8 | `synthesise/residual.py` | Emergent themes from `other:` values |
+| 3.7 | `validate/adjudicate.py`, `analyse/blind_read.py` | Blind-read is the only independent view of the coding. **As built:** adjudication is `validate/agreement.py adjudicate` |
+| 3.8 | `synthesise/residual.py` | Emergent themes from `other:` values. **Added:** `synthesise/themes.py` tags the four themes the PM approved (D-10) into `story_themes` |
 | 3.9 | `evals/test_p3_coding.py` | |
 
 ### 5.3 The remediation loop
@@ -261,6 +266,8 @@ On T-8 or a fixture group failing: read the failures → sharpen the offending `
 **T-2 at 100%** (spans against `text_clean`) · T-3, T-7, T-8, T-11, T-12 met · P3-INV-1…10 green · κ computed with a verdict for every spine field · **coverage register complete, all 60 rows** · **T-20 ≥ 300 core stories** → **P4 starts.**
 
 If T-20 fails at 3B's projection, trigger the §0.4 loop-back to P1-F before submitting the batch — not after.
+
+**Result (2026-09-26).** T-2 and T-3 100% (3,261 verified spans) · T-8 90%, P3-MET-2 89% (question level, D-9), P3-MET-3 100% on fixtures v1.2 · T-11 60/60 (32 coded, 28 to the interview register) · T-12: worst `other:` rate 5% · κ with verdicts on every spine field (primary_stage 0.63; outcome 0.51 and severity 0.33 `low_reliability`) · blind read 60 stories, 77% · **T-7 below 25% for B, C, D and T-20 at 115: stated limitations** (`evals/limitations.yaml`). The T-20 loop-back could not run: paid collection is exhausted (D-8).
 
 ---
 
@@ -285,6 +292,7 @@ If T-20 fails at 3B's projection, trigger the §0.4 loop-back to P1-F before sub
 ## 7. Phase 5 — Ask AI
 
 **Duration:** 1 day · **Budget:** ~$2.80 · **Committed to date:** ~$12.25
+**Re-planned 2026-09-26:** about $1.50 is left for this phase after P4. Golden set 40 → 24 (Appendix B's reduced form, every category kept); the per-session and daily caps are set before the URL is shared; the deterministic half (retrieval, gate, verify) is written first as §7.1 already says.
 **The thinnest phase against its scope.** Mitigation: its deterministic half is written earlier (§1.2).
 
 ### 7.1 Build order — deterministic first
@@ -346,6 +354,7 @@ Found later, all applied before any record existed, so none cost a re-run. Each 
 | A.8 | **`published`** — a singleton row pinning the run the app serves | P0 | EC-OPS-11, X-3: the app reads a pinned run, never "latest" |
 | A.9 | **`records.source` gains `youtube`, `stackexchange`, `hackernews`, `x`, `quora`** | P1 | The PM's source decision, `Docs/decisions.md` D-1 |
 | A.10 | **`records.collect_method`**, NOT NULL: `official_api`, `public_feed`, `public_scraper_lib`, `headless_render`, `apify` | P1 | D-1: three sources come through a third-party scraper against their robots policy, so how each record was obtained is disclosed per row, not only in prose |
+| A.12 | **`story_themes`** — emergent themes the PM approved after the freeze, one row per (story, theme) with a verified span | P3 | D-10: adding them to the frozen codebook would re-code every story. A table beside it re-codes nothing |
 | A.11 | **`records.posts_json`** — for a thread stored as one record, each post's `author_key` and its offsets in `text_clean` | P1 | EC-COL-4 and the segmentation fixtures treat a thread as one record holding several people's stories. A story's author is then the author of the post its span starts in — looked up, not guessed by a model (A.2, EC-COL-12). Nullable and last, so it was added to the empty file in place |
 
 ---

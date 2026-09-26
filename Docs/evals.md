@@ -214,17 +214,21 @@ Run on **pilot** output, before the full spend.
 | ID | Metric | Threshold |
 |---|---|---|
 | P3-MET-1 | Fixture accuracy, `primary_stage` | **T-8 ≥ 85%** |
-| P3-MET-2 | Fixture accuracy, 5.2/5.3/5.4 minimal pairs | ≥ 80% **[EC-CODE-3]** |
+| P3-MET-2 | Fixture accuracy, 5.2/5.3/5.4 minimal pairs — scored at QUESTION level: the story lands in the right one of the three and not the other two; value-level accuracy reported beside it (defined after the first run, `Docs/decisions.md` D-9) | ≥ 80% **[EC-CODE-3]** |
 | P3-MET-3 | Fixture accuracy, Stage 2 vs Stage 4 | ≥ 80% **[EC-CODE-7]** |
 | P3-MET-4 | Per-field κ, all spine fields | **T-10**, reported with agreement and marginals **[EC-VAL-2]** |
 | P3-MET-5 | κ reported **separately for `primary_stage`**, not only pooled | Present **[EC-CODE-2]** |
 | P3-MET-6 | `primary_stage` distribution vs expectation | Flag if any single stage > 45% **[EC-CODE-2]** |
 | P3-MET-7 | Cross-coder `not_stated` gap per question | Flag above 20pp **[EC-CODE-10]** |
-| P3-MET-8 | `other:` rate per question | **T-12 ≤ 20%** **[EC-CODE-9]** |
-| P3-MET-9 | **Block yield** — non-`not_stated` share where a block ran | **T-7 ≥ 25%** **[EC-SEG-5]** |
+| P3-MET-8 | `other:` rate per question — excluding 10.3, which is set in code from the source and has no listed value for YouTube or X (D-9) | **T-12 ≤ 20%** **[EC-CODE-9]** |
+| P3-MET-9 | **Block yield** — non-`not_stated` share where a block ran, per block. Reported beside it: the yield on stories BELOW the `reaches_stage` gate (core stories are coded in full), which is the direct check that gating loses nothing | **T-7 ≥ 25%** **[EC-SEG-5]** |
 | P3-MET-10 | Coverage computed for all 60 questions | **T-11 60 of 60** **[EC-COV-1]** |
 | P3-MET-11 | Coverage reported per source as well as pooled | Present **[EC-COV-4]** |
 | P3-MET-12 | Blind-read audit run; disagreement candidates listed. **The only genuinely independent view of the coding**, and the sole probe for correlated error | Present **[EC-VAL-7, EC-VAL-1]** |
+
+**Measured 2026-09-26 (fixtures v1.2, corpus run `code-20260926-115805-886c5d`).** T-8 90% · P3-MET-2 89% (values 78%) · P3-MET-3 100% · primary_stage κ 0.63, raw 0.71, n 100 · P3-MET-6: after the Stage 0 re-code no stage above 45% (core: 5 → 31%) · P3-MET-7 flags 1.5, 1.6, 6.2, 6.6, 7.3, 7.5 · T-12 worst 5% · **T-7: A 0.34, B 0.20, C 0.15, D 0.21** — below the gate C yields 0.00 and D 0.06, so the gate loses nothing; B, C and D pass as stated limitations · T-11 60/60 · blind read 60 stories, 77% stage agreement. Gate report: `evals/reports/gate_P3_20260926.md` (49/49).
+
+Also pinned by `evals/test_p3_coding.py` beyond this table: no story coded Stage 0 while it ends with the photo found and nothing says it was unreachable (EC-CODE-18); no `other:` value that spells a listed value; every emergent-theme tag (D-10) carries a span verified against `text_clean`.
 
 **Remediation loop** when T-8 or a fixture group fails: read the failures → sharpen the offending `boundary_note` → bump `prompt_version` → re-run the fixtures (free of corpus cost — 40 stories is cents) → re-score. **Maximum three iterations**, then the shortfall is reported as a stated limitation. The fixture loop is cheap precisely so that iteration happens here rather than against the paid corpus.
 
