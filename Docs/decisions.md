@@ -831,3 +831,79 @@ browser check of streaming, the scroll hold and the replaced-draft caption — d
 IST), recorded as a **$21** budget (`runs.CEILING_USD`, `evals/manual_checks.yaml`), read the same
 way as D-11's "2 credits more". **Spend $18.54 recorded of $21**; the ten sweeps v2.1–v2.10 cost
 $1.30 (v2.0's $0.16 was the session before).
+
+## D-15 — Ask AI v3: answers argue like a researcher, the evidence moves under them, gpt-5-mini writes, and nothing moves when an answer lands (2026-09-27, decided by the PM)
+
+**The PM, 2026-09-27, after using the live page:** "there is a huge jerk post an answer completion.
+fix that. The answer shouldn't always just quote numbers everywhere. It should make claims,
+reasonable assumptions, recommendations, caveats … argue and explain like a proper research …
+Remove the superscripts from the answers and mention the evidence in the evidence toggle … The
+content in the evidence box and the answer shouldn't be the same … constantly quoting the number
+of stories would make the bad impression … you keep writing the word 'stories', do you think people
+would understand it?"; then "nice-to-read, nice looking answers as if a researcher has spoken";
+"people quoted comments should actually be relevant … Stop writing 'One limit is that these are
+public posts'"; and "why is it so expensive … use mini".
+
+**What changed (`ask_v3.0` → `ask_v3.8`).**
+1. **The jerk** — measured frame by frame in the browser, three causes, each fixed:
+   (a) the page re-ran after every answer and redrew it in another layout — now the live answer is
+   drawn in the transcript's own slots and a question is taken in on one instant run and answered on
+   the next (`ask.py:_accept`), so no leftover element of the previous screen is removed when it
+   finishes; (b) Streamlit's chat view glided the page 426 px down when the evidence and footer were
+   added — `_hold_still` keeps the answer where it is when it lands and never lets a long answer scroll
+   past its first line (measured after: 0 px of movement at completion, first answer and follow-up);
+   (c) the old 12-second scroll hold fought that scroll. Also: the input box is drawn before the
+   answer, and the "replaced" note sits under the words, not above.
+2. **The answer** — a bold claim, then one to three short paragraphs of argument: what the evidence
+   shows, why it probably happens (marked as reasoning: "a likely reason is…", "my read is…"), what it
+   implies; a limit only where it changes how a claim reads (no closing limit line); a post quoted only
+   when its words show the point; 70–160 words. Off-topic questions are turned, in two to four
+   friendly sentences, toward what the study can answer. The writer sees the study's background
+   (the finding path, what public posts can and cannot show) with no figures in it.
+3. **Numbers** — shares are said in words ("about a quarter"), each held to the share its sentence
+   cites by `verify.check_proportions` (absolute, ±5 points; "over"/"nearly" on the right side; no
+   fraction of a group under 30; "most"/"the majority" only above half). Exact counts only when the
+   question asks how many, or for a group too small for a share. "percentage without its count"
+   left the absolute list: the count is one click away in the evidence. A count in words ("Thirty-one
+   of the 115") is turned into digits and checked; a rounded "over 31,000" matches within 5%.
+4. **The evidence** — no superscripts; the text keeps its citations internally for the checks, and
+   the panel under the answer ("The evidence behind this answer · N sources") lists, grouped, the exact
+   figures, each post in full with its site, and the limits — what the answer does not repeat.
+5. **"Cases", not "stories"**, everywhere a reader sees (`plain.reader_words`; "dataset" → "evidence",
+   "coded" → "read"; the footer stamp). Other pages still say "stories" — not changed here.
+6. **gpt-5-mini writes** (the planner already was): a fifth of gpt-5's price per token. A 24-question
+   sweep fell from $0.115 (v2.10, gpt-5) to $0.054 (v3.8) with answers about twice as long.
+7. **The checker, re-read for prose** — an uncited sentence, a missing quote and a missing method-flag
+   caveat are no longer problems (reasoning needs no source; its numbers, fractions and quotes are
+   still checked). Formatting fixed before the check, never content: "Label:" openers become prose
+   (`unlabel`), quoted category names lose their quotes (`unquote_terms`), an unknown tag is dropped.
+   Kinds-of-photo comparisons: a comparative near a kind, or a superlative said OF a kind, is
+   absolute; a superlative within one kind ("for photos kept as memories, the largest problem…") is
+   not.
+8. **Time** — the stream is read on a worker thread and this thread waits only to the deadline (two
+   v3.0 answers ran to 14.5 s when closing the stream did not wake a read); a late draft's finished
+   paragraphs are served if they pass every check.
+
+| Sweep | Served as written | Withheld (all real at v3.8) | Late | Mean / max s | Cost |
+|---|---|---|---|---|---|
+| v3.0 `…203958-fe1e6c` | 2 | 22 | 3 | 8.2 / 14.5 | $0.066 |
+| v3.1 `…204509-ba5528` | 14 | 10 | 2 | 7.6 / 9.5 | $0.066 |
+| v3.2 `…204807-968af8` | 13 | 11 | 3 | 7.6 / 9.5 | $0.066 |
+| v3.3 `…205135-a28598` | 16 | 8 | 0 | 6.9 / 9.0 | $0.061 |
+| v3.4 `…205354-6c0d2a` | 19 | 5 | 0 | 7.0 / 8.6 | $0.062 |
+| v3.5 `…205640-9267c1` | 21 | 3 | 0 | 6.9 / 9.5 | $0.059 |
+| v3.6 `…210721-19f6de` | 19 | 5 | 0 | 7.2 / 9.3 | $0.058 |
+| v3.7 `…211113-25a045` | 21 | 3 | 0 | 7.1 / 9.2 | $0.056 |
+| **v3.8 `…211327-dfb541`** | **19** | **5** | **0** | 7.5 / 8.9 | $0.054 |
+
+Every sweep: T-13 24/24 routes. v3.8: 0 absolute problems served, 0 assertion failures (N1 carries
+115 and 109, N2 31). The five withheld at v3.8 are real — a kinds comparison (S1, U1), fractions that
+do not fit (S2 "about two in five", R1 "about two thirds"), a made-up number (S5 "120") — and each got
+the fallback. A v3.0 attempt halted at T-19 on budget accounting (both calls on gpt-5-mini merged
+their usage under one model; now kept by role), recorded $0.09 with some double count.
+
+**Still open, stated.** Reasoning the checks cannot see: an answer can generalise from the vaguely
+remembered cases to "pet photos" (I2), and F2 once said the problem "clusters" in sentimental and
+unclear photos without a check catching it. The fallback, when it is served, is still a plain list.
+The rest of the site still says "stories". **Spend $19.18 recorded of $21** (the v3 sweeps and the
+halted run: $0.64).

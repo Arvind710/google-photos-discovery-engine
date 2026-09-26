@@ -67,7 +67,7 @@ def one(client, q: dict) -> dict:
             fails.append(f"matched forbidden /{pat}/")
     usage = {}
     for x in ([pre] if pre else []) + [a]:
-        for m, t in x.usage.items():
+        for m, t in x.by_role.items():             # "plan" / "write" (both gpt-5-mini, v3.0)
             u = usage.setdefault(m, [0, 0, 0])
             for i in range(3):
                 u[i] += t[i]
@@ -76,7 +76,7 @@ def one(client, q: dict) -> dict:
             "route_ok": a.route in q["expect"], "verified": a.verified,
             "problems": a.report.problems() if a.report else [a.error or "no report"],
             "repaired": a.repaired, "withheld": a.withheld, "fails": fails, "gap": a.verdict.gap if a.verdict else "",
-            "planned_by": a.planned_by, "draft": a.draft,
+            "planned_by": a.planned_by, "draft": a.draft, "cut": a.cut,
             "cost_estimated": sorted(set(a.estimated) | set(pre.estimated if pre else [])),
             "text": text, "seconds": round(a.seconds, 1),
             "cost_usd": round(a.cost_usd + (pre.cost_usd if pre else 0), 5), "usage": usage,
@@ -100,8 +100,10 @@ def main() -> int:
     # old $0.035 a question was v1's gpt-5 at a longer brief plus a repair; kept, it
     # would have made the ceiling refuse a sweep that costs a fifth of it — and it made
     # T-19's 1.5× halt meaningless.
+    # ask_v3.0: the writer is gpt-5-mini (a fifth of gpt-5's price) writing up to ~2× longer
+    # answers — about $0.002 a question, estimated at $0.004 until a sweep measures it.
     plan_est = max(0.0013 * len(qs), .01)
-    synth_est = max(0.0080 * len(qs), .02)
+    synth_est = max(0.0040 * len(qs), .02)
     with rmod.Run(con, "ask-golden-plan", model=A.PLANNER_MODEL, estimate_usd=plan_est,
                   prompt_version=A.PROMPT_VERSION, n=len(qs)) as rp, \
          rmod.Run(con, "ask-golden-synth", model=A.SYNTHESIS_MODEL, estimate_usd=synth_est,
@@ -109,7 +111,7 @@ def main() -> int:
         with ThreadPoolExecutor(args.workers) as ex:
             rows = list(ex.map(lambda q: one(client, q), qs))
         for r in rows:
-            for m, run in ((A.PLANNER_MODEL, rp), (A.SYNTHESIS_MODEL, rs)):
+            for m, run in (("plan", rp), ("write", rs)):
                 u = r["usage"].get(m, [0, 0, 0])
                 run.add_usage(input_tokens=u[0], cached_tokens=u[1], output_tokens=u[2])
         summary = {
@@ -121,6 +123,7 @@ def main() -> int:
             "withheld_late": sum(any(w.startswith("the draft did not finish") for w in r["withheld"])
                                  for r in rows),
             "planned_by_rules": sum(r["planned_by"] == "rules" for r in rows),
+            "late_served_whole_paragraphs": sum(bool(r.get("cut")) for r in rows),
             "cost_estimated_rows": sum(bool(r["cost_estimated"]) for r in rows),
             "assertion_fails": sum(bool(r["fails"]) for r in rows),
             "problems_by_type": {k: sum(1 for r in rows for p in r["problems"]

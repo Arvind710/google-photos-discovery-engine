@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+import time
 from pathlib import Path
 
 import pytest
@@ -52,7 +53,10 @@ def test_a_clean_answer_passes_every_check():
     (GOOD.replace("the stories are few", "the core is thin"), "internal word"),        # D-14
     (GOOD.replace("That is", "Caveat: that is"), "label-and-colon"),                      # T-17
     (GOOD.replace("\n\n*Want the split by kind of photo?*", ""), "closing"),
-    (GOOD.replace("[[analysis_method_flags|thin_core]]", ""), "evidence"),                # INV-9
+    # ask_v3: a limit is said where it bears on a claim, never as a closing line, so an
+    # answer without a method flag is no longer a problem (the PM, 2026-09-27).
+    (GOOD.replace("That is 27% (31 of 115) of the stories", "That is about half of them"),
+     "unsupported number (a share in words"),                                            # v3
 ])
 def test_checker_catches(bad, kind):
     assert any(p.startswith(kind) for p in V.check(bad, "FULL", ROWS, RECS).problems())
@@ -244,7 +248,9 @@ def test_user_and_model_text_is_escaped_before_html():
     and HTML disabled."""
     ask = (VIEWS / "ask.py").read_text()
     assert "unsafe_allow_html=False" in ask and "_escape_md(" in ask
-    assert "st.text(question)" in ask and 'st.text(msg["content"])' in ask
+    # ask_v3: a question is drawn only by the transcript (it is accepted on one run and
+    # answered on the next), so this is the one place user text reaches the page.
+    assert 'st.text(msg["content"])' in ask and "st.text(question)" not in ask
     tri = (VIEWS / "try_it.py").read_text()
     for field in (r"s\['text'\]", r"sp\['why'\]", r"s\['why'\]"):
         uses = re.findall(rf"\{{[^{{}}]*{field}[^{{}}]*\}}", tri)
@@ -374,7 +380,9 @@ def test_the_brief_is_plain_tagged_sentences_and_tags_expand_to_exact_keys(con):
     f1 = tags.to_cite["F1"]
     assert tags.expand("It does [F1].") == f"It does {f1}."
     assert tags.expand("x [F1, S1]") == f"x {f1}{tags.to_cite['S1']}"
-    assert tags.expand("x [F999]") == "x [F999]" and P.check_jargon("x [F999]")
+    # ask_v3.3: a tag never given is dropped (citations are not shown); a raw tag
+    # that reached the page would still be an internal word.
+    assert tags.expand("x [F999]") == "x " and P.check_jargon("x [F999]")
 
 
 def test_the_ask_page_uses_no_html_tags_in_markdown():
@@ -416,7 +424,7 @@ def test_a_fallback_flags_a_false_premise_before_any_figure(con):
         premise={"asserts": "most failures are deletions", "status": "contradicted",
                  "correction": ""})
     head, bullets = text.split("\n- ", 1)
-    assert "takes as given something these stories do not show" in head
+    assert "takes as given something these cases do not show" in head
     assert "already gone" in bullets.split("\n")[0]              # the premise's own stage first
 
 
@@ -690,7 +698,8 @@ def test_a_draft_past_the_budget_is_replaced_and_the_answer_lands_inside_it(con)
     # the part of the draft that streamed is kept for the page and the sweep.
     assert a.draft.startswith("word word") and a.cost_usd > 0
     assert set(a.estimated) == {A.PLANNER_MODEL, A.SYNTHESIS_MODEL}
-    assert a.usage[A.SYNTHESIS_MODEL][2] > 0 and a.usage[A.PLANNER_MODEL][2] == A.PLANNER_OUT_EST
+    # ask_v3: planner and writer are the same model, so their usage shares one entry.
+    assert a.usage[A.PLANNER_MODEL][2] > A.PLANNER_OUT_EST
 
 
 @pytest.mark.needs_corpus
@@ -734,7 +743,8 @@ def test_the_budget_and_the_claim_on_the_page():
     assert A.BUDGET_S <= 10 and A.PLANNER_TIMEOUT_S < A.BUDGET_S / 2
     src = (VIEWS / "ask.py").read_text()
     assert 'TYPICAL = "about 15 seconds"' in src and "on_text=show" in src
-    assert "_scroll_to_answer" in src and "scrollIntoView" in src
+    # ask_v3: `_hold_still` keeps the answer in place (the scroll hold fought the page).
+    assert "_hold_still()" in src and "ask-done" in src and "scrollBy" in src
 
 
 @pytest.mark.needs_corpus
@@ -845,7 +855,7 @@ def test_a_what_to_fix_fallback_leads_with_the_ranked_opportunity(con):
     v = R.gate(p, got, q)
     text = A.fallback(v, got, p)
     first = next(ln for ln in text.splitlines() if ln.startswith("- "))
-    assert "[[analysis_opportunity|stage5]]" in first and "enough stories to rank" in first
+    assert "[[analysis_opportunity|stage5]]" in first and "enough cases to rank" in first
     assert V.check(text, v.route, got.rows(), got.records(), question=q, gap=v.gap).ok
 
 
@@ -916,7 +926,7 @@ def test_the_ask_page_footer_stamp_is_in_plain_words():
     from lib import plain as P
     s = nav.plain_stamp("Corpus v1.0 — 115 core stories from 109 people, in 31,235 public "
                         "records collected 2026-09-25 to 2026-09-26 · codebook v1:03257d4f")
-    assert s.startswith("Data version 1.0 — 115 stories") and "109 people" in s
+    assert s.startswith("Data version 1.0 — 115 cases") and "109 people" in s
     assert not P.check_jargon(s) and "codebook" not in s
     assert 'nav.footer(plain=page.url_path == "ask")' in (ROOT / "app" / "Home.py").read_text()
 
@@ -1039,3 +1049,119 @@ def test_the_gate_names_the_main_groups_size_when_the_other_population_is_retrie
     got = R.retrieve(con, p)
     v = R.gate(p, got, q)
     assert not V.check_floor_claim(" ".join(v.caveats + [v.gap or ""]))
+
+
+class _Deaf(_Stall):
+    """A read already waiting, which closing the stream does not wake — v3.0 served
+    S5 and I2 at 14.5 s against a 10 s budget."""
+    def __iter__(self):
+        for w in ["It ", "does ", "[F1]"]:
+            yield _Ev(type="response.output_text.delta", delta=w)
+        time.sleep(6)
+
+    def close(self):
+        pass
+
+
+class _DeafClient(_StallClient):
+    def with_options(self, timeout=None, max_retries=None):
+        c = _DeafClient(self.plan_s)
+        c.timeout = timeout
+        return c
+
+    def create(self, stream=False, **kw):
+        return _Deaf() if stream else _FakeClient.create(self, stream=stream, **kw)
+
+
+@pytest.mark.needs_corpus
+def test_a_read_that_ignores_close_still_cannot_outlast_the_deadline(con):
+    a = A.ask(_DeafClient(plan_s=99), con, "Does search understand what people type?",
+              budget_s=3.0)
+    assert a.seconds <= 3.1, a.seconds
+    assert a.withheld and "did not finish" in a.withheld[0] and a.draft.startswith("It does")
+
+
+def test_v3_formatting_turns_labels_and_quoted_category_names_into_prose():
+    """v3.0 sweep: 13 of 24 drafts opened with "Short answer:" or "Where the evidence
+    runs out:", and several quoted the study's own category names as if a person had
+    said them. Both are formatting, fixed before the check; a real quote stays."""
+    from lib import plain as P
+    assert V.unlabel("**Short answer: very rarely.**") == "**Very rarely.**"
+    assert V.unlabel("This suggests fixes: make it easy.") == "This suggests fixes — make it easy."
+    assert V.unlabel("One post fits: “it broke”") == "One post fits: “it broke”"
+    t = 'Few say “adding more words made the photo disappear”; one wrote “it broke”.'
+    assert P.unquote_terms(t, [{"text": "it broke badly"}], []) == (
+        'Few say adding more words made the photo disappear; one wrote “it broke”.')
+    assert P.reader_words("The dataset is small.") == "The evidence is small."
+
+
+@pytest.mark.parametrize("t,ok", [
+    ("About a quarter hit this. [[analysis_crosstab|k5]]", True),
+    ("Roughly half hit this. [[analysis_crosstab|k5]]", False),
+    ("Most people hit this. [[analysis_crosstab|k5]]", False),
+    ("For a half‑remembered photo, about a quarter fail. [[analysis_crosstab|k5]]", True)])
+def test_a_share_in_words_must_fit_the_figure_it_rests_on(t, ok):
+    """ask_v3: shares are said in words; each is held to its figure like a number."""
+    assert (V.check_proportions(t, ROWS) == []) is ok
+
+
+def test_an_unknown_or_loose_tag_is_dropped_not_shown():
+    """v3.2: "[F34]" (30 facts given) and "[F1–F14]" withheld two good drafts as
+    internal words; citations are no longer shown, so they are dropped."""
+    from lib import plain as P
+    t = P.Tags()
+    t.add("F", "[[analysis_crosstab|k5]]", "x")
+    assert t.expand("A. [F34] B. [F1–F14] C. [F1]") == "A.  B. [[analysis_crosstab|k5]] C. [[analysis_crosstab|k5]]"
+
+
+def test_a_late_drafts_finished_paragraphs_are_its_answer_only_when_long_enough():
+    assert A._whole_paragraphs("one two three\n\nfour") == ""
+    long = " ".join(["word"] * 60)
+    assert A._whole_paragraphs(f"{long}\n\nhalf a sent") == long
+
+
+@pytest.mark.needs_corpus
+def test_a_stored_answer_redraws_as_prose_with_its_evidence_below(monkeypatch):
+    """ask_v3: the transcript redraw (every run after an answer) shows the answer with
+    no citation marks or superscripts, and its sources in the evidence panel. A stale
+    second `_render_answer` once overrode the new one: the redraw showed superscripts
+    and raised KeyError on the new evidence entries (browser, 2026-09-27)."""
+    from streamlit.testing.v1 import AppTest
+
+    import lib.caps
+    monkeypatch.setattr(lib.caps, "api_key", lambda: "sk-test-not-used")
+    at = AppTest.from_file(str(VIEWS / "ask.py"), default_timeout=60)
+    msg = {"role": "assistant", "error": "", "restated": "Does search understand them?",
+           "text": "**About a quarter hit this.** [[analysis_crosstab|k5]]\n\nOne wrote "
+                   "“it found nothing” [[story|s1]].\n\n*Want more?*",
+           "refs": {"analysis_crosstab|k5": {"group": "What the figures say",
+                                             "detail": "In 31 of 115 cases (27%) …"},
+                    "story|s1": {"group": "What people wrote", "detail": "A post on Reddit",
+                                 "quote": "it found nothing at all"}},
+           "replaced": None, "problems": [], "foot": "✓ checked · full answer · 7s"}
+    at.session_state["threads"] = {"t1": {"id": "t1", "title": "x", "messages": [
+        {"role": "user", "content": "Does search understand them?"}, msg]}}
+    at.session_state["order"] = ["t1"]
+    at.session_state["active"] = "t1"
+    at.run()
+    assert not at.exception, at.exception
+    shown = " ".join(m.value for m in at.markdown)
+    assert "About a quarter hit this." in shown and "[[" not in shown
+    assert not re.search(r"[¹²³⁴⁵⁶⁷⁸⁹]", shown)
+    assert any(e.label.startswith("The evidence behind this answer · 2 sources")
+               for e in at.expander)
+
+
+def test_a_count_in_words_is_checked_as_a_number():
+    """v3.7, N2: "Thirty-one of the 115 core cases" escaped the number check."""
+    from lib import plain as P
+    assert P.number_words("Thirty-one of the 115 cases.") == "31 of the 115 cases."
+    assert P.number_words("In about one in six cases.") == "In about one in six cases."
+    assert P.number_words("one wrote “twenty two people”") == "one wrote “twenty two people”"
+
+
+def test_a_denial_excuses_only_the_comparison_right_after_it():
+    """v3.7, U2: "We can't say whether … — but the cases show a different pattern"."""
+    assert V.check_comparison("We can't say whether utility photos behave differently — but "
+                              "the cases show a different pattern for utility photos.")
+    assert not V.check_comparison("We cannot say whether memory photos fare better than others.")

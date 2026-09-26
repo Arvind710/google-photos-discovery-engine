@@ -119,16 +119,17 @@ def plain_stamp(stamp: str) -> str:
     """The corpus stamp without the project's own words, for the Ask AI page,
     where nothing may need them (D-14): "Corpus v1.0 — 115 core stories from 109
     people, in 31,235 public records collected A to B · codebook v1:…" →
-    "Data version 1.0 — 115 stories about a photo someone only vaguely remembered,
-    from 109 people, in 31,235 public posts collected A to B"."""
+    "Data version 1.0 — 115 cases of someone hunting for a photo they only vaguely
+    remembered, from 109 people, in 31,235 public posts collected A to B" (a reader
+    does not know the study's word "stories", ask_v3)."""
     import re
     m = re.match(r"Corpus v([\d.]+) — (\d[\d,]*) core stories from (\d[\d,]*) people, in "
                  r"(\d[\d,]*) public records collected (\S+) to (\S+)", stamp or "")
     if not m:
         return stamp
     v, n, p, recs, lo, hi = m.groups()
-    return (f"Data version {v} — {n} stories about a photo someone only vaguely remembered, "
-            f"from {p} people, in {recs} public posts collected {lo} to {hi}")
+    return (f"Data version {v} — {n} cases of someone hunting for a photo they only vaguely "
+            f"remembered, from {p} people, in {recs} public posts collected {lo} to {hi}")
 
 
 def footer(*, plain: bool = False) -> None:

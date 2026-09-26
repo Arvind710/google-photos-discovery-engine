@@ -43,7 +43,10 @@ PROXY = re.compile(
     r"of (?:all )?attempts|users (?:fail|succeed)|searches (?:fail|succeed))\b", re.I)
 _NEGATION = re.compile(r"\b(not|never|no|none|nor|neither|cannot|can't|isn't|aren't|"
                        r"rather than|instead of|does not|do not|is not|are not|without)\b", re.I)
-LABEL_COLON = re.compile(r"(?:^|(?<=[.!?]\s)|(?<=\n))\s*[*_]*([A-Z][A-Za-z' ]{0,28}?)[*_]*:\s")
+# Also right after a sentence's citations ("…idea. [[x|y]] This fits a simple idea: …",
+# v3.3 S4): the checker sees it once citations are blanked, so the rewrite must too.
+LABEL_COLON = re.compile(r"(?:^|(?<=[.!?]\s)|(?<=\]\]\s)|(?<=\n))\s*[*_]*([A-Z][A-Za-z' ]{0,28}?)"
+                         r"[*_]*:\s")
 
 
 def fence(text: str) -> str:
@@ -116,6 +119,11 @@ def check_numbers(text: str, rows: list[dict], gap: str = "") -> list[str]:
     # The gate's gap sentence is handed to the model to state ("22 of 290 stories
     # do"), so its numbers are supported wherever they appear.
     stated = _candidates([{"gap": gap}]) if gap else set()
+    # The size of the evidence ("the 115 cases", "331 cases from 316 people") is
+    # context an answer may state anywhere (v3.4: "of the 115 cases" in a paragraph
+    # citing only a split withheld N2 and U1).
+    stated |= _candidates([r for r in rows or []
+                           if (r.get("_cite") or {}).get("table") == "analysis_funnel"])
     bad = []
     for para in re.split(r"\n\s*\n", text or ""):
         cited = [by_key[(c["table"], c["key"])] for c in citations(para)
@@ -124,10 +132,34 @@ def check_numbers(text: str, rows: list[dict], gap: str = "") -> list[str]:
     return bad
 
 
+# "over 31,000 public posts" for 31,235 (v3.1, N1): a round number of a thousand or
+# more, said as approximate, matches a figure within 5% on the right side.
+_APPROX = re.compile(r"\b(about|around|roughly|nearly|almost|over|more than|some|close to|"
+                     r"just over|just under|under)\s+$", re.I)
+
+
+def _approx_ok(v: float, before: str, cands: set[float]) -> bool:
+    m = _APPROX.search(before)
+    if not m or v < 1000 or v % 100:
+        return False
+    word = m.group(1).lower()
+    for c in cands:
+        if abs(c - v) <= 0.05 * c:
+            if word in ("over", "more than", "just over") and c < v:
+                continue
+            if word in ("nearly", "almost", "under", "just under") and c > v:
+                continue
+            return True
+    return False
+
+
 def _numbers_in(text: str, cands: set[float]) -> list[str]:
     bad = []
-    for v, pct, _ in numerals(_strip(text)):
+    t = _strip(text)
+    for v, pct, at in numerals(t):
         if not pct and v in STRUCTURAL:
+            continue
+        if not pct and _approx_ok(v, t[max(0, at - 14):at], cands):
             continue
         if not pct and 1900 <= v <= 2100 and v == int(v):
             continue                                                 # a year
@@ -172,7 +204,7 @@ def check_share_arithmetic(text: str) -> list[str]:
 
 # Up to 140 characters ("32 stories are about photos kept for the information in
 # them (receipts, documents, notes) — too few", v2.9), but never across another count.
-_FLOOR_CLAIM = re.compile(r"(\d[\d,]*)\s+(?:stories|posts)\b(?:(?!\d[\d,]*\s+(?:stories|posts)\b)"
+_FLOOR_CLAIM = re.compile(r"(\d[\d,]*)\s+(?:stories|posts|cases)\b(?:(?!\d[\d,]*\s+(?:stories|posts|cases)\b)"
                           r"[^.\n]){0,140}?too few \(under (\d+)\)", re.I)
 
 
@@ -183,6 +215,81 @@ def check_floor_claim(text: str) -> list[str]:
     t = QUOTE.sub(" ", CITATION.sub(" ", text or ""))
     return [m.group(0)[:80] for m in _FLOOR_CLAIM.finditer(t)
             if int(m.group(1).replace(",", "")) >= int(m.group(2))]
+
+
+# A share said in words (ask_v3, the PM: "constantly quoting the number of stories
+# would make a bad impression"). Each phrase is held to the shares the sentence
+# cites — and, when the sentence cites none, its paragraph's — like a number.
+_FRACTION = {"one in twenty": 0.05, "one in ten": 0.10, "one in eight": 0.125,
+             "one in seven": 1 / 7, "one in six": 1 / 6, "one in five": 0.20, "a fifth": 0.20,
+             "one in four": 0.25, "a quarter": 0.25, "one in three": 1 / 3, "a third": 1 / 3,
+             "two in five": 0.40, "half": 0.50, "three in five": 0.60, "two-thirds": 2 / 3,
+             "two thirds": 2 / 3, "three-quarters": 0.75, "three quarters": 0.75,
+             "four in five": 0.80, "nine in ten": 0.90}
+_FRACTION_RE = re.compile(
+    r"\b(?:(about|around|roughly|nearly|almost|over|more than|under|less than|just over|"
+    r"just under|close to|some)\s+)?(" + "|".join(sorted(map(re.escape, _FRACTION), key=len,
+                                                     reverse=True)) + r")\b", re.I)
+_MAJORITY = re.compile(r"\b(?:the majority|most (?:people|of them|of these|cases|posts|searchers|"
+                       r"of the (?:people|cases|posts)))\b", re.I)
+_SENT_CITED = re.compile(r"[^.!?\n]+(?:[.!?]+|$)(?:\s*\[\[[a-z_]+\|[^\]]+\]\])*")
+
+
+_PAIRS = (("stories", "of"), ("core_stories", "of"), ("n_coded", "stories_asked"))
+
+
+def _shares(rows: list[dict]) -> list[float]:
+    """Every share a row can state — a count of cases, an opportunity's cases, or
+    how many cases say anything at all (coverage: "about a quarter say how long
+    they kept trying", v3.0 R3)."""
+    out = []
+    for r in rows:
+        for a, b in _PAIRS:
+            n, d = r.get(a), r.get(b)
+            if isinstance(n, int) and isinstance(d, int) and d:
+                out.append(n / d)
+    return out
+
+
+def check_proportions(text: str, rows: list[dict]) -> list[str]:
+    """"about a quarter", "roughly one in five", "most people": each must fit a
+    share the sentence rests on, within PROPORTION_TOLERANCE (5 points; "over" /
+    "nearly" also on the right side). A group under 30 gets no share at all, so
+    no fraction may rest on it alone. Absolute, like a made-up number."""
+    from lib.plain import PROPORTION_TOLERANCE as TOL
+    by_key = {(r["_cite"]["table"], str(r["_cite"]["key"])): r for r in rows or []
+              if r.get("_cite")}
+    bad = []
+    for para in re.split(r"\n\s*\n", text or ""):
+        para_rows = [by_key[(c["table"], c["key"])] for c in citations(para)
+                     if (c["table"], c["key"]) in by_key]
+        for m in _SENT_CITED.finditer(para):
+            sent = m.group(0)
+            cited = [by_key[(c["table"], c["key"])] for c in citations(sent)
+                     if (c["table"], c["key"]) in by_key] or para_rows or list(by_key.values())
+            bare = QUOTE.sub(" ", CITATION.sub(" ", sent))
+            floor_ok = [r for r in cited if max((v for v in (r.get("of"), r.get("stories_asked"))
+                                                 if isinstance(v, int)), default=0) >= FLOOR]
+            vals = _shares(floor_ok)
+            for f in _FRACTION_RE.finditer(bare):
+                mod, v = (f.group(1) or "").lower(), _FRACTION[f.group(2).lower()]
+                if f.group(2).lower() == "half" and re.search(
+                        r"\bhalf(?:[\-\u2010\u2011\u2012\u2013]\w|[\s]+(?:remembered|forgotten|"
+                        r"recalled|formed|memor))", bare[f.start():],
+                        re.I):
+                    continue                              # "a half-remembered photo"
+                if mod in ("over", "more than", "just over"):
+                    ok = any(v <= x <= v + 2 * TOL for x in vals)
+                elif mod in ("nearly", "almost", "under", "less than", "just under", "close to"):
+                    ok = any(v - 2 * TOL <= x <= v + 0.01 for x in vals)
+                else:
+                    ok = any(abs(x - v) <= TOL for x in vals)
+                if not ok:
+                    bad.append(f.group(0))
+            for f in _MAJORITY.finditer(bare):
+                if not any(x > 0.5 for x in vals):
+                    bad.append(f.group(0))
+    return bad
 
 
 def check_directional(text: str) -> list[str]:
@@ -237,15 +344,28 @@ def _sentence_of(t: str, a: int, b: int, cap: int = 300) -> str:
     return t[start:min(end.start() if end else len(t), b + cap)]
 
 
-_KIND = (r"(?:sentimental|utility|practical|unclear|kept as memories|memory photos|"
-         r"for the information in them|why (?:it was|they were) kept)")
-_MORE = (r"(?:most|more|less|least|fewer|harder|hardest|easier|easiest|higher|highest|lower|"
-         r"lowest|mainly|mostly|skews?|skewed|bigger|biggest|larger|largest|dominat\w*|than)")
-_KIND_COMPARE = re.compile(rf"\b{_KIND}\b[^.;\n]{{0,40}}\b{_MORE}\b|\b{_MORE}\b[^.;\n]{{0,40}}"
-                           rf"\b{_KIND}\b", re.I)
+# "practical" only as a kind ("practical photos"): "the biggest practical gain" is not
+# one (v3.0, F1). A comparative followed by "to <verb>" is about an action — "easier
+# to back up or mark utility photos" (v3.0, L1) — not a kind of photo.
+_KIND = (r"(?:sentimental|utility|practical (?:photos?|ones|images)|unclear|kept as memories|"
+         r"memory photos|information photos|photos kept for (?:their )?information|"
+         r"for the information in them|why (?:it|the photo|the photos|they) (?:was|were) kept)")
+# A comparative near a kind of photo compares kinds ("information photos more often
+# fail", "behave differently"). A superlative ranks — kinds when it is said of one
+# ("people struggle most with sentimental photos"), problems within one when the kind
+# is the scope ("For photos kept as memories, the largest problem was…", v3.4 U1/U2).
+_COMPARATIVE = (r"(?:more|less|fewer|harder(?!\s+to\b)|easier(?!\s+to\b)|higher|lower|bigger|"
+                r"larger|skews?|skewed|than|differently|different|unlike|whereas)")
+_SUPERLATIVE = r"(?:most|least|hardest|easiest|highest|lowest|mainly|mostly|biggest|largest|dominat\w*)"
+_KIND_COMPARE = re.compile(rf"\b{_KIND}\b[^.;\n]{{0,60}}?\b{_COMPARATIVE}\b|\b{_COMPARATIVE}\b"
+                           rf"[^.;\n]{{0,40}}?\b{_KIND}\b", re.I)
+_KIND_SUPER = re.compile(rf"(?P<pre>[^.;\n]{{0,24}})\b{_KIND}\b[^.;\n]{{0,40}}\b{_SUPERLATIVE}\b|"
+                         rf"\b{_SUPERLATIVE}\b[^.;\n]{{0,40}}\b{_KIND}\b", re.I)
+_SCOPE = re.compile(r"\b(?:for|among|within|in|about)\b", re.I)
 
-_KIND_DIFFER = re.compile(r"\bdiffer\w*\b[^.;\n]{0,40}\bkinds? of photos?\b|\bkinds? of photos?\b"
-                          r"[^.;\n]{0,40}\bdiffer\w*\b", re.I)
+_KIND_WORDS = r"(?:kinds? of photos?|types? of photos?|photo(?:'s)? (?:kind|type)s?)"
+_KIND_DIFFER = re.compile(rf"\b(?:differ\w*|depends? on)\b[^.;\n]{{0,40}}\b(?:{_KIND_WORDS}|{_KIND})\b|"
+                          rf"\b{_KIND_WORDS}\b[^.;\n]{{0,40}}\bdiffer\w*\b", re.I)
 
 
 def check_comparison(text: str) -> list[str]:
@@ -256,7 +376,19 @@ def check_comparison(text: str) -> list[str]:
     Flags a comparative word within a few words of a kind of photo, in the
     answer's own words. Not absolute: it triggers the repair."""
     t = QUOTE.sub(" ", CITATION.sub(" ", text or ""))
-    bad = [m.group(0)[:80] for m in _KIND_COMPARE.finditer(t)]
+    bad = []
+    for m in _KIND_COMPARE.finditer(t):
+        sent = _sentence_of(t, m.start(), m.end())
+        # Denied only when the denial is right before THIS comparison: "We can't say
+        # whether … — but the cases show a different pattern" asserts one (v3.7, U2).
+        just_before = t[max(0, m.start() - 50):m.start()]
+        if not (sent.rstrip(" *_").endswith("?") or re.search(
+                r"\b(?:whether|cannot|can.t|not|no)\b[^—;]*$", just_before, re.I)):
+            bad.append(m.group(0)[:80])
+    for m in _KIND_SUPER.finditer(t):
+        if m.group("pre") is not None and _SCOPE.search(m.group("pre")):
+            continue                         # "for photos kept as memories, the largest…"
+        bad.append(m.group(0).strip()[:80])
     # "By kind of photo, the first misstep differs." / "Search goes wrong in
     # different ways by kind of photo." (U1, v2.7 and v2.8) — a claim of difference
     # with no comparative word. Not when denied ("cannot say whether it differs by
@@ -277,6 +409,8 @@ def _norm(s: str) -> str:
 
 
 LABEL_WORDS = 6
+_SAID = re.compile(r"\b(wrote|writes|said|says|say|posted|asked|asks|complained|told|put it|"
+                   r"one person|someone|a poster|a user|people typed|typed|searched for)\b", re.I)
 
 
 def check_quotes(text: str, records: list[dict], rows: list[dict],
@@ -302,6 +436,11 @@ def check_quotes(text: str, records: list[dict], rows: list[dict],
         q = _norm(m.group(1)).strip(" .,;:!?…")
         if len(q.split()) < 3:
             continue                                          # a term, not testimony
+        # Four words or fewer with no one said to have said them — a "did you mean"
+        # prompt, a label — is a term too (v3.1, S4). Attributed, it is testimony.
+        sent = _sentence_of(text, m.start(), m.end())
+        if len(q.split()) <= 4 and not _SAID.search(sent):
+            continue
         if len(q.split()) <= LABEL_WORDS and any(q in lab for lab in labels):
             continue                                          # a category's name
         parts = [p for p in re.split(r"\s*(?:…|\.\.\.)\s*", q) if len(p.split()) >= 3] or [q]
@@ -345,6 +484,39 @@ def dash_figure_labels(text: str) -> str:
     return t
 
 
+# Openers that only announce what follows: dropped, the sentence kept.
+_HEADING = re.compile(r"(?:the )?(?:short answer|answer|in short|bottom line|the bottom line|"
+                      r"takeaway|the takeaway|note|caveat|caveats|limits?|a limit|why|"
+                      r"what this means|where the evidence runs out|what we can say|"
+                      r"what the posts do show|what the evidence shows|partial answer|"
+                      r"my read|in brief|summary)", re.I)
+
+
+def unlabel(text: str) -> str:
+    """Formatting only (ask_v3): a "Label:" opening becomes prose. A heading-like
+    opener ("Short answer:", "Where the evidence runs out:") is dropped and the
+    sentence after it kept; any other short clause before a colon ("This suggests
+    product fixes:") gets a dash instead. v3.0's writer (gpt-5-mini) opened 13 of 24
+    drafts this way and each was withheld. A colon that introduces a quote, or
+    follows "wrote"/"said", is untouched."""
+    t = text or ""
+    for m in reversed(list(LABEL_COLON.finditer(t))):
+        label = m.group(1).strip()
+        after = t[m.end():]
+        if (len(label.split()) > 5 or _SPEECH.search(label)
+                or re.match(r"\s*[*_]*[\"“‘']", after)):
+            continue
+        c = t.rindex(":", m.start(), m.end())
+        if _HEADING.fullmatch(label):
+            nxt = re.match(r"(\s*[*_]*)(\S)", after)
+            rest = (nxt.group(1).lstrip() + nxt.group(2).upper() + after[nxt.end():]) if nxt \
+                else after
+            t = t[:m.start(1)] + t[c + 1:m.end()].replace(" ", "") + rest
+        else:
+            t = t[:c] + " —" + t[c + 1:]
+    return t
+
+
 def check_label_colon(text: str) -> list[str]:
     """EC-ASK-8: "Caveat:", "Answer:", "The numbers:" — a form, not an answer."""
     t = CITATION.sub(" ", text or "")
@@ -378,10 +550,16 @@ def check_codes(text: str) -> list[str]:
 
 def italicise_closing(text: str) -> str:
     """Formatting only, never content: a final line that is already a question
-    is wrapped in *…* so it renders as the contract's italic closing line."""
-    lines = (text or "").rstrip().split("\n")
+    is wrapped in *…* so it renders as the contract's italic closing line. A
+    closing question written at the end of a paragraph (v3.4: P1, L2, I1) is
+    moved to a line of its own first."""
+    t = (text or "").rstrip()
+    m = re.search(r"(?<=[.!)”\]])\s+(\*?[A-Z][^.!?\n*]{3,200}\?\*?)$", t)
+    if m and "\n" not in m.group(1):
+        t = t[:m.start()].rstrip() + "\n\n" + m.group(1)
+    lines = t.split("\n")
     last = lines[-1].strip() if lines else ""
-    if last.endswith("?") and not re.fullmatch(r"[*_].*[*_]", last) and len(last.split()) <= 16:
+    if last.endswith("?") and not re.fullmatch(r"[*_].*[*_]", last) and len(last.split()) <= 30:
         lines[-1] = f"*{last.strip('*_ ')}*"
     return "\n".join(lines)
 
@@ -437,6 +615,7 @@ class Report:
     directional_claimed: list[str] = field(default_factory=list)
     comparison: list[str] = field(default_factory=list)    # no kind of photo differs
     jargon: list[str] = field(default_factory=list)        # plain words (D-14)
+    proportions: list[str] = field(default_factory=list)   # a share in words must fit (v3)
 
     def problems(self) -> list[str]:
         out = []
@@ -445,6 +624,8 @@ class Report:
                               self.arithmetic),
                              ("unsupported number (a count called too few is not)",
                               self.floor_claim),
+                             ("unsupported number (a share in words does not fit)",
+                              self.proportions),
                              ("percentage without its count", self.percentages),
                              ("unverifiable quote", self.quotes),
                              ("citation not retrieved", self.citations),
@@ -555,6 +736,9 @@ def canonical_story_citations(text: str, records: list[dict]) -> str:
     return CITATION.sub(fix, text or "")
 
 
+MAX_WORDS = 260          # ask_v3: as long as the question needs, never an essay
+
+
 def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
           question: str = "", gap: str = "") -> Report:
     rep = Report()
@@ -562,6 +746,7 @@ def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
     rep.numbers = check_numbers(text, rows, gap)
     rep.arithmetic = check_share_arithmetic(text)
     rep.floor_claim = check_floor_claim(text)
+    rep.proportions = check_proportions(text, rows) if route != "NONE" else []
     rep.percentages = check_percentages(text)
     rep.quotes = check_quotes(text, records, rows, question)
     rep.citations = check_citations(text, rows, records)
@@ -578,8 +763,8 @@ def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
     rep.jargon = [w for w in check_jargon(text)
                   if not all(x.rstrip("s") in asked for x in w.lower().split())]
     words = len(CITATION.sub(" ", text).split())
-    if words > 200:
-        rep.length = [f"{words} words, over the 200 limit"]
+    if words > MAX_WORDS:
+        rep.length = [f"{words} words, over the {MAX_WORDS} limit"]
     if route == "NONE":
         if citations(text):
             rep.refusal.append("a refusal cites evidence")
@@ -588,16 +773,13 @@ def check(answer: str, route: str, rows: list[dict], records: list[dict], *,
         if any(len(m.group(1).split()) >= 3 for m in QUOTE.finditer(text)):
             rep.refusal.append("a refusal quotes")        # a quoted 2-word term is not testimony
         return rep
-    rep.uncited = check_uncited(text)
+    # ask_v3 (the PM, 2026-09-27): an answer argues like a researcher — its own
+    # reasoning needs no source (numbers, fractions and quotes in it are still
+    # checked), a post is quoted only when it bears on the point, and a limit is
+    # said only where it changes how a claim reads — so neither an uncited
+    # sentence, a missing quote nor a missing caveat line is a problem any more.
     rep.closing = check_closing(text)
     cited = citations(text)
-    if route == "FULL":
-        if not any(c["table"] == "story" for c in cited):
-            rep.evidence.append("a FULL answer quotes no story")
-        if not any(c["table"].startswith("analysis_") for c in cited):
-            rep.evidence.append("a FULL answer cites no counted row")
-    counted = any(c["table"].startswith("analysis_") and c["table"] != "analysis_method_flags"
-                  for c in cited)
-    if counted and not any(c["table"] == "analysis_method_flags" for c in cited):
-        rep.evidence.append("a counted answer cites no method flag in its caveat")
+    if route == "FULL" and not any(c["table"].startswith("analysis_") for c in cited):
+        rep.evidence.append("a FULL answer cites no counted row")
     return rep

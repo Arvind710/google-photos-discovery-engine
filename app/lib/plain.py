@@ -431,12 +431,137 @@ def desnake(text) -> str:
     return re.sub(r"\bmetric\b", "measure", t)
 
 
+# ------------------------------------------------------------ reader words
+# "Stories" is the study's word for one person's account of hunting for one
+# photo; a reader does not know it (the PM, 2026-09-27: "do you think people
+# would understand it?"). Everything a reader sees says "cases" instead.
+_STORY_WORD = [(re.compile(r"\bStories\b"), "Cases"), (re.compile(r"\bstories\b"), "cases"),
+               (re.compile(r"\bStory\b"), "Case"), (re.compile(r"\bstory\b"), "case"),
+               # v3.0's writer said "the dataset" in 13 of 24 drafts; to a reader it is
+               # the evidence (and "dataset" is an internal word to the checker).
+               (re.compile(r"\bThe data ?set\b"), "The evidence"),
+               (re.compile(r"\bthe data ?set\b"), "the evidence"),
+               (re.compile(r"\b(?:This|Our) data ?set\b"), "This evidence"),
+               (re.compile(r"\b(?:this|our) data ?set\b"), "this evidence"),
+               (re.compile(r"\bdata ?sets?\b"), "evidence"),
+               (re.compile(r"\b[Cc]oded (cases|posts)\b"), r"\1"),
+               (re.compile(r"\bcoded\b"), "read"), (re.compile(r"\bCoded\b"), "Read"),
+               (re.compile(r"\bcoders\b"), "readers"), (re.compile(r"\bcoder\b"), "reader"),
+               (re.compile(r"\b(?:as |only )?directional\b"), "only a rough guide")]
+
+
+def reader_words(text: str) -> str:
+    """"stories" → "cases" in the text's own words — never inside a quotation (a
+    poster's words) or a citation (machinery)."""
+    from lib.verify import CITATION, QUOTE
+    t = text or ""
+    keep: list[str] = []
+
+    def hide(m):
+        keep.append(m.group(0))
+        return f"\x00{len(keep) - 1}\x00"
+    t = QUOTE.sub(hide, CITATION.sub(hide, t))
+    for pat, rep in _STORY_WORD:
+        t = pat.sub(rep, t)
+    while "\x00" in t:
+        t = re.sub(r"\x00(\d+)\x00", lambda m: keep[int(m.group(1))], t)
+    return t
+
+
+def unquote_terms(text: str, records: list[dict], rows: list[dict]) -> str:
+    """Formatting only (ask_v3): quotation marks around one of the study's own
+    category names — "adding more words made the photo disappear" — make it read
+    as someone's words. They are removed, unless a retrieved post really says it."""
+    from lib.verify import QUOTE, _norm
+    names = {_norm(v) for d in (STAGE, VALUE, OUTCOME, FAMILY) for v in d.values()}
+    for r in rows or []:
+        k = str((r.get("_cite") or {}).get("key", ""))
+        m = re.fullmatch(r"(?:core|adjacent)\.[^=]+=(.+)@.+", k)
+        if m:
+            names.add(_norm(words(m.group(1))))
+    said = " ".join(_norm(x.get("text", "")) for x in records or [])
+
+    def fix(m):
+        q = _norm(m.group(1)).strip(" .,;:!?…")
+        # Whole or in part ("did not understand what they typed, or showed the wrong
+        # photos" is the end of a category name, v3.1 P2).
+        hit = q in names or (len(q.split()) >= 4 and any(q in n for n in names))
+        return m.group(1) if hit and q not in said else m.group(0)
+    return QUOTE.sub(fix, text or "")
+
+
+_UNITS = {w: i for i, w in enumerate("zero one two three four five six seven eight nine ten eleven "
+                                    "twelve thirteen fourteen fifteen sixteen seventeen eighteen "
+                                    "nineteen".split())}
+_TENS = {w: 10 * i for i, w in enumerate("_ _ twenty thirty forty fifty sixty seventy eighty "
+                                         "ninety".split()) if w != "_"}
+_NUMBER_WORD = re.compile(
+    r"\b((?:" + "|".join(_TENS) + r")(?:[-\s](?:" + "|".join(list(_UNITS)[1:10]) + r"))?|"
+    r"(?:" + "|".join(list(_UNITS)[6:]) + r"))\b(?=\s+(?:of|cases?|people|posts?|stories|reports?|"
+    r"said|say|describe))", re.I)
+
+
+def number_words(text: str) -> str:
+    """"Thirty-one of the 115 cases" → "31 of the 115 cases" (v3.7, N2), so a count
+    written in words is checked like any number. Only counts of 6 and up — 1 to 5
+    are small quantifiers the checker lets pass anyway — and never a proportion
+    ("one in six" is left alone: "six" there is followed by "cases" only after "in")."""
+    from lib.verify import QUOTE
+
+    def val(w: str) -> int:
+        parts = re.split(r"[-\s]", w.lower())
+        return sum(_TENS.get(x, _UNITS.get(x, 0)) for x in parts)
+
+    def fix(m):
+        if re.search(r"\bin\s+$", m.string[max(0, m.start() - 4):m.start()], re.I):
+            return m.group(0)                                 # "one in six cases"
+        return str(val(m.group(1)))
+    keep: list[str] = []
+
+    def hide(m):
+        keep.append(m.group(0))
+        return f"\x01{len(keep) - 1}\x01"
+    t = _NUMBER_WORD.sub(fix, QUOTE.sub(hide, text or ""))
+    return re.sub(r"\x01(\d+)\x01", lambda m: keep[int(m.group(1))], t)
+
+
+# A share in words: what the writer says instead of "31 of 115 stories (27%)"
+# (the PM, 2026-09-27: "constantly quoting the number of stories would make a bad
+# impression"). The checker holds every such phrase to the share it cites
+# (verify.check_proportions), with PROPORTION_TOLERANCE either side.
+PROPORTIONS = [(0.05, "one in twenty"), (0.10, "one in ten"), (0.125, "one in eight"),
+               (1 / 6, "one in six"), (0.20, "one in five"), (0.25, "a quarter"),
+               (1 / 3, "a third"), (0.40, "two in five"), (0.50, "half"),
+               (0.60, "three in five"), (2 / 3, "two-thirds"), (0.75, "three-quarters"),
+               (0.80, "four in five"), (0.90, "nine in ten")]
+PROPORTION_TOLERANCE = 0.05
+
+
+def in_words(n: int, d: int) -> str | None:
+    """"about a quarter" for 31 of 115; None below the floor, where a share is not
+    given at all ([CTX] §15.5), or when nothing is near enough."""
+    if not d or d < FLOOR:
+        return None
+    v = n / d
+    if v < 0.03:
+        return "only a handful"
+    best = min(PROPORTIONS, key=lambda x: abs(x[0] - v))
+    return f"about {best[1]}" if abs(best[0] - v) <= PROPORTION_TOLERANCE else None
+
+
+def _share_of(r: dict) -> tuple[int, int] | None:
+    n = r.get("stories", r.get("core_stories"))
+    d = r.get("of")
+    return (int(n), int(d)) if isinstance(n, int) and isinstance(d, int) and d else None
+
+
 # ------------------------------------------------------------------- tags
 _TAG = re.compile(r"\[\s*([FSN]\d+(?:\s*(?:,|;|/|&|and)\s*[FSN]?\d+)*)\s*\]")
 _ONE = re.compile(r"([FSN])?(\d+)")
 _PARTIAL = re.compile(r"\[[FSN]?[\d,\s FSN]{0,12}$")          # a tag still arriving
 # A quote written INSIDE the tag ("[S1 “returned way too many images”]", v2.8: L1)
 # is the quote followed by its tag; the quote is then checked like any other.
+_LOOSE_TAG = re.compile(r"\[\s*[FSN]\d+[^\[\]\n]{0,40}\]")
 _QUOTED_TAG = re.compile(r"\[\s*([FSN]\d+)\s*[:,—–-]?\s*(“[^”\]]*”|\"[^\"\]]*\")\s*\]")
 
 
@@ -457,15 +582,20 @@ class Tags:
         return tag
 
     def expand(self, text: str) -> str:
-        """[F3] and [F3, S1] → [[table|key]]… for the checker and the page. An
-        unknown tag is left as written, and the jargon check fails it."""
+        """[F3] and [F3, S1] → [[table|key]]… for the checker and the page. A tag
+        that was never given ("[F34]" with 30 facts, v3.2 R1), or a bracket of tags
+        in a form the pattern does not know ("[F1–F14]"), is dropped: citations are
+        not shown to the reader any more (ask_v3), and every number in that paragraph
+        is still held to the rows its other tags name — or to every retrieved row."""
         def one(m):
             out, last = [], "F"
             for k, n in _ONE.findall(m.group(1)):
                 last = k or last
-                out.append(self.to_cite.get(f"{last}{n}", f"[{last}{n}]"))
+                out.append(self.to_cite.get(f"{last}{n}", ""))
             return "".join(out)
-        return _TAG.sub(one, untangle(text))
+        t = _TAG.sub(one, untangle(text))
+        return _LOOSE_TAG.sub(lambda m: "".join(
+            self.to_cite.get(f"{k}{n}", "") for k, n in re.findall(r"([FSN])(\d+)", m.group(0))), t)
 
 
 def visible(text: str) -> str:
@@ -487,11 +617,16 @@ def build(got, *, story_chars: int = 600, max_facts: int = 30) -> Tags:
         s = sentence(r)
         if s and cite not in seen:
             seen.add(cite)
-            tags.add("F", cite, s)
+            nd = _share_of(r)
+            if nd and nd[1] < FLOOR:
+                s += " (≈ counts only)"
+            elif nd and in_words(*nd):
+                s += f" (≈ {in_words(*nd)})"
+            tags.add("F", cite, reader_words(s))
     for r in method.get("flags", []):
         s = sentence(r)
         if s:
-            tags.add("N", f"[[{r['_cite']['table']}|{r['_cite']['key']}]]", s)
+            tags.add("N", f"[[{r['_cite']['table']}|{r['_cite']['key']}]]", reader_words(s))
     for s in got.records():
         where = SOURCE.get(s.get("source"), s.get("source"))
         body = s["text"].replace(" …[cut]", "")

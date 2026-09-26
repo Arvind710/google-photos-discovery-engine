@@ -341,6 +341,12 @@ the translation layer on every registry row, a late planner and a stalled stream
 a replay test for every case the sweeps v2.1–v2.10 turned up (a % that disagrees with its count, a
 count wrongly called "too few" and a claim that kinds of photo differ are absolute; see D-14).
 
+**Measured, 2026-09-27 (D-15, Ask AI v3).** Answers argue in prose with shares in words, each held to
+its figure (`check_proportions`, absolute); gpt-5-mini writes. Sweep at `ask_v3.8`
+(`ask-golden-synth-20260926-211327-dfb541`): T-13 24/24, 19 drafts served as written, 5 withheld (all
+real), 0 absolute problems served, 0 late, mean 7.5 s, max 8.9 s, $0.054 for 24 questions. In the
+browser, 0 px of movement when an answer completes (`browser_P5_20260927.md`).
+
 ---
 
 ## 11. P6 gate — Deploy (BROWSER)

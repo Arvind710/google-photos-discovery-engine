@@ -20,16 +20,29 @@ on screen by the fallback, with a line saying so. The draft is visible for the
 second or two it takes to check — the PM's trade for words that appear as they
 are written, and why the status line reads "checking" until the check is done.
 
-When an answer lands the page scrolls to the START of it and stays there
-(`_scroll_to_answer`), not to its end.
+While an answer streams the page never scrolls past its first line, and when it
+lands nothing moves (`_hold_still`).
+
+NO JUMP WHEN IT LANDS (ask_v3, the PM: "there is a huge jerk post an answer
+completion"). The answer used to be streamed into one layout and then the page
+was re-run and redrawn from the transcript in another — a status box vanished,
+the "Understood as" line appeared above the words, superscripts re-flowed them,
+and a scroll script fired. Now the live answer is drawn in the SAME slots the
+transcript uses, filled in place: the restatement first, the words as they
+stream, the evidence and footer below them when checked. And the question is
+taken in on one instant run and answered on the next (`_accept`), so no element
+of the previous screen is left to be removed when the answer finishes.
+
+NO SUPERSCRIPTS (ask_v3). The answer reads as prose; what it rests on is in the
+evidence panel under it — the exact figures, each post in full, the limits — so
+the panel adds what the answer does not repeat.
 
 Everything on this page is in plain words: the evidence reaches the writer
 through the translation layer (plain.py), and the references, warnings and
 header here use the same words — nothing needs the project's vocabulary.
 
 User text is shown with `st.text` (never parsed); the answer is Markdown with
-HTML OFF and `$` escaped; citation numbers are Unicode superscripts, because a
-tag inside HTML-off Markdown prints as text.
+HTML OFF and `$` escaped; its citations are removed before it is shown.
 """
 
 import re
@@ -46,7 +59,6 @@ from lib import verify as V
 MUTED, HAIR, ACCENT, WARN = ui.MUTED, ui.HAIR, ui.BLUE, ui.ORANGE
 AVATAR = {"user": "🙋", "assistant": "🔎"}
 TYPICAL = "about 15 seconds"
-_SUP = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
 
 # (chip, question): the chip fits under the input; the question is what is sent,
 # each one from the golden set the engine is graded on.
@@ -59,32 +71,22 @@ SUGGESTED = [
      "Does Google Photos fail to understand the clues people give it?"),
     ("What should be fixed first?", "Which opportunity does the engine recommend, and why?"),
     ("How big is the evidence?",
-     "How many stories is this based on, and from how many different people?"),
+     "How many cases is this based on, and from how many different people?"),
 ]
 
 # The stage names the status line shows (analyst.ask calls progress(stage)).
-STAGE = {"plan": "Reading your question…", "retrieve": "Finding the stories and figures…",
-         "write": "Writing — checking follows…", "check": "Checking every number and quote…"}
+STAGE = {"plan": "Reading your question…", "retrieve": "Finding the evidence…",
+         "write": "Writing — every figure and quote is checked next…",
+         "check": "Checking every figure and quote…"}
 
-# A citation reads as evidence, not as a schema.
-TABLE_LABEL = {"analysis_crosstab": "A count from the stories",
-               "analysis_derived": "A count from the stories",
-               "analysis_coverage": "How many posts mention this",
-               "analysis_reliability": "How consistently the stories were read",
-               "analysis_method_flags": "A limit of this evidence",
-               "analysis_funnel": "The size of the evidence",
-               "analysis_sources": "Where the posts came from",
-               "analysis_opportunity": "A problem worth fixing",
-               "analysis_weight_sensitivity": "How stable the ranking is",
-               "analysis_synthesis": "The engine's suggestion",
-               "story_themes": "A pattern noticed later", "story": "What someone wrote"}
-
+# The evidence panel's three groups, by where a citation points.
+GROUP = {"story": "What people wrote", "analysis_method_flags": "Limits to keep in mind"}
+FIGURES = "What the figures say"
 # Only findings that bear on whether the answer can be TRUSTED reach the screen;
 # a missing closing question or a long answer is the writing, not the evidence.
 # Each in plain words: the reader sees what to be careful of, not the checker's rule name.
-EVIDENCE = {"uncited claim": "a sentence is not tied to a source",
-            "directional": "a figure from a small group is not marked as a rough guide",
-            "comparison between kinds": "it compares kinds of photo that have too few stories "
+EVIDENCE = {"directional": "a figure from a small group is not marked as a rough guide",
+            "comparison between kinds": "it compares kinds of photo that have too few cases "
                                         "to compare",
             "evidence": "it rests on fewer sources than a full answer should"}
 VERIFY_WARNING = "**Read this answer with care:** "
@@ -155,9 +157,10 @@ fun = db.query("SELECT n, n_authors FROM analysis_funnel WHERE source='_all'"
                " AND step='stories:core'")
 CORE = int(fun.iloc[0]["n"]) if not fun.empty else 0
 PEOPLE = int(fun.iloc[0]["n_authors"]) if not fun.empty else 0
-IDENTITY = (f"Answers come only from <b>{CORE} stories</b> that {PEOPLE} people posted about "
-            "a photo they only vaguely remembered. Every claim shows its source, every number "
-            "and quote is checked, and the answer says plainly when the stories cannot tell.")
+IDENTITY = (f"Answers come from <b>{CORE} cases</b> — public posts in which {PEOPLE} people "
+            "described hunting for a photo they only vaguely remembered. Every figure and quote "
+            "is checked, the evidence sits under each answer, and it says plainly when the "
+            "evidence runs out.")
 
 
 @st.cache_resource(show_spinner=False)
@@ -199,82 +202,75 @@ def _title(q: str) -> str:
 
 # ------------------------------------------------------------- one answer
 def _refs(a: A.Answer) -> dict[str, dict]:
-    """Everything a reference can show, resolved once, as plain strings."""
+    """Everything the evidence panel can show, resolved once, as plain strings."""
     out = {}
     if not a.retrieved:
         return out
     for s in a.retrieved.records():
         text = s["text"].replace(" …[cut]", "…")
         out[f"story|{s['story_id']}"] = {
-            "label": TABLE_LABEL["story"],
-            "detail": f"a post on {P.SOURCE.get(s['source'], s['source'])}",
-            "quote": text[:320] + ("…" if len(text) > 320 else "")}
+            "group": GROUP["story"],
+            "detail": f"A post on {P.SOURCE.get(s['source'], s['source'])}",
+            "quote": text[:420] + ("…" if len(text) > 420 else "")}
     for r in a.retrieved.rows():
         c = r.get("_cite")
         if c:
-            # The same plain sentence the writer was given (plain.py).
+            # The exact figure, as the translation layer states it — the answer said
+            # it in words; here is the count behind it.
             out[f"{c['table']}|{c['key']}"] = {
-                "label": TABLE_LABEL.get(c["table"], "A figure from the stories"),
-                "detail": P.sentence(r) or P.scrub(r.get("text") or r.get("label") or "")}
+                "group": GROUP.get(c["table"], FIGURES),
+                "detail": P.reader_words(P.sentence(r)
+                                         or P.scrub(r.get("text") or r.get("label") or ""))}
     return out
 
 
-def _scroll_to_answer(follow_s: float = 2.0) -> None:
-    """Bring the START of the newest answer to the top of the screen and hold it
-    there for `follow_s` seconds — Streamlit's chat keeps the page pinned to the
-    bottom as content grows, which left readers at the END of a long answer
-    (the PM, 2026-09-27). A reader who scrolls or taps stops the hold at once."""
-    components.html(f"""<script>
-    const doc = window.parent.document;
-    let stop = false;
-    ["wheel", "touchstart", "keydown", "mousedown"].forEach(e =>
-        doc.addEventListener(e, () => {{ stop = true; }}, {{once: true, passive: true}}));
-    const go = () => {{
-      const m = doc.querySelectorAll(".ask-a");
-      if (!m.length) return;
-      const msg = m[m.length - 1].closest('[data-testid="stChatMessage"]') || m[m.length - 1];
-      msg.scrollIntoView({{block: "start"}});
-    }};
-    const t0 = Date.now();
-    const iv = setInterval(() => {{
-      if (stop || Date.now() - t0 > {int(follow_s * 1000)}) {{ clearInterval(iv); return; }}
-      go();
-    }}, 100);
-    </script>""", height=0)
+def _prose(text: str) -> str:
+    """The answer as a reader sees it: no citation marks (they live in the panel)."""
+    t = V.CITATION.sub("", text or "")
+    t = re.sub(r"[ \t]+([.,;:!?])", r"\1", t)
+    return re.sub(r"[ \t]{2,}", " ", t).strip()
 
 
-def _render_answer(msg: dict) -> None:
-    if msg.get("error"):
-        st.error(msg["error"])
+def _evidence(msg: dict) -> None:
+    """The panel under an answer: every source it cites, grouped, in full."""
+    keys = list(dict.fromkeys(f"{t}|{k.strip()}" for t, k in V.CITATION.findall(msg["text"])))
+    refs = [msg["refs"][k] for k in keys if k in msg.get("refs", {})]
+    if not refs:
         return
+    with st.expander(f"The evidence behind this answer · {len(refs)} "
+                     f"source{'s' if len(refs) != 1 else ''}"):
+        html = [f"<div style='color:{MUTED};font-size:.76rem;margin:0 0 .5rem'>A <i>case</i> is "
+                "one person's account, in a public post, of hunting for one photo. Figures "
+                "count cases — not users, not searches.</div>"]
+        for head in (FIGURES, GROUP["story"], GROUP["analysis_method_flags"]):
+            items = [r for r in refs if r.get("group", FIGURES) == head]
+            if not items:
+                continue
+            html.append(f"<div style='font-size:.68rem;font-weight:800;letter-spacing:.12em;"
+                        f"color:{MUTED};margin:.8rem 0 .3rem'>{head.upper()}</div>")
+            for r in items:
+                body = "<div style='font-size:.86rem;line-height:1.5;margin:.3rem 0'>"
+                if r.get("quote"):
+                    body += (f"<div style='border-left:3px solid {ACCENT};padding-left:.7rem'>"
+                             f"“{ui.esc(r['quote'])}”<div style='color:{MUTED};font-size:.74rem;"
+                             f"margin-top:.15rem'>{ui.esc(r['detail'])}</div></div>")
+                else:
+                    body += f"• {ui.esc(r['detail'])}"
+                html.append(body + "</div>")
+        st.html("".join(html))
+
+
+def _restated_html(text: str) -> str:
+    return (f"<div style='color:{MUTED};font-size:.78rem;margin-bottom:.4rem'>"
+            f"{text}</div>")
+
+
+def _below(msg: dict) -> None:
+    """What sits under the words: why a draft was replaced (below, so nothing above
+    the words moves when it lands), the evidence, any warning, the footer."""
     if msg.get("replaced") is not None:
         st.caption(REPLACED[bool(msg["replaced"])])
-    if msg.get("restated"):
-        st.html(f"<div style='color:{MUTED};font-size:.78rem;margin-bottom:.4rem'>Understood "
-                f"as: {ui.esc(msg['restated'])}</div>")
-    order: list[tuple[str, str]] = []
-
-    def num(m):
-        k = (m.group(1), m.group(2).strip())
-        if k not in order:
-            order.append(k)
-        return str(order.index(k) + 1).translate(_SUP)
-
-    st.markdown(V.CITATION.sub(num, _escape_md(msg["text"])), unsafe_allow_html=False)
-    if order:
-        with st.expander(f"Where this came from — {len(order)} references"):
-            st.caption("Every numbered claim above, traced to the figure or the story it "
-                       "rests on.")
-            lines = []
-            for i, (t, k) in enumerate(order, 1):
-                ref = msg["refs"].get(f"{t}|{k}", {"label": t, "detail": k})
-                body = (f"<div style='font-size:.84rem;margin:.35rem 0'><b>[{i}]</b> "
-                        f"{ui.esc(ref['label'])} — {ui.esc(ref['detail'])}")
-                if ref.get("quote"):
-                    body += (f"<div style='border-left:2px solid {HAIR};padding-left:.6rem;"
-                             f"margin-top:.2rem;color:{MUTED}'>“{ui.esc(ref['quote'])}”</div>")
-                lines.append(body + "</div>")
-            st.html("".join(lines))
+    _evidence(msg)
     said = list(dict.fromkeys(plain for p in msg.get("problems", [])
                               for k, plain in EVIDENCE.items() if p.startswith(k)))
     if said:
@@ -282,8 +278,190 @@ def _render_answer(msg: dict) -> None:
     st.caption(msg.get("foot", ""))
 
 
-# ---------------------------------------------------------------- sidebar
+def _render_answer(msg: dict) -> None:
+    if msg.get("error"):
+        st.error(msg["error"])
+        return
+    # The same order the live answer fills: restatement, words, below.
+    if msg.get("restated"):
+        st.html(_restated_html(f"Understood as: {ui.esc(msg['restated'])}"))
+    st.markdown(_escape_md(_prose(msg["text"])), unsafe_allow_html=False)
+    _below(msg)
+
+
+def _hold_still(top_margin: int = 64, settle_s: float = 2.0) -> None:
+    """Keep the answer where the reader is looking (ask_v3, the PM: "a huge jerk post
+    an answer completion"). Measured in the browser: the words streamed in without the
+    page moving, and when the answer finished — the evidence panel and footer added —
+    Streamlit's chat view glided the page 426 px to the bottom, taking the answer's
+    first lines off screen. (The old 12-second hold then fought that scroll.)
+
+    This script remembers where the answer sits while it streams, never lets a long
+    answer scroll past its own first line, and when the finished marker appears it
+    cancels any scroll that would move the answer, for `settle_s`. One instant
+    correction cancels a smooth scroll mid-flight. The reader's own scroll, tap or
+    key stops it at once."""
+    components.html(f"""<script>
+    const doc = window.parent.document, win = window.parent;
+    let stop = false, last = null, doneAt = null;
+    ["wheel", "touchstart", "keydown", "mousedown"].forEach(e =>
+        doc.addEventListener(e, () => {{ stop = true; }}, {{once: true, passive: true}}));
+    const scroller = el => {{
+      for (let n = el; n; n = n.parentElement) {{
+        const o = win.getComputedStyle(n).overflowY;
+        if ((o === "auto" || o === "scroll") && n.scrollHeight > n.clientHeight) return n;
+      }}
+      return doc.scrollingElement;
+    }};
+    const frame = () => {{
+      if (stop) return;
+      const m = doc.querySelectorAll(".ask-a");
+      if (m.length) {{
+        const msg = m[m.length - 1].closest('[data-testid="stChatMessage"]');
+        const top = msg.getBoundingClientRect().top;
+        const done = msg.querySelector(".ask-done") !== null;
+        if (!done) {{
+          if (top < {top_margin}) scroller(msg).scrollBy({{top: top - {top_margin},
+                                                          behavior: "instant"}});
+          else last = top;
+        }} else {{
+          if (doneAt === null) doneAt = Date.now();
+          if (last !== null && Math.abs(top - last) > 1)
+            scroller(msg).scrollBy({{top: top - last, behavior: "instant"}});
+          if (Date.now() - doneAt > {int(settle_s * 1000)}) return;
+        }}
+      }}
+      win.requestAnimationFrame(frame);
+    }};
+    win.requestAnimationFrame(frame);
+    </script>""", height=0)
+
+
 thread = _active()
+
+
+def _accept(q: str) -> None:
+    """A question is taken in on one run and answered on the NEXT (ask_v3). That
+    instant run redraws the page in its final shape — the conversation with the
+    question in it — before any word arrives. Answered on the same run, the words
+    streamed in while the previous screen's leftover elements (the welcome block)
+    were still on the page, and when the run ended Streamlit removed them all at
+    once: the page shrank and the answer jumped (measured 95 px → 263 px)."""
+    why = A.screen(q) or caps.blocked("ask")
+    thread["messages"].append({"role": "user", "content": q})
+    if thread["title"] == "New chat":
+        thread["title"] = _title(q)
+    if why:
+        # A declined question is a turn like any other and stays in the thread.
+        thread["messages"].append({"role": "assistant", "text": why, "restated": "",
+                                   "refs": {}, "problems": [], "foot": ""})
+    else:
+        caps.record("ask")
+        st.session_state["answering"] = thread["id"]
+    st.rerun()
+
+
+# ------------------------------------------------------------- transcript
+if thread["messages"]:
+    st.html(f"<div style='display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem;"
+            f"border-bottom:1px solid {HAIR};padding-bottom:.55rem;margin:0 0 1.1rem'>"
+            f"<span style='font-size:.68rem;font-weight:800;letter-spacing:.18em;"
+            f"color:{MUTED}'>ASK AI</span><span style='font-size:.78rem;color:{MUTED};"
+            f"line-height:1.5'>based on <b>{CORE}</b> cases people described in public posts · "
+            "the evidence sits under each answer · figures count <b>public posts</b>, not "
+            "users or searches</span></div>")
+
+for msg in thread["messages"]:
+    with st.chat_message(msg["role"], avatar=AVATAR[msg["role"]]):
+        if msg["role"] == "user":
+            st.html(QUESTION_MARK)
+            st.text(msg["content"])
+        else:
+            st.html(ANSWER_MARK)
+            _render_answer(msg)
+
+# ------------------------------------------------------------ the input, or the welcome
+# Before the answer is written: the input is pinned to the window's bottom wherever it
+# is drawn, and drawn AFTER a streamed answer it was the last thing the run added.
+if thread["messages"]:
+    typed = st.chat_input("Ask a follow-up…", key="ask_more")
+    if typed:
+        _accept(typed)
+else:
+    st.html("<div style='height:6vh'></div>")
+    _, mid, _ = st.columns([1, 8, 1])
+    with mid:
+        st.html(f"<div style='text-align:center;margin:0 0 1.1rem'>"
+                f"<div style='font-size:.68rem;font-weight:800;letter-spacing:.18em;"
+                f"color:{MUTED}'>ASK AI</div>"
+                f"<div style='font-size:1.9rem;font-weight:750;line-height:1.25;"
+                f"margin-top:.3rem'>What can I help you with?</div>"
+                f"<div style='color:{MUTED};font-size:.9rem;line-height:1.55;margin:.5rem auto 0;"
+                f"max-width:56ch'>{IDENTITY} Most land in {TYPICAL}.</div></div>")
+        with st.container():
+            typed = st.chat_input("Ask anything about how people search for old photos…",
+                                  key="ask_first")
+        if typed:
+            _accept(typed)
+        st.html(f"<div style='color:{MUTED};font-size:.76rem;text-align:center;"
+                f"margin:.9rem 0 .3rem'>or start with one of these</div>")
+        for row in (SUGGESTED[:3], SUGGESTED[3:]):
+            for col, (chip, q) in zip(st.columns(len(row)), row, strict=True):
+                if col.button(chip, key=f"sugg{q[:18]}"):
+                    _accept(q)
+        st.html(f"<div style='text-align:center;margin:1.4rem 0 .2rem'><span style='font-size:"
+                f".75rem;color:{MUTED};border:1px solid {HAIR};border-radius:999px;padding:.2rem"
+                f" .55rem'><span style='display:inline-block;width:.45rem;height:.45rem;"
+                f"border-radius:50%;background:{WARN};margin-right:.4rem;vertical-align:middle'>"
+                "</span>every figure counts <b>public posts</b> — not users, not searches, "
+                "not a success rate</span></div>")
+
+# ------------------------------------------------------------- a new answer
+# Drawn where the next message goes, in the transcript's own slots, filled in place.
+if st.session_state.get("answering") == thread["id"] and thread["messages"] \
+        and thread["messages"][-1]["role"] == "user":
+    st.session_state.pop("answering")          # never asked twice, even if this run fails
+    question = thread["messages"][-1]["content"]
+    msgs = thread["messages"][:-1]
+    hist = [{"question": q["content"], "answer": a.get("text", "")}
+            for q, a in zip(msgs[::2], msgs[1::2], strict=False)]
+    with st.chat_message("assistant", avatar=AVATAR["assistant"]):
+        st.html(ANSWER_MARK)
+        top, words, under = st.empty(), st.empty(), st.empty()
+        top.html(_restated_html(f"{STAGE['plan']} · usually {TYPICAL}"))
+        under.caption(STAGE["retrieve"])
+        _hold_still()
+
+        def show(so_far: str) -> None:
+            words.markdown(_escape_md(P.reader_words(so_far)) + " ▌", unsafe_allow_html=False)
+
+        a = A.ask(_client(key), db.connection(), question, history=hist, on_text=show,
+                  on_restated=lambda r: top.html(_restated_html(f"Understood as: {ui.esc(r)}")),
+                  progress=lambda s: under.caption(f"{STAGE[s]} · usually {TYPICAL}"))
+        route = {"FULL": "full answer", "PARTIAL": "partial answer — it says what the evidence "
+                 "cannot settle", "NONE": "outside what this study covers"}.get(a.route, a.route)
+        msg = {"role": "assistant", "error": caps.explain(a.error) if a.error else "",
+               "text": a.text, "restated": a.restated, "refs": _refs(a),
+               "replaced": (a.withheld[0].startswith("the draft did not finish")
+                            if a.withheld else None),
+               "problems": a.report.problems() if a.report else [],
+               "foot": (f"{'✓ checked' if a.verified else '⚠ not fully checked'} · {route} · "
+                        f"{a.seconds:.0f}s")}
+        if msg["error"]:
+            top.empty()
+            words.error(msg["error"])
+            under.empty()
+        else:
+            words.markdown(_escape_md(_prose(msg["text"])), unsafe_allow_html=False)
+            with under.container():
+                _below(msg)
+                st.html("<span class='ask-done' style='display:none'></span>")
+    thread["messages"].append(msg)
+
+
+# ---------------------------------------------------------------- sidebar
+# Drawn LAST, so a chat started on this run is already in the list (no re-run
+# after an answer, ask_v3); the sidebar's place on screen does not depend on order.
 with st.sidebar:
     st.html(f"<div style='margin-top:.4rem;padding-top:.7rem;border-top:1px solid {HAIR}'>"
             "</div>")
@@ -307,107 +485,3 @@ with st.sidebar:
     st.html(f"<div style='font-size:.7rem;color:{MUTED};line-height:1.45;margin-top:.8rem'>"
             f"{caps.left('ask')} questions left in this visit · a public page on a personal "
             "API budget.</div>")
-
-# ------------------------------------------------------------- transcript
-if thread["messages"]:
-    st.html(f"<div style='display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem;"
-            f"border-bottom:1px solid {HAIR};padding-bottom:.55rem;margin:0 0 1.1rem'>"
-            f"<span style='font-size:.68rem;font-weight:800;letter-spacing:.18em;"
-            f"color:{MUTED}'>ASK AI</span><span style='font-size:.78rem;color:{MUTED};"
-            f"line-height:1.5'>based on <b>{CORE}</b> stories people posted · every claim "
-            "shows its source · figures count <b>public posts</b>, not users or searches"
-            "</span></div>")
-
-for msg in thread["messages"]:
-    with st.chat_message(msg["role"], avatar=AVATAR[msg["role"]]):
-        if msg["role"] == "user":
-            st.html(QUESTION_MARK)
-            st.text(msg["content"])
-        else:
-            st.html(ANSWER_MARK)
-            _render_answer(msg)
-
-# ----------------------------------------------------- the empty-thread state
-# On the run that answers the first question the thread is still empty, so the
-# hero must step aside when a question is already in flight (Myntra, checked).
-in_flight = bool(st.session_state.get("pending") or st.session_state.get("ask_first"))
-typed = None
-if thread["messages"]:
-    typed = st.chat_input("Ask a follow-up…", key="ask_more")
-elif in_flight:
-    typed = st.session_state.get("ask_first")
-else:
-    st.html("<div style='height:6vh'></div>")
-    _, mid, _ = st.columns([1, 8, 1])
-    with mid:
-        st.html(f"<div style='text-align:center;margin:0 0 1.1rem'>"
-                f"<div style='font-size:.68rem;font-weight:800;letter-spacing:.18em;"
-                f"color:{MUTED}'>ASK AI</div>"
-                f"<div style='font-size:1.9rem;font-weight:750;line-height:1.25;"
-                f"margin-top:.3rem'>What can I help you with?</div>"
-                f"<div style='color:{MUTED};font-size:.9rem;line-height:1.55;margin:.5rem auto 0;"
-                f"max-width:56ch'>{IDENTITY} Most land in {TYPICAL}.</div></div>")
-        with st.container():
-            st.chat_input("Ask anything about the stories…", key="ask_first")
-        st.html(f"<div style='color:{MUTED};font-size:.76rem;text-align:center;"
-                f"margin:.9rem 0 .3rem'>or start with one of these</div>")
-        for row in (SUGGESTED[:3], SUGGESTED[3:]):
-            for col, (chip, q) in zip(st.columns(len(row)), row, strict=True):
-                if col.button(chip, key=f"sugg{q[:18]}"):
-                    st.session_state["pending"] = q
-                    st.rerun()
-        st.html(f"<div style='text-align:center;margin:1.4rem 0 .2rem'><span style='font-size:"
-                f".75rem;color:{MUTED};border:1px solid {HAIR};border-radius:999px;padding:.2rem"
-                f" .55rem'><span style='display:inline-block;width:.45rem;height:.45rem;"
-                f"border-radius:50%;background:{WARN};margin-right:.4rem;vertical-align:middle'>"
-                "</span>every figure counts <b>public posts</b> — not users, not searches, "
-                "not a success rate</span></div>")
-
-question = typed or st.session_state.pop("pending", None)
-
-# ------------------------------------------------------------- a new answer
-if question:
-    why = A.screen(question) or caps.blocked("ask")
-    thread["messages"].append({"role": "user", "content": question})
-    if thread["title"] == "New chat":
-        thread["title"] = _title(question)
-    if why:
-        # A declined question is a turn like any other and stays in the thread.
-        thread["messages"].append({"role": "assistant", "text": why, "restated": "",
-                                   "refs": {}, "problems": [], "foot": ""})
-        st.rerun()
-    caps.record("ask")
-    with st.chat_message("user", avatar=AVATAR["user"]):
-        st.html(QUESTION_MARK)
-        st.text(question)
-    msgs = thread["messages"][:-1]
-    hist = [{"question": q["content"], "answer": a.get("text", "")}
-            for q, a in zip(msgs[::2], msgs[1::2], strict=False)]
-    with st.chat_message("assistant", avatar=AVATAR["assistant"]):
-        st.html(ANSWER_MARK)
-        stage = st.status(f"{STAGE['plan']} · usually {TYPICAL}", expanded=False)
-        words = st.empty()
-        _scroll_to_answer(follow_s=12.0)
-
-        def show(so_far: str) -> None:
-            words.markdown(_escape_md(so_far) + " ▌", unsafe_allow_html=False)
-
-        a = A.ask(_client(key), db.connection(), question, history=hist, on_text=show,
-                  progress=lambda s: stage.update(label=f"{STAGE[s]} · usually {TYPICAL}"))
-        stage.update(label=("Could not answer" if a.error else f"Answered in {a.seconds:.0f}s"),
-                     state="error" if a.error else "complete")
-    route = {"FULL": "full answer", "PARTIAL": "partial answer — it names what the stories "
-             "cannot support", "NONE": "outside what these stories hold"}.get(a.route, a.route)
-    thread["messages"].append(
-        {"role": "assistant", "error": caps.explain(a.error) if a.error else "",
-         "text": a.text, "restated": a.restated, "refs": _refs(a),
-         "replaced": (a.withheld[0].startswith("the draft did not finish")
-                      if a.withheld else None),
-         "problems": a.report.problems() if a.report else [],
-         "foot": (f"{'✓ checked' if a.verified else '⚠ not fully checked'} · {route} · "
-                  f"{a.seconds:.0f}s")})
-    st.session_state["scroll_to_answer"] = True
-    st.rerun()
-
-if st.session_state.pop("scroll_to_answer", False):
-    _scroll_to_answer()
