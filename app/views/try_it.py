@@ -8,7 +8,12 @@ text; nothing is written back.
 import streamlit as st
 
 from lib import caps, db, tryit, ui, words
-from lib.evidence import share
+
+
+def plain(v: str) -> str:
+    """Codebook values in plain words: "decisive_cue:what" → "decisive cue — what"."""
+    return str(v).replace(":", " — ").replace("_", " ")
+
 
 SAMPLE = ("I remember a pic of a small café in Goa from a trip, no idea which year. Searched "
           "'cafe goa' and it showed nothing, then 'goa restaurant' and got hundreds of beach "
@@ -85,7 +90,7 @@ if tr:
             + "".join(ui.quote(v, f"evidence for {k}") for k, v in c["evidence"].items()),
             ui.BLUE))
         rows = "".join(f"<tr><td style='padding:.15rem .6rem .15rem 0;color:{ui.MUTED}'>{q}</td>"
-                       f"<td style='padding:.15rem 0'>{ui.esc(', '.join(v))}</td></tr>"
+                       f"<td style='padding:.15rem 0'>{ui.esc(plain(', '.join(v)))}</td></tr>"
                        for q, v in c["codes"].items())
         st.html(f"<table style='font-size:.84rem'>{rows}</table>")
         ui.note(f"Questions the story does not speak to are coded 'not stated' and not shown. "
@@ -131,9 +136,10 @@ if not pick.empty:
         ui.GREEN))
     st.html("<table style='font-size:.84rem'>" + "".join(
         f"<tr><td style='padding:.15rem .6rem .15rem 0;color:{ui.MUTED}'>{q}</td><td>"
-        f"{ui.esc(v)}</td></tr>" for q, v in zip(cd["question"], cd["v"], strict=True))
+        f"{ui.esc(plain(v))}</td></tr>" for q, v in zip(cd["question"], cd["v"], strict=True))
         + "</table>")
     n_core = int(db.query("SELECT n FROM analysis_funnel WHERE source='_all' AND"
                           " step='stories:core'").iloc[0]["n"])
-    ui.note(f"One of {n_core} core stories; {share(len(cd), 60).text} of the codebook's questions "
-            f"have an answer for it.")
+    # A count, not a share: 60 questions of ONE story are not a sample of anything.
+    ui.note(f"One of {n_core} core stories; {len(cd)} of the codebook's 60 questions have an "
+            f"answer for it.")
