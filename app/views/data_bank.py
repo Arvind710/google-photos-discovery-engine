@@ -12,6 +12,8 @@ scraper against their robots.txt, and the page says so rather than leaving it
 to be discovered.
 """
 
+import html
+
 import plotly.graph_objects as go
 import streamlit as st
 
@@ -201,12 +203,13 @@ else:
                         " FROM exclusions e JOIN records r USING (record_id)"
                         " WHERE e.reason = ? AND e.story_id IS NULL LIMIT 30", (pick,))
         for _, r in rows.iterrows():
+            # Users' own text: escaped, so a '<' in a post is shown, not parsed.
             t = str(r["text_clean"])
             st.html(f"<div style='border-left:2px solid {HAIR};padding:.15rem 0 .15rem .7rem;"
                     f"margin:.45rem 0;font-size:.85rem;line-height:1.45'>"
-                    f"{t[:300]}{'…' if len(t) > 300 else ''}<div style='color:{MUTED};"
+                    f"{html.escape(t[:300])}{'…' if len(t) > 300 else ''}<div style='color:{MUTED};"
                     f"font-size:.74rem;margin-top:.2rem'>{words.source(r['source'])} · "
-                    f"{r['detail'] or ''}</div></div>")
+                    f"{html.escape(r['detail'] or '')}</div></div>")
 
 # ================================================================= PART 4
 section(4, "Where the collection is thinnest",

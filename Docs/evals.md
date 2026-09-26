@@ -133,7 +133,7 @@ Before any paid call.
 
 | ID | Type | Check | Threshold |
 |---|---|---|---|
-| P1-INV-1 | INV | **Accounting identity:** `raw == records + exclusions`. No record vanishes unlogged | Exact |
+| P1-INV-1 | INV | **Accounting identity.** Exclusions mark rather than remove (A.1), so every collected record stays in `records` and is **either kept or excluded, never both and never neither**: `records = kept + excluded`. Per collect run: `fetched = written_new + already_present + all_deleted + duplicate_in_batch`. No record vanishes unlogged | Exact |
 | P1-INV-2 | INV | Every record has non-empty `source_url` and `text_raw` | 100% |
 | P1-INV-3 | INV | `record_id` unique; re-ingest idempotent | 100% |
 | P1-INV-4 | INV | No email, phone or handle pattern survives in `text_clean` | **0 hits [EC-OPS-8]** |
@@ -141,7 +141,7 @@ Before any paid call.
 | P1-INV-6 | INV | No record is silently truncated. A record over the token cap is chunked on comment boundaries, and every chunk shares one `record_id` | 0 truncations **[EC-COL-4]** |
 | P1-MET-1 | MET | Each configured source contributed > 0 | All nine (`Docs/decisions.md` D-1) **[EC-COL-1]** |
 | P1-MET-4 | MET | Every record carries `collect_method`, and the Data Bank shows source × method | 100% (A.10, D-1) |
-| P1-PROBE-2 | PROBE | Collector field survival: for each Apify actor and the GP Help renderer, a sample of records has non-empty text, a permalink, an author and a date where the source provides one, and Reddit comments appear as their own records | 0 empty-field regressions **[EC-COL-13, EC-COL-14]** |
+| P1-PROBE-2 | PROBE | Collector field survival: for each Apify actor and the GP Help renderer, records have non-empty text, a permalink, an author and a date where the source provides one. Threaded sources (Reddit, GP Help, Stack Exchange, YouTube) keep a whole thread as **one** record, so their replies must survive **inside** it: `posts_json` (A.11) lists each post with its own author, and GP Help bodies are not title-only | 0 empty-field regressions **[EC-COL-13, EC-COL-14]** |
 | P1-MET-2 | MET | Distinct-author count reported per source | Present **[EC-COL-6]** |
 | **P1-MET-3** | MET | **Lexicon recall probe** | **T-4 ≤ 5%** |
 | **P1-PROBE-1** | PROBE | **Consensus-preservation test** | See below **[EC-CLEAN-1]** |

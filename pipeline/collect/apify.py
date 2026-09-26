@@ -30,6 +30,23 @@ def _call(method: str, url: str, token: str, payload: dict | None = None) -> Any
         return json.loads(r.read())
 
 
+def settled_usage(run_id: str, token: str, info: dict, *, tries: int = 6,
+                  wait_s: int = 5) -> dict:
+    """Re-read the run until its cost stops changing. Apify bills a run for a
+    while after it reports SUCCEEDED: read at that moment, `usageTotalUsd`
+    came back as $0.012 for a run that settled at $0.242 (2026-09-26), and
+    every collect run's recorded cost was low."""
+    last = info.get("usageTotalUsd")
+    for _ in range(tries):
+        time.sleep(wait_s)
+        info = _call("GET", f"{API}/actor-runs/{run_id}", token)["data"]
+        now = info.get("usageTotalUsd")
+        if now == last and now is not None:
+            break
+        last = now
+    return info
+
+
 def run_actor(actor: str, payload: dict, token: str, *, label: str, poll_s: int = 10,
               timeout_s: int = 3600) -> tuple[list[dict], dict]:
     """Start, poll, fetch. Returns (items, meta) with meta = status, run id and
@@ -48,6 +65,7 @@ def run_actor(actor: str, payload: dict, token: str, *, label: str, poll_s: int 
     else:
         _call("POST", f"{API}/actor-runs/{run_id}/abort", token)
         status = "TIMED-OUT (aborted by collector)"
+    info = settled_usage(run_id, token, info)
     items = _call("GET", f"{API}/datasets/{ds}/items?clean=true&format=json", token)
     meta = {"actor": actor, "apify_run_id": run_id, "status": status, "items": len(items),
             "usd": info.get("usageTotalUsd"), "waited_s": waited}

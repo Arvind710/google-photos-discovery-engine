@@ -91,7 +91,7 @@ Three layers, all from [SOL-JOURNEY] Part 2, and they are routinely conflated:
 |---|---|---|---|
 | **Stage** | Part 2(a), the journey table | Stage 5 — *Interpretation and matching* | 11 (0–10) |
 | **Question** — a field to fill | Part 2(b)/(c) IDs | `5.6 What response type does the user see?` | **60** |
-| **Value** — the code itself | The bullets under each question | `zero_results` | ~340 |
+| **Value** — the code itself | The bullets under each question | `zero_results` | 399 in v1 (estimated ~340 before sub-fields such as `date:` and `who:` were expanded) |
 
 "Assign a code" means: *for question 5.6, pick one of its listed answers.* This is what [SOL-JOURNEY] Part 3 means by *"Turn the question bank into a codebook."* The question bank is not background reading — it is the literal enum.
 
@@ -235,7 +235,7 @@ Every question in [SOL-JOURNEY] Part 2 appears below. `Exp` is the expected publ
 | 10.2 | Preventive habits adopted? | D | Reveals unmet need |
 | 10.3 | Do they complain publicly? | — | Structurally 100% in this corpus. Coded as a **standing bias flag**, not a variable |
 
-**Totals.** Block A 14 · B 14 · C 16 · D 12 · R (interview register) 9 · structural 1 = **60**.
+**Totals.** Block A 11 · B 13 · C 16 · D 11 · R (interview register) 8 · structural 1 = **60**, counted from the tables above. (An earlier draft of this line read "A 14 · B 14 · C 16 · D 12 · R 9", which sums to 66; `pipeline/common/codebook.py` pins the table's totals.)
 
 Every question keeps its full value list from [SOL-JOURNEY]. Every question also gets `not_stated` and `other:<free text>`. Values are never invented.
 
@@ -253,7 +253,7 @@ So:
 
 This is what makes "we did not miss anything" a claim the document can defend. A question is either coded with a measured coverage rate, or named as an interview question with the measurement that justified it. Nothing is unaccounted for.
 
-It also protects against my guesses being wrong in the expensive direction: I have marked 9 questions `R` on judgement, and the pilot costs under a dollar to check all of them.
+It also protects against my guesses being wrong in the expensive direction: I have marked 8 questions `R` on judgement, and the pilot costs under a dollar to check all of them.
 
 ### 3.5 The codebook is data
 
@@ -411,12 +411,12 @@ One helper makes "never a percentage without its denominator" structurally true 
 
 | Source | Method (`collect_method`) | Raw target | Why |
 |---|---|---|---|
-| **Reddit** | `apify` — `webdatalabs~reddit-scraper-pro` | ~4,500 | Longest narratives, real cue vocabulary, actual tactics. Carries blocks C and D |
+| **Reddit** | `apify` — `webdatalabs~reddit-scraper-pro` | ~4,500 **posts** | Longest narratives, real cue vocabulary, actual tactics. Carries blocks C and D. The target counts posts and comments, the unit Myntra stored as records. Here a whole thread is one record (A.11), so the P1 collect was **306 threads holding 3,751 posts** (D-5), and after the top-up on the terms the budget stop had skipped it is **448 threads holding 5,493 posts** (D-6) |
 | **GP Help Community** | `headless_render` — Playwright on thread pages (fallback: `apify`) | ~1,500 | Explicit "can't find my photo" threads; replies carry workarounds |
 | **Play Store** | `public_scraper_lib` — `google-play-scraper` | ~2,000 | Volume, India-heavy. Mostly block A only — and that ratio is a reported finding |
 | **App Store** | `public_feed` — Apple's customer-review RSS, several countries | ~1,000 | Cross-platform comparison |
 | **YouTube** | `official_api` — Data API v3 comment threads | ~800 | Reactions to search and Ask Photos tutorials; "tried this, didn't work" |
-| **X** | `apify` — `apidojo~tweet-scraper` | ~600 | Real-time frustration, Ask Photos reactions |
+| **X** | `apify` — `kaitoeasyapi~twitter-x-data-tweet-scraper-pay-per-result-cheapest` (`apidojo~tweet-scraper` refused work on Apify's free plan, D-4) | ~600 | Real-time frustration, Ask Photos reactions |
 | **Quora** | `apify` — `fatihtahta~quora-scraper` | ~300 | Long-tail stories, Indian users |
 | **Stack Exchange** | `official_api` — Web Apps, Android, Ask Different | ~200 | Detailed, technical retrieval problems |
 | **Hacker News** | `official_api` — Algolia search | ~200 | Detailed comparisons with Apple Photos and others |
@@ -691,4 +691,4 @@ $ grep -cE '\*\*[0-9]+\.[0-9]+ ' <the Part 2 section of the solution file>
 60
 ```
 
-All 60 appear in §3.3 with a block or register disposition, and the block totals reconcile: A 14 · B 14 · C 16 · D 12 · R 9 · structural 1 = 60. §3.4 then converts every disposition from judgement into measurement at the pilot, so a question is either coded with a measured coverage rate or named as a Part 3 interview question with the measurement that justified it.
+All 60 appear in §3.3 with a block or register disposition, and the block totals reconcile: A 11 · B 13 · C 16 · D 11 · R 8 · structural 1 = 60. §3.4 then converts every disposition from judgement into measurement at the pilot, so a question is either coded with a measured coverage rate or named as a Part 3 interview question with the measurement that justified it.

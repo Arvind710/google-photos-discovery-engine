@@ -404,6 +404,16 @@ def test_P4_INV_1_data_bank_formats_no_share_itself():
     assert not re.search(r":\.\d*%|\{[^}]*%\}|\* ?100\b", src), "view formats a share itself"
 
 
+def test_data_bank_escapes_user_text_inside_raw_html():
+    """Post text reaches st.html in the set-aside reader; unescaped, a '<' in a
+    post is parsed as markup. AppTest cannot see st.html, so this reads the
+    source: every f-string that interpolates stored text escapes it."""
+    src = (ROOT / "app" / "views" / "data_bank.py").read_text()
+    for field in (r"t\[:300\]", r"r\['detail'\]"):
+        uses = re.findall(rf"\{{[^}}]*{field}[^}}]*\}}", src)
+        assert uses and all("html.escape(" in u for u in uses), (field, uses)
+
+
 def test_data_bank_is_in_the_nav_and_planned_no_longer_lists_it():
     from lib import nav
     assert "data_bank.py" in [p[0] for p in nav.PAGES]
@@ -454,6 +464,16 @@ def test_reddit_mapping_flattens_nested_comments_and_keys_on_reddit_id():
     assert rec["text_clean"].startswith("Can't find a photo of a receipt\n\nSearched")
     assert bounds[0]["author_key"] == bounds[2]["author_key"] # OP's follow-up, same author
     assert rec["collect_method"] == "apify" and rec["created_at"].startswith("2026-08-01")
+
+
+def test_apify_cost_is_read_after_billing_settles(monkeypatch):
+    """A run's cost read at SUCCEEDED was $0.012 for a run that settled at
+    $0.242 (2026-09-26). The runner re-reads until the figure stops moving."""
+    from pipeline.collect import apify
+    seen = iter([0.242, 0.242, 0.242])
+    monkeypatch.setattr(apify.time, "sleep", lambda s: None)
+    monkeypatch.setattr(apify, "_call", lambda m, u, t, p=None: {"data": {"usageTotalUsd": next(seen)}})
+    assert apify.settled_usage("run", "tok", {"usageTotalUsd": 0.012})["usageTotalUsd"] == 0.242
 
 
 def test_reddit_payload_asks_for_post_text_explicitly():

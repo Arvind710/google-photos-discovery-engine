@@ -33,11 +33,6 @@ THING = re.compile(
     r"google photos|ask photos|camera roll|whiteboard|prescription|id card|aadhaar|passport)\b"
     r"|(?i:photograph(ed|ing)?|screenshott?ed|snapped|clicked (a|the) (pic|photo)|"
     r"took (a|the|some) (pic|photo|picture|screenshot))")
-ACT = re.compile(
-    r"(?i)(\bfind|\bfound\b|search|look(ing|ed)? for|locat|scroll|\blost\b|missing|"
-    r"can.?t (see|get|remember)|remember|forgot|which (year|month|trip|album)|dhoondh|"
-    r"nahi mil|mil nahi|nahin mil|khoj|where (is|are|did)|recover|retriev|dig(ging)? (up|out)|"
-    r"\bask photos\b|gemini|\btyped?\b|typing)")
 # Strong retrieval phrases pass on their own: a story can describe the hunt
 # without ever naming a photo ("no idea what to type… scrolled through 2022",
 # "kya search karu"). Found by the authored-fixture test, 2026-09-26.
@@ -75,7 +70,8 @@ def main() -> int:
     con = dbm.init()
     lex = _lexicon()
     with rmod.Run(con, "prefilter", model=None, estimate_usd=0,
-                  rule="lexicon term, or photo-thing AND retrieval-act") as run:
+                  rule="lexicon term, or strong retrieval phrase, or any photo-like thing "
+                       "(round 2)") as run:
         # The gate's marks are its CURRENT judgement: a re-run replaces the
         # previous gate's marks (a probe's verdicts on them are kept in
         # data/artifacts/). Records set aside by cleaning are not re-judged.

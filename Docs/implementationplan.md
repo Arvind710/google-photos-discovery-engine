@@ -165,7 +165,7 @@ P0-INV-1…7 green · P0-OPS-1…3 green · blank app live · all five fixture f
 ## 3. Phase 1 — Data Bank
 
 **Objective:** a clean, auditable corpus with a visible funnel.
-**Duration:** 1 day · **Budget:** ~$0.05 OpenAI (the lexicon probe) · **plus Apify, billed separately:** ~$2–4 of a $10/month limit (Reddit ≈ $0.38 per 1,000 records measured on Myntra; X ≈ $0.40, Quora ≈ $0.99 per 1,000 listed) · **Committed to date:** ~$0.35
+**Duration:** 1 day · **Budget:** ~$0.05 OpenAI (the lexicon probe) · **plus Apify, billed separately:** ~$2–4 of a $10/month limit, planned from Reddit ≈ $0.38 per 1,000 records measured on Myntra, X ≈ $0.40 and Quora ≈ $0.99 per 1,000 listed · **Actual:** OpenAI $0.09 (two probe rounds); Apify $6.06 at the P1 gate, $7.94 after the D-6 Reddit top-up. Myntra's Reddit figure counted each comment as a record. Whole threads measured **~$6.70 per 1,000 threads, ~$0.27 per search term** (D-4, D-5) · **Committed to date:** ~$0.35
 
 ### 3.1 Build tasks
 
@@ -173,10 +173,10 @@ Sources and methods per `Docs/decisions.md` D-1 (revised 2026-09-26). Every coll
 
 | # | Task | Notes |
 |---|---|---|
-| 1.1 | `collect/reddit_apify.py`, `collect/x_apify.py`, `collect/quora_apify.py` | Ported from Myntra's `reddit_apify.py`: flatten nested comments, key on the platform's own id (not Apify's per-run id), drop bots and log it, report per-query yield with failures marked. Subreddits from [CTX] §6.1 (arch §5.1 never listed them), recorded in the run params. Apify runs outside the OpenAI budget but are still logged in `runs` |
+| 1.1 | `collect/apify_sources.py` (Reddit, X, Quora) + `collect/apify.py` (actor runner) | Ported from Myntra's `reddit_apify.py`: flatten nested comments, key on the platform's own id (not Apify's per-run id), drop bots and log it, report per-query yield with failures marked. Subreddits from [CTX] §6.1 (arch §5.1 never listed them), recorded in the run params. Apify runs outside the OpenAI budget but are still logged in `runs` |
 | 1.2 | `collect/gp_help.py` | Playwright renders thread pages; threads discovered from the listing pages (`/search` and `/api` are robots-disallowed). Thread + replies, per-post author; replies carry the workarounds. **Fallback:** Apify `burbn~google-forums-search`; if both fail, stop and tell the PM |
-| 1.3 | `collect/play_store.py`, `collect/app_store.py` | Play via `google-play-scraper`; App Store via Apple's review RSS across several countries (~500 per country cap). Expect low yield and **report the ratio** — that ratio is [CTX] §13's short-text bias, made visible |
-| 1.3a | `collect/youtube.py`, `collect/stackexchange.py`, `collect/hackernews.py` | Official APIs. YouTube: search is 100 of 10,000 daily units, comments 1 — few searches, many comments per video |
+| 1.3 | `collect/stores.py` (Play, App Store) | Play via `google-play-scraper`; App Store via Apple's review RSS across several countries (~500 per country cap). Expect low yield and **report the ratio** — that ratio is [CTX] §13's short-text bias, made visible |
+| 1.3a | `collect/official_apis.py` (YouTube, Stack Exchange, Hacker News) | Official APIs. YouTube: search is 100 of 10,000 daily units, comments 1 — few searches, many comments per video |
 | 1.4 | `clean/dedupe.py` | Exact hash across sources; near-dupe **only** within `(source, author_key)`. Jaccard > 0.85 |
 | 1.5 | `clean/language.py` | Detect; translate non-English into `text_en`. **`text_clean` stays canonical** — EC-CLEAN-4 |
 | 1.6 | `clean/scrub.py` | Typed placeholders. Assert zero email/phone/handle patterns survive |
