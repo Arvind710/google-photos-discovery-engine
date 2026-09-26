@@ -510,3 +510,60 @@ listed value is now that value (`classify.blocks.validate`); one stored row
 (`0.1 other:only_in_other_app`) was corrected, and a test pins that none remain.
 
 **Spend: $12.89 of $15.**
+
+## D-11 — How opportunities are scored with 115 core stories; severity out of the headline; a $17 budget (2026-09-26, decided by the PM)
+
+**Severity leaves the headline ranking (PM: "go with your recommendation").**
+Severity is weighted 25 in `scoring_v1.yaml`, but its dual-coding κ is 0.33
+(`low_reliability`, D-9), and P4-INV-3 bars such a field from a ranked score.
+The headline score is therefore the other four pre-registered weights
+(metric leverage 30, frequency 20, evidence strength 15, reach 10),
+renormalised. A second ranking with all five weights, severity included, is
+shown beside it as a sensitivity row, labelled with its κ. The pre-registered
+file is unchanged, and this was decided before the first ranking run.
+
+**A candidate is one primary stage.** [CTX] §9.1 defines an opportunity as
+stage × failure mode × segment. With 115 core stories, every failure-mode cell
+inside a stage holds fewer than ten stories (Stage 5: 5.6 irrelevant results
+6, concept not modelled 3, buried 2 …), so candidates are the failure stages
+(0, 2, 3, 5, 6 carry core stories). The failure modes and the photo-class split
+are shown inside each card as counts. Stages 1 and 9 are listed as "not a
+failure", never scored.
+
+**The evidence floor decides what can be ranked.** P4-INV-2 forbids ranking
+below n = 30 ([CTX] §15.5). Only Stage 5 (36 core stories) clears it; Stages
+2, 3 and 6 (9 each) pass the proposed gates but are shown `below_floor`,
+unranked. Stage 0 (20) is gated out. The weight sensitivity is also computed
+over every gate-passing candidate, as an illustrative pool that ignores the
+floor: Stage 5 is first in 100% of 1,000 draws in both variants, because it
+scores at least as high as every other candidate on every criterion.
+
+**The judgement inputs are proposed by Claude, for the PM to approve**
+(`codebook/opportunity_inputs_v1.yaml`; proposed 20:02 IST, **approved by the PM at 20:08 IST**: "approved, push and continue"). [CTX] §9.2 makes
+the two gates and reach PM judgement; the metric-node → leverage map is a
+judgement too. They were proposed after the candidates' counts were seen (a
+gate cannot be scored without knowing what the candidate is), and that is
+disclosed; the weights were not touched. Until approval, every row carries
+`inputs_status = proposed`.
+
+**Two findings from the derived analyses (`analysis_derived`).** No core story
+reveals a cue the teller was certain of and later found wrong (2.2
+`certain_wrong`: 0 of 115; 22 are certain and correct), and results-as-cues
+(6.5) and anchor-and-pivot appear in one story each. [SOL-JOURNEY]'s two
+headline hypotheses — wrong cues applied as hard filters (5.3), and results
+prompting recall (6.5) — therefore have no public-text support either way. They
+go to the Part 3 interviews as observed tasks, which is where the solution doc
+said stages 6 and 7 would have to be seen.
+
+**Budget.** The PM added $2 of OpenAI credit ("I had 2 credits more in openAI
+console"). The budget is recorded as $17 (`runs.CEILING_USD`,
+`evals/manual_checks.yaml`, and the gate report reads the same constant).
+$4.11 remains.
+
+**A bug fixed alongside.** The Data Bank's record browser put stored post text
+and thread titles into Markdown-rendering widgets (expander labels, captions)
+unescaped, and built the permalink as a Markdown link. A `$…$` in a post would
+render as LaTeX, `:red[…]` as colour. Both now go through `md()`, and the link
+is a `st.link_button`. Pinned by
+`test_data_bank_escapes_user_text_inside_markdown_widgets`, which fails on the
+old code.

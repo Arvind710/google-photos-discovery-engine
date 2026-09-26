@@ -30,7 +30,8 @@ ROOT = Path(__file__).resolve().parents[1]
 REPORTS = ROOT / "evals" / "reports"
 JUNIT = ROOT / ".pytest_junit.xml"
 DB = ROOT / "data" / "corpus.db"
-CEILING = 15.00
+sys.path.insert(0, str(ROOT))
+from pipeline.common.runs import CEILING_USD as CEILING  # noqa: E402  (after the path line)
 
 TITLES = {"p0": "P0 — Foundation & freeze", "p1": "P1 — Data Bank", "p2": "P2 — Segmentation",
           "p3": "P3 — Coding & reliability", "p4": "P4 — Analysis & opportunities",

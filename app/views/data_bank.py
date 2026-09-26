@@ -58,6 +58,17 @@ def note(text: str) -> None:
             f"margin:.35rem 0 0;max-width:80ch'>{text}</div>")
 
 
+_MD = str.maketrans({c: "\\" + c for c in "\\`*_[]()#+-!<>|~$:{}"})
+
+
+def md(text: str) -> str:
+    """User text shown inside a Markdown-rendering widget (expander labels,
+    captions): every character Markdown, Streamlit's `:colour[…]`/`:icon:`
+    syntax or LaTeX (`$…$`) would act on is backslash-escaped, so a post is
+    shown as written, never as formatting."""
+    return str(text).translate(_MD)
+
+
 def hbar(labels: list[str], values: list[int], texts: list[str], colours, height=None):
     fig = go.Figure(go.Bar(
         x=values[::-1], y=labels[::-1], orientation="h", marker_color=colours[::-1],
@@ -360,10 +371,10 @@ for _, r in rows.iterrows():
     t = str(r["text_clean"])
     head = (t[:110] + "…") if len(t) > 110 else t
     with st.expander(f"{words.source(r['source'])} · {str(r['created_at'] or '')[:10]} · "
-                     f"{head}"):
+                     f"{md(head)}"):
         st.text(t[:4000] + ("…" if len(t) > 4000 else ""))
-        st.caption(f"found by: {r['collect_query'] or '—'} · context: "
-                   f"{r['thread_context'] or '—'} · language: {r['lang'] or '—'}")
-        st.markdown(f"[Open where it was posted ↗]({r['source_url']})")
+        st.caption(f"found by: {md(r['collect_query'] or '—')} · context: "
+                   f"{md(r['thread_context'] or '—')} · language: {r['lang'] or '—'}")
+        st.link_button("Open where it was posted ↗", r["source_url"])
 if len(rows) == 60:
     st.caption("Showing the 60 most recent matches. Narrow the filters to see others.")

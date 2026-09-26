@@ -419,6 +419,25 @@ def test_data_bank_escapes_user_text_inside_raw_html():
         assert uses and all("html.escape(" in u for u in uses), (field, uses)
 
 
+def test_data_bank_escapes_user_text_inside_markdown_widgets():
+    """Expander labels and captions render Markdown (and Streamlit's `$…$`
+    LaTeX and `:colour[…]`). Stored post text and thread titles shown there go
+    through md(); the permalink is a button, never a Markdown link."""
+    import ast
+    src = (ROOT / "app" / "views" / "data_bank.py").read_text()
+    for field in (r"\bhead\b", r"r\[.thread_context.\]", r"r\['collect_query'\]"):
+        uses = re.findall(rf"\{{[^}}]*{field}[^}}]*\}}", src)
+        assert uses and all("md(" in u for u in uses), (field, uses)
+    assert not re.search(r"\]\(\{", src)                          # no Markdown link built from data
+    fn = next(n for n in ast.parse(src).body if isinstance(n, ast.FunctionDef) and n.name == "md")
+    ns: dict = {}
+    exec(compile(ast.Module([n for n in ast.parse(src).body if isinstance(n, ast.Assign)
+                             and getattr(n.targets[0], "id", "") == "_MD"] + [fn], []),
+                 "md", "exec"), ns)
+    out = ns["md"]("costs $5 then $10 :red[x] **bold** [link](u)")
+    assert all(f"\\{c}" in out for c in "$*[:(")
+
+
 def test_data_bank_is_in_the_nav_and_planned_no_longer_lists_it():
     from lib import nav
     assert "data_bank.py" in [p[0] for p in nav.PAGES]

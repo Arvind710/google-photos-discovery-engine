@@ -283,9 +283,9 @@ def test_T19_halts_at_one_and_a_half_times_estimate(blank_db):
     assert row["status"] == "halted_budget" and row["cost_usd"] > 0   # spend still recorded
 
 
-def test_ceiling_refuses_a_pass_that_would_cross_15(blank_db):
+def test_ceiling_refuses_a_pass_that_would_cross_the_budget(blank_db):
     blank_db.execute("INSERT INTO runs (run_id, stage, started_at, cost_usd) VALUES"
-                     " ('old','x','t',14.50)")
+                     " ('old','x','t',?)", (runs_mod.CEILING_USD - 0.50,))
     with pytest.raises(runs_mod.BudgetHalt, match="ceiling"):
         with runs_mod.Run(blank_db, "next", model="gpt-5", estimate_usd=0.80):
             pass
@@ -441,7 +441,8 @@ def test_masked_never_reveals_a_secret():
 @pytest.mark.manual
 def test_P0_OPS_2_openai_hard_cap_recorded(root):
     m = yaml.safe_load((root / "evals" / "manual_checks.yaml").read_text())
-    assert m["openai_hard_cap_usd"] == 15, "set the $15 console limit, then record it"
+    assert m["openai_hard_cap_usd"] == runs_mod.CEILING_USD, \
+        "the recorded console budget and the in-code ceiling must agree"
     assert m["openai_hard_cap_confirmed_at"], "record when it was set"
 
 

@@ -38,7 +38,9 @@ MODEL_RATES: dict[str, dict[str, float]] = {
 RATES_CONFIRMED_AT = "2026-09-26"
 BATCH_DISCOUNT = 0.5
 
-CEILING_USD = 15.00          # the console hard cap (P0-OPS-2); this is the in-code mirror
+# The console budget (P0-OPS-2); this is the in-code mirror. $15 at P0; the PM
+# added $2 of credit on 2026-09-26 (Docs/decisions.md D-11).
+CEILING_USD = 17.00
 HALT_MULTIPLE = 1.5          # T-19
 
 

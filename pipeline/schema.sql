@@ -37,6 +37,8 @@
 --        the codebook froze (codebook/emergent_themes_v1.yaml, D-10). A new
 --        table beside the frozen codebook, so no story is re-coded. Every tag
 --        carries a quote verified against text_clean.
+--   A.13 (P4, 2026-09-26) analysis_derived, analysis_opportunity,
+--        analysis_weight_sensitivity — derived, rebuilt whole, new tables only.
 
 PRAGMA foreign_keys = ON;
 
@@ -253,6 +255,51 @@ CREATE TABLE IF NOT EXISTS analysis_crosstab (
   n_authors INTEGER,                         -- distinct authors beside every count (EC-COL-6)
   run_id TEXT NOT NULL,
   PRIMARY KEY (dim_a, val_a, dim_b, val_b, run_id)
+);
+
+-- A.13 (P4, 2026-09-26): derived analyses, opportunity candidates and weight
+-- sensitivity. New tables only; rebuilt whole by pipeline/analyse/*.py.
+CREATE TABLE IF NOT EXISTS analysis_derived (          -- cue matrix, rates, JS divergence
+  metric     TEXT NOT NULL,                  -- e.g. cue_remembered, certain_wrong, js_divergence
+  key        TEXT NOT NULL,                  -- e.g. a cue family, a source, '_all'
+  population TEXT NOT NULL,                  -- core | adjacent
+  value      REAL,                           -- a rate is n/denom; a divergence is its own value
+  n          INTEGER NOT NULL,
+  denom      INTEGER NOT NULL,
+  n_authors  INTEGER,
+  note       TEXT,                           -- e.g. which low_reliability field it rests on
+  run_id     TEXT NOT NULL,
+  PRIMARY KEY (metric, key, population)
+);
+
+CREATE TABLE IF NOT EXISTS analysis_opportunity (      -- [CTX] §9, arch §6
+  candidate_id   TEXT PRIMARY KEY,           -- e.g. "stage5"
+  primary_stage  TEXT NOT NULL,
+  label          TEXT NOT NULL,
+  n_core         INTEGER NOT NULL,           -- the frequency numerator (core stories)
+  denom          INTEGER NOT NULL,           -- live core stories
+  n_authors      INTEGER NOT NULL,
+  n_adjacent     INTEGER NOT NULL,           -- same stage among adjacent stories, reported beside
+  detail_json    TEXT NOT NULL,              -- sources, photo classes, failure modes, quotes
+  scores_json    TEXT NOT NULL,              -- criterion → {score, why}
+  gates_json     TEXT NOT NULL,              -- gate → {score, why, passed}
+  inputs_status  TEXT NOT NULL CHECK (inputs_status IN ('proposed','approved')),
+  status         TEXT NOT NULL CHECK (status IN ('ranked','gated_out','below_floor','not_a_failure')),
+  status_reason  TEXT NOT NULL,
+  score_headline REAL,                       -- weights without severity (D-11)
+  score_with_severity REAL,                  -- the pre-registered five weights: a sensitivity row
+  rank_headline  INTEGER,
+  run_id         TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS analysis_weight_sensitivity (
+  variant      TEXT NOT NULL,                -- headline | with_severity
+  candidate_id TEXT NOT NULL,
+  top_share    REAL NOT NULL,                -- share of draws in which it ranks first
+  draws        INTEGER NOT NULL,
+  pool         TEXT NOT NULL,                -- ranked | gates_passed (illustrative, below floor included)
+  run_id       TEXT NOT NULL,
+  PRIMARY KEY (variant, candidate_id, pool)
 );
 
 -- -------------------------------------------------------------- provenance

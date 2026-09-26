@@ -1,0 +1,110 @@
+# opportunity_inputs_v1.yaml — the judgement inputs to opportunity scoring
+# ([CTX] §9.2, §15.2). [CTX] names three criteria as PM judgement: the two
+# GATES (addressable by Google Photos, AI necessity) and REACH (estimated share
+# of the GP user base affected — not a story count). Metric leverage is scored
+# from the metric node, and the node → score map is a judgement too.
+#
+# Claude PROPOSED every score below on 2026-09-26, for the PM to approve or
+# change ("propose your scores in the scoring inputs and I'll approve").
+# Until `status: approved`, every ranking built from this file is marked
+# PROPOSED on the page and in analysis_opportunity.inputs_status.
+#
+# Proposed after the candidates' story counts were seen (the gates and reach
+# cannot be scored without knowing what a candidate IS); the WEIGHTS were
+# pre-registered before any of this (scoring_v1.yaml, 2026-09-26T00:34:41+05:30)
+# and are not touched here. Disclosed in Docs/decisions.md D-11.
+#
+# Scale 1–5 everywhere. Gates pass at ≥ 3 (scoring_v1.yaml).
+
+version: v1
+status: approved            # proposed | approved
+proposed_by: Claude
+proposed_at: "2026-09-26T20:02+05:30"   # written just before the first scoring run (20:03 IST)
+approved_by: PM             # "approved, push and continue"
+approved_at: "2026-09-26T20:08+05:30"
+
+# Metric leverage ([CTX] §9.2): how much fixing this factor moves the goal
+# metric, from its place in the decomposition (metric_nodes_v1.yaml):
+#   success = enters × [found_1 + (1 − found_1) × refines × found_after_refinement],
+#   found   = query_captures_usable_cue × target_ranked_visible × user_recognises_target
+node_leverage:
+  query_captures_usable_cue:
+    score: 5
+    why: A factor of every attempt, first and refined — nothing is found without it.
+  target_ranked_visible:
+    score: 5
+    why: A factor of every attempt, first and refined.
+  user_recognises_target:
+    score: 5
+    why: A factor of every attempt, first and refined.
+  enters_gp_retrieval_path:
+    score: 4
+    why: Multiplies everything, but part of this population avoids search for reasons GP cannot change.
+  found_after_refinement:
+    score: 3
+    why: Acts only on the second-and-later attempts.
+  refines_instead_of_quitting:
+    score: 3
+    why: Acts only on the second-and-later attempts.
+  target_retrievable:
+    score: 2
+    why: A precondition of the metric, not a factor of retrieval itself.
+
+# One candidate per primary stage where something went WRONG (D-11). Stage 1
+# is context and 9/10 mean nothing went wrong: they are reported, not scored.
+candidates:
+  stage0:
+    label: The photo was gone before anyone searched — deleted, never backed up, elsewhere
+    addressable_by_gp:
+      score: 2
+      why: GP can make trash, archive and backup state visible, but a photo deleted or never uploaded cannot be retrieved by any search.
+    ai_necessity:
+      score: 1
+      why: Surfacing library state is a UI and policy fix; no inference about a vague memory is needed.
+    reach:
+      score: 3
+      why: Loss and backup confusion is common (130 adjacent stories say so), but it is not the vague-retrieval population.
+  stage2:
+    label: They could not remember enough about the photo to form any search
+    addressable_by_gp:
+      score: 3
+      why: GP holds signals the user has lost (when, where, who was there, neighbouring photos) and could offer them back as prompts.
+    ai_necessity:
+      score: 5
+      why: Reconstructing a memory from fragments — inferring a date or event from other photos — needs inference; a filter cannot.
+    reach:
+      score: 3
+      why: Anyone with a large library and an old target; limited by how rarely people recall nothing usable.
+  stage3:
+    label: They never searched — scrolled the timeline or didn't know search could help
+    addressable_by_gp:
+      score: 4
+      why: Entry points and search discoverability are fully inside the product.
+    ai_necessity:
+      score: 3
+      why: Partly discoverability (a UI fix), partly a conversational entry that accepts a vague description.
+    reach:
+      score: 4
+      why: The invisible population who never search is large by construction and under-counted in public posts.
+  stage5:
+    label: Search did not understand or match what they typed
+    addressable_by_gp:
+      score: 5
+      why: The index, query understanding and ranking are Google Photos' own systems.
+    ai_necessity:
+      score: 5
+      why: Matching a partial, fuzzy or relational description to a photo is the inference problem the brief names.
+    reach:
+      score: 4
+      why: Every user who types a search; the most common failure among core stories.
+  stage6:
+    label: The photo was in front of them but hard to spot among many look-alikes
+    addressable_by_gp:
+      score: 4
+      why: Grouping, de-duplication and result layout are inside the product.
+    ai_necessity:
+      score: 3
+      why: Clustering near-duplicates and explaining why a result appeared need models; layout alone is a UI fix.
+    reach:
+      score: 3
+      why: Heavy libraries with many similar events; smaller than all searchers.
